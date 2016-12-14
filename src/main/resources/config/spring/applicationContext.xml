@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+http://www.springframework.org/schema/beans/spring-beans.xsd
+http://www.springframework.org/schema/context
+http://www.springframework.org/schema/context/spring-context.xsd
+http://www.springframework.org/schema/aop
+http://www.springframework.org/schema/aop/spring-aop.xsd
+http://www.springframework.org/schema/tx
+http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+    <!-- 如果将service和dao的扫描放到springmvc-servlet.xml中会发现事务不能生效 -->
+    <!-- 如果将controller的扫描也放到applicationContext.xml中会发现URI Mapping有问题 -->
+    <!-- 所以，在这里将controller的扫描和service、dao的扫描分开 -->
+    <context:component-scan base-package="**.service" />
+    <context:component-scan base-package="**.dao" />
+
+    <!-- 加载数据库连接信息db.properties -->
+    <!-- <context:property-placeholder location="classpath:/config/db/db.properties" /> -->
+    <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <list>
+                <value>classpath:/config/db/db.properties</value>
+                <value>classpath:/config/wechat/wechat.properties</value>
+                <value>classpath:/config/redis/redis.properties</value>
+            </list>
+        </property>
+    </bean>
+
+    <!-- 配置数据源 -->
+    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
+          destroy-method="close">
+        <property name="driverClassName" value="${jdbc.driverClassName}"/>
+        <property name="url" value="${jdbc.url}"/>
+        <property name="username" value="${jdbc.username}"/>
+        <property name="password" value="${jdbc.password}"/>
+    </bean>
+
+    <!-- 配置sqlSessionFactory -->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="typeAliasesPackage" value="com.cheng.mywechat.model" />
+        <property name="mapperLocations">
+            <list>
+                <value>classpath:mybatisMapper/*/*Mapper.xml</value>
+            </list>
+        </property>
+    </bean>
+
+    <!-- 配置mapper扫描路径 -->
+    <!-- <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="**.mapper"/>
+    </bean> -->
+
+    <!-- 配置事务管理器 -->
+    <bean id="transactionManager"
+          class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+    <bean id="sqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate"	scope="prototype">
+        <constructor-arg index="0" ref="sqlSessionFactory" />
+    </bean>
+
+    <!-- 启用事务注解，后面在Service类或方法上面加上@Transactional注解 -->
+    <tx:annotation-driven transaction-manager="transactionManager" />
+
+    <bean id="WxMpServiceImpl" class="me.chanjar.weixin.mp.api.WxMpServiceImpl">
+        <property name="wxMpConfigStorage" ref="WxMpInMemoryConfigStorage"/>
+    </bean>
+
+    <bean id="WxMpInMemoryConfigStorage" class="me.chanjar.weixin.mp.api.WxMpInMemoryConfigStorage">
+        <property name="appId" value="${wechat.APP_ID}"/>
+        <property name="secret" value="${wechat.SECRET}"/>
+        <property name="aesKey" value="${wechat.AES_KEY}"/>
+        <property name="token" value="${wechat.TOKEN}"/>
+    </bean>
+
+    <bean id="wxMpMessageRouter" class="me.chanjar.weixin.mp.api.WxMpMessageRouter" scope="singleton">
+        <constructor-arg index="0" ref="WxMpServiceImpl" />
+    </bean>
+
+    <!-- Redis -->
+    <bean id="poolConfig" class="redis.clients.jedis.JedisPoolConfig">
+        <property name="maxIdle" value="${redis.maxIdle}" />
+        <!-- <property name="maxActive" value="${redis.maxActive}" /> -->
+        <!-- <property name="maxWait" value="${redis.maxWait}" />   -->
+        <property name="testOnBorrow" value="${redis.testOnBorrow}" />
+    </bean>
+
+    <bean id="connectionFactory" class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory"
+          p:host-name="${redis.host}" p:port="${redis.port}" p:password="${redis.pass}"  p:pool-config-ref="poolConfig"/>
+
+    <!--     <bean id="redisTemplate" class="org.springframework.data.redis.core.StringRedisTemplate">
+            <property name="connectionFactory"   ref="connectionFactory" />
+        </bean> -->
+
+    <bean id="stringRedisSerializer" class="org.springframework.data.redis.serializer.StringRedisSerializer" />
+    <bean id="jdkSerializationRedisSerializer"	class="org.springframework.data.redis.serializer.JdkSerializationRedisSerializer" />
+
+    <bean id="redisTemplate" class="org.springframework.data.redis.core.RedisTemplate">
+        <property name="connectionFactory" ref="connectionFactory"/>
+
+        <property name="keySerializer" ref="stringRedisSerializer"/>
+        <property name="valueSerializer" ref="jdkSerializationRedisSerializer"/>
+        <property name="hashKeySerializer" ref="stringRedisSerializer"/>
+        <property name="hashValueSerializer" ref="jdkSerializationRedisSerializer"/>
+        <property name="stringSerializer" ref="stringRedisSerializer"/>
+    </bean>
+
+    <!--<bean id="zgRedisTemplete" class="com.zoe.weiya.comm.redis.ZoeRedisTemplete">
+        <property name="redisTemplete" ref="redisTemplate"/>
+        <property name="usePool" value="true" />
+    </bean>-->
+
+</beans>
