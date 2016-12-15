@@ -12,6 +12,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <org.springframework-version>4.1.1.RELEASE</org.springframework-version>
         <jackson-version>2.4.3</jackson-version>
+        <weixin-java-mp>2.4.0</weixin-java-mp>
     </properties>
 
     <dependencies>
@@ -148,9 +149,9 @@
         </dependency>
         <!-- weixin-java-mp -->
         <dependency>
-            <groupId>me.chanjar</groupId>
+            <groupId>com.github.binarywang</groupId>
             <artifactId>weixin-java-mp</artifactId>
-            <version>1.3.3</version>
+            <version>${weixin-java-mp}</version>
         </dependency>
         <!-- Spring-data-redis -->
         <dependency>
