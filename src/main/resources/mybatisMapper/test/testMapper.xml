@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC " -//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zoe.weiya.dao.mybatisMapper.test.TestDao.TestDaoMapper">
-	<select id="getTest" resultType="Object">
+	<select id="getTest" resultType="Test">
 		SELECT 1 'test_id','test_name' AS 'test_name',now() as 'time'
 	</select>
 
