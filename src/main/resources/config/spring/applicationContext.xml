@@ -68,7 +68,7 @@ http://www.springframework.org/schema/tx/spring-tx.xsd">
     <!-- 启用事务注解，后面在Service类或方法上面加上@Transactional注解 -->
     <tx:annotation-driven transaction-manager="transactionManager" />
 
-    <bean id="WxMpServiceImpl" class="me.chanjar.weixin.mp.api.WxMpServiceImpl">
+    <bean id="WxMpServiceImpl" class="me.chanjar.weixin.mp.api.impl.WxMpServiceImpl">
         <property name="wxMpConfigStorage" ref="WxMpInMemoryConfigStorage"/>
     </bean>
 
