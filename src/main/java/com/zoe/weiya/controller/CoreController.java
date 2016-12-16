@@ -24,7 +24,7 @@ import java.util.Map;
 /**
  * Created by andy on 2016/12/15.
  */
-@RequestMapping("/core")
+@RequestMapping("core")
 @Controller
 public class CoreController {
 
