@@ -29,7 +29,7 @@ import java.util.Map;
 public class CoreController {
 
     @Autowired
-    WxMpServiceImpl wxMpService;
+    protected WxMpServiceImpl wxMpService;
     @Autowired
     protected WxMpMessageRouter wxMpMessageRouter;
     @Autowired
