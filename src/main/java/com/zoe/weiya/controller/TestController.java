@@ -5,6 +5,7 @@ import com.zoe.weiya.comm.logger.ZoeLoggerFactory;
 import com.zoe.weiya.service.test.TestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.sql.SQLException;
@@ -22,14 +23,14 @@ public class TestController {
     private TestService testService;
 
     @RequestMapping("")
-    public Object test(){
+    public Object test(@RequestParam(value = "name") String code){
         Map<String,Object> test = new HashMap<>();
-        test.put("hi","man");
+        test.put("hi",code);
         return test;
     }
 
-    @RequestMapping("mybatisMapper/test")
-    public Object test2(){
+    @RequestMapping("test")
+    public Object test2(@RequestParam(value = "test") String test){
         try {
             return testService.getTest();
         } catch (SQLException e) {

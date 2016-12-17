@@ -1,4 +1,4 @@
-package com.zoe.weiya.comm.Respon;
+package com.zoe.weiya.comm.response;
 
 /**
  * Created by andy on 2016/12/17.
@@ -30,6 +30,10 @@ public class ResponseMsg {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public void setStatus(int status) {
+        this.status = String.valueOf(status);
     }
 
     @Override

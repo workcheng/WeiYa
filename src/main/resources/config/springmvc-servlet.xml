@@ -95,19 +95,19 @@
 
     <!-- 以下配置将拦截所有的URL请求 -->
     <mvc:interceptors>
-         <bean class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor" />
-        <!--<bean class="com.cheng.mywechat.interceptor.BaseInterceptor"/>-->
+         <!--<bean class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor" />-->
+        <bean class="com.zoe.weiya.interceptor.BaseInterceptor"/>
     </mvc:interceptors>
     <!-- 以下配置将拦截特有的URL请求 -->
-    <!--<mvc:interceptors>-->
-        <!--<mvc:interceptor>-->
-            <!--<mvc:mapping path="/base/*"/>-->
-            <!--<bean class="com.cheng.mywechat.interceptor.time.TimeBasedAccessInterceptor">-->
-                <!--<property name="openingTime" value="9" />-->
-                <!--<property name="closingTime" value="12" />-->
-                <!--<property name="mappingURL" value=".*/base/.*" />-->
-            <!--</bean>-->
-        <!--</mvc:interceptor>-->
-    <!--</mvc:interceptors>-->
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <mvc:mapping path="/base/*"/>
+            <bean class="com.zoe.weiya.interceptor.time.TimeBasedAccessInterceptor">
+                <property name="openingTime" value="9" />
+                <property name="closingTime" value="12" />
+                <property name="mappingURL" value=".*/base/.*" />
+            </bean>
+        </mvc:interceptor>
+    </mvc:interceptors>
 
 </beans>
