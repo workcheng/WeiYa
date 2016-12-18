@@ -1,5 +1,6 @@
 package com.zoe.weiya.controller;
 
+import com.zoe.weiya.servlet.AwardServlet;
 import me.chanjar.weixin.common.exception.WxErrorException;
 import me.chanjar.weixin.common.session.WxSessionManager;
 import me.chanjar.weixin.mp.api.WxMpConfigStorage;
@@ -24,7 +25,7 @@ import java.util.Map;
 /**
  * Created by andy on 2016/12/15.
  */
-@RequestMapping("/core")
+@RequestMapping("core")
 @Controller
 public class CoreController {
 
@@ -39,14 +40,15 @@ public class CoreController {
     public void wechat(HttpServletRequest request, HttpServletResponse response) {
         try {
             init();
-            service(request, response);
+            AwardServlet awardServlet = new AwardServlet();
+            awardServlet.doGet(request, response);
         } catch (ServletException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-
+    @RequestMapping(value = "/init")
     private void init() throws ServletException {
         WxMpMessageHandler test = test();
         WxMpMessageHandler reply = reply();
@@ -54,7 +56,7 @@ public class CoreController {
                 .rule().async(false).content("andy").handler(test).end()
 //                .rule().async(false).msgType(WxConsts.MASS_MSG_TEXT).handler(fun).end()
                 .rule().async(false).handler(reply).end();
-        System.out.println();
+        System.out.println("测试代码");
     }
 
     private void service(HttpServletRequest request, HttpServletResponse response)
@@ -84,6 +86,7 @@ public class CoreController {
 
         if ("raw".equals(encryptType)) {
             // 明文传输的消息
+            //消息接收与响应
             WxMpXmlMessage inMessage = WxMpXmlMessage.fromXml(request.getInputStream());
             WxMpXmlOutMessage outMessage = wxMpMessageRouter.route(inMessage);
             // if (null != outMessage) {

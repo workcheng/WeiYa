@@ -3,9 +3,17 @@
 xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd" 
 id="WebApp_ID" version="3.0">
   <display-name>weiYa</display-name>
-  <welcome-file-list>
-    <welcome-file>index.jsp</welcome-file>
-  </welcome-file-list>
+    <servlet>
+        <servlet-name>AwardServlet</servlet-name>
+        <servlet-class>com.zoe.weiya.servlet.AwardServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>AwardServlet</servlet-name>
+        <url-pattern>/AwardServlet</url-pattern>
+    </servlet-mapping>
+    <welcome-file-list>
+        <welcome-file>index.jsp</welcome-file>
+    </welcome-file-list>
   <context-param>
     <param-name>log4jConfigLocation</param-name>
     <param-value>classpath:/config/log/log4j.properties</param-value>
