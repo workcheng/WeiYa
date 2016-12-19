@@ -6,15 +6,44 @@
     <title>签到</title>
     <link rel="stylesheet" href="http://demo.open.weixin.qq.com/jssdk/css/style.css?ts=1420774989">
     <script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
-    <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+    <script src="http://apps.bdimg.com/libs/jquery/1.11.3/jquery.min.js"></script>
 
     <script>
         $(document).ready(function () {
+            var weixinUrl = location.href.split('#')[0];
+            var weixin = location.href.split('=')[1];
+            var code = weixin.split('&')[0];
+            var getUserInfo = "http://zxc.tunnel.qydev.com/auth/user_info";
+
+            //用户授权
+            var authUrl = "http://zxc.tunnel.qydev.com/auth/url";
+            $.ajax({
+                url: authUrl, //这个地址是服务器配置JSSDK的地址
+                data: {           // 这个地址是发生jssdk调用的url地址
+                    // 用于服务器配置
+                    url: weixinUrl,
+                    state: ''
+                }
+            }).success(function (data) {
+                alert(JSON.stringify(data));
+            });
+
+            //获取用户信息
+            $.ajax({
+                url: getUserInfo, //这个地址是服务器配置JSSDK的地址
+                data: {           // 这个地址是发生jssdk调用的url地址
+                    // 用于服务器配置
+                    code: code,
+                    lang: ''
+                }
+            }).success(function (data) {
+                alert(JSON.stringify(data));
+            });
+
             // 根据实际填写接口的配置地点
             // 这里的接口地址是基于node-weixin配置的。
             var url = "http://zxc.tunnel.qydev.com/sign/url";
             // 当前的网页请求地址
-            var weixinUrl = location.href.split('#')[0];
             $.ajax({
                 url: url, //这个地址是服务器配置JSSDK的地址
                 data: {           // 这个地址是发生jssdk调用的url地址
@@ -46,14 +75,14 @@
                         }
                     });
 
-                    //扫描二维码并返回结果
-                    wx.scanQRCode({
-                        needResult: 1,
-                        desc: 'scanQRCode desc',
-                        success: function (res) {
-                            alert(JSON.stringify(res));
-                        }
-                    });
+                    /*//扫描二维码并返回结果
+                     wx.scanQRCode({
+                     needResult: 1,
+                     desc: 'scanQRCode desc',
+                     success: function (res) {
+                     alert(JSON.stringify(res));
+                     }
+                     });*/
 
                 });
                 wx.error(function (res) {
