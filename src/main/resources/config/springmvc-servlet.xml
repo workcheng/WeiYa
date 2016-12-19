@@ -9,7 +9,7 @@
 	http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd">
 
     <!-- 启用spring mvc 注解 -->
-    <context:annotation-config />
+    <context:annotation-config/>
 
     <!-- 配置自动扫描 -->
     <context:component-scan base-package="**.controller">
@@ -19,9 +19,9 @@
     <!-- 视图解析 -->
     <bean id="validator"
           class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean">
-        <property name="providerClass" value="org.hibernate.validator.HibernateValidator" />
+        <property name="providerClass" value="org.hibernate.validator.HibernateValidator"/>
         <!--不设置则默认为classpath下的 ValidationMessages.properties -->
-        <property name="validationMessageSource" ref="messageSource" />
+        <property name="validationMessageSource" ref="messageSource"/>
     </bean>
 
     <bean id="jacksonObjectMapper" class="com.fasterxml.jackson.databind.ObjectMapper">
@@ -30,14 +30,14 @@
         </property>
     </bean>
     <bean id="jacksonSerializationConfig" class="com.fasterxml.jackson.databind.SerializationConfig"
-          factory-bean="jacksonObjectMapper" factory-method="getSerializationConfig" />
+          factory-bean="jacksonObjectMapper" factory-method="getSerializationConfig"/>
 
     <mvc:annotation-driven validator="validator">
         <mvc:message-converters register-defaults="true">
             <bean
                     class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
-                <property name="supportedMediaTypes" value="application/json" />
-                <property name="objectMapper" ref="jacksonObjectMapper" />
+                <property name="supportedMediaTypes" value="application/json"/>
+                <property name="objectMapper" ref="jacksonObjectMapper"/>
             </bean>
             <!-- <bean class="org.springframework.http.converter.json.GsonHttpMessageConverter"></bean> -->
             <!-- <bean class="com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter"></bean> -->
@@ -57,23 +57,23 @@
           class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
         <property name="mediaTypes">
             <map>
-                <entry key="html" value="text/html" />
-                <entry key="xml" value="text/xml" />
-                <entry key="json" value="application/json" />
+                <entry key="html" value="text/html"/>
+                <entry key="xml" value="text/xml"/>
+                <entry key="json" value="application/json"/>
             </map>
         </property>
         <property name="defaultViews">
             <list>
-                <bean class="org.springframework.web.servlet.view.json.MappingJackson2JsonView" />
+                <bean class="org.springframework.web.servlet.view.json.MappingJackson2JsonView"/>
             </list>
         </property>
         <property name="viewResolvers">
             <list>
                 <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
                     <property name="viewClass"
-                              value="org.springframework.web.servlet.view.JstlView" />
-                    <property name="prefix" value="/WEB-INF/" />
-                    <property name="suffix" value=".jsp" />
+                              value="org.springframework.web.servlet.view.JstlView"/>
+                    <property name="prefix" value="/WEB-INF/"/>
+                    <property name="suffix" value=".jsp"/>
                 </bean>
             </list>
         </property>
@@ -95,7 +95,7 @@
 
     <!-- 以下配置将拦截所有的URL请求 -->
     <mvc:interceptors>
-         <!--<bean class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor" />-->
+        <!--<bean class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor" />-->
         <bean class="com.zoe.weiya.interceptor.BaseInterceptor"/>
     </mvc:interceptors>
     <!-- 以下配置将拦截特有的URL请求 -->
@@ -103,11 +103,13 @@
         <mvc:interceptor>
             <mvc:mapping path="/base/*"/>
             <bean class="com.zoe.weiya.interceptor.time.TimeBasedAccessInterceptor">
-                <property name="openingTime" value="9" />
-                <property name="closingTime" value="12" />
-                <property name="mappingURL" value=".*/base/.*" />
+                <property name="openingTime" value="9"/>
+                <property name="closingTime" value="12"/>
+                <property name="mappingURL" value=".*/base/.*"/>
             </bean>
         </mvc:interceptor>
     </mvc:interceptors>
+
+    <mvc:resources mapping="/view/**" location="/WEB-INF/view/"/>
 
 </beans>
