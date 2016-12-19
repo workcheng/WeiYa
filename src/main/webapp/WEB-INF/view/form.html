@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name=viewport content="width=device-width">
     <title>签到</title>
+    <link rel="stylesheet" href="http://demo.open.weixin.qq.com/jssdk/css/style.css?ts=1420774989">
     <script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
     <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
 
@@ -45,14 +46,18 @@
                         }
                     });
 
-                    wx.getNetworkType({
+                    //扫描二维码并返回结果
+                    wx.scanQRCode({
+                        needResult: 1,
+                        desc: 'scanQRCode desc',
                         success: function (res) {
-                            alert(res.networkType);
-                        },
-                        fail: function (res) {
                             alert(JSON.stringify(res));
                         }
                     });
+
+                });
+                wx.error(function (res) {
+                    alert(res.errMsg);
                 });
             });
         });
