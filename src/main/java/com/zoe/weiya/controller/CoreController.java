@@ -54,7 +54,6 @@ public class CoreController {
                 .rule().async(false).content("andy").handler(test).end()
 //                .rule().async(false).msgType(WxConsts.MASS_MSG_TEXT).handler(fun).end()
                 .rule().async(false).handler(reply).end();
-        System.out.println();
     }
 
     private void service(HttpServletRequest request, HttpServletResponse response)
