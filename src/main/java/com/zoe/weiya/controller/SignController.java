@@ -11,6 +11,7 @@ import me.chanjar.weixin.mp.api.impl.WxMpServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -35,7 +36,7 @@ public class SignController {
     }
 
     @RequestMapping("url")
-    public Object getSign(String url){
+    public Object getSign(@RequestParam String url){
         try {
             return ZoeObject.success(wxMpService.createJsapiSignature(url));
         } catch (WxErrorException e) {
