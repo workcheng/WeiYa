@@ -27,71 +27,35 @@
                     config[k] = json.data[k];
                 }
                 config.debug = true;// 添加你需要的JSSDK的权限
-                config.appId = config.appId;
+                config.appId = config.appid;
                 config.jsApiList = ['getLocation'];
                 config.timestamp = parseInt(config.timestamp);
                 config.nonceStr = config.noncestr;
                 config.signature = config.signature
-                console.log('config', config);
                 wx.config(config);
-
-                console.log('wx', wx);
-
-
                 wx.ready(function () {
                     alert("微信jssdk配置成功!");
                     //地理位置
-                });
-                wx.hideOptionMenu();
-                wx.getLocation({
-                    success: function (res) {
-                        var latitude = res.latitude; // 纬度，浮点数，范围为90 ~ -90
-                        var longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。
-                        var speed = res.speed; // 速度，以米/每秒计
-                        var accuracy = res.accuracy; // 位置精度
-                        alert("latitude : " + latitude + "--longitude : " + longitude + "--speed : " + speed + "--accuracy : " + accuracy);
-                    }
-                });
+                    wx.getLocation({
+                        success: function (res) {
+                            alert(JSON.stringify(res));
+                        },
+                        cancel: function (res) {
+                            alert('用户拒绝授权获取地理位置');
+                        }
+                    });
 
-                wx.error(function (res) {
-                    alert('微信JSSDK配置失败！');
+                    wx.getNetworkType({
+                        success: function (res) {
+                            alert(res.networkType);
+                        },
+                        fail: function (res) {
+                            alert(JSON.stringify(res));
+                        }
+                    });
                 });
             });
         });
-        /*  wx.config({
-         debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
-         appId: 'wxa002721c59e0435a', // 必填，公众号的唯一标识
-         timestamp: 1482118665, // 必填，生成签名的时间戳
-         nonceStr: 'HvKDeQuRmBNBSVyMOfA7ZxOjEj6RuxTlRaXDIFE0ywVzrOJ7kpwoaIno-G0IjL6gi7PGXLjzar4M7rKeAq6xNkohqZmPJgrMu2CbH_dR2so', // 必填，生成签名的随机串
-         signature: 'e8de0fc3abc4870434e5b641bc252449f471026f',// 必填，签名，见附录1
-         jsApiList: ['getLocation'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
-         });
-         wx.ready(function () {
-         alert("微信jssdk配置成功!");
-         });
-         $('#btnSign').click(function () {
-         //地理位置
-         wx.getLocation({
-         success: function (res) {
-         var latitude = res.latitude; // 纬度，浮点数，范围为90 ~ -90
-         var longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。
-         var speed = res.speed; // 速度，以米/每秒计
-         var accuracy = res.accuracy; // 位置精度
-         alert("latitude : " + latitude + "--longitude : " + longitude + "--speed : " + speed + "--accuracy : " + accuracy);
-         }
-         });
-         /!*wx.scanQRCode({
-         // 默认为0，扫描效果由微信处理，1则直接返回扫描结果，
-         needResult: 1,
-         // 可以指定扫二维码还是一维码，默认二者都有
-         scanType: ["qrCode", "barCode"],
-         success: function (res) {
-         // 当needResult 为 1 时，扫码返回的结果
-         var result = res.resultStr;
-         alert(result);
-         }
-         });*!/
-         });*/
     </script>
 </head>
 <body>
@@ -113,7 +77,7 @@
         </select>
     </ul>
     <ul>
-        <input class="weui_btn weui_btn_mini weui_btn_primary" type="button" value="签到" id="btnSign">
+        <input type="button" value="签到" id="btnSign">
     </ul>
 </div>
 </body>
