@@ -1,4 +1,4 @@
-package com.zoe.weiya.service.test;
+package com.zoe.weiya.service;
 
 import com.zoe.weiya.dao.test.TestDao;
 import org.springframework.beans.factory.annotation.Autowired;

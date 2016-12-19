@@ -256,7 +256,7 @@ public class ZoeRedisTemplete {
 
   public Set<String> getAllSessionkey() {
 
-    Set<String> sets = redisTemplete.keys("0gmi:session:*");
+    Set<String> sets = redisTemplete.keys("00:session:*");
     return sets;
   }
 
