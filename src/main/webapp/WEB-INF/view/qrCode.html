@@ -9,23 +9,6 @@
     <script>
         $(document).ready(function () {
             var weixinUrl = location.href.split('#')[0];
-            var weixin = location.href.split('=')[1];
-            var code = weixin.split('&')[0];
-            var getUserInfo = "http://zxc.tunnel.qydev.com/auth/user_info";
-
-            //用户授权
-            var authUrl = "http://zxc.tunnel.qydev.com/auth/url";
-            $.ajax({
-                url: authUrl, //这个地址是服务器配置JSSDK的地址
-                data: {           // 这个地址是发生jssdk调用的url地址
-                    // 用于服务器配置
-                    url: weixinUrl,
-                    state: ''
-                }
-            }).success(function (data) {
-                alert(JSON.stringify(data));
-            });
-
             // 根据实际填写接口的配置地点
             // 这里的接口地址是基于node-weixin配置的。
             var url = "http://zxc.tunnel.qydev.com/sign/url";
@@ -37,50 +20,31 @@
                     url: weixinUrl
                 }
             }).success(function (json) {       // 获得服务器返回的配置信息
-                var data = json.data;
                 var config = {};
                 for (var k in json.data) {
                     config[k] = json.data[k];
                 }
                 config.debug = true;// 添加你需要的JSSDK的权限
                 config.appId = config.appid;
-                config.jsApiList = ['scanQRCode', 'getLocation', 'getSystemInfo'];
+                config.jsApiList = ['scanQRCode'];
                 config.timestamp = parseInt(config.timestamp);
                 config.nonceStr = config.noncestr;
                 config.signature = config.signature
                 wx.config(config);
-                wx.ready(function () {
-                    alert("微信jssdk配置成功!");
-                    //地理位置
-                    wx.getLocation({
-                        success: function (res) {
-                            alert(JSON.stringify(res));
-                        },
-                        cancel: function (res) {
-                            alert('用户拒绝授权获取地理位置');
-                        }
-                    });
 
+                wx.ready(function () {
                     //扫描二维码并返回结果
                     wx.scanQRCode({
                         needResult: 0, // 默认为0，扫描结果由微信处理，1则直接返回扫描结果，
                         scanType: ["qrCode", "barCode"], // 可以指定扫二维码还是一维码，默认二者都有
                         success: function (res) {
                             var result = res.resultStr; // 当needResult 为 1 时，扫码返回的结果
-                            window.location.href = "/view/form.html?action=-1";
-                        }
-                    });
-                    /**
-                     *  获取系统信息
-                     */
-                    wx.getSystemInfo({
-                        success: function (res) {
-                            console.log(res)
+                            window.location.href = "/view/form.html";
                         }
                     });
                 });
                 wx.error(function (res) {
-                    alert(res.errMsg);
+                    console.info(res.errMsg);
                 });
             });
         });
@@ -88,7 +52,7 @@
 </head>
 <body>
 <div id="scanQRCode">
-
+    <p>Hello World!</p>
 </div>
 </body>
 </html>

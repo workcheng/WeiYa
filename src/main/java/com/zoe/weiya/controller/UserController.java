@@ -2,6 +2,7 @@ package com.zoe.weiya.controller;
 
 import com.zoe.weiya.comm.logger.ZoeLogger;
 import com.zoe.weiya.comm.logger.ZoeLoggerFactory;
+import com.zoe.weiya.comm.response.ZoeObject;
 import com.zoe.weiya.service.user.UserService;
 import me.chanjar.weixin.mp.bean.result.WxMpUser;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +20,9 @@ public class UserController {
     private UserService userService;
 
     @RequestMapping(value = "save",method = RequestMethod.POST)
-    public void save(@RequestBody WxMpUser u){
+    public Object save(@RequestBody WxMpUser u){
         userService.save(u);
+        return ZoeObject.success();
     }
 
     @RequestMapping(value = "getUser",method = RequestMethod.GET)

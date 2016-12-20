@@ -9,6 +9,14 @@ import me.chanjar.weixin.common.exception.WxErrorException;
  */
 public class ZoeObject {
 
+    public static ResponseMsg success(){
+        ResponseMsg msg = new ResponseMsg();
+        msg.setData("");
+        msg.setMessage(ZoeErrorCode.SUCCESS.getDescription());
+        msg.setStatus(ZoeErrorCode.SUCCESS.getCode());
+        return msg;
+    }
+
     public static ResponseMsg success(Object obj){
         ResponseMsg msg = new ResponseMsg();
         msg.setData(obj);
