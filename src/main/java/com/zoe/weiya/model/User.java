@@ -1,21 +1,23 @@
 package com.zoe.weiya.model;
 
+import me.chanjar.weixin.mp.bean.result.WxMpUser;
+
 import java.io.Serializable;
 
 /**
  * Created by andy on 2016/12/20.
  */
-public class User implements Serializable {
+public class User extends WxMpUser implements Serializable {
 
-    private String id;
+    private String openid;
     private String name;
 
-    public String getId() {
-        return id;
+    public String getOpenid() {
+        return openid;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setOpenid(String openid) {
+        this.openid = openid;
     }
 
     public String getName() {
@@ -29,7 +31,7 @@ public class User implements Serializable {
     @Override
     public String toString() {
         return "User{" +
-                "id='" + id + '\'' +
+                "openid='" + openid + '\'' +
                 ", name='" + name + '\'' +
                 '}';
     }

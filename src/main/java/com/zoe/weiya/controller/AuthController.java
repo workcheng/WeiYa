@@ -22,6 +22,7 @@ public class AuthController {
     @Autowired
     protected WxMpServiceImpl wxMpService;
 
+
     @RequestMapping(value="url",method = RequestMethod.GET)
     public Object getAuthUrl(String url,String state){
         return ZoeObject.success(wxMpService.oauth2buildAuthorizationUrl(url, CommonConstant.AUTH_USERINFO,state));
@@ -40,7 +41,7 @@ public class AuthController {
     @RequestMapping("user_info")
     public Object getUserInfo(@RequestParam(value = "code") String code, String lang){
         try {
-            return wxMpService.oauth2getUserInfo(wxMpService.oauth2getAccessToken(code),lang);
+            return ZoeObject.success(wxMpService.oauth2getUserInfo(wxMpService.oauth2getAccessToken(code),lang));
         } catch (WxErrorException e) {
             log.error(CommonConstant.ERROR+e.toString());
             return ZoeObject.failure(e.toString());
