@@ -268,8 +268,8 @@ public class ZoeRedisTemplete {
     return redisTemplete.getExpire(key, timeUnit);
   }
 
-  public void setSet(String key, Object obj){
-    redisTemplete.opsForSet().add(key,obj);
+  public Long setSet(String key, Object obj){
+    return redisTemplete.opsForSet().add(key,obj);
   }
 
   public boolean isMember(String key, Object obj){
