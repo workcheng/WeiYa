@@ -1,7 +1,7 @@
 package com.zoe.weiya.service.user;
 
 import com.zoe.weiya.comm.redis.ZoeRedisTemplete;
-import com.zoe.weiya.model.User;
+import me.chanjar.weixin.mp.bean.result.WxMpUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,11 +13,11 @@ public class UserService {
     @Autowired
     private ZoeRedisTemplete zoeRedisTemplete;
 
-    public void save(User u){
-        zoeRedisTemplete.setValue(u.getId(),u);
+    public void save(WxMpUser u){
+        zoeRedisTemplete.setValue(u.getOpenId(),u);
     }
 
-    public User get(String id){
-        return (User) zoeRedisTemplete.getValue(id);
+    public WxMpUser get(String openId){
+        return (WxMpUser) zoeRedisTemplete.getValue(openId);
     }
 }
