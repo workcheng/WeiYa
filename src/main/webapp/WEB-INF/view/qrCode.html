@@ -3,11 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name=viewport content="width=device-width">
-    <title>签到</title>
-    <link rel="stylesheet" href="http://demo.open.weixin.qq.com/jssdk/css/style.css?ts=1420774989">
+    <title>扫描二维码</title>
     <script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
     <script src="http://apps.bdimg.com/libs/jquery/1.11.3/jquery.min.js"></script>
-
     <script>
         $(document).ready(function () {
             var weixinUrl = location.href.split('#')[0];
@@ -23,18 +21,6 @@
                     // 用于服务器配置
                     url: weixinUrl,
                     state: ''
-                }
-            }).success(function (data) {
-                alert(JSON.stringify(data));
-            });
-
-            //获取用户信息
-            $.ajax({
-                url: getUserInfo, //这个地址是服务器配置JSSDK的地址
-                data: {           // 这个地址是发生jssdk调用的url地址
-                    // 用于服务器配置
-                    code: code,
-                    lang: ''
                 }
             }).success(function (data) {
                 alert(JSON.stringify(data));
@@ -58,7 +44,7 @@
                 }
                 config.debug = true;// 添加你需要的JSSDK的权限
                 config.appId = config.appid;
-                config.jsApiList = ['getLocation'];
+                config.jsApiList = ['scanQRCode', 'getLocation', 'getSystemInfo'];
                 config.timestamp = parseInt(config.timestamp);
                 config.nonceStr = config.noncestr;
                 config.signature = config.signature
@@ -84,7 +70,14 @@
                             window.location.href = "/view/form.html?action=-1";
                         }
                     });
-
+                    /**
+                     *  获取系统信息
+                     */
+                    wx.getSystemInfo({
+                        success: function (res) {
+                            console.log(res)
+                        }
+                    });
                 });
                 wx.error(function (res) {
                     alert(res.errMsg);
@@ -94,26 +87,8 @@
     </script>
 </head>
 <body>
-<div>
-    <ul>
-        <label>姓名：</label>
-        <input name="userName" type="text">
-    </ul>
-    <ul>
-        <label>性别：</label>
-        <input name="sex" type="radio" value="男" selected="selected">男
-        <input name="sex" type="radio" value="女" selected="selected">女
-    </ul>
-    <ul>
-        <label>部门：</label>
-        <select name="dept">
-            <option value="0">区域产品中心</option>
-            <option value="1">医院产品中心</option>
-        </select>
-    </ul>
-    <ul>
-        <input type="button" value="签到" id="btnSign">
-    </ul>
+<div id="scanQRCode">
+
 </div>
 </body>
 </html>
