@@ -268,4 +268,36 @@ public class ZoeRedisTemplete {
     return redisTemplete.getExpire(key, timeUnit);
   }
 
+  public void setSet(String key, Object obj){
+    redisTemplete.opsForSet().add(key,obj);
+  }
+
+  public boolean isMember(String key, Object obj){
+    return redisTemplete.opsForSet().isMember(key,obj);
+  }
+
+  public Long getSetSize(String key){
+    return redisTemplete.opsForSet().size(key);
+  }
+
+  public Object pop(String key){
+    return redisTemplete.opsForSet().pop(key);
+  }
+
+  public Set<Object> getSet(String key){
+    return redisTemplete.opsForSet().members(key);
+  }
+
+  public Object randomMember(String key){
+    return redisTemplete.opsForSet().randomMember(key);
+  }
+
+  public List<Object> randomMember(String key, long l){
+    return redisTemplete.opsForSet().randomMembers(key,l);
+  }
+
+  public Long remove(String key, List<Object> list){
+    return redisTemplete.opsForSet().remove(key, list);
+  }
+
 }
