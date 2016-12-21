@@ -19,7 +19,9 @@ public class UserServiceTest extends AbstractTestCase {
         User u = new User();
         u.setName("ch");
         u.setOpenid("001");
-        log.info("info:"+userService.saveInSet(u));
+        log.info("info:"+userService.saveInSet(u.getOpenId()));
+        u.setCity("XIAMEN");
+        log.info("size:"+userService.isMember(u.getOpenId()));
     }
 
     @Test
