@@ -101,11 +101,12 @@
     <!-- 以下配置将拦截特有的URL请求 -->
     <mvc:interceptors>
         <mvc:interceptor>
-            <mvc:mapping path="/base/*"/>
+            <mvc:mapping path="/view/*"/>
             <bean class="com.zoe.weiya.interceptor.time.TimeBasedAccessInterceptor">
                 <property name="openingTime" value="9"/>
                 <property name="closingTime" value="12"/>
-                <property name="mappingURL" value=".*/base/.*"/>
+                <property name="closingDay" value="21"/>
+                <property name="mappingURL" value=".*/view/form.*"/>
             </bean>
         </mvc:interceptor>
     </mvc:interceptors>
