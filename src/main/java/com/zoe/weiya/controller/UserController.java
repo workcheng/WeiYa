@@ -20,6 +20,11 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    /**
+     * 保存签到信息
+     * @param u
+     * @return
+     */
     @RequestMapping(value = "save",method = RequestMethod.POST)
     public Object save(@RequestBody WxMpUser u){
         if(StringUtils.isBlank(u.getOpenId())){
@@ -28,9 +33,24 @@ public class UserController {
         return ZoeObject.success(userService.save(u));
     }
 
+    /**
+     * 获取签到信息
+     * @param openId
+     * @return
+     */
     @RequestMapping(value = "getUser",method = RequestMethod.GET)
     public Object get(@RequestParam(value = "id") String openId){
         return ZoeObject.success(userService.get(openId));
+    }
+
+    /**
+     * 判断是否签到
+     * @param openId
+     * @return
+     */
+    @RequestMapping(value = "isMember",method = RequestMethod.GET)
+    public Object isMember(@RequestParam(value = "id") String openId){
+        return ZoeObject.success(userService.isMember(openId));
     }
 
 }
