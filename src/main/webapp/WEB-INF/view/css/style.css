@@ -14,7 +14,7 @@ body {
 }
 
 fieldset {
-    border: 1px #ebebeb solid;
+    border: 0px #ebebeb solid;
     padding: 15px 10px 15px 10px;
     margin: 0 0 10px 0;
 }
@@ -114,9 +114,12 @@ textarea.optional {
 }
 
 input.submit {
+    height: 30px;
+    line-height: 30px;
+    padding: 0 30px;
     color: #FFFFFF;
-    background-color: #0fcdf6;
-    padding: 2px 5px 2px 5px;
+    background-color: #66ffff;
+    border-radius: 200px;
     cursor: pointer;
     border: none;
 }
