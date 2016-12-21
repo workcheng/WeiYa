@@ -25,7 +25,7 @@ public class UserService {
             zoeRedisTemplete.setValue(u.getOpenId(),u);
             return ZoeObject.success();
         }else if(aLong == 0){
-            return ZoeObject.failure(ZoeErrorCode.ERROR_HAS_SIGN);
+            return ZoeObject.failure(ZoeErrorCode.HAS_SIGN);
         }
         return ZoeObject.failure(ZoeErrorCode.ERROR_INTERNAL);
     }

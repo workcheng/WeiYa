@@ -52,9 +52,9 @@ public class UserController {
     @RequestMapping(value = "isMember",method = RequestMethod.GET)
     public Object isMember(@RequestParam(value = "id") String openId){
         if(userService.isMember(openId)){
-            return ZoeObject.success(ZoeErrorCode.ERROR_HAS_SIGN);
+            return ZoeObject.success(ZoeErrorCode.HAS_SIGN);
         }else{
-            return ZoeObject.success(ZoeErrorCode.ERROR_NOT_SIGN);
+            return ZoeObject.success(ZoeErrorCode.NOT_SIGN);
         }
     }
 
