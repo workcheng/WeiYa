@@ -25,6 +25,14 @@ public class ZoeObject {
         return msg;
     }
 
+    public static ResponseMsg failure(){
+        ResponseMsg msg = new ResponseMsg();
+        msg.setData("");
+        msg.setMessage(ZoeErrorCode.ERROR.getDescription());
+        msg.setStatus(ZoeErrorCode.ERROR.getCode());
+        return msg;
+    }
+
     public static ResponseMsg failure(Object obj){
         ResponseMsg msg = new ResponseMsg();
         msg.setData(obj);
