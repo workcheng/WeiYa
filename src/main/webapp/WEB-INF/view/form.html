@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="initial-scale=1, user-scalable=0, minimal-ui">
-    <title>签到</title>
+    <title>年会签到表</title>
     <link rel="stylesheet" href="../view/css/style.css">
     <script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
     <script src="http://apps.bdimg.com/libs/jquery/1.11.3/jquery.min.js"></script>
@@ -43,7 +43,7 @@
                 }
                 config.debug = true;// 添加你需要的JSSDK的权限
                 config.appId = config.appid;
-                config.jsApiList = ['checkJsApi', 'getLocation'];
+                config.jsApiList = ['checkJsApi', 'getLocation', 'closeWindow'];
                 config.timestamp = parseInt(config.timestamp);
                 config.nonceStr = config.noncestr;
                 config.signature = config.signature
@@ -61,7 +61,10 @@
                     }
                 });
                 //地理位置
+                /*$('#getLocation').click(function () {
+                 initWxConfig(window.location.href, '@Url.Action("GetWxConfig","Api")');//重新获取微信配置参数*/
                 wx.getLocation({
+                    type: 'wgs84',// 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
                     success: function (res) {
                         console.log(res, JSON.stringify((res)));
                         // alert(JSON.stringify(res));
@@ -86,14 +89,15 @@
                     }).success(function (json) {
                         var userInfo = json.data;
                         var openId = userInfo.openId;
-                        console.log(openId, JSON.stringify(openId));
+                        console.log(userInfo, JSON.stringify(userInfo));
 
                         document.querySelector('#btnSign').onclick = function () {
                             var addUserUrl = "http://zxc.tunnel.qydev.com/user/save";
                             var signInfo = {
-//                                "userName": $("input[name='userName']").val(),
-//                                "dept": $("select[name='dept']").val(),
-//                                "phone": $("input[name='phone']").val(),
+                                /* "userName": $("input[name='userName']").val(),
+                                 "dept": $("select[name='dept']").val(),
+                                 "phone": $("input[name='phone']").val(),*/
+                                "headImgUrl": userInfo.headImgUrl,
                                 "openId": openId
                             };
                             signInfo = JSON.stringify(signInfo);
@@ -104,7 +108,12 @@
                                 contentType: 'application/json',
                                 data: signInfo
                             }).success(function (json) {
-                                console.log(JSON.stringify(json));
+                                var msg = json.message;
+                                if (msg == "成功") {
+                                    window.location.href = "/view/success.html";
+                                    wx.closeWindow();
+                                }
+                                console.log(JSON.stringify(json.message));
                             })
                         }
                     });
@@ -123,17 +132,25 @@
 <div>
     <fieldset>
         <legend>图片</legend>
+        <div class="form-row" style="width: 100px;height: 100px;float: left;clear: none">
+            <img src="images/zysoft.jpg" style="width: 100px;height: 100px">
+        </div>
+        <div class="form-row" style="width: 200px;height: 100px;float: left;clear: none">
+            <h2>年会签到表</h2>
+            <span>感谢您参加智业年会，请登记您的签到信息。</span>
+        </div>
     </fieldset>
 </div>
 <div>
     <fieldset>
-        <legend>签到</legend>
+        <legend>年会签到表</legend>
         <div class="form-row">
             <div class="field-label"><label for="userName">姓名</label>:</div>
             <div class="field-widget"><input name="userName" id="userName" class="required"></div>
         </div>
         <div class="form-row">
-            <div class="field-label"><label for="dept">部门</label>:</div>
+            <div class="field-label" style="width: 188px;"><label for="dept" style="width: 152px;">所属中心/分子公司</label>:
+            </div>
             <div class="field-widget">
                 <select id="field6" name="dept" class="validate-selection">
                     <option>--请选择--</option>
