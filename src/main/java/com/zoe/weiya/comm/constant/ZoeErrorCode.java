@@ -11,8 +11,8 @@ public enum ZoeErrorCode {
     HAS_SIGN(2001, "已签到"),
     NOT_SIGN(2002, "未签到");
 
-    ZoeErrorCode(int number, String description) {
-        this.code = number;
+    ZoeErrorCode(int code, String description) {
+        this.code = code;
         this.description = description;
     }
 
