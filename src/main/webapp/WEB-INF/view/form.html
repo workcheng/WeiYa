@@ -91,31 +91,47 @@
                         var openId = userInfo.openId;
                         console.log(userInfo, JSON.stringify(userInfo));
 
-                        document.querySelector('#btnSign').onclick = function () {
-                            var addUserUrl = "http://zxc.tunnel.qydev.com/user/save";
-                            var signInfo = {
-                                /* "userName": $("input[name='userName']").val(),
-                                 "dept": $("select[name='dept']").val(),
-                                 "phone": $("input[name='phone']").val(),*/
-                                "headImgUrl": userInfo.headImgUrl,
-                                "openId": openId
-                            };
-                            signInfo = JSON.stringify(signInfo);
-                            console.log("info", signInfo);
-                            $.ajax({
-                                type: 'POST',
-                                url: addUserUrl,
-                                contentType: 'application/json',
-                                data: signInfo
-                            }).success(function (json) {
-                                var msg = json.message;
-                                if (msg == "成功") {
-                                    window.location.href = "/view/success.html";
-                                    wx.closeWindow();
+                        var memberUrl = "http://zxc.tunnel.qydev.com/user/isMember";
+                        $.ajax({
+                            url: memberUrl,
+                            data: {
+                                id: openId
+                            }
+                        }).success(function (json) {
+                            console.log(json, JSON.stringify(json));
+                            var data = json.data;
+                            if (data == true) {
+                                document.querySelector('#btnSign').onclick = function () {
+                                    var addUserUrl = "http://zxc.tunnel.qydev.com/user/save";
+                                    var signInfo = {
+                                        /* "userName": $("input[name='userName']").val(),
+                                         "dept": $("select[name='dept']").val(),
+                                         "phone": $("input[name='phone']").val(),*/
+                                        "headImgUrl": userInfo.headImgUrl,
+                                        "openId": openId
+                                    };
+                                    signInfo = JSON.stringify(signInfo);
+                                    console.log("info", signInfo);
+                                    $.ajax({
+                                        type: 'POST',
+                                        url: addUserUrl,
+                                        contentType: 'application/json',
+                                        data: signInfo
+                                    }).success(function (json) {
+                                        var msg = json.message;
+                                        if (msg == "成功") {
+                                            $("#partySign").hide();
+                                            $("#signSuccess").show();
+                                        }
+                                        console.log(JSON.stringify(json.message));
+                                    })
                                 }
-                                console.log(JSON.stringify(json.message));
-                            })
-                        }
+                            } else {
+                                $("#partySign").hide();
+                                $("#reSign").show();
+                            }
+                        })
+
                     });
                 });
                 wx.error(function (res) {
@@ -144,37 +160,49 @@
 <div>
     <fieldset>
         <legend>年会签到表</legend>
-        <div class="form-row">
-            <div class="field-label"><label for="userName">姓名</label>:</div>
-            <div class="field-widget"><input name="userName" id="userName" class="required"></div>
-        </div>
-        <div class="form-row">
-            <div class="field-label" style="width: 188px;"><label for="dept" style="width: 152px;">所属中心/分子公司</label>:
+        <div id="partySign">
+            <div class="form-row">
+                <div class="field-label"><label for="userName">姓名</label>:</div>
+                <div class="field-widget"><input name="userName" id="userName" class="required"></div>
             </div>
-            <div class="field-widget">
-                <select id="field6" name="dept" class="validate-selection">
-                    <option>--请选择--</option>
-                    <option>区域产品中心</option>
-                    <option>医院产品中心</option>
-                    <option>智业互联</option>
-                    <option>云顶伟业</option>
-                    <option>福建区</option>
-                </select>
+            <div class="form-row">
+                <div class="field-label" style="width: 188px;"><label for="dept" style="width: 152px;">所属中心/分子公司</label>:
+                </div>
+                <div class="field-widget">
+                    <select id="field6" name="dept" class="validate-selection">
+                        <option>--请选择--</option>
+                        <option>区域产品中心</option>
+                        <option>医院产品中心</option>
+                        <option>智业互联</option>
+                        <option>云顶伟业</option>
+                        <option>福建区</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="field-label"><label for="phone">电话</label>:</div>
+                <div class="field-widget"><input name="phone" id="field7" class="required"></div>
+            </div>
+            <div class="form-row">
+                <div class="field-label"><label></label></div>
+                <div class="field-widget">
+                    <label class="field-label" style="width: 80px;" for="phone">是否点餐:</label>
+                    <input type="checkbox" name="isOrder" style="margin-top: 6px;">
+                </div>
+            </div>
+            <div class="form-row">
+                <input type="submit" class="submit" id="btnSign" value="签到"/>
             </div>
         </div>
-        <div class="form-row">
-            <div class="field-label"><label for="phone">电话</label>:</div>
-            <div class="field-widget"><input name="phone" id="field7" class="required"></div>
+        <div id="signSuccess" style="display: none">
+            <span>
+                <p>签到成功，感谢您的配合！</p>
+            </span>
         </div>
-        <div class="form-row">
-            <div class="field-label"><label></label></div>
-            <div class="field-widget">
-                <label class="field-label" style="width: 80px;" for="phone">是否点餐:</label>
-                <input type="checkbox" name="isOrder" style="margin-top: 6px;">
-            </div>
-        </div>
-        <div class="form-row">
-            <input type="submit" class="submit" id="btnSign" value="签到"/>
+        <div id="reSign" style="display: none">
+            <span>
+                <p>对不起，您已经签到一次了，不能重复签到！</p>
+            </span>
         </div>
     </fieldset>
 </div>
