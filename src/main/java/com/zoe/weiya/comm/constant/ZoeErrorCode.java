@@ -8,7 +8,8 @@ public enum ZoeErrorCode {
     ERROR(1001,"错误"),
     ERROR_INTERNAL(1002,"内部错误"),
     ERROR_WECHAT(2000,"WECHAT SDK错误"),
-    ERROR_HAS_SIGN(2001,"已签到")
+    ERROR_HAS_SIGN(2001,"已签到"),
+    ERROR_NOT_SIGN(2002,"未签到")
     ;
 
     ZoeErrorCode(int number, String description) {
