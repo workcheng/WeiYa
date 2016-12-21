@@ -1,5 +1,6 @@
 package com.zoe.weiya.controller;
 
+import com.zoe.weiya.comm.constant.ZoeErrorCode;
 import com.zoe.weiya.comm.logger.ZoeLogger;
 import com.zoe.weiya.comm.logger.ZoeLoggerFactory;
 import com.zoe.weiya.comm.response.ZoeObject;
@@ -50,7 +51,11 @@ public class UserController {
      */
     @RequestMapping(value = "isMember",method = RequestMethod.GET)
     public Object isMember(@RequestParam(value = "id") String openId){
-        return ZoeObject.success(userService.isMember(openId));
+        if(userService.isMember(openId)){
+            return ZoeObject.success(ZoeErrorCode.ERROR_HAS_SIGN);
+        }else{
+            return ZoeObject.success(ZoeErrorCode.ERROR_NOT_SIGN);
+        }
     }
 
 }
