@@ -2,19 +2,15 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name=viewport content="width=device-width">
+    <meta name="viewport" content="initial-scale=1, user-scalable=0, minimal-ui">
     <title>签到</title>
-    <link rel="stylesheet" href="http://demo.open.weixin.qq.com/jssdk/css/style.css?ts=1420774989">
+    <link rel="stylesheet" href="../view/css/style.css">
     <script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
     <script src="http://apps.bdimg.com/libs/jquery/1.11.3/jquery.min.js"></script>
 
     <script>
         $(document).ready(function () {
             var weixinUrl = location.href.split('#')[0];
-            var weixin = location.href.split('=')[1];
-            var code = weixin.split('&')[0];
-            var getUserInfo = "http://zxc.tunnel.qydev.com/auth/user_info";
-
             //用户授权
             var authUrl = "http://zxc.tunnel.qydev.com/auth/url";
             $.ajax({
@@ -24,24 +20,13 @@
                     url: weixinUrl,
                     state: ''
                 }
-            }).success(function (data) {
-                alert(JSON.stringify(data));
-            });
-
-            //获取用户信息
-            $.ajax({
-                url: getUserInfo, //这个地址是服务器配置JSSDK的地址
-                data: {           // 这个地址是发生jssdk调用的url地址
-                    // 用于服务器配置
-                    code: code,
-                    lang: ''
-                }
-            }).success(function (data) {
-                alert(JSON.stringify(data));
+            }).success(function (json) {
+                console.log(JSON.stringify(json.data));
             });
 
             // 根据实际填写接口的配置地点
             // 这里的接口地址是基于node-weixin配置的。
+            var weixinUrl = location.href.split('#')[0];
             var url = "http://zxc.tunnel.qydev.com/sign/url";
             // 当前的网页请求地址
             $.ajax({
@@ -58,62 +43,123 @@
                 }
                 config.debug = true;// 添加你需要的JSSDK的权限
                 config.appId = config.appid;
-                config.jsApiList = ['getLocation'];
+                config.jsApiList = ['checkJsApi', 'getLocation'];
                 config.timestamp = parseInt(config.timestamp);
                 config.nonceStr = config.noncestr;
                 config.signature = config.signature
                 wx.config(config);
+
+                wx.checkJsApi({
+                    jsApiList: [
+                        'getLocation'
+                    ],
+                    success: function (res) {
+                        if (res.checkResult.getLocation == false) {
+                            alert('你的微信版本太低，不支持微信JS接口，请升级到最新的微信版本！');
+                            return;
+                        }
+                    }
+                });
+                //地理位置
+                wx.getLocation({
+                    success: function (res) {
+                        console.log(res, JSON.stringify((res)));
+                        // alert(JSON.stringify(res));
+                    },
+                    cancel: function (res) {
+                        alert('用户拒绝授权获取地理位置');
+                    }
+                });
+
                 wx.ready(function () {
-                    alert("微信jssdk配置成功!");
-                    //地理位置
-                    wx.getLocation({
-                        success: function (res) {
-                            alert(JSON.stringify(res));
-                        },
-                        cancel: function (res) {
-                            alert('用户拒绝授权获取地理位置');
+                    var getUserInfo = "http://zxc.tunnel.qydev.com/auth/user_info";
+                    var weixin = location.href.split('=')[1];
+                    var code = weixin.split('&')[0];
+                    //获取用户信息
+                    $.ajax({
+                        url: getUserInfo, //这个地址是服务器配置JSSDK的地址
+                        data: {           // 这个地址是发生jssdk调用的url地址
+                            // 用于服务器配置
+                            code: code,
+                            lang: ''
+                        }
+                    }).success(function (json) {
+                        var userInfo = json.data;
+                        var openId = userInfo.openId;
+                        console.log(openId, JSON.stringify(openId));
+
+                        document.querySelector('#btnSign').onclick = function () {
+                            var addUserUrl = "http://zxc.tunnel.qydev.com/user/save";
+                            var signInfo = {
+//                                "userName": $("input[name='userName']").val(),
+//                                "dept": $("select[name='dept']").val(),
+//                                "phone": $("input[name='phone']").val(),
+                                "openId": openId
+                            };
+                            signInfo = JSON.stringify(signInfo);
+                            console.log("info", signInfo);
+                            $.ajax({
+                                type: 'POST',
+                                url: addUserUrl,
+                                contentType: 'application/json',
+                                data: signInfo
+                            }).success(function (json) {
+                                console.log(JSON.stringify(json));
+                            })
                         }
                     });
-
-                    //扫描二维码并返回结果
-                    wx.scanQRCode({
-                        needResult: 0, // 默认为0，扫描结果由微信处理，1则直接返回扫描结果，
-                        scanType: ["qrCode", "barCode"], // 可以指定扫二维码还是一维码，默认二者都有
-                        success: function (res) {
-                            var result = res.resultStr; // 当needResult 为 1 时，扫码返回的结果
-                            window.location.href = "/view/form.html?action=-1";
-                        }
-                    });
-
                 });
                 wx.error(function (res) {
-                    alert(res.errMsg);
+                    //alert(res.errMsg);
                 });
             });
         });
     </script>
+    <style type="text/css">
+
+    </style>
 </head>
 <body>
 <div>
-    <ul>
-        <label>姓名：</label>
-        <input name="userName" type="text">
-    </ul>
-    <ul>
-        <label>性别：</label>
-        <input name="sex" type="radio" value="男" selected="selected">男
-        <input name="sex" type="radio" value="女" selected="selected">女
-    </ul>
-    <ul>
-        <label>部门：</label>
-        <select name="dept">
-            <option value="0">区域产品中心</option>
-            <option value="1">医院产品中心</option>
-        </select>
-    </ul>
-    <ul>
-        <input type="button" value="签到" id="btnSign">
-    </ul>
+    <fieldset>
+        <legend>图片</legend>
+    </fieldset>
+</div>
+<div>
+    <fieldset>
+        <legend>签到</legend>
+        <div class="form-row">
+            <div class="field-label"><label for="userName">姓名</label>:</div>
+            <div class="field-widget"><input name="userName" id="userName" class="required"></div>
+        </div>
+        <div class="form-row">
+            <div class="field-label"><label for="dept">部门</label>:</div>
+            <div class="field-widget">
+                <select id="field6" name="dept" class="validate-selection">
+                    <option>--请选择--</option>
+                    <option>区域产品中心</option>
+                    <option>医院产品中心</option>
+                    <option>智业互联</option>
+                    <option>云顶伟业</option>
+                    <option>福建区</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="field-label"><label for="phone">电话</label>:</div>
+            <div class="field-widget"><input name="phone" id="field7" class="required"></div>
+        </div>
+        <div class="form-row">
+            <div class="field-label"><label></label></div>
+            <div class="field-widget">
+                <label class="field-label" style="width: 80px;" for="phone">是否点餐:</label>
+                <input type="checkbox" name="isOrder" style="margin-top: 6px;">
+            </div>
+        </div>
+        <div class="form-row">
+            <input type="submit" class="submit" id="btnSign" value="签到"/>
+        </div>
+    </fieldset>
 </div>
 </body>
 </html>

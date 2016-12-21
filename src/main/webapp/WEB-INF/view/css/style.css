@@ -1,107 +1,165 @@
-html, body {
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-}
-
 body {
-    background: url(../images/bg.png) no-repeat;
-    background-size: 100% 100%;
-    background-color: black;
-    padding-top: 50px;
-    height: 100%;
+    color: #333;
+    background: url(../images/bg.gif) repeat;
+    padding: 0px;
+    font-size: 12px;
+    font-family: Arial, Helvetica, sans-serif;
 }
 
-#title {
-    font-family: "STHeitiSC-Light", "Hiragino Sans GB", "Microsoft YaHei", "WenQuanYi Micro Hei", Arial, Helvetica, "sans-serif";
-    font-size: 70px;
-    color: white;
-    line-height: 72px;
-    text-shadow: 0px 0px 20px rgba(0, 0, 0, 0.50);
-    text-align: center;
-    margin: 30px;
+.form_content {
+    width: 575px;
+    margin: 30px auto;
+    padding: 10px;
+    background: url(../images/form_top_bg.gif) repeat-x top #fff;
 }
 
-#congra-label {
-    font-family: "STHeitiSC-Light", "Hiragino Sans GB", "Microsoft YaHei", "WenQuanYi Micro Hei", Arial, Helvetica, "sans-serif";
-    font-size: 50px;
-    color: white;
-    line-height: 72px;
-    text-shadow: 0px 0px 20px rgba(0, 0, 0, 0.50);
-    text-align: center;
-    visibility: hidden;
-    margin: 15px;
+fieldset {
+    border: 1px #ebebeb solid;
+    padding: 15px 10px 15px 10px;
+    margin: 0 0 10px 0;
 }
 
-#congra-label.active {
-    visibility: visible;
-    /*margin-top: 30px; */
+legend {
+    color: #FFFFFF;
+    background-color: #0fcdf6;
+    padding: 2px 5px 2px 5px;
 }
 
-#horizontal-line {
-    background-image: linear-gradient(-98deg, rgba(255, 255, 255, 0.13) 0%, #FFFFFF 45%, rgba(255, 255, 255, 0.08) 92%);
-    height: 2px;
-    width: 80%;
-    margin-left: auto;
-    margin-right: auto;
-    margin-bottom: 0px;
+legend.optional {
+    color: #FFFFFF;
+    background-color: #50c150;
+    padding: 2px 5px 2px 5px;
 }
 
-#btn-control {
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
+.form-row {
+    clear: both;
+    float: left;
+    padding: 5px 5px 5px 5px;
+}
 
-    height: 150px;
+.form-row-select {
+    clear: both;
+    float: left;
+    padding: 10px 5px 5px 5px;
+}
+
+.field-label {
+    width: 150px;
+    float: left;
+    line-height: 25px;
+    font-size: 18px;
+
+    font-weight: bold;
+}
+
+label {
+    float: left;
+    color: #666666;
+}
+
+label.left {
+    padding: 0 20px 0 5px;
+    float: left;
+    color: #666666;
+}
+
+.field-widget {
+    float: left;
+}
+
+input.required {
     width: 300px;
-    background: url(../images/go.png) no-repeat top;
+    height: 22px;
+    border: 1px solid #95E0EF;
+    background-color: #f3fcfe;
+    border-left-width: 2px;
+    padding: 5px 0 0 2px;
+    float: left;
 }
 
-#btn-control:active {
-    background: url(../images/go-press.png) no-repeat top;
+input.optional {
+    width: 300px;
+    height: 22px;
+    border: 1px solid #adedad;
+    background-color: #f3fef3;
+    border-left-width: 2px;
+    padding: 5px 0 0 2px;
 }
 
-#btn-control.running {
-    background: url(../images/stop.png) no-repeat top;
+select.validate-selection {
+    width: 305px;
+    height: 28px;
+    border: 1px solid #95E0EF;
+    background-color: #f3fcfe;
+    border-left-width: 2px;
+    padding: 4px 2px 3px 2px;
+    float: left;
 }
 
-#btn-control.running:active {
-    background: url(../images/stop-press.png) no-repeat top;
+textarea.required {
+    width: 300px;
+    height: 75px;
+    float: left;
+    border: 1px solid #95E0EF;
+    background-color: #f3fcfe;
+    border-left-width: 2px;
 }
 
-.slotMachine {
-    background-color: rgba(0, 0, 0, 0.21);
-    border: 2px solid white;
-    border-radius: 28px;
-
-    display: inline-block;
-    text-align: center;
-    height: 100px;
-    width: 460px;
-
-    margin: 5px;
+textarea.optional {
+    width: 300px;
+    height: 75px;
+    border: 1px solid #adedad;
+    background-color: #f3fef3;
+    border-left-width: 2px;
 }
 
-.slotMachine-box {
-    text-align: center;
-    margin-bottom: 20px;
+input.submit {
+    color: #FFFFFF;
+    background-color: #0fcdf6;
+    padding: 2px 5px 2px 5px;
+    cursor: pointer;
+    border: none;
 }
 
-.slotMachine.active {
-    box-shadow: 0px 0px 20px 0px #FFFFFF;
+input.reset {
+    color: #FFFFFF;
+    background-color: #50c150;
+    cursor: pointer;
+    padding: 2px 5px 2px 5px;
+    border: none;
 }
 
-.slot {
-    height: 100px;
-    line-height: 100px;
-    font-size: 50px;
-    color: white;
-    text-shadow: 0px 0px 20px rgba(0, 0, 0, 0.50);
+input.validation-failed, textarea.validation-failed, select.validation-failed {
+    border: 1px solid #FF9A7F;
+    background-color: #FFF2EF;
+    color: #FF3300;
 }
 
-#containter {
-    background-color: rgba(0, 0, 0, 0.21);
-    padding: 30px;
-    margin: 100px 350px;
-    border-radius: 80px;
+input.validation-passed, textarea.validation-passed {
+    border: 1px solid #00CC00;
+    color: #000;
 }
+
+.validation-advice {
+    width: 50px;
+    float: left;
+    margin: 0px 0 0 10px;
+    padding: 0px 0 0 25px;
+    background: url(../images/warning.png) no-repeat left;
+    color: #FF9A7F;
+    font-size: 10px;
+}
+
+.custom-advice {
+    margin: 5px 0;
+    padding: 5px;
+    background-color: #C8AA00;
+    color: #FFF;
+    font-weight: bold;
+}
+
+
+
+
+
+
