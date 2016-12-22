@@ -1,23 +1,35 @@
 package com.zoe.weiya.model;
 
-import me.chanjar.weixin.mp.bean.result.WxMpUser;
+import org.hibernate.validator.constraints.NotBlank;
 
-import java.io.Serializable;
+import javax.validation.constraints.NotNull;
 
 /**
  * Created by andy on 2016/12/20.
  */
-public class User extends WxMpUser implements Serializable {
+public class User extends OnlyUser{
 
-    private String openid;
+    @NotBlank(message = "openId不能为空")
+    private String openId;
+    @NotBlank(message = "姓名不能为空")
     private String name;
+    @NotNull(message = "是否订餐不能为空")
+    private Integer order;
 
-    public String getOpenid() {
-        return openid;
+    public Integer getOrder() {
+        return order;
     }
 
-    public void setOpenid(String openid) {
-        this.openid = openid;
+    public void setOrder(Integer order) {
+        this.order = order;
+    }
+
+    public String getOpenId() {
+        return openId;
+    }
+
+    public void setOpenId(String openId) {
+        this.openId = openId;
     }
 
     public String getName() {
@@ -31,7 +43,7 @@ public class User extends WxMpUser implements Serializable {
     @Override
     public String toString() {
         return "User{" +
-                "openid='" + openid + '\'' +
+                "openid='" + openId + '\'' +
                 ", name='" + name + '\'' +
                 '}';
     }
