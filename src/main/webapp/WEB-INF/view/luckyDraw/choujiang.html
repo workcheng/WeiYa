@@ -1,0 +1,121 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>抽奖系统</title>
+    <script type="text/javascript">
+        var alldata = "1,2,3,4,5,6,7,8,9,10,11";//抽奖数据，以逗号分隔
+        var alldataarr = alldata.split(",");
+        var num = alldataarr.length - 1;//总数量
+        var timer;
+        function change() {
+            var radm = GetRnd(0, num);
+            document.getElementById("showresult").value = alldataarr[radm];
+            document.getElementById("photoshow").src = "http://zxc.tunnel.qydev.com/view/luckyDraw/images/" + alldataarr[radm] + ".jpg";
+        }
+        function start() {
+            document.getElementById("showresult").value = "";
+            clearInterval(timer);
+            timer = setInterval('change()', 10); //随机数据变换速度，越小变换的越快
+        }
+        function ok() {
+            document.getElementById("zz").style.display = "block";
+            clearInterval(timer);
+            timer = setInterval('change()', 300);
+            setTimeout("clos()", 2000);
+        }
+        function GetRnd(min, max) {
+            return parseInt(Math.random() * (max - min + 1));
+        }
+        function qwe() {
+            document.getElementById("zz").onclick = function () {
+            }
+        }
+        function clos() {
+            clearInterval(timer);
+            document.getElementById("zz").onclick = function () {
+                this.style.display = "none";
+                qwe();
+            }
+        }
+        // --></script>
+    <style type="text/css">
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background: url(images/true1.jpg) no-repeat;
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+            background-size: cover;
+        }
+
+        /* #box {
+             background: url(images/true.jpg) no-repeat;
+             height: 100%;
+             width: 100%;
+             overflow: hidden;
+             background-size: cover;
+         }*/
+
+        #chouj {
+            position: absolute;
+            left: 25%;
+            top: 35%;
+        }
+
+        #chouj input {
+            weight: 300px;
+            height: 50px;
+        }
+
+        #oknum {
+            color: #FFF;
+        }
+
+        #zz {
+            position: absolute;
+            left: 0%;
+            width: 100%;
+            height: 100%;
+            background-color: black;
+            z-index: 0;
+            -moz-opacity: 0.7;
+            opacity: .70;
+            bottom: 0;
+            filter: alpha(opacity=70);
+            display: none;
+        }
+
+        #djs {
+            z-index: 10;
+            position: absolute;
+            color: #FFF;
+        }
+
+        #tp {
+            z-index: 1000;
+            position: absolute;
+        }
+    </style>
+</head>
+
+<body>
+<div id="box">
+    <div id="chouj">
+        <button onclick="start()" style="width:200px; height:50px; font-size:25px;" accesskey="s">开始抽奖</button>
+        <button onclick="ok()" style="width:200px; height:50px; font-size:25px;" accesskey="o">停止</button>
+        <div id="tp">
+            <img id="photoshow" src="" width="300" height="300"/><br/><br/>
+            <input name="" id="showresult" type="text" style="width:200px; height:50px; font-size:25px;" value=""/>
+        </div>
+
+    </div>
+    <div id="zz"></div>
+</div>
+</body>
+</html>

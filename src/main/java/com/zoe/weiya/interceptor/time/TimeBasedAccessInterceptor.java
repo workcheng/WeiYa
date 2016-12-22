@@ -52,13 +52,13 @@ public class TimeBasedAccessInterceptor extends HandlerInterceptorAdapter {
           return true;
         }
       }
-        String msg="签到开放时间：{0}号 {1}:00-{2}:00";
+       /* String msg="签到开放时间：{0}号 {1}:00-{2}:00";
         String format = MessageFormat.format(msg, closingDay, openingTime, closingTime);
         request.setAttribute("msg", format);
         request.getRequestDispatcher("/msg.jsp").forward(request, response);
         response.setContentType("application/json; charset=utf-8");
         response.getWriter().write(format);
-        return false;
+        return false;*/
     }
     return true;
   }
