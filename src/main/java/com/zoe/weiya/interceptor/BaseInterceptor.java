@@ -18,8 +18,6 @@ public class BaseInterceptor extends AbstractBaseInterceptor{
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
       throws Exception {
       doFilter(request,response);
-      String url = request.getRequestURL().toString();
-      log.error("base url="+url);
       return true;
     }
 
