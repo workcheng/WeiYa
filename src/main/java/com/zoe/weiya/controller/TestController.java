@@ -2,9 +2,10 @@ package com.zoe.weiya.controller;
 
 import com.zoe.weiya.comm.logger.ZoeLogger;
 import com.zoe.weiya.comm.logger.ZoeLoggerFactory;
+import com.zoe.weiya.model.OnlyUser;
+import com.zoe.weiya.model.User;
 import com.zoe.weiya.service.TestService;
 import com.zoe.weiya.service.user.UserService;
-import me.chanjar.weixin.mp.bean.result.WxMpUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -42,12 +43,12 @@ public class TestController {
     }
 
     @RequestMapping(value = "redis",method = RequestMethod.POST)
-    public void save(@RequestBody WxMpUser u){
+    public void save(@RequestBody User u){
         userService.save(u);
     }
 
     @RequestMapping(value = "redis",method = RequestMethod.GET)
-    public WxMpUser get(String id){
+    public OnlyUser get(String id){
         return userService.get(id);
     }
 }
