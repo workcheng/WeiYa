@@ -1,0 +1,540 @@
+﻿@charset "utf-8";
+/* CSS Document */
+body {
+    background: url(../images/bg.gif) top center no-repeat;
+    background-color: #fff;
+}
+
+#btn_change li {
+    border: 2px solid #fff;
+    color: #fff;
+}
+
+/*按钮颜色*/
+#joinCount, #top_notice {
+    color: #fff;
+}
+
+/*顶部滚动通知和参与人数的文字颜色*/
+#index {
+    color: #fff;
+}
+
+#wall_zz {
+    background: url(../images/bg.gif) center top no-repeat;
+    width: 100%;
+    height: 835px;
+    position: absolute;
+    top: -145px;
+    z-index: 8888;
+}
+
+#messagewall {
+    background: none;
+}
+
+#messagewall ul {
+    position: relative;
+    top: -29px;
+}
+
+#messagewall li {
+    background: none;
+}
+
+#messagewall #wall_1 {
+    Left: 321px;
+    Top: 315px;
+    Width: 38px;
+    Height: 38px;
+}
+
+#messagewall #wall_2 {
+    Left: 360px;
+    Top: 315px;
+    Width: 38px;
+    Height: 38px;
+}
+
+#messagewall #wall_3 {
+    Left: 399px;
+    Top: 315px;
+    Width: 38px;
+    Height: 38px;
+}
+
+#messagewall #wall_4 {
+    Left: 438px;
+    Top: 315px;
+    Width: 38px;
+    Height: 38px;
+}
+
+#messagewall #wall_5 {
+    Left: 477px;
+    Top: 315px;
+    Width: 38px;
+    Height: 38px;
+}
+
+#messagewall #wall_6 {
+    Left: 516px;
+    Top: 315px;
+    Width: 38px;
+    Height: 38px;
+}
+
+#messagewall #wall_7 {
+    Left: 555px;
+    Top: 315px;
+    Width: 38px;
+    Height: 38px;
+}
+
+#messagewall #wall_8 {
+    Left: 594px;
+    Top: 315px;
+    Width: 38px;
+    Height: 38px;
+}
+
+#messagewall #wall_9 {
+    Left: 633px;
+    Top: 315px;
+    Width: 38px;
+    Height: 38px;
+}
+
+#messagewall #wall_10 {
+    Left: 321px;
+    Top: 276px;
+    Width: 38px;
+    Height: 38px;
+}
+
+#messagewall #wall_11 {
+    Left: 360px;
+    Top: 276px;
+    Width: 38px;
+    Height: 38px;
+}
+
+#messagewall #wall_12 {
+    Left: 399px;
+    Top: 276px;
+    Width: 38px;
+    Height: 38px;
+}
+
+#messagewall #wall_13 {
+    Left: 438px;
+    Top: 276px;
+    Width: 38px;
+    Height: 38px;
+}
+
+#messagewall #wall_14 {
+    Left: 477px;
+    Top: 276px;
+    Width: 38px;
+    Height: 38px;
+}
+
+#messagewall #wall_15 {
+    Left: 516px;
+    Top: 276px;
+    Width: 38px;
+    Height: 38px;
+}
+
+#messagewall #wall_16 {
+    Left: 555px;
+    Top: 276px;
+    Width: 38px;
+    Height: 38px;
+}
+
+#messagewall #wall_17 {
+    Left: 594px;
+    Top: 276px;
+    Width: 38px;
+    Height: 38px;
+}
+
+#messagewall #wall_18 {
+    Left: 633px;
+    Top: 276px;
+    Width: 38px;
+    Height: 38px;
+}
+
+#messagewall #wall_19 {
+    Left: 321px;
+    Top: 237px;
+    Width: 38px;
+    Height: 38px;
+}
+
+#messagewall #wall_20 {
+    Left: 360px;
+    Top: 237px;
+    Width: 38px;
+    Height: 38px;
+}
+
+#messagewall #wall_21 {
+    Left: 399px;
+    Top: 237px;
+    Width: 38px;
+    Height: 38px;
+}
+
+#messagewall #wall_22 {
+    Left: 438px;
+    Top: 237px;
+    Width: 38px;
+    Height: 38px;
+}
+
+#messagewall #wall_23 {
+    Left: 477px;
+    Top: 237px;
+    Width: 38px;
+    Height: 38px;
+}
+
+#messagewall #wall_24 {
+    Left: 516px;
+    Top: 237px;
+    Width: 38px;
+    Height: 38px;
+}
+
+#messagewall #wall_25 {
+    Left: 555px;
+    Top: 237px;
+    Width: 38px;
+    Height: 38px;
+}
+
+#messagewall #wall_26 {
+    Left: 594px;
+    Top: 237px;
+    Width: 38px;
+    Height: 38px;
+}
+
+#messagewall #wall_27 {
+    Left: 633px;
+    Top: 237px;
+    Width: 38px;
+    Height: 38px;
+}
+
+#messagewall #wall_28 {
+    Left: 360px;
+    Top: 198px;
+    Width: 38px;
+    Height: 38px;
+}
+
+#messagewall #wall_29 {
+    Left: 399px;
+    Top: 198px;
+    Width: 38px;
+    Height: 38px;
+}
+
+#messagewall #wall_30 {
+    Left: 438px;
+    Top: 198px;
+    Width: 38px;
+    Height: 38px;
+}
+
+#messagewall #wall_31 {
+    Left: 477px;
+    Top: 198px;
+    Width: 38px;
+    Height: 38px;
+}
+
+#messagewall #wall_32 {
+    Left: 516px;
+    Top: 198px;
+    Width: 38px;
+    Height: 38px;
+}
+
+#messagewall #wall_33 {
+    Left: 555px;
+    Top: 198px;
+    Width: 38px;
+    Height: 38px;
+}
+
+#messagewall #wall_34 {
+    Left: 594px;
+    Top: 198px;
+    Width: 38px;
+    Height: 38px;
+}
+
+#messagewall #wall_35 {
+    Left: 633px;
+    Top: 198px;
+    Width: 38px;
+    Height: 38px;
+}
+
+#messagewall #wall_36 {
+    Left: 360px;
+    Top: 159px;
+    Width: 38px;
+    Height: 38px;
+}
+
+#messagewall #wall_37 {
+    Left: 399px;
+    Top: 159px;
+    Width: 38px;
+    Height: 38px;
+}
+
+#messagewall #wall_38 {
+    Left: 438px;
+    Top: 159px;
+    Width: 38px;
+    Height: 38px;
+}
+
+#messagewall #wall_39 {
+    Left: 477px;
+    Top: 159px;
+    Width: 38px;
+    Height: 38px;
+}
+
+#messagewall #wall_40 {
+    Left: 516px;
+    Top: 159px;
+    Width: 38px;
+    Height: 38px;
+}
+
+#messagewall #wall_41 {
+    Left: 555px;
+    Top: 159px;
+    Width: 38px;
+    Height: 38px;
+}
+
+#messagewall #wall_42 {
+    Left: 594px;
+    Top: 159px;
+    Width: 38px;
+    Height: 38px;
+}
+
+#messagewall #wall_43 {
+    Left: 360px;
+    Top: 120px;
+    Width: 38px;
+    Height: 38px;
+}
+
+#messagewall #wall_44 {
+    Left: 399px;
+    Top: 120px;
+    Width: 38px;
+    Height: 38px;
+}
+
+#messagewall #wall_45 {
+    Left: 438px;
+    Top: 120px;
+    Width: 38px;
+    Height: 38px;
+}
+
+#messagewall #wall_46 {
+    Left: 477px;
+    Top: 120px;
+    Width: 38px;
+    Height: 38px;
+}
+
+#messagewall #wall_47 {
+    Left: 516px;
+    Top: 120px;
+    Width: 38px;
+    Height: 38px;
+}
+
+#messagewall #wall_48 {
+    Left: 555px;
+    Top: 120px;
+    Width: 38px;
+    Height: 38px;
+}
+
+#messagewall #wall_49 {
+    Left: 594px;
+    Top: 120px;
+    Width: 38px;
+    Height: 38px;
+}
+
+#messagewall #wall_50 {
+    Left: 60px;
+    Top: 60px;
+    Width: 60px;
+    Height: 60px;
+    display: none;
+}
+
+#messagewall #wall_51 {
+    Left: 60px;
+    Top: 60px;
+    Width: 60px;
+    Height: 60px;
+    display: none;
+}
+
+#messagewall #wall_52 {
+    Left: 60px;
+    Top: 60px;
+    Width: 60px;
+    Height: 60px;
+    display: none;
+}
+
+#messagewall #wall_53 {
+    Left: 60px;
+    Top: 60px;
+    Width: 60px;
+    Height: 60px;
+    display: none;
+}
+
+#messagewall #wall_54 {
+    Left: 60px;
+    Top: 60px;
+    Width: 60px;
+    Height: 60px;
+    display: none;
+}
+
+#messagewall #wall_55 {
+    Left: 60px;
+    Top: 60px;
+    Width: 60px;
+    Height: 60px;
+    display: none;
+}
+
+#messagewall #wall_56 {
+    Left: 60px;
+    Top: 60px;
+    Width: 60px;
+    Height: 60px;
+    display: none;
+}
+
+#messagewall #wall_57 {
+    Left: 60px;
+    Top: 60px;
+    Width: 60px;
+    Height: 60px;
+    display: none;
+}
+
+#messagewall #wall_58 {
+    Left: 60px;
+    Top: 60px;
+    Width: 60px;
+    Height: 60px;
+    display: none;
+}
+
+#messagewall #wall_59 {
+    Left: 60px;
+    Top: 60px;
+    Width: 60px;
+    Height: 60px;
+    display: none;
+}
+
+#messagewall #wall_60 {
+    Left: 60px;
+    Top: 60px;
+    Width: 60px;
+    Height: 60px;
+    display: none;
+}
+
+#messagewall #wall_61 {
+    Left: 60px;
+    Top: 60px;
+    Width: 60px;
+    Height: 60px;
+    display: none;
+}
+
+#messagewall #wall_62 {
+    Left: 60px;
+    Top: 60px;
+    Width: 60px;
+    Height: 60px;
+    display: none;
+}
+
+#messagewall #wall_63 {
+    Left: 60px;
+    Top: 60px;
+    Width: 60px;
+    Height: 60px;
+    display: none;
+}
+
+#messagewall #wall_64 {
+    Left: 60px;
+    Top: 60px;
+    Width: 60px;
+    Height: 60px;
+    display: none;
+}
+
+#messagewall #wall_65 {
+    Left: 60px;
+    Top: 60px;
+    Width: 60px;
+    Height: 60px;
+    display: none;
+}
+
+#messagewall #wall_66 {
+    Left: 60px;
+    Top: 60px;
+    Width: 60px;
+    Height: 60px;
+    display: none;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
