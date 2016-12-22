@@ -1,6 +1,8 @@
 package com.zoe.weiya.service.user;
 
 import com.zoe.weiya.comm.constant.ZoeErrorCode;
+import com.zoe.weiya.comm.exception.HasSignException;
+import com.zoe.weiya.comm.exception.InternalException;
 import com.zoe.weiya.comm.redis.ZoeRedisTemplete;
 import com.zoe.weiya.comm.response.ResponseMsg;
 import com.zoe.weiya.comm.response.ZoeObject;
@@ -24,7 +26,7 @@ public class UserService {
     @Autowired
     private ZoeRedisTemplete zoeRedisTemplete;
 
-    public ResponseMsg save(User u) {
+    public void save(User u) throws HasSignException, InternalException {
         Long aLong = this.saveInSet(u.getOpenId());
         if (aLong == 1) {
             OnlyUser onlyUser = new OnlyUser();
@@ -35,11 +37,11 @@ public class UserService {
             onlyUser.setHeadImgUrl(u.getHeadImgUrl());
             onlyUser.setSignFlag(u.getSignFlag());
             zoeRedisTemplete.setValue(u.getOpenId(), onlyUser);
-            return ZoeObject.success();
         } else if (aLong == 0) {
-            return ZoeObject.failure(ZoeErrorCode.HAS_SIGN);
+            throw new HasSignException(ZoeErrorCode.HAS_SIGN.getDescription());
+        }else{
+            throw new InternalException(ZoeErrorCode.ERROR_INTERNAL.getDescription());
         }
-        return ZoeObject.failure(ZoeErrorCode.ERROR_INTERNAL);
     }
 
     public ResponseMsg deleteAll(List<OnlyUser> users) {

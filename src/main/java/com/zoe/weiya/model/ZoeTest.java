@@ -3,7 +3,7 @@ package com.zoe.weiya.model;
 /**
  * Created by chenghui on 2016/12/15.
  */
-public class Test {
+public class ZoeTest {
     private Integer test_id;
     private String test_name;
 
