@@ -35,6 +35,7 @@ public class UserService {
             onlyUser.setDepName(u.getDepName());
             onlyUser.setOrder(u.getOrder());
             onlyUser.setHeadImgUrl(u.getHeadImgUrl());
+            onlyUser.setSignFlag(u.getSignFlag());
             zoeRedisTemplete.setValue(u.getOpenId(), onlyUser);
         } else if (aLong == 0) {
             throw new HasSignException(ZoeErrorCode.HAS_SIGN.getDescription());
@@ -94,15 +95,18 @@ public class UserService {
         //1.获取所有签到人员的信息
         List<OnlyUser> signUser = getSignUser();
         List<OnlyUser> list = RandomUtil.createRandomList(signUser, 1);
+        //分批次抽奖中奖名单
+        List<OnlyUser> priceUser = new ArrayList<>();
         //2.进行随机筛选出一条（抽奖）
         OnlyUser onlyUser = list.get(0);
-        //3.已经抽中的人员从名单中剔除
-//        list.remove(onlyUser);
-//        deleteAll(list);/**/
-//        for (OnlyUser user : list) {
-//            save((User) user);
-//        }
-        return onlyUser;
+        //中奖次数+1
+        onlyUser.setPriceCount(onlyUser.getPriceCount() + 1);
+        if (priceUser.contains(onlyUser)) {
+            return LotterySelect();
+        } else {
+            priceUser.add(onlyUser);
+            return onlyUser;
+        }
     }
 
 }
