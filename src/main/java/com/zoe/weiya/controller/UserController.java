@@ -1,10 +1,11 @@
 package com.zoe.weiya.controller;
 
 import com.zoe.weiya.comm.constant.ZoeErrorCode;
+import com.zoe.weiya.comm.exception.HasSignException;
+import com.zoe.weiya.comm.exception.InternalException;
 import com.zoe.weiya.comm.logger.ZoeLogger;
 import com.zoe.weiya.comm.logger.ZoeLoggerFactory;
 import com.zoe.weiya.comm.response.ZoeObject;
-import com.zoe.weiya.model.OnlyUser;
 import com.zoe.weiya.model.User;
 import com.zoe.weiya.service.user.UserService;
 import org.apache.commons.lang3.StringUtils;
@@ -35,7 +36,16 @@ public class UserController {
         if (StringUtils.isBlank(u.getOpenId())) {
             return ZoeObject.failure();
         }
-        return ZoeObject.success(userService.save(u));
+        try {
+            userService.save(u);
+        } catch (HasSignException e) {
+            log.error("ermsg",e);
+            return ZoeObject.failure(ZoeErrorCode.HAS_SIGN);
+        } catch (InternalException e) {
+            log.error("ermsg",e);
+            return ZoeObject.failure(ZoeErrorCode.ERROR_INTERNAL);
+        }
+        return ZoeObject.failure(ZoeErrorCode.HAS_SIGN);
     }
 
     /**
