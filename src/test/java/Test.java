@@ -1,7 +1,12 @@
+import com.zoe.weiya.AbstractTestCase;
+import redis.clients.jedis.Jedis;
+
 /**
  * Created by chenghui on 2016/12/20.
  */
-public class Test {
+public class Test extends AbstractTestCase{
+
+
     public static void main(String[] args) {
 //        "latitude":24.479834,"longitude":118.089425,
 
@@ -43,4 +48,13 @@ public class Test {
         s = Math.round(s * 10000) / 10000;
         return s;
     }
+
+    @org.junit.Test
+    public void test() throws Exception {
+        Jedis jedis = new Jedis("localhost");
+        jedis.hset("lotteryPerson", "ID001", "张三");
+        jedis.hset("lotteryPerson", "ID002", "李四");
+        jedis.hset("lotteryPerson", "ID003", "王五");
+    }
+
 }

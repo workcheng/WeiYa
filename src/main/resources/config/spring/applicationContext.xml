@@ -65,6 +65,8 @@ http://www.springframework.org/schema/tx/spring-tx.xsd">
         <constructor-arg index="0" ref="sqlSessionFactory" />
     </bean>
 
+    <bean id="weiya.bean.factory" class="com.zoe.weiya.comm.bean.BeanFactory"/>
+
     <!-- 启用事务注解，后面在Service类或方法上面加上@Transactional注解 -->
     <tx:annotation-driven transaction-manager="transactionManager" />
 
