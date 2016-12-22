@@ -47,6 +47,13 @@
                     $("#user").text("");
                 }
             })
+            $("#isOrder").click(function () {
+                if ($("#isOrder").is(':checked')) {
+                    $(this).val(1);
+                } else {
+                    $(this).val(0);
+                }
+            })
 
             var weixinUrl = location.href.split('#')[0];
             //用户授权
@@ -57,10 +64,10 @@
                     // 用于服务器配置
                     url: weixinUrl,
                     state: ''
+                }, success: function (data) {
+                    console.log(JSON.stringify(data.data));
                 }
-            }).success(function (json) {
-                console.log(JSON.stringify(json.data));
-            });
+            })
 
             // 根据实际填写接口的配置地点
             // 这里的接口地址是基于node-weixin配置的。
@@ -73,7 +80,7 @@
                     // 用于服务器配置
                     url: weixinUrl
                 },
-                success: function () {
+                success: function (json) {
                     var data = json.data;
                     var config = {};
                     for (var k in json.data) {
@@ -125,7 +132,7 @@
                                 code: code,
                                 lang: ''
                             },
-                            success: function () {
+                            success: function (json) {
                                 var userInfo = json.data;
                                 var openId = userInfo.openId;
                                 console.log(userInfo, JSON.stringify(userInfo));
@@ -136,7 +143,7 @@
                                     data: {
                                         id: openId
                                     },
-                                    success: function () {
+                                    success: function (json) {
                                         console.log(json, JSON.stringify(json));
                                         var data = json.data;
                                         if (data == "NOT_SIGN") {
@@ -155,9 +162,9 @@
                                                 } else {
                                                     var addUserUrl = "http://zxc.tunnel.qydev.com/user/save";
                                                     var signInfo = {
-                                                        "name": "zxc",//$("input[name='userName']").val(),
-                                                        "depName": "qy",//$("select[name='dept']").val(),
-                                                        "order": 1,
+                                                        "name": $("input[name='userName']").val(),
+                                                        "depName": $("select[name='dept']").val(),
+                                                        "order": $("#isOrder").val(),
                                                         "headImgUrl": userInfo.headImgUrl,
                                                         "openId": openId
                                                     };
@@ -167,14 +174,15 @@
                                                         type: 'POST',
                                                         url: addUserUrl,
                                                         contentType: 'application/json',
-                                                        data: signInfo
-                                                    }).success(function (json) {
-                                                        var msg = json.message;
-                                                        if (msg == "成功") {
-                                                            $("#partySign").hide();
-                                                            $("#signSuccess").show();
+                                                        data: signInfo,
+                                                        success: function (json) {
+                                                            var msg = json.message;
+                                                            if (msg == "成功") {
+                                                                $("#partySign").hide();
+                                                                $("#signSuccess").show();
+                                                            }
+                                                            console.log(JSON.stringify(json.message));
                                                         }
-                                                        console.log(JSON.stringify(json.message));
                                                     })
                                                 }
                                             }
@@ -213,7 +221,7 @@
         <legend><img src="images/favicon.ico"></legend>
         <div style="height: 100px;">
             <div class="form-row" style="width: 100px;height: 100px;float: left;clear: none">
-                <img src="images/zysoft.jpg" style="width: 100px;height: 100px">
+                <img src="images/zylogo.png" style="width: 100px;height: 100px">
             </div>
             <div class="form-row" style="width: 200px;height: 100px;float: left;clear: none">
                 <h2>年会签到表</h2>
@@ -244,7 +252,7 @@
                 <div class="field-label"><label></label></div>
                 <div class="field-widget">
                     <label class="field-label" style="width: 80px;" for="phone">是否点餐:</label>
-                    <input type="checkbox" name="isOrder" style="margin-top: 6px;">
+                    <input type="checkbox" name="isOrder" id="isOrder" value="0" style="margin-top: 6px;">
                 </div>
             </div>
             <div class="form-row" style="float: right;margin-right: 30px;">
