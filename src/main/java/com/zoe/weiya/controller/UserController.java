@@ -4,11 +4,13 @@ import com.zoe.weiya.comm.constant.ZoeErrorCode;
 import com.zoe.weiya.comm.logger.ZoeLogger;
 import com.zoe.weiya.comm.logger.ZoeLoggerFactory;
 import com.zoe.weiya.comm.response.ZoeObject;
+import com.zoe.weiya.model.User;
 import com.zoe.weiya.service.user.UserService;
-import me.chanjar.weixin.mp.bean.result.WxMpUser;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 /**
  * Created by chenghui on 2016/12/20.
@@ -27,7 +29,8 @@ public class UserController {
      * @return
      */
     @RequestMapping(value = "save",method = RequestMethod.POST)
-    public Object save(@RequestBody WxMpUser u){
+    public Object save(@RequestBody @Valid User u){
+        //TODO 根据配置文件设置的时间点，限定提交的时限
         if(StringUtils.isBlank(u.getOpenId())){
             return ZoeObject.failure();
         }
@@ -56,6 +59,11 @@ public class UserController {
         }else{
             return ZoeObject.success(ZoeErrorCode.NOT_SIGN);
         }
+    }
+
+    @RequestMapping(value = "userList",method = RequestMethod.GET)
+    public Object getUserList (){
+        return ZoeObject.success(userService.getSignUser());
     }
 
 }
