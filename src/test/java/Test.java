@@ -1,7 +1,16 @@
+import com.zoe.weiya.AbstractTestCase;
+import com.zoe.weiya.comm.bean.BeanFactory;
+import com.zoe.weiya.dao.LotteryImpl;
+import com.zoe.weiya.model.User;
+import redis.clients.jedis.Jedis;
+
 /**
  * Created by chenghui on 2016/12/20.
  */
-public class Test {
+public class Test extends AbstractTestCase{
+
+    protected LotteryImpl lottery =null;
+
     public static void main(String[] args) {
 //        "latitude":24.479834,"longitude":118.089425,
 
@@ -42,5 +51,20 @@ public class Test {
         s = s * EARTH_RADIUS;
         s = Math.round(s * 10000) / 10000;
         return s;
+    }
+
+    @org.junit.Test
+    public void test() throws Exception {
+        Jedis jedis = new Jedis("localhost");
+        jedis.hset("lotteryPerson", "ID001", "张三");
+        jedis.hset("lotteryPerson", "ID002", "李四");
+        jedis.hset("lotteryPerson", "ID003", "王五");
+    }
+
+    @org.junit.Test
+    public void test1() throws Exception {
+        lottery=BeanFactory.getBean(LotteryImpl.class);
+        User user = lottery.LotterySelect("localhost", "lotteryPerson");
+        System.out.println();
     }
 }
