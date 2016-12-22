@@ -27,9 +27,9 @@
         function start() {
             document.getElementById("showresult").value = "";
             clearInterval(timer);
-            timer = setInterval('change()', 10); //随机数据变换速度，越小变换的越快
+            timer = setInterval('change()', 100); //随机数据变换速度，越小变换的越快
         }
-        function ok() {
+        function stop() {
             document.getElementById("zz").style.display = "block";
             clearInterval(timer);
             timer = setInterval('change()', 300);
@@ -56,7 +56,7 @@
 <div id="box">
     <div id="chouj">
         <button onclick="start()" style="width:200px; height:50px; font-size:25px;" accesskey="s">开始抽奖</button>
-        <button onclick="ok()" style="width:200px; height:50px; font-size:25px;" accesskey="o">停止</button>
+        <button onclick="stop()" style="width:200px; height:50px; font-size:25px;" accesskey="o">停止</button>
         <div id="tp">
             <img id="photoshow" src="" width="300" height="300"/><br/><br/>
             <input name="" id="showresult" type="text" style="width:200px; height:50px; font-size:25px;" value=""/>
