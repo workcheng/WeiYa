@@ -25,12 +25,13 @@ public class UserController {
 
     /**
      * 保存签到信息
+     *
      * @param u
      * @return
      */
-    @RequestMapping(value = "save",method = RequestMethod.POST)
-    public Object save(@RequestBody @Valid User u){
-        if(StringUtils.isBlank(u.getOpenId())){
+    @RequestMapping(value = "save", method = RequestMethod.POST)
+    public Object save(@RequestBody @Valid User u) {
+        if (StringUtils.isBlank(u.getOpenId())) {
             return ZoeObject.failure();
         }
         return ZoeObject.success(userService.save(u));
@@ -38,30 +39,32 @@ public class UserController {
 
     /**
      * 获取签到信息
+     *
      * @param openId
      * @return
      */
-    @RequestMapping(value = "getUser",method = RequestMethod.GET)
-    public Object get(@RequestParam(value = "id") String openId){
+    @RequestMapping(value = "getUser", method = RequestMethod.GET)
+    public Object get(@RequestParam(value = "id") String openId) {
         return ZoeObject.success(userService.get(openId));
     }
 
     /**
      * 判断是否签到
+     *
      * @param openId
      * @return
      */
-    @RequestMapping(value = "isMember",method = RequestMethod.GET)
-    public Object isMember(@RequestParam(value = "id") String openId){
-        if(userService.isMember(openId)){
+    @RequestMapping(value = "isMember", method = RequestMethod.GET)
+    public Object isMember(@RequestParam(value = "id") String openId) {
+        if (userService.isMember(openId)) {
             return ZoeObject.success(ZoeErrorCode.HAS_SIGN);
-        }else{
+        } else {
             return ZoeObject.success(ZoeErrorCode.NOT_SIGN);
         }
     }
 
-    @RequestMapping(value = "userList",method = RequestMethod.GET)
-    public Object getUserList (){
+    @RequestMapping(value = "userList", method = RequestMethod.GET)
+    public Object getUserList() {
         return ZoeObject.success(userService.getSignUser());
     }
 

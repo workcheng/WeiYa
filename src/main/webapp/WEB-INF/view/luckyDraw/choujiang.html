@@ -4,15 +4,24 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <title>抽奖系统</title>
+    <script src="http://apps.bdimg.com/libs/jquery/1.11.3/jquery.min.js"></script>
     <script type="text/javascript">
-        var alldata = "1,2,3,4,5,6,7,8,9,10,11";//抽奖数据，以逗号分隔
-        var alldataarr = alldata.split(",");
+        var getUserList = "http://zxc.tunnel.qydev.com/user/userList";
+        var alldataarr = null;
+        $.ajax({
+            async: false,
+            url: getUserList,
+            success: function (data) {
+                alldataarr = data.data;
+            }
+        })
+
         var num = alldataarr.length - 1;//总数量
         var timer;
         function change() {
             var radm = GetRnd(0, num);
-            document.getElementById("showresult").value = alldataarr[radm];
-            document.getElementById("photoshow").src = "http://zxc.tunnel.qydev.com/view/luckyDraw/images/" + alldataarr[radm] + ".jpg";
+            document.getElementById("showresult").value = alldataarr[radm].name;
+            document.getElementById("photoshow").src = alldataarr[radm].headImgUrl;
         }
         function start() {
             document.getElementById("showresult").value = "";
@@ -46,21 +55,13 @@
             padding: 0;
         }
 
-        body {
-            background: url(images/true1.jpg) no-repeat;
-            height: 100%;
-            width: 100%;
-            overflow: hidden;
-            background-size: cover;
+        #box {
+            background: url(images/cjbg.jpg);
+            background-repeat: no-repeat;
+            position: relative;
+            height: 664px;
+            width: 1024px;
         }
-
-        /* #box {
-             background: url(images/true.jpg) no-repeat;
-             height: 100%;
-             width: 100%;
-             overflow: hidden;
-             background-size: cover;
-         }*/
 
         #chouj {
             position: absolute;
@@ -69,8 +70,8 @@
         }
 
         #chouj input {
-            weight: 300px;
-            height: 50px;
+            weight = 300px;
+            height = 50px;
         }
 
         #oknum {
