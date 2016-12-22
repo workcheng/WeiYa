@@ -7,6 +7,7 @@ package com.zoe.weiya.comm.properties;
 import com.zoe.weiya.comm.logger.ZoeLogger;
 import com.zoe.weiya.comm.logger.ZoeLoggerFactory;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
@@ -18,7 +19,7 @@ public class ZoeProperties {
 
   private static ZoeLogger log = ZoeLoggerFactory.getLogger(ZoeProperties.class);
 
-  public static Properties readProperties(String filePath) throws Exception {
+  public static Properties readProperties(String filePath)  {
     Properties properties = new Properties();
     ClassLoader loader = Thread.currentThread().getContextClassLoader();
     InputStream inputStream = null;
@@ -27,34 +28,33 @@ public class ZoeProperties {
     } else {
       inputStream = loader.getResourceAsStream(filePath);
     }
-    properties.load(inputStream);
-    inputStream.close();
+    try {
+      properties.load(inputStream);
+    } catch (IOException e) {
+        log.error("error",e.toString());
+        e.printStackTrace();
+    }finally {
+      if(null != inputStream){
+        try {
+            inputStream.close();
+            if(null != loader){
+                loader = null;
+            }
+        } catch (IOException e) {
+            log.error("error",e.toString());
+            e.printStackTrace();
+        }
+      }
+
+    }
     return properties;
   }
 
-  public static String get(String filePath, String key) throws Exception {
+  public static String get(String filePath, String key) {
     Properties properties = ZoeProperties.readProperties(filePath);
-    return properties.getProperty(key);
-  }
-
-  public static int getTaHoNumber() {
-    int defalutValue = 10;
-    try {
-      defalutValue = Integer.valueOf(get("config/algorithm/config.properties", "joho.match.tahos.top"));
-    } catch (Exception e) {
-      log.error("System error", e);
-    }
-    return defalutValue;
-  }
-
-  public static int getJoHoNumber() {
-    int defalutValue = 10;
-    try {
-      defalutValue = Integer.valueOf(get("config/algorithm/config.properties", "taho.match.johos.top"));
-    } catch (Exception e) {
-      log.error("System error", e);
-    }
-    return defalutValue;
+      String property = properties.getProperty(key);
+      properties = null;
+      return property;
   }
 
   public static int getServerNumber() {
@@ -62,18 +62,8 @@ public class ZoeProperties {
     try {
       defalutValue = Integer.valueOf(get("config/algorithm/config.properties", "server.number"));
     } catch (Exception e) {
-      log.error("System error", e);
-    }
-    return defalutValue;
-  }
-
-  public static float getPreferredEduLevel() {
-    float defalutValue = 0.9f;
-    try {
-      defalutValue = Float
-          .valueOf(get("config/algorithm/config.properties", "preferred.education.degree.level.weight"));
-    } catch (Exception e) {
-      log.error("System error", e);
+        log.error("System error", e);
+        e.printStackTrace();
     }
     return defalutValue;
   }

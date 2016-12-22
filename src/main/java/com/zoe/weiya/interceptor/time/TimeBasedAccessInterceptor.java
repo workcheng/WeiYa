@@ -6,6 +6,7 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.text.MessageFormat;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -14,6 +15,7 @@ public class TimeBasedAccessInterceptor extends HandlerInterceptorAdapter {
  
   private int    openingTime;
   private int    closingTime;
+  private int    closingDay;
   private String mappingURL; // 利用正则映射到需要拦截的路径
 
   public void setOpeningTime(int openingTime) {
@@ -28,25 +30,35 @@ public class TimeBasedAccessInterceptor extends HandlerInterceptorAdapter {
     this.mappingURL = mappingURL;
   }
 
+  public void setClosingDay(int closingDay) {
+    this.closingDay = closingDay;
+  }
+
   @Override
   public boolean preHandle(HttpServletRequest request,
       HttpServletResponse response, Object handler) throws Exception {
     String url = request.getRequestURL().toString();
     log.error("url="+url);
     log.error("mappingURL="+mappingURL);
-    if (mappingURL == null || url.matches(mappingURL)) {
+    if (mappingURL == null || url.matches(mappingURL)) {//如果匹配url，是所要控制的页面
       Calendar c = Calendar.getInstance();
       c.setTime(new Date());
       int now = c.get(Calendar.HOUR_OF_DAY);
-      if (now < openingTime || now > closingTime) {
-//        request.setAttribute("msg", "注册开放时间：9：00-12：00");
-//        request.getRequestDispatcher("/msg.jsp").forward(request, response);
-//        response.setContentType("application/json; charset=utf-8");
-//        response.getWriter().write("注册开放时间：9：00-12：00");
-//        return false;
-        return true;
+      int day = c.get(Calendar.DATE);
+      if(day == closingDay){
+        if (openingTime <now && now < closingTime) {//如果时间在这之内，则让其签到
+          log.info("closingDay="+closingDay);
+          log.info("now="+now);
+          return true;
+        }
       }
-      return true;
+        String msg="签到开放时间：{0}号 {1}:00-{2}:00";
+        String format = MessageFormat.format(msg, closingDay, openingTime, closingTime);
+        request.setAttribute("msg", format);
+        request.getRequestDispatcher("/msg.jsp").forward(request, response);
+        response.setContentType("application/json; charset=utf-8");
+        response.getWriter().write(format);
+        return false;
     }
     return true;
   }

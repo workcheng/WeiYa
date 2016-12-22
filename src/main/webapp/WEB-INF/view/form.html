@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="initial-scale=1, user-scalable=0, minimal-ui">
+    <title>年会签到表</title>
+    <link rel="stylesheet" href="../view/css/style.css">
+    <script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+    <script src="http://apps.bdimg.com/libs/jquery/1.11.3/jquery.min.js"></script>
+
+    <script>
+        var EARTH_RADIUS = 6378137.0;    //单位M
+        var PI = Math.PI;
+
+        function getRad(d) {
+            return d * PI / 180.0;
+        }
+
+        /**
+         * caculate the great circle distance
+         * @param {Object} lat1 纬度
+         * @param {Object} lng1  经度
+         * @param {Object} lat2
+         * @param {Object} lng2
+         */
+        function getGreatCircleDistance(lat1, lng1, lat2, lng2) {
+            var radLat1 = getRad(lat1);
+            var radLat2 = getRad(lat2);
+
+            var a = radLat1 - radLat2;
+            var b = getRad(lng1) - getRad(lng2);
+
+            var s = 2 * Math.asin(Math.sqrt(Math.pow(Math.sin(a / 2), 2) + Math.cos(radLat1) * Math.cos(radLat2) * Math.pow(Math.sin(b / 2), 2)));
+            s = s * EARTH_RADIUS;
+            s = Math.round(s * 10000) / 10000.0;
+
+            return s;
+        }
+
+        //  alert(getGreatCircleDistance(24.479834, 118.089425, 24.49037, 118.1744));//24.47974,118.1767203  http://lbsyun.baidu.com/jsdemo.htm#a6_1
+
+        $(document).ready(function () {
+            $("input[name='userName']").mouseleave(function () {
+                if ($("#userName").val() == "") {
+                    $("#user").text("请输入您的名字！");
+                } else {
+                    $("#user").text("");
+                }
+            })
+
+            var weixinUrl = location.href.split('#')[0];
+            //用户授权
+            var authUrl = "http://zxc.tunnel.qydev.com/auth/url";
+            $.ajax({
+                url: authUrl, //这个地址是服务器配置JSSDK的地址
+                data: {           // 这个地址是发生jssdk调用的url地址
+                    // 用于服务器配置
+                    url: weixinUrl,
+                    state: ''
+                }
+            }).success(function (json) {
+                console.log(JSON.stringify(json.data));
+            });
+
+            // 根据实际填写接口的配置地点
+            // 这里的接口地址是基于node-weixin配置的。
+            var weixinUrl = location.href.split('#')[0];
+            var url = "http://zxc.tunnel.qydev.com/sign/url";
+            // 当前的网页请求地址
+            $.ajax({
+                url: url, //这个地址是服务器配置JSSDK的地址
+                data: {           // 这个地址是发生jssdk调用的url地址
+                    // 用于服务器配置
+                    url: weixinUrl
+                }
+            }).success(function (json) {       // 获得服务器返回的配置信息
+                var data = json.data;
+                var config = {};
+                for (var k in json.data) {
+                    config[k] = json.data[k];
+                }
+                config.debug = true;// 添加你需要的JSSDK的权限
+                config.appId = config.appid;
+                config.jsApiList = ['checkJsApi', 'getLocation', 'hideOptionMenu'];
+                config.timestamp = parseInt(config.timestamp);
+                config.nonceStr = config.noncestr;
+                config.signature = config.signature
+                wx.config(config);
+                wx.hideOptionMenu();
+
+                wx.checkJsApi({
+                    jsApiList: [
+                        'getLocation'
+                    ],
+                    success: function (res) {
+                        console.log(JSON.stringify(res))
+                        if (res.checkResult.getLocation == false) {
+                            alert('你的微信版本太低，不支持微信JS接口，请升级到最新的微信版本！');
+                            return;
+                        }
+                    }
+                });
+                //地理位置
+                /*$('#getLocation').click(function () {
+                 initWxConfig(window.location.href, '@Url.Action("GetWxConfig","Api")');//重新获取微信配置参数*/
+                wx.getLocation({
+                    type: 'wgs84',// 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
+                    success: function (res) {
+                        console.log("res", JSON.stringify((res)));
+                    },
+                    cancel: function (res) {
+                        alert('用户拒绝授权获取地理位置');
+                    }
+                });
+
+                wx.ready(function () {
+                    var getUserInfo = "http://zxc.tunnel.qydev.com/auth/user_info";
+                    var weixin = location.href.split('=')[1];
+                    var code = weixin.split('&')[0];
+                    //获取用户信息
+                    $.ajax({
+                        url: getUserInfo, //这个地址是服务器配置JSSDK的地址
+                        data: {           // 这个地址是发生jssdk调用的url地址
+                            // 用于服务器配置
+                            code: code,
+                            lang: ''
+                        }
+                    }).success(function (json) {
+                        var userInfo = json.data;
+                        var openId = userInfo.openId;
+                        console.log(userInfo, JSON.stringify(userInfo));
+
+                        var memberUrl = "http://zxc.tunnel.qydev.com/user/isMember";
+                        $.ajax({
+                            url: memberUrl,
+                            data: {
+                                id: openId
+                            }
+                        }).success(function (json) {
+                            console.log(json, JSON.stringify(json));
+                            var data = json.data;
+                            if (data == "NOT_SIGN") {
+                                document.querySelector('#btnSign').onclick = function () {
+                                    if ($("#userName").val() == "" && $("#phone").val() == "") {
+                                        if ($("#userName").val() == "") {
+                                            $("#user").text("请输入您的名字！");
+                                        } else {
+                                            $("#user").text("");
+                                        }
+                                        if ($("#phone").val() == "") {
+                                            $("#mobile").text("请输入您的名字！");
+                                        } else {
+                                            $("#mobile").text("");
+                                        }
+                                    } else {
+                                        var addUserUrl = "http://zxc.tunnel.qydev.com/user/save";
+                                        var signInfo = {
+                                            /* "userName": $("input[name='userName']").val(),
+                                             "dept": $("select[name='dept']").val(),
+                                             "phone": $("input[name='phone']").val(),*/
+                                            "headImgUrl": userInfo.headImgUrl,
+                                            "openId": openId
+                                        };
+                                        signInfo = JSON.stringify(signInfo);
+                                        console
+                                                .log("info", signInfo);
+                                        $.ajax({
+                                            type: 'POST',
+                                            url: addUserUrl,
+                                            contentType: 'application/json',
+                                            data: signInfo
+                                        }).success(function (json) {
+                                            var msg = json.message;
+                                            if (msg == "成功") {
+                                                $("#partySign").hide();
+                                                $("#signSuccess").show();
+                                            }
+                                            console.log(JSON.stringify(json.message));
+                                        })
+                                    }
+                                }
+                            } else {
+                                $("#partySign").hide();
+                                $("#reSign").show();
+                            }
+                        })
+
+                    });
+                });
+                wx.error(function (res) {
+                });
+            });
+        });
+    </script>
+    <style type="text/css">
+        .field-content {
+            width: 300px;
+            height: 50px;
+            line-height: 20px;
+            text-align: center;
+            float: left;
+            margin-top: 100px;
+            margin-left: 20px;
+            font-size: 18px;
+            font-weight: bold
+        }
+    </style>
+</head>
+<body>
+<div>
+    <fieldset>
+        <legend><img src="images/favicon.ico"></legend>
+        <div style="height: 100px;">
+            <div class="form-row" style="width: 100px;height: 100px;float: left;clear: none">
+                <img src="images/zysoft.jpg" style="width: 100px;height: 100px">
+            </div>
+            <div class="form-row" style="width: 200px;height: 100px;float: left;clear: none">
+                <h2>年会签到表</h2>
+                <span>感谢您参加智业年会，请登记您的签到信息。</span>
+            </div>
+        </div>
+        <div id="partySign">
+            <div class="form-row">
+                <div class="field-label" style="width: 50px"><label for="userName">姓名</label>:</div>
+                <span style="color: red;" id="user"></span>
+                <div class="field-widget"><input name="userName" id="userName" class="required">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="field-label" style="width: 188px;"><label for="dept" style="width: 152px;">所属中心/分子公司</label>:
+                </div>
+                <div class="field-widget">
+                    <select id="field6" name="dept" class="validate-selection">
+                        <option>区域产品中心</option>
+                        <option>医院产品中心</option>
+                        <option>智业互联</option>
+                        <option>云顶伟业</option>
+                        <option>福建区</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="field-label"><label></label></div>
+                <div class="field-widget">
+                    <label class="field-label" style="width: 80px;" for="phone">是否点餐:</label>
+                    <input type="checkbox" name="isOrder" style="margin-top: 6px;">
+                </div>
+            </div>
+            <div class="form-row" style="float: right;margin-right: 30px;">
+                <input type="submit" class="submit" id="btnSign" value="签到"/>
+            </div>
+        </div>
+        <div id="signSuccess" style="width: 300px;height: 306px;display: none">
+            <span class="field-content">
+                签到成功，感谢您的配合！
+            </span>
+        </div>
+        <div id="reSign" style="display: none" class="field-content">
+            <span>
+                对不起，您已经签到一次了，不能重复签到！
+            </span>
+        </div>
+    </fieldset>
+</div>
+</body>
+</html>
