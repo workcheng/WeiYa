@@ -1,8 +1,6 @@
 package com.zoe.weiya.util;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
@@ -27,6 +25,7 @@ public class RandomUtil {
 
     /**
      * 获得一个[0,max)之间的随机整数。
+     *
      * @param max
      * @return
      */
@@ -36,16 +35,18 @@ public class RandomUtil {
 
     /**
      * 获得一个[min, max]之间的随机整数
+     *
      * @param min
      * @param max
      * @return
      */
     public static int getRandomInt(int min, int max) {
-        return getRandom().nextInt(max-min+1) + min;
+        return getRandom().nextInt(max - min + 1) + min;
     }
 
     /**
      * 获得一个[0,max)之间的长整数。
+     *
      * @param max
      * @return
      */
@@ -55,32 +56,35 @@ public class RandomUtil {
 
     /**
      * 从数组中随机获取一个元素
+     *
      * @param array
      * @return
      */
-    public static <E> E getRandomElement(E[] array){
+    public static <E> E getRandomElement(E[] array) {
         return array[getRandomInt(array.length)];
     }
 
     /**
      * 从list中随机取得一个元素
+     *
      * @param list
      * @return
      */
-    public static <E> E getRandomElement(List<E> list){
+    public static <E> E getRandomElement(List<E> list) {
         return list.get(getRandomInt(list.size()));
     }
 
     /**
      * 从set中随机取得一个元素
+     *
      * @param set
      * @return
      */
-    public static <E> E getRandomElement(Set<E> set){
+    public static <E> E getRandomElement(Set<E> set) {
         int rn = getRandomInt(set.size());
         int i = 0;
         for (E e : set) {
-            if(i==rn){
+            if (i == rn) {
                 return e;
             }
             i++;
@@ -90,6 +94,7 @@ public class RandomUtil {
 
     /**
      * 从map中随机取得一个key
+     *
      * @param map
      * @return
      */
@@ -97,7 +102,7 @@ public class RandomUtil {
         int rn = getRandomInt(map.size());
         int i = 0;
         for (K key : map.keySet()) {
-            if(i==rn){
+            if (i == rn) {
                 return key;
             }
             i++;
@@ -107,6 +112,7 @@ public class RandomUtil {
 
     /**
      * 从map中随机取得一个value
+     *
      * @param map
      * @return
      */
@@ -114,7 +120,7 @@ public class RandomUtil {
         int rn = getRandomInt(map.size());
         int i = 0;
         for (V value : map.values()) {
-            if(i==rn){
+            if (i == rn) {
                 return value;
             }
             i++;
@@ -124,6 +130,7 @@ public class RandomUtil {
 
     /**
      * 生成一个n位的随机数，用于验证码等
+     *
      * @param n
      * @return
      */
@@ -143,5 +150,24 @@ public class RandomUtil {
             rn = "0";
         }
         return rn;
+    }
+
+    public static <E> List<E> createRandomList(List<E> list, int n) {
+// TODO Auto-generated method stub
+        Map map = new HashMap();
+        List<E> listNew = new ArrayList();
+        if (list.size() <= n) {
+            return list;
+        } else {
+            while (map.size() < n) {
+                int random = (int) (Math.random() * list.size());
+                if (!map.containsKey(random)) {
+                    map.put(random, "");
+                    System.out.println(random + "===========" + list.get(random));
+                    listNew.add(list.get(random));
+                }
+            }
+            return listNew;
+        }
     }
 }

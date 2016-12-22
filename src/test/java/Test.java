@@ -1,7 +1,4 @@
 import com.zoe.weiya.AbstractTestCase;
-import com.zoe.weiya.comm.bean.BeanFactory;
-import com.zoe.weiya.dao.LotteryImpl;
-import com.zoe.weiya.model.User;
 import redis.clients.jedis.Jedis;
 
 /**
@@ -9,7 +6,6 @@ import redis.clients.jedis.Jedis;
  */
 public class Test extends AbstractTestCase{
 
-    protected LotteryImpl lottery =null;
 
     public static void main(String[] args) {
 //        "latitude":24.479834,"longitude":118.089425,
@@ -61,10 +57,4 @@ public class Test extends AbstractTestCase{
         jedis.hset("lotteryPerson", "ID003", "王五");
     }
 
-    @org.junit.Test
-    public void test1() throws Exception {
-        lottery=BeanFactory.getBean(LotteryImpl.class);
-        User user = lottery.LotterySelect("localhost", "lotteryPerson");
-        System.out.println();
-    }
 }
