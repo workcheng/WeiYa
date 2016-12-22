@@ -1,5 +1,7 @@
 package com.zoe.weiya.controller;
 
+import com.zoe.weiya.comm.exception.HasSignException;
+import com.zoe.weiya.comm.exception.InternalException;
 import com.zoe.weiya.comm.logger.ZoeLogger;
 import com.zoe.weiya.comm.logger.ZoeLoggerFactory;
 import com.zoe.weiya.model.OnlyUser;
@@ -49,7 +51,13 @@ public class ZoeTestController {
 
     @RequestMapping(value = "redis",method = RequestMethod.POST)
     public void save(@RequestBody User u){
-        userService.save(u);
+        try {
+            userService.save(u);
+        } catch (HasSignException e) {
+            e.printStackTrace();
+        } catch (InternalException e) {
+            e.printStackTrace();
+        }
     }
 
     @RequestMapping(value = "redis",method = RequestMethod.GET)
