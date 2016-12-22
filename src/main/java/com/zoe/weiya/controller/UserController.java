@@ -30,6 +30,7 @@ public class UserController {
      */
     @RequestMapping(value = "save",method = RequestMethod.POST)
     public Object save(@RequestBody @Valid User u){
+        //TODO 根据配置文件设置的时间点，限定提交的时限
         if(StringUtils.isBlank(u.getOpenId())){
             return ZoeObject.failure();
         }
