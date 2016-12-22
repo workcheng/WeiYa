@@ -4,6 +4,7 @@ import com.zoe.weiya.comm.constant.ZoeErrorCode;
 import com.zoe.weiya.comm.logger.ZoeLogger;
 import com.zoe.weiya.comm.logger.ZoeLoggerFactory;
 import com.zoe.weiya.comm.response.ZoeObject;
+import com.zoe.weiya.model.OnlyUser;
 import com.zoe.weiya.model.User;
 import com.zoe.weiya.service.user.UserService;
 import org.apache.commons.lang3.StringUtils;
@@ -66,6 +67,11 @@ public class UserController {
     @RequestMapping(value = "userList", method = RequestMethod.GET)
     public Object getUserList() {
         return ZoeObject.success(userService.getSignUser());
+    }
+
+    @RequestMapping(value = "lotterySelect", method = RequestMethod.GET)
+    public Object LotterySelect() {
+        return ZoeObject.success(userService.LotterySelect());
     }
 
 }

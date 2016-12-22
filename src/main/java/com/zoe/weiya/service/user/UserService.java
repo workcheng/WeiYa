@@ -95,11 +95,11 @@ public class UserService {
         //2.进行随机筛选出一条（抽奖）
         OnlyUser onlyUser = list.get(0);
         //3.已经抽中的人员从名单中剔除
-        list.remove(onlyUser);
-        deleteAll(list);
-        for (OnlyUser user : list) {
-            save((User) user);
-        }
+//        list.remove(onlyUser);
+//        deleteAll(list);/**/
+//        for (OnlyUser user : list) {
+//            save((User) user);
+//        }
         return onlyUser;
     }
 
