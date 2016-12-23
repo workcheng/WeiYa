@@ -1,5 +1,7 @@
 package com.zoe.weiya.controller;
 
+import com.zoe.weiya.service.message.WechatService;
+import me.chanjar.weixin.common.api.WxConsts;
 import me.chanjar.weixin.common.exception.WxErrorException;
 import me.chanjar.weixin.common.session.WxSessionManager;
 import me.chanjar.weixin.mp.api.WxMpConfigStorage;
@@ -34,6 +36,8 @@ public class CoreController {
     protected WxMpMessageRouter wxMpMessageRouter;
     @Autowired
     protected WxMpConfigStorage wxMpConfigStorage;
+    @Autowired
+    protected WechatService wechatService;
 
     @RequestMapping("")
     public void wechat(HttpServletRequest request, HttpServletResponse response) {
@@ -51,9 +55,13 @@ public class CoreController {
         WxMpMessageHandler test = test();
         WxMpMessageHandler reply = reply();
         wxMpMessageRouter
-                .rule().async(false).content("andy").handler(test).end()
-//                .rule().async(false).msgType(WxConsts.MASS_MSG_TEXT).handler(fun).end()
-                .rule().async(false).handler(reply).end();
+            .rule().async(false).content("andy").handler(test).end()
+            .rule().async(false).event(WxConsts.EVT_SUBSCRIBE).handler(wechatService.sendSignMessage()).end()//关注事件
+            .rule().async(false).msgType("event")
+            //.event(WxConsts.EVT_SCAN)
+            .handler(wechatService.sendSignMessage()).end()//扫码事件
+            .rule().async(false).handler(reply).end()
+        ;
     }
 
     private void service(HttpServletRequest request, HttpServletResponse response)

@@ -1,10 +1,12 @@
 package com.zoe.weiya.controller;
 
+import com.zoe.weiya.comm.exception.HasSignException;
+import com.zoe.weiya.comm.exception.InternalException;
 import com.zoe.weiya.comm.logger.ZoeLogger;
 import com.zoe.weiya.comm.logger.ZoeLoggerFactory;
 import com.zoe.weiya.model.OnlyUser;
 import com.zoe.weiya.model.User;
-import com.zoe.weiya.service.TestService;
+import com.zoe.weiya.service.ZoeTestService;
 import com.zoe.weiya.service.user.UserService;
 import com.zoe.weiya.util.IpUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +28,7 @@ import java.util.Map;
 public class ZoeTestController {
     private static final ZoeLogger log = ZoeLoggerFactory.getLogger(ZoeTestController.class);
     @Autowired
-    private TestService testService;
+    private ZoeTestService testService;
     @Autowired
     private UserService userService;
 
@@ -49,7 +51,13 @@ public class ZoeTestController {
 
     @RequestMapping(value = "redis",method = RequestMethod.POST)
     public void save(@RequestBody User u){
-        userService.save(u);
+        try {
+            userService.save(u);
+        } catch (HasSignException e) {
+            e.printStackTrace();
+        } catch (InternalException e) {
+            e.printStackTrace();
+        }
     }
 
     @RequestMapping(value = "redis",method = RequestMethod.GET)

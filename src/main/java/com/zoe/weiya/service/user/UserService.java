@@ -1,6 +1,8 @@
 package com.zoe.weiya.service.user;
 
 import com.zoe.weiya.comm.constant.ZoeErrorCode;
+import com.zoe.weiya.comm.exception.HasSignException;
+import com.zoe.weiya.comm.exception.InternalException;
 import com.zoe.weiya.comm.redis.ZoeRedisTemplete;
 import com.zoe.weiya.comm.response.ResponseMsg;
 import com.zoe.weiya.comm.response.ZoeObject;
@@ -24,7 +26,7 @@ public class UserService {
     @Autowired
     private ZoeRedisTemplete zoeRedisTemplete;
 
-    public ResponseMsg save(User u) {
+    public void save(User u) throws HasSignException, InternalException {
         Long aLong = this.saveInSet(u.getOpenId());
         if (aLong == 1) {
             OnlyUser onlyUser = new OnlyUser();
@@ -33,12 +35,13 @@ public class UserService {
             onlyUser.setDepName(u.getDepName());
             onlyUser.setOrder(u.getOrder());
             onlyUser.setHeadImgUrl(u.getHeadImgUrl());
+            onlyUser.setSignFlag(u.getSignFlag());
             zoeRedisTemplete.setValue(u.getOpenId(), onlyUser);
-            return ZoeObject.success();
         } else if (aLong == 0) {
-            return ZoeObject.failure(ZoeErrorCode.HAS_SIGN);
+            throw new HasSignException(ZoeErrorCode.HAS_SIGN.getDescription());
+        }else{
+            throw new InternalException(ZoeErrorCode.ERROR_INTERNAL.getDescription());
         }
-        return ZoeObject.failure(ZoeErrorCode.ERROR_INTERNAL);
     }
 
     public ResponseMsg deleteAll(List<OnlyUser> users) {
@@ -92,15 +95,18 @@ public class UserService {
         //1.获取所有签到人员的信息
         List<OnlyUser> signUser = getSignUser();
         List<OnlyUser> list = RandomUtil.createRandomList(signUser, 1);
+        //分批次抽奖中奖名单
+        List<OnlyUser> priceUser = new ArrayList<>();
         //2.进行随机筛选出一条（抽奖）
         OnlyUser onlyUser = list.get(0);
-        //3.已经抽中的人员从名单中剔除
-//        list.remove(onlyUser);
-//        deleteAll(list);/**/
-//        for (OnlyUser user : list) {
-//            save((User) user);
-//        }
-        return onlyUser;
+        //中奖次数+1
+        onlyUser.setPriceCount(onlyUser.getPriceCount() + 1);
+        if (priceUser.contains(onlyUser)) {
+            return LotterySelect();
+        } else {
+            priceUser.add(onlyUser);
+            return onlyUser;
+        }
     }
 
 }

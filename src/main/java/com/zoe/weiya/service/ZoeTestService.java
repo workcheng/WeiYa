@@ -10,7 +10,7 @@ import java.sql.SQLException;
  * Created by andy on 2016/12/14.
  */
 @Service
-public class TestService {
+public class ZoeTestService {
     @Autowired
     private TestDao testDao;
 
