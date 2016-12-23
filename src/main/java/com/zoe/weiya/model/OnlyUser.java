@@ -15,6 +15,11 @@ public class OnlyUser implements Serializable {
     private Integer priceCount;
     private String signFlag;//该时间段内的签到标识符
 
+    public OnlyUser(String openId, String signFlag) {
+        this.openId = openId;
+        this.signFlag = signFlag;
+    }
+
     public String getSignFlag() {
         return signFlag;
     }

@@ -29,7 +29,7 @@ public class UserService {
     public void save(User u) throws HasSignException, InternalException {
         Long aLong = this.saveInSet(u.getOpenId());
         if (aLong == 1) {
-            OnlyUser onlyUser = new OnlyUser();
+            OnlyUser onlyUser = new OnlyUser(u.getOpenId(),u.getSignFlag());
             onlyUser.setOpenId(u.getOpenId());
             onlyUser.setName(u.getName());
             onlyUser.setDepName(u.getDepName());
@@ -51,7 +51,7 @@ public class UserService {
             flag = true;
         }
         if (flag) {
-            return ZoeObject.failure(ZoeErrorCode.SUCCESS);
+            return ZoeObject.success(ZoeErrorCode.SUCCESS);
         } else {
             return ZoeObject.failure(ZoeErrorCode.ERROR);
         }
