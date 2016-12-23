@@ -4,317 +4,47 @@
     <meta charset="UTF-8">
     <link id="defaultCss" rel="stylesheet" href="css/lottery.css">
     <link id="themeCss" rel="stylesheet" href="css/lottery-9.css">
-    <script type="text/javascript" src="js/sea.js"></script>
     <script src="http://apps.bdimg.com/libs/jquery/1.11.3/jquery.min.js"></script>
     <script type="text/javascript" src="js/jquery.js"></script>
-    <!--<script type="text/javascript" src="js/lottery.js"></script>
-    <script type="text/javascript" src="js/awardRotate.js"></script>
+    <script type="text/javascript" src="js/lottery.js"></script>
+    <script type="text/javascript" src="js/common.js"></script>
+    <!--<script type="text/javascript" src="js/awardRotate.js"></script>
     <script type="text/javascript" src="js/jquery.barrager.js"></script>
     <script type="text/javascript" src="js/jquery.extensions.js"></script>-->
     <title>年会抽奖系统</title>
     <script>
-        var beginTimer; //开始抽奖
-        var stopTimer; //停止抽奖
-        var luckTimer;
-        var scrollRange = 190;
-        var luckState = true; //抽奖状态
-        var isLuck = ""; //中奖号
-        var luckNumber; //抽奖次数
-        var luckNumberList = 1;
-        var luckLevel; //等级ID
-        var showLevel; //等级名称
-        var autoLuck = false; //自动抽奖
-        var selectNumber = 1; //保存上一次抽奖人的数量,
-        var luckScrollTime = 30;
-        var stopLuckTime; //强制停止抽奖
-        var luckUl = $("#luck_user ul");
-        var deleteLuckUser = '';
-        var levelMaxNum;
-        var GetRnd = function (min, max) {
-            return parseInt(Math.random() * (max - min + 1));
-        }
-        var getLottery = function () {
-            var getUserList = "http://zxc.tunnel.qydev.com/user/userList";
-            var alldataarr = null;
-            $.ajax({
-                async: false,
-                url: getUserList,
-                success: function (data) {
-                    alldataarr = data.data;
-                    $.each(alldataarr, function (index, item) {
-                        var str = '<li><img src="' + item.headImgUrl + '"><br><span>' + item.name + '</span></li>';
-                        luckUl = $("#luck_user ul");
-                        luckUl.append(str);
-                    })
-                    /*var num = alldataarr.length - 1;
-                     var radm = GetRnd(0, num);*/
-                    /* var str = '<li><img src="' + alldataarr[radm].headImgUrl + '"><br><span>' + alldataarr[radm].name + '</span></li>';
-                     luckUl = $("#luck_user ul");
-                     luckUl.append(str);*/
-                    luckUserList();
-                }
-            })
-        }
-
-        var luckUserList = function () {
-            luckUl.css("width", $("#luck_user").find("li").length * 190 * 2);
-            luckUl.append(luckUl.html());
-        }
-        //移除重复标签，用于增加新的用户
-        var removeUserList = function () {
-            luckUl.find("li").each(function (index, element) {
-                if ($(this).index() + 1 > luckUl.find("li").length / 2) {
-                    $(this).remove();
-                }
-            });
-        }
-
-        var isAuto = function () {
-            $('#showPrize').hide();  //2015-03-27
-            if ($("#showNumber").find("a").text() > 1) {
-                autoLuck = true;
-                luckNumberList = $("#showNumber").find("a").text();
-                selectNumber = $("#showNumber").find("a").text();
-            } else {
-                autoLuck = false;
-                selectNumber = 1;
-                luckNumberList = 1;
-            }
-            luckLevel = $("#showLevel").find("a").attr("data-prizeid");
-            levelMaxNum = $("#showLevel").find("a").attr("data-amount") * 1;
-            luckNumber = $("#showNumber").find("a").text() * 1;
-            showLevel = $("#showLevel").find("a").html();
-            if (isLuck != "") {
-                luckUl.find('li[data-userid=' + isLuck + ']').remove();
-                luckUl.width(luckUl.width() - 380); //移除已中奖人后重新设置宽度
-                isLuck = "";
-            }
-            //判断是否有需要回到奖池的用户
-            if (deleteLuckUser != '') {
-                removeUserList();
-                luckUl.append(deleteLuckUser);
-                luckUserList();
-                deleteLuckUser = '';
-            }
-            if ($('#luck_user li').length < 0) {
-                console.log('当前还没有人参加活动');
-                return false;
-            }
-            if ($("#luck_user li").length == 2) {
-                $("#luck_user ul li:last").remove();
-                luckUl.width(190);
-                luckUl.css("left", "170px");
-            }
-            if (luckLevel == 0) {
-                console.log("请选择抽奖等级");
-                return false;
-            }
-            $('#test').val(luckNumberList);
-            if (luckNumberList * 1 > levelMaxNum) {
-                console.log("亲，奖品没那么多!");
-                return false;
-            }
-
-            if (isLuck != "" && luckNumber > Math.max(1, $("#luck_user li").length / 2 - 1)) {
-                console.log("抽奖人数不够!");
-                return false;
-            } else if (luckNumber > Math.max(1, $("#luck_user li").length / 2)) {
-                console.log("抽奖人数不够!");
-                return false;
-            }
-            beginLuck();
-            $('#lottery .condition').addClass('disabled');
-        }
-        var beginLuck = function () {  //key 0:只抽一个人奖 1:自动抽奖
-            stopLuckTime = 0;
-            if (autoLuck == true) {
-                $("#luckIng").show();
-                $("#luckIng span").text(luckNumberList);
-                setTimeout(function () {
-                    stopLuck(luckNumberList);
-                }, 3000);
-            }
-            if (luckState) {
-                $("#stopLuck").show();
-                $("#beginLuck").hide();
-                if (isLuck != '') {
-                    luckUl.find('li[data-userid=' + isLuck + ']').remove();
-                    luckUl.width(luckUl.width() - 380); //移除已中奖人后重新设置宽度
-                }
-                //判断奖池是否已经没人了
-                if ($("#luck_user li").length == 0) {
-                    console.log("已经没有人了!");
-                    $("#stopLuck").hide();
-                    $("#beginLuck").show();
-                    return false;
-                }
-
-                if ($("#luck_user li").length == 1) {
-                    luckUl.width(190);
-                    luckUl.css("left", "170px");
-                }
-                if ($("#luck_user li").length == 2) {
-                    $("#luck_user li:last").remove();
-                    luckUl.width(190);
-                    luckUl.css("left", "170px");
-                }
-                if ($("#luck_user li").length > 2) {
-                    beginTimer = setInterval(function () {
-
-                        luckUl.css({left: -scrollRange});
-                        scrollRange = scrollRange + 60;
-                        if (scrollRange > luckUl.width() / 2 + 45) {
-                            luckUl.css("left", -20);
-                            scrollRange = 190;
-                        }
-                        stopLuckTime = stopLuckTime + 50;
-                        if (autoLuck == true && stopLuckTime > 150000) {
-                            clearInterval(beginTimer);
-                            stopLuck(luckNumberList);
-                        }
-                    }, luckScrollTime);
-                }
-            } else {
-                console.log("抽奖进行中...");
-            }
-
-        }
-
-        //停止抽奖
-        var stopLuck = function () {
-            clearInterval(beginTimer);
-            clearInterval(stopTimer);
-            luckState = false;
-            $("[data-prizeid=" + luckLevel + "]").find("label").html($("[data-prizeid=" + luckLevel + "]").find("label").html() * 1 - 1);
-            // 邓辉 2016-06-17 22:39
-            $("[data-prizeid=" + luckLevel + "]").attr('data-amount', $("[data-prizeid=" + luckLevel + "]").find("label").html() * 1);
-            // 邓辉 2016-06-17 22:39
-            $("#beginLuck").show();
-            $("#stopLuck").hide();
-            var i = 10; //速度递减
-            var j = 2; //时间控制
-            if ($("#luck_user li").length > 1) {
-                stopTimer = setInterval(function () {
-                    luckUl.css({left: -scrollRange});
-                    scrollRange = scrollRange + i;
-                    j++;
-                    if (j % 2 == 0) {
-                        i--;
-                    }
-                    if (scrollRange >= parseInt(luckUl.width() / 2) + 45) {
-                        luckUl.css("left", -20);
-                        scrollRange = 20;
-                    }
-                    if (i <= 1) {
-                        clearInterval(stopTimer);
-                        var stopRange = Math.ceil(scrollRange / 190) * 190 + 20;
-                        luckTimer = setInterval(function () {
-                            scrollRange = scrollRange + 1;
-                            luckUl.css({left: -scrollRange});
-                            if (scrollRange >= parseInt(luckUl.width() / 2) + 45) {
-                                luckUl.css("left", -20);
-                                scrollRange = 20;
-                                stopRange = stopRange - luckUl.width() / 2;
-                            }
-
-                            if (scrollRange == stopRange) {
-                                clearInterval(luckTimer);
-                                luckState = true;
-                                $("#submitLottery").removeClass("gray");
-                                $("#removeLottery").removeClass("gray");
-                                /////////////中奖
-                                var luckLi = $('#luck_user li:eq(' + Math.ceil(scrollRange / 190) + ')');
-                                isLuck = luckLi.data("userid"); //获取中奖data,也就是中奖人的ID啦
-                                var imgUl = luckLi.find("img").attr("src");
-                                var userName = luckLi.find("span").html();
-                                var headPath = luckLi.data("headpath");
-                                if ($("#luckUl").find("#level_" + luckLevel).length < 1) {
-                                    $("#luckUl").prepend("<div id=level_" + luckLevel + " class='level'><label>" + showLevel + ":<a></a></label><ul></ul></div>");
-                                }
-                                $("#level_" + luckLevel).find("ul").prepend('<li data-hasluck="0" data-headpath="' + headPath + '" data-isluck="' + isLuck + '" data-level="' + luckLevel + '"><span></span><a href="javascript:void(0)">x</a><img src="' + imgUl + '"><font>' + userName + '</font></li>');
-
-                                $("#level_" + luckLevel + " li").each(function (index, element) {
-                                    $(this).find("span").html($("#level_" + luckLevel + " li").length - $(this).index());
-                                });
-                                $("#level_" + luckLevel + " label a").text($("#level_" + luckLevel + " li").length);
-                                $("#luckNumber").html($("#luckUl li").length);
-                                if (luckNumberList > 1) {
-                                    luckNumberList--;
-                                    setTimeout(function () {
-                                        beginLuck();
-                                    }, 0);  //重新抽奖
-                                } else {
-                                    $("#luck_number").val(selectNumber); //重新赋值给抽奖人数
-                                    $("#luckIng").css("display", "none");
-                                    $('#lottery .condition').removeClass('disabled');
-                                }
-                                showLuckAnimate(imgUl, showLevel, userName);
-                            }
-                        }, 10);
-                    }
-                }, 30);
-            } else {
-                setTimeout(function () {
-                    luckState = true;
-                    $('#lottery .condition').removeClass('disabled');
-                    $("#submitLottery").removeClass("gray");
-                    $("#removeLottery").removeClass("gray");
-                    isLuck = $("#luck_user li").data("userid");
-                    var imgUl = $("#luck_user li").find("img").attr("src");
-                    var userName = $("#luck_user li").find("span").html();
-                    var headPath = $("#luck_user li").data("headpath");
-                    if ($("#luckUl").find("#level_" + luckLevel).length < 1) {
-                        $("#luckUl").prepend("<div id=level_" + luckLevel + " class='level'><label>" + showLevel + ":<a></a></label><ul></ul></div>");
-                    }
-                    $("#level_" + luckLevel).find("ul").prepend('<li data-hasluck="0" data-headpath="' + headPath + '" data-isluck="' + isLuck + '" data-level="' + luckLevel + '"><span></span><a href="javascript:void(0)">x</a><img src="' + imgUl + '"><font>' + userName + '</font></li>');
-
-                    $("#level_" + luckLevel + " li").each(function (index, element) {
-                        $(this).find("span").html($("#level_" + luckLevel + " li").length - $(this).index());
-                    });
-                    $("#level_" + luckLevel + " label a").text($("#level_" + luckLevel + " li").length);
-                    $("#luckNumber").html($("#luckUl li").length);
-                    $("#luck_number").val(selectNumber); //重新赋值给抽奖人数
-                    $("#luckIng").css("display", "none");
-                    showLuckAnimate(imgUl, showLevel, userName);
-                }, 1000);
-            }
-        }
-
-        var showLuckAnimate = function (imgUl, showLevel, userName) {
-            //fireWork.show();
-            $('body').append('<div class="animate-bg"><div class="light"></div><img class="luckbg" src="images/luckbg.png" /><img src="' + imgUl + '" class="luckUserHead" /><div class="showLuckUserName">' + userName + '</div><div class="showLuckLevel">恭喜获得<span>' + showLevel + '</span></div></div>');
-            $(".luckbg").animate({
-                "width": "800px",
-                "height": "518px",
-                "margin-top": "-330px",
-                "margin-left": "-400px",
-                "opacity": "1"
-            }, "fast");
-            $(".luckUserHead").animate({"margin-top": "-275px"});
-            $(".showLuckLevel").animate({"margin-top": "40px"});
-            $(".showLuckUserName").animate({"opacity": "1"});
-            setTimeout(function () {
-                // fireWork.hide();
-                $(".animate-bg").animate({"opacity": "0"}, "slow", function () {
-                    $(".animate-bg").remove();
-                });
-                $("#bgsound").remove();
-            }, 3000);
-        }
         $(document).ready(function () {
             getLottery();
-            $("#beginLuck").click(function () {
+            $('.showNumber a').click(function () {
+                selectLotteryNumber($(this));
+            });
+
+            $(".prize a").click(function () {
+                selectLotteryNumber($(this));
+            })
+
+            $('#beginLuck').click(function () {
                 isAuto();
             });
             $('#stopLuck').click(function () {
                 stopLuck();
             });
-        })
+            $('#removeLottery').click(function () {
+                removeLottery();
+            });
+            $('#submitLottery').click(function () {
+                SubmitLotteryFans();
+            });
+            $('#luckUl').on('click', 'a', function () {
+                deleteThis($(this), $(this).parent().data('level'));
+            });
+            getLotteryAward();
+        });
 
     </script>
 </head>
 <body>
-<div class="module luck_pair" id="lottery" style="display: block;top: 0px;">
+<div class="module luck_pair" id="lottery" style="display: block;top: 0px;width:980px;margin:0 auto;">
 
     <div class="left">
         <div class="userList">
@@ -332,15 +62,14 @@
             <div class="select" id="showLevel">
                 <a data-prizeid="124" data-amount="55">一等奖</a>
             </div>
-            <div class="select_option prize" style="left: 97.0469px; top: 380px; display: none;"><a data-prizeid="124"
-                                                                                                    data-prizeimg=""
-                                                                                                    data-prizename="一等奖"
-                                                                                                    data-amount="55">
-                <div>一等奖</div>
-                <span>剩<label>55</label>名</span></a><a data-prizeid="125" data-prizeimg="" data-prizename="二等奖"
-                                                       data-amount="86">
-                <div>二等奖</div>
-                <span>剩<label>86</label>名</span></a></div>
+            <div class="select_option prize" style="left: 97.0469px; top: 380px; display: none;">
+                <a data-prizeid="124" data-prizeimg="" data-prizename="一等奖" data-amount="">
+                    <div>一等奖</div>
+                </a>
+                <a data-prizeid="125" data-prizeimg="" data-prizename="二等奖"
+                   data-amount="">
+                    <div>二等奖</div>
+                </a></div>
             人数:
             <div class="select" id="showNumber">
                 <a data-number="1">1</a>
@@ -369,19 +98,18 @@
         <a class="clickBtn stopBtn" id="stopLuck" style="display: none;">停止抽奖</a>
         <a class="clickBtn" id="luckIng" style="display: none;">自动抽奖中(<span></span>)</a>
     </div>
-    <!--  <div class="right">
-          <div class="title">获奖名单</div>
-          <div class="resultNum">获奖人数:<span id="luckNumber">14</span></div>
-          <div id="luckUl" class="result">
-              <div id="level_124" class="level"><label>一等奖:<a>12</a></label>
-                  <ul>
+    <div class="right">
+        <div class="title">获奖名单</div>
+        <div id="luckUl" class="result">
+            <div id="level_124" class="level">
+                <ul>
 
-                  </ul>
-              </div>
-          </div>
-          <a class="reclick" id="removeLottery">重新抽奖</a>
-          <a class="submitUser" id="submitLottery">确认名单</a>
-      </div>-->
+                </ul>
+            </div>
+        </div>
+        <a class="reclick" id="removeLottery">重新抽奖</a>
+        <a class="submitUser" id="submitLottery">确认名单</a>
+    </div>
 </div>
 </body>
 </html>
