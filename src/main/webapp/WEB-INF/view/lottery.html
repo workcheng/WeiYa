@@ -6,683 +6,319 @@
     <link id="themeCss" rel="stylesheet" href="css/lottery-9.css">
     <script type="text/javascript" src="js/sea.js"></script>
     <script src="http://apps.bdimg.com/libs/jquery/1.11.3/jquery.min.js"></script>
-    <script type="text/javascript" src="js/lottery.js"></script>
+    <script type="text/javascript" src="js/jquery.js"></script>
+    <!--<script type="text/javascript" src="js/lottery.js"></script>
     <script type="text/javascript" src="js/awardRotate.js"></script>
     <script type="text/javascript" src="js/jquery.barrager.js"></script>
-    <script type="text/javascript" src="js/jquery.extensions.js"></script>
+    <script type="text/javascript" src="js/jquery.extensions.js"></script>-->
     <title>年会抽奖系统</title>
+    <script>
+        var beginTimer; //开始抽奖
+        var stopTimer; //停止抽奖
+        var luckTimer;
+        var scrollRange = 190;
+        var luckState = true; //抽奖状态
+        var isLuck = ""; //中奖号
+        var luckNumber; //抽奖次数
+        var luckNumberList = 1;
+        var luckLevel; //等级ID
+        var showLevel; //等级名称
+        var autoLuck = false; //自动抽奖
+        var selectNumber = 1; //保存上一次抽奖人的数量,
+        var luckScrollTime = 30;
+        var stopLuckTime; //强制停止抽奖
+        var luckUl = $("#luck_user ul");
+        var deleteLuckUser = '';
+        var levelMaxNum;
+        $(document).ready(function () {
+            getLottery();
+            $("#beginLuck").click(function () {
+                isAuto();
+            });
+            $('#stopLuck').click(function () {
+                stopLuck();
+            });
+        })
+
+        var getLottery = function () {
+            var getUserList = "http://zxc.tunnel.qydev.com/user/userList";
+            var alldataarr = null;
+            $.ajax({
+                async: false,
+                url: getUserList,
+                success: function (data) {
+                    alldataarr = data.data;
+                    var num = alldataarr.length - 1;
+                    var radm = GetRnd(0, num);
+                    var str = '<li><img src="' + alldataarr[radm].headImgUrl + '"><br><span>' + alldataarr[radm].name + '</span></li>';
+                    luckUl.append(str);
+                    luckUserList();
+                }
+            })
+        }
+        var GetRnd = function (min, max) {
+            return parseInt(Math.random() * (max - min + 1));
+        }
+        var luckUserList = function () {
+            luckUl.css("width", $("#luck_user").find("li").length * 190 * 2);
+            luckUl.append(luckUl.html());
+        }
+        //移除重复标签，用于增加新的用户
+        var removeUserList = function () {
+            luckUl.find("li").each(function (index, element) {
+                if ($(this).index() + 1 > luckUl.find("li").length / 2) {
+                    $(this).remove();
+                }
+            });
+        }
+        var isAuto = function () {
+            $('#showPrize').hide();  //2015-03-27
+            if ($("#showNumber").find("a").text() > 1) {
+                autoLuck = true;
+                luckNumberList = $("#showNumber").find("a").text();
+                selectNumber = $("#showNumber").find("a").text();
+            } else {
+                autoLuck = false;
+                selectNumber = 1;
+                luckNumberList = 1;
+            }
+            luckLevel = $("#showLevel").find("a").attr("data-prizeid");
+            levelMaxNum = $("#showLevel").find("a").attr("data-amount") * 1;
+            luckNumber = $("#showNumber").find("a").text() * 1;
+            showLevel = $("#showLevel").find("a").html();
+            if (isLuck != "") {
+                luckUl.find('li[data-userid=' + isLuck + ']').remove();
+                luckUl.width(luckUl.width() - 380); //移除已中奖人后重新设置宽度
+                isLuck = "";
+            }
+            //判断是否有需要回到奖池的用户
+            if (deleteLuckUser != '') {
+                removeUserList();
+                luckUl.append(deleteLuckUser);
+                luckUserList();
+                deleteLuckUser = '';
+            }
+            if ($('#luck_user li').length < 0) {
+                console.log('当前还没有人参加活动');
+                return false;
+            }
+            if ($("#luck_user li").length == 2) {
+                $("#luck_user ul li:last").remove();
+                luckUl.width(190);
+                luckUl.css("left", "170px");
+            }
+            if (luckLevel == 0) {
+                console.log("请选择抽奖等级");
+                return false;
+            }
+            $('#test').val(luckNumberList);
+            if (luckNumberList * 1 > levelMaxNum) {
+                console.log("亲，奖品没那么多!");
+                return false;
+            }
+
+            if (isLuck != "" && luckNumber > Math.max(1, $("#luck_user li").length / 2 - 1)) {
+                console.log("抽奖人数不够!");
+                return false;
+            } else if (luckNumber > Math.max(1, $("#luck_user li").length / 2)) {
+                console.log("抽奖人数不够!");
+                return false;
+            }
+            beginLuck();
+            $('#lottery .condition').addClass('disabled');
+        }
+        var beginLuck = function () {  //key 0:只抽一个人奖 1:自动抽奖
+            stopLuckTime = 0;
+            if (autoLuck == true) {
+                $("#luckIng").show();
+                $("#luckIng span").text(luckNumberList);
+                setTimeout(function () {
+                    stopLuck(luckNumberList);
+                }, 3000);
+            }
+            if (luckState) {
+                $("#stopLuck").show();
+                $("#beginLuck").hide();
+                if (isLuck != '') {
+                    luckUl.find('li[data-userid=' + isLuck + ']').remove();
+                    luckUl.width(luckUl.width() - 380); //移除已中奖人后重新设置宽度
+                }
+                //判断奖池是否已经没人了
+                if ($("#luck_user li").length == 0) {
+                    console.log("已经没有人了!");
+                    $("#stopLuck").hide();
+                    $("#beginLuck").show();
+                    return false;
+                }
+
+                if ($("#luck_user li").length == 1) {
+                    luckUl.width(190);
+                    luckUl.css("left", "170px");
+                }
+                if ($("#luck_user li").length == 2) {
+                    $("#luck_user li:last").remove();
+                    luckUl.width(190);
+                    luckUl.css("left", "170px");
+                }
+                if ($("#luck_user li").length > 2) {
+                    beginTimer = setInterval(function () {
+
+                        luckUl.css({left: -scrollRange});
+                        scrollRange = scrollRange + 60;
+                        if (scrollRange > luckUl.width() / 2 + 45) {
+                            luckUl.css("left", -20);
+                            scrollRange = 190;
+                        }
+                        stopLuckTime = stopLuckTime + 50;
+                        if (autoLuck == true && stopLuckTime > 150000) {
+                            clearInterval(beginTimer);
+                            stopLuck(luckNumberList);
+                        }
+                    }, luckScrollTime);
+                }
+            } else {
+                console.log("抽奖进行中...");
+            }
+
+        }
+
+        //停止抽奖
+        var stopLuck = function () {
+            clearInterval(beginTimer);
+            clearInterval(stopTimer);
+            luckState = false;
+            $("[data-prizeid=" + luckLevel + "]").find("label").html($("[data-prizeid=" + luckLevel + "]").find("label").html() * 1 - 1);
+            // 邓辉 2016-06-17 22:39
+            $("[data-prizeid=" + luckLevel + "]").attr('data-amount', $("[data-prizeid=" + luckLevel + "]").find("label").html() * 1);
+            // 邓辉 2016-06-17 22:39
+            $("#beginLuck").show();
+            $("#stopLuck").hide();
+            var i = 10; //速度递减
+            var j = 2; //时间控制
+            if ($("#luck_user li").length > 1) {
+                stopTimer = setInterval(function () {
+                    luckUl.css({left: -scrollRange});
+                    scrollRange = scrollRange + i;
+                    j++;
+                    if (j % 2 == 0) {
+                        i--;
+                    }
+                    if (scrollRange >= parseInt(luckUl.width() / 2) + 45) {
+                        luckUl.css("left", -20);
+                        scrollRange = 20;
+                    }
+                    if (i <= 1) {
+                        clearInterval(stopTimer);
+                        var stopRange = Math.ceil(scrollRange / 190) * 190 + 20;
+                        luckTimer = setInterval(function () {
+                            scrollRange = scrollRange + 1;
+                            luckUl.css({left: -scrollRange});
+                            if (scrollRange >= parseInt(luckUl.width() / 2) + 45) {
+                                luckUl.css("left", -20);
+                                scrollRange = 20;
+                                stopRange = stopRange - luckUl.width() / 2;
+                            }
+
+                            if (scrollRange == stopRange) {
+                                clearInterval(luckTimer);
+                                luckState = true;
+                                $("#submitLottery").removeClass("gray");
+                                $("#removeLottery").removeClass("gray");
+                                /////////////中奖
+                                var luckLi = $('#luck_user li:eq(' + Math.ceil(scrollRange / 190) + ')');
+                                isLuck = luckLi.data("userid"); //获取中奖data,也就是中奖人的ID啦
+                                var imgUl = luckLi.find("img").attr("src");
+                                var userName = luckLi.find("span").html();
+                                var headPath = luckLi.data("headpath");
+                                if ($("#luckUl").find("#level_" + luckLevel).length < 1) {
+                                    $("#luckUl").prepend("<div id=level_" + luckLevel + " class='level'><label>" + showLevel + ":<a></a></label><ul></ul></div>");
+                                }
+                                $("#level_" + luckLevel).find("ul").prepend('<li data-hasluck="0" data-headpath="' + headPath + '" data-isluck="' + isLuck + '" data-level="' + luckLevel + '"><span></span><a href="javascript:void(0)">x</a><img src="' + imgUl + '"><font>' + userName + '</font></li>');
+
+                                $("#level_" + luckLevel + " li").each(function (index, element) {
+                                    $(this).find("span").html($("#level_" + luckLevel + " li").length - $(this).index());
+                                });
+                                $("#level_" + luckLevel + " label a").text($("#level_" + luckLevel + " li").length);
+                                $("#luckNumber").html($("#luckUl li").length);
+                                if (luckNumberList > 1) {
+                                    luckNumberList--;
+                                    setTimeout(function () {
+                                        beginLuck();
+                                    }, 0);  //重新抽奖
+                                } else {
+                                    $("#luck_number").val(selectNumber); //重新赋值给抽奖人数
+                                    $("#luckIng").css("display", "none");
+                                    $('#lottery .condition').removeClass('disabled');
+                                }
+                                showLuckAnimate(imgUl, showLevel, userName);
+                            }
+                        }, 10);
+                    }
+                }, 30);
+            } else {
+                setTimeout(function () {
+                    luckState = true;
+                    $('#lottery .condition').removeClass('disabled');
+                    $("#submitLottery").removeClass("gray");
+                    $("#removeLottery").removeClass("gray");
+                    isLuck = $("#luck_user li").data("userid");
+                    var imgUl = $("#luck_user li").find("img").attr("src");
+                    var userName = $("#luck_user li").find("span").html();
+                    var headPath = $("#luck_user li").data("headpath");
+                    if ($("#luckUl").find("#level_" + luckLevel).length < 1) {
+                        $("#luckUl").prepend("<div id=level_" + luckLevel + " class='level'><label>" + showLevel + ":<a></a></label><ul></ul></div>");
+                    }
+                    $("#level_" + luckLevel).find("ul").prepend('<li data-hasluck="0" data-headpath="' + headPath + '" data-isluck="' + isLuck + '" data-level="' + luckLevel + '"><span></span><a href="javascript:void(0)">x</a><img src="' + imgUl + '"><font>' + userName + '</font></li>');
+
+                    $("#level_" + luckLevel + " li").each(function (index, element) {
+                        $(this).find("span").html($("#level_" + luckLevel + " li").length - $(this).index());
+                    });
+                    $("#level_" + luckLevel + " label a").text($("#level_" + luckLevel + " li").length);
+                    $("#luckNumber").html($("#luckUl li").length);
+                    $("#luck_number").val(selectNumber); //重新赋值给抽奖人数
+                    $("#luckIng").css("display", "none");
+                    showLuckAnimate(imgUl, showLevel, userName);
+                }, 1000);
+            }
+        }
+
+        var showLuckAnimate = function (imgUl, showLevel, userName) {
+            fireWork.show();
+            $('body').append('<div class="animate-bg"><div class="light"></div><img class="luckbg" src="' + $('#config>#FileWebHost').val() + '/ScreenTheme/default/images/luckbg.png" /><img src="' + imgUl + '" class="luckUserHead" /><div class="showLuckUserName">' + userName + '</div><div class="showLuckLevel">恭喜获得<span>' + showLevel + '</span></div></div>');
+            $(".luckbg").animate({
+                "width": "800px",
+                "height": "518px",
+                "margin-top": "-330px",
+                "margin-left": "-400px",
+                "opacity": "1"
+            }, "fast");
+            $(".luckUserHead").animate({"margin-top": "-275px"});
+            $(".showLuckLevel").animate({"margin-top": "40px"});
+            $(".showLuckUserName").animate({"opacity": "1"});
+            setTimeout(function () {
+                fireWork.hide();
+                $(".animate-bg").animate({"opacity": "0"}, "slow", function () {
+                    $(".animate-bg").remove();
+                });
+                $("#bgsound").remove();
+            }, 3000);
+        }
+    </script>
 </head>
 <body>
-<div data-moduleid="100105" data-modulename="lottery" class="module luck_pair" id="lottery" style="display: block;">
+<div class="module luck_pair" id="lottery" style="display: block;top: 0px;">
 
     <div class="left">
-        <div id="showPrize" style="display: none;">
-            <span>◆</span>
-            <a href="javascript:void(0)">x</a>
-            <div class="prizeContent"></div>
-        </div>
         <div class="userList">
             <div id="luck_user">
                 <div class="left"></div>
                 <div class="right"></div>
                 <div class="lucky"></div>
                 <ul style="width: 31160px; left: -2680px;">
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawcTHEAIkwVj4u95q-6okWaA.jpg"
-                        data-userid="274394"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawcTHEAIkwVj4u95q-6okWaA.jpg"><br><span>寂</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawXq2HgzpYySvst0u-OSbe4M.jpg"
-                        data-userid="273500"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawXq2HgzpYySvst0u-OSbe4M.jpg"><br><span>快乐魔方作文王老师18605560212</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawR9sx-8AwhclDXIPs2DSB3I.jpg"
-                        data-userid="274478"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawR9sx-8AwhclDXIPs2DSB3I.jpg"><br><span>Maggie</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2maweLyB5aUnGPgrnA9unKx9ac.jpg"
-                        data-userid="273499"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2maweLyB5aUnGPgrnA9unKx9ac.jpg"><br><span>Revive</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawV4S1MYoSuoBwUUhNGCcz5Y.jpg"
-                        data-userid="274535"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawV4S1MYoSuoBwUUhNGCcz5Y.jpg"><br><span>butterball</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawUKyYt7Px0Bg3AdV-yG4f70.jpg"
-                        data-userid="273434"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawUKyYt7Px0Bg3AdV-yG4f70.jpg"><br><span></span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawVJQ0v8ONFWoCDmBDAsBxwU.jpg"
-                        data-userid="273736"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawVJQ0v8ONFWoCDmBDAsBxwU.jpg"><br><span>零</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawYqus6OdeGJJfqtcGO64HqI.jpg"
-                        data-userid="274669"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawYqus6OdeGJJfqtcGO64HqI.jpg"><br><span>熊猫先生丶</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawZaRthd8sN6Af2PGey5KEFc.jpg"
-                        data-userid="274974"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawZaRthd8sN6Af2PGey5KEFc.jpg"><br><span>Bonjour</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawURfW454hWb-1uPsdWXn8G8.jpg"
-                        data-userid="273453"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawURfW454hWb-1uPsdWXn8G8.jpg"><br><span>程</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawXHKSoNjQxRo8EjvTzsQGLo.jpg"
-                        data-userid="275008"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawXHKSoNjQxRo8EjvTzsQGLo.jpg"><br><span>🐾🐾</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawZW51t0zeUq_8RWSlPxHAw8.jpg"
-                        data-userid="274620"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawZW51t0zeUq_8RWSlPxHAw8.jpg"><br><span>张文叶</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawYkYYn_2T-D-tR4P3lYBaQQ.jpg"
-                        data-userid="273485"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawYkYYn_2T-D-tR4P3lYBaQQ.jpg"><br><span>王沛鑫</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawQVgqynC94xpKLzRIbbRwLk.jpg"
-                        data-userid="273836"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawQVgqynC94xpKLzRIbbRwLk.jpg"><br><span>中卡物流人事部</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawWrRQdt9vn0sQEuZ0quc9mo.jpg"
-                        data-userid="273967"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawWrRQdt9vn0sQEuZ0quc9mo.jpg"><br><span>必须镇静</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawd_W-dXvvEl6SMgQ_vS69Z0.jpg"
-                        data-userid="274705"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawd_W-dXvvEl6SMgQ_vS69Z0.jpg"><br><span>晚点</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawaTgrk5GIL60rhQcRvbY4WI.jpg"
-                        data-userid="273995"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawaTgrk5GIL60rhQcRvbY4WI.jpg"><br><span>刘亚丽</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawYd-9SiPJ0K0U3a73g_xrtA.jpg"
-                        data-userid="273447"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawYd-9SiPJ0K0U3a73g_xrtA.jpg"><br><span>Mr.Zhai</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawVmT2VuGl5caYu3v_UUY6vA.jpg"
-                        data-userid="273566"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawVmT2VuGl5caYu3v_UUY6vA.jpg"><br><span>陈来锋</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawVW5HUHOMLBVvcaXKw7ldTQ.jpg"
-                        data-userid="273918"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawVW5HUHOMLBVvcaXKw7ldTQ.jpg"><br><span>Lyw💤</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawbXpTZuLmXf1nbFqfujOIAo.jpg"
-                        data-userid="273942"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawbXpTZuLmXf1nbFqfujOIAo.jpg"><br><span>Amouru</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawRDCCUYhYLqhJoVFCCRbVTE.jpg"
-                        data-userid="273888"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawRDCCUYhYLqhJoVFCCRbVTE.jpg"><br><span>sweety</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawfM8qsfyRYtBkZiScSSSoEc.jpg"
-                        data-userid="275043"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawfM8qsfyRYtBkZiScSSSoEc.jpg"><br><span>游走的灵动</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawXaFxaT86xLZ6UtqCaC9w-k.jpg"
-                        data-userid="274533"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawXaFxaT86xLZ6UtqCaC9w-k.jpg"><br><span>HR亚文</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawQ1XhYbPUdG-ZeT41WWV-ug.jpg"
-                        data-userid="274395"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawQ1XhYbPUdG-ZeT41WWV-ug.jpg"><br><span>0</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawYjztGB1QANvfmlC0xVFzg0.jpg"
-                        data-userid="274409"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawYjztGB1QANvfmlC0xVFzg0.jpg"><br><span>L</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawUcd_EmTm_Wd4aYW2Eb2o5A.jpg"
-                        data-userid="275004"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawUcd_EmTm_Wd4aYW2Eb2o5A.jpg"><br><span>MMJX</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawXk-eMPa-b8nCdLfX28_RAU.jpg"
-                        data-userid="275081"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawXk-eMPa-b8nCdLfX28_RAU.jpg"><br><span>瑜廷</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawYNDfPyoUmsD3kw2f8_oSiA.jpg"
-                        data-userid="274701"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawYNDfPyoUmsD3kw2f8_oSiA.jpg"><br><span>DDCC®</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawTqodgOkvFr7YZFKpwtkTLU.jpg"
-                        data-userid="273935"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawTqodgOkvFr7YZFKpwtkTLU.jpg"><br><span>₯㎕。 W rr     💥</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawVdF-l276KqACCv2EbZbsJ4.jpg"
-                        data-userid="273354"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawVdF-l276KqACCv2EbZbsJ4.jpg"><br><span>小葡萄。</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawRE-QWnxKWv_W2lDwxkPcdU.jpg"
-                        data-userid="273300"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawRE-QWnxKWv_W2lDwxkPcdU.jpg"><br><span>A弹指一挥间</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawd0ZiewEOS0mxsyKYuBpsPk.jpg"
-                        data-userid="273329"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawd0ZiewEOS0mxsyKYuBpsPk.jpg"><br><span>todo</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawaVbL6sinACId9v4psdzgPU.jpg"
-                        data-userid="273314"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawaVbL6sinACId9v4psdzgPU.jpg"><br><span>胡创锋</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawd3dCc-NFwU1JOht4kv_Llw.jpg"
-                        data-userid="274369"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawd3dCc-NFwU1JOht4kv_Llw.jpg"><br><span>senvy</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawejl3RKS6WMAct9Ey9miJGo.jpg"
-                        data-userid="273735"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawejl3RKS6WMAct9Ey9miJGo.jpg"><br><span>阿涵</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawWlv8IbDlEnmPbwnRC7HnlI.jpg"
-                        data-userid="274002"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawWlv8IbDlEnmPbwnRC7HnlI.jpg"><br><span>卡卡</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawWDUSPzD7JGdqmCF66-ByKQ.jpg"
-                        data-userid="274532"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawWDUSPzD7JGdqmCF66-ByKQ.jpg"><br><span>王丹</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawXkJ25ktdTkLtu0-in8WCaQ.jpg"
-                        data-userid="273820"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawXkJ25ktdTkLtu0-in8WCaQ.jpg"><br><span>甜~</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawf2sW7WwzxIPRhHtp9VfWxo.jpg"
-                        data-userid="273291"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawf2sW7WwzxIPRhHtp9VfWxo.jpg"><br><span>浮生半梦</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawfE3lt5HAZoXIOqHjHM7PpE.jpg"
-                        data-userid="273475"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawfE3lt5HAZoXIOqHjHM7PpE.jpg"><br><span>欧阳瑜翼</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawT6jPEDhfXe81FCoQLZj15w.jpg"
-                        data-userid="273775"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawT6jPEDhfXe81FCoQLZj15w.jpg"><br><span>红豆小丸子🍡</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawYr9Zx1JDhwYO4j4fRLKn5M.jpg"
-                        data-userid="273374"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawYr9Zx1JDhwYO4j4fRLKn5M.jpg"><br><span>肥鸡蛋❄️</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawYvHgQAe2bzfcENANAArNpY.jpg"
-                        data-userid="273417"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawYvHgQAe2bzfcENANAArNpY.jpg"><br><span>曹伟</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawe6KxNSr3urlAWy2ASy6MLw.jpg"
-                        data-userid="273895"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawe6KxNSr3urlAWy2ASy6MLw.jpg"><br><span>嘴不怂。</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawS6vwS9rjjKqIGFSDWO7tes.jpg"
-                        data-userid="273997"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawS6vwS9rjjKqIGFSDWO7tes.jpg"><br><span>。</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawfCJfVeON2ivYNxNPH0THd8.jpg"
-                        data-userid="274677"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawfCJfVeON2ivYNxNPH0THd8.jpg"><br><span>荃荃</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawdHEviWlbIOGSuwblkAG-2M.jpg"
-                        data-userid="273309"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawdHEviWlbIOGSuwblkAG-2M.jpg"><br><span>ada</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawSw3n-AfeNCs-BvQi823djI.jpg"
-                        data-userid="273348"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawSw3n-AfeNCs-BvQi823djI.jpg"><br><span>华</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawVVouRpS6fidp6-_eBvJc64.jpg"
-                        data-userid="274489"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawVVouRpS6fidp6-_eBvJc64.jpg"><br><span>欧兰整形助理医~杨医生</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawZYBkGuq1xRbQ0dqFG_2M3I.jpg"
-                        data-userid="275086"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawZYBkGuq1xRbQ0dqFG_2M3I.jpg"><br><span>不言不語ღ不傾訴</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawbpfU_0duuV6X7eVDeR_WBo.jpg"
-                        data-userid="274689"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawbpfU_0duuV6X7eVDeR_WBo.jpg"><br><span>戴玲</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2maweetsRDdQV66vpeoG21Z4uk.jpg"
-                        data-userid="274898"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2maweetsRDdQV66vpeoG21Z4uk.jpg"><br><span>麦沛添</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawYo9VIVkgUWa5CpWkuoadnU.jpg"
-                        data-userid="273529"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawYo9VIVkgUWa5CpWkuoadnU.jpg"><br><span>瑭</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawRadtxAi-0qCsICBIlQaO7A.jpg"
-                        data-userid="273976"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawRadtxAi-0qCsICBIlQaO7A.jpg"><br><span>晨曦下的幸存者</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawYPYB4U293N5LSbDQYpZqMg.jpg"
-                        data-userid="273822"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawYPYB4U293N5LSbDQYpZqMg.jpg"><br><span>西直街小霸王彪哥</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawVObZD0P8qr-0EkCe6Kx098.jpg"
-                        data-userid="273751"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawVObZD0P8qr-0EkCe6Kx098.jpg"><br><span>木子</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawbtgnNqDFRus4f2hpo1yq3M.jpg"
-                        data-userid="274378"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawbtgnNqDFRus4f2hpo1yq3M.jpg"><br><span>龚伟</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawSHIW-cDP8OOT0VeDNWsUxg.jpg"
-                        data-userid="273399"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawSHIW-cDP8OOT0VeDNWsUxg.jpg"><br><span>孙晓敏</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawQzHs81XJMdeCcWo_Tu5ZZs.jpg"
-                        data-userid="273777"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawQzHs81XJMdeCcWo_Tu5ZZs.jpg"><br><span>姜荣华</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawR5OdF0XQOW1NekboCAPgm8.jpg"
-                        data-userid="273480"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawR5OdF0XQOW1NekboCAPgm8.jpg"><br><span>不离不弃</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawWVt1WpsFDFgKH6pLltT5U0.jpg"
-                        data-userid="273738"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawWVt1WpsFDFgKH6pLltT5U0.jpg"><br><span>小D</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawcYbjKsAPaHopL9XFslxD0k.jpg"
-                        data-userid="273330"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawcYbjKsAPaHopL9XFslxD0k.jpg"><br><span>木木</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawW9tozJSHjLIXpPdmP76pdg.jpg"
-                        data-userid="273397"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawW9tozJSHjLIXpPdmP76pdg.jpg"><br><span>敏儿🌀</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawSUgh7e4m3R4s4rrArpxAO0.jpg"
-                        data-userid="273514"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawSUgh7e4m3R4s4rrArpxAO0.jpg"><br><span>锦时</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawVGj6uOgxj1rZCQWjJO34ME.jpg"
-                        data-userid="275091"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawVGj6uOgxj1rZCQWjJO34ME.jpg"><br><span>雅然</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawaGZsCBVrODNF1sNYs-f4oY.jpg"
-                        data-userid="274779"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawaGZsCBVrODNF1sNYs-f4oY.jpg"><br><span>神龙酱</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2maweSLXOFZ0VIz50_PNAHc030.jpg"
-                        data-userid="274582"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2maweSLXOFZ0VIz50_PNAHc030.jpg"><br><span>陪衬角色</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawTuO8DEt6aoTBdBDm1le6M0.jpg"
-                        data-userid="273520"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawTuO8DEt6aoTBdBDm1le6M0.jpg"><br><span>子岸</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawWFv4KhevMbG8k3le0IfuG0.jpg"
-                        data-userid="273472"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawWFv4KhevMbG8k3le0IfuG0.jpg"><br><span>黄</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawYyCpc9xIySB2J5MEqTWHi8.jpg"
-                        data-userid="273731"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawYyCpc9xIySB2J5MEqTWHi8.jpg"><br><span>^_^^_^^_^</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawSavXbz5B5fy4AJBO4hXo9o.jpg"
-                        data-userid="274668"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawSavXbz5B5fy4AJBO4hXo9o.jpg"><br><span>海盗船长</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawSiIEEn7I_jSsLOpYcZkyGo.jpg"
-                        data-userid="274728"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawSiIEEn7I_jSsLOpYcZkyGo.jpg"><br><span>好名字</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawcHasDQs4K9tZBV4aJ4aNFg.jpg"
-                        data-userid="273508"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawcHasDQs4K9tZBV4aJ4aNFg.jpg"><br><span>TG</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawUcZuj6tCdoFzmLD3W9j2n8.jpg"
-                        data-userid="274637"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawUcZuj6tCdoFzmLD3W9j2n8.jpg"><br><span>刘洋✎﹏</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawfhPYamJlWSFMQuiHWGZSpU.jpg"
-                        data-userid="274686"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawfhPYamJlWSFMQuiHWGZSpU.jpg"><br><span>Mr. L</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawb4r5YBZsqI6tm9zOMK4jKA.jpg"
-                        data-userid="274557"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawb4r5YBZsqI6tm9zOMK4jKA.jpg"><br><span>🌞</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawQ7HxJwe20GAuMrvL199yq0.jpg"
-                        data-userid="273531"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawQ7HxJwe20GAuMrvL199yq0.jpg"><br><span>远世</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawVBOOxokTeqUjIPpAFSSjjg.jpg"
-                        data-userid="273732"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawVBOOxokTeqUjIPpAFSSjjg.jpg"><br><span>千百度</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawYU8_BRJz2YUFSdIti9g7Lw.jpg"
-                        data-userid="274789"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawYU8_BRJz2YUFSdIti9g7Lw.jpg"><br><span>知行合一</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawSGm7CxuD_jkC4V5nnHZh5Y.jpg"
-                        data-userid="273974"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawSGm7CxuD_jkC4V5nnHZh5Y.jpg"><br><span>石器兔</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawV7oaG6byveBevfFzkNV340.jpg"
-                        data-userid="274685"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawV7oaG6byveBevfFzkNV340.jpg"><br><span>💋、筱南夕枫</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawcTHEAIkwVj4u95q-6okWaA.jpg"
-                        data-userid="274394"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawcTHEAIkwVj4u95q-6okWaA.jpg"><br><span>寂</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawXq2HgzpYySvst0u-OSbe4M.jpg"
-                        data-userid="273500"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawXq2HgzpYySvst0u-OSbe4M.jpg"><br><span>快乐魔方作文王老师18605560212</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawR9sx-8AwhclDXIPs2DSB3I.jpg"
-                        data-userid="274478"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawR9sx-8AwhclDXIPs2DSB3I.jpg"><br><span>Maggie</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2maweLyB5aUnGPgrnA9unKx9ac.jpg"
-                        data-userid="273499"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2maweLyB5aUnGPgrnA9unKx9ac.jpg"><br><span>Revive</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawV4S1MYoSuoBwUUhNGCcz5Y.jpg"
-                        data-userid="274535"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawV4S1MYoSuoBwUUhNGCcz5Y.jpg"><br><span>butterball</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawUKyYt7Px0Bg3AdV-yG4f70.jpg"
-                        data-userid="273434"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawUKyYt7Px0Bg3AdV-yG4f70.jpg"><br><span></span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawVJQ0v8ONFWoCDmBDAsBxwU.jpg"
-                        data-userid="273736"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawVJQ0v8ONFWoCDmBDAsBxwU.jpg"><br><span>零</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawYqus6OdeGJJfqtcGO64HqI.jpg"
-                        data-userid="274669"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawYqus6OdeGJJfqtcGO64HqI.jpg"><br><span>熊猫先生丶</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawZaRthd8sN6Af2PGey5KEFc.jpg"
-                        data-userid="274974"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawZaRthd8sN6Af2PGey5KEFc.jpg"><br><span>Bonjour</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawURfW454hWb-1uPsdWXn8G8.jpg"
-                        data-userid="273453"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawURfW454hWb-1uPsdWXn8G8.jpg"><br><span>程</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawXHKSoNjQxRo8EjvTzsQGLo.jpg"
-                        data-userid="275008"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawXHKSoNjQxRo8EjvTzsQGLo.jpg"><br><span>🐾🐾</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawZW51t0zeUq_8RWSlPxHAw8.jpg"
-                        data-userid="274620"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawZW51t0zeUq_8RWSlPxHAw8.jpg"><br><span>张文叶</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawYkYYn_2T-D-tR4P3lYBaQQ.jpg"
-                        data-userid="273485"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawYkYYn_2T-D-tR4P3lYBaQQ.jpg"><br><span>王沛鑫</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawQVgqynC94xpKLzRIbbRwLk.jpg"
-                        data-userid="273836"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawQVgqynC94xpKLzRIbbRwLk.jpg"><br><span>中卡物流人事部</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawWrRQdt9vn0sQEuZ0quc9mo.jpg"
-                        data-userid="273967"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawWrRQdt9vn0sQEuZ0quc9mo.jpg"><br><span>必须镇静</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawd_W-dXvvEl6SMgQ_vS69Z0.jpg"
-                        data-userid="274705"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawd_W-dXvvEl6SMgQ_vS69Z0.jpg"><br><span>晚点</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawaTgrk5GIL60rhQcRvbY4WI.jpg"
-                        data-userid="273995"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawaTgrk5GIL60rhQcRvbY4WI.jpg"><br><span>刘亚丽</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawYd-9SiPJ0K0U3a73g_xrtA.jpg"
-                        data-userid="273447"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawYd-9SiPJ0K0U3a73g_xrtA.jpg"><br><span>Mr.Zhai</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawVmT2VuGl5caYu3v_UUY6vA.jpg"
-                        data-userid="273566"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawVmT2VuGl5caYu3v_UUY6vA.jpg"><br><span>陈来锋</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawVW5HUHOMLBVvcaXKw7ldTQ.jpg"
-                        data-userid="273918"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawVW5HUHOMLBVvcaXKw7ldTQ.jpg"><br><span>Lyw💤</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawbXpTZuLmXf1nbFqfujOIAo.jpg"
-                        data-userid="273942"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawbXpTZuLmXf1nbFqfujOIAo.jpg"><br><span>Amouru</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawRDCCUYhYLqhJoVFCCRbVTE.jpg"
-                        data-userid="273888"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawRDCCUYhYLqhJoVFCCRbVTE.jpg"><br><span>sweety</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawfM8qsfyRYtBkZiScSSSoEc.jpg"
-                        data-userid="275043"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawfM8qsfyRYtBkZiScSSSoEc.jpg"><br><span>游走的灵动</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawXaFxaT86xLZ6UtqCaC9w-k.jpg"
-                        data-userid="274533"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawXaFxaT86xLZ6UtqCaC9w-k.jpg"><br><span>HR亚文</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawQ1XhYbPUdG-ZeT41WWV-ug.jpg"
-                        data-userid="274395"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawQ1XhYbPUdG-ZeT41WWV-ug.jpg"><br><span>0</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawYjztGB1QANvfmlC0xVFzg0.jpg"
-                        data-userid="274409"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawYjztGB1QANvfmlC0xVFzg0.jpg"><br><span>L</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawUcd_EmTm_Wd4aYW2Eb2o5A.jpg"
-                        data-userid="275004"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawUcd_EmTm_Wd4aYW2Eb2o5A.jpg"><br><span>MMJX</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawXk-eMPa-b8nCdLfX28_RAU.jpg"
-                        data-userid="275081"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawXk-eMPa-b8nCdLfX28_RAU.jpg"><br><span>瑜廷</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawYNDfPyoUmsD3kw2f8_oSiA.jpg"
-                        data-userid="274701"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawYNDfPyoUmsD3kw2f8_oSiA.jpg"><br><span>DDCC®</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawTqodgOkvFr7YZFKpwtkTLU.jpg"
-                        data-userid="273935"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawTqodgOkvFr7YZFKpwtkTLU.jpg"><br><span>₯㎕。 W rr     💥</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawVdF-l276KqACCv2EbZbsJ4.jpg"
-                        data-userid="273354"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawVdF-l276KqACCv2EbZbsJ4.jpg"><br><span>小葡萄。</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawRE-QWnxKWv_W2lDwxkPcdU.jpg"
-                        data-userid="273300"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawRE-QWnxKWv_W2lDwxkPcdU.jpg"><br><span>A弹指一挥间</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawd0ZiewEOS0mxsyKYuBpsPk.jpg"
-                        data-userid="273329"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawd0ZiewEOS0mxsyKYuBpsPk.jpg"><br><span>todo</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawaVbL6sinACId9v4psdzgPU.jpg"
-                        data-userid="273314"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawaVbL6sinACId9v4psdzgPU.jpg"><br><span>胡创锋</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawd3dCc-NFwU1JOht4kv_Llw.jpg"
-                        data-userid="274369"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawd3dCc-NFwU1JOht4kv_Llw.jpg"><br><span>senvy</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawejl3RKS6WMAct9Ey9miJGo.jpg"
-                        data-userid="273735"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawejl3RKS6WMAct9Ey9miJGo.jpg"><br><span>阿涵</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawWlv8IbDlEnmPbwnRC7HnlI.jpg"
-                        data-userid="274002"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawWlv8IbDlEnmPbwnRC7HnlI.jpg"><br><span>卡卡</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawWDUSPzD7JGdqmCF66-ByKQ.jpg"
-                        data-userid="274532"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawWDUSPzD7JGdqmCF66-ByKQ.jpg"><br><span>王丹</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawXkJ25ktdTkLtu0-in8WCaQ.jpg"
-                        data-userid="273820"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawXkJ25ktdTkLtu0-in8WCaQ.jpg"><br><span>甜~</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawf2sW7WwzxIPRhHtp9VfWxo.jpg"
-                        data-userid="273291"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawf2sW7WwzxIPRhHtp9VfWxo.jpg"><br><span>浮生半梦</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawfE3lt5HAZoXIOqHjHM7PpE.jpg"
-                        data-userid="273475"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawfE3lt5HAZoXIOqHjHM7PpE.jpg"><br><span>欧阳瑜翼</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawT6jPEDhfXe81FCoQLZj15w.jpg"
-                        data-userid="273775"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawT6jPEDhfXe81FCoQLZj15w.jpg"><br><span>红豆小丸子🍡</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawYr9Zx1JDhwYO4j4fRLKn5M.jpg"
-                        data-userid="273374"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawYr9Zx1JDhwYO4j4fRLKn5M.jpg"><br><span>肥鸡蛋❄️</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawYvHgQAe2bzfcENANAArNpY.jpg"
-                        data-userid="273417"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawYvHgQAe2bzfcENANAArNpY.jpg"><br><span>曹伟</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawe6KxNSr3urlAWy2ASy6MLw.jpg"
-                        data-userid="273895"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawe6KxNSr3urlAWy2ASy6MLw.jpg"><br><span>嘴不怂。</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawS6vwS9rjjKqIGFSDWO7tes.jpg"
-                        data-userid="273997"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawS6vwS9rjjKqIGFSDWO7tes.jpg"><br><span>。</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawfCJfVeON2ivYNxNPH0THd8.jpg"
-                        data-userid="274677"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawfCJfVeON2ivYNxNPH0THd8.jpg"><br><span>荃荃</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawdHEviWlbIOGSuwblkAG-2M.jpg"
-                        data-userid="273309"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawdHEviWlbIOGSuwblkAG-2M.jpg"><br><span>ada</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawSw3n-AfeNCs-BvQi823djI.jpg"
-                        data-userid="273348"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawSw3n-AfeNCs-BvQi823djI.jpg"><br><span>华</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawVVouRpS6fidp6-_eBvJc64.jpg"
-                        data-userid="274489"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawVVouRpS6fidp6-_eBvJc64.jpg"><br><span>欧兰整形助理医~杨医生</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawZYBkGuq1xRbQ0dqFG_2M3I.jpg"
-                        data-userid="275086"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawZYBkGuq1xRbQ0dqFG_2M3I.jpg"><br><span>不言不語ღ不傾訴</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawbpfU_0duuV6X7eVDeR_WBo.jpg"
-                        data-userid="274689"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawbpfU_0duuV6X7eVDeR_WBo.jpg"><br><span>戴玲</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2maweetsRDdQV66vpeoG21Z4uk.jpg"
-                        data-userid="274898"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2maweetsRDdQV66vpeoG21Z4uk.jpg"><br><span>麦沛添</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawYo9VIVkgUWa5CpWkuoadnU.jpg"
-                        data-userid="273529"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawYo9VIVkgUWa5CpWkuoadnU.jpg"><br><span>瑭</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawRadtxAi-0qCsICBIlQaO7A.jpg"
-                        data-userid="273976"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawRadtxAi-0qCsICBIlQaO7A.jpg"><br><span>晨曦下的幸存者</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawYPYB4U293N5LSbDQYpZqMg.jpg"
-                        data-userid="273822"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawYPYB4U293N5LSbDQYpZqMg.jpg"><br><span>西直街小霸王彪哥</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawVObZD0P8qr-0EkCe6Kx098.jpg"
-                        data-userid="273751"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawVObZD0P8qr-0EkCe6Kx098.jpg"><br><span>木子</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawbtgnNqDFRus4f2hpo1yq3M.jpg"
-                        data-userid="274378"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawbtgnNqDFRus4f2hpo1yq3M.jpg"><br><span>龚伟</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawSHIW-cDP8OOT0VeDNWsUxg.jpg"
-                        data-userid="273399"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawSHIW-cDP8OOT0VeDNWsUxg.jpg"><br><span>孙晓敏</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawQzHs81XJMdeCcWo_Tu5ZZs.jpg"
-                        data-userid="273777"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawQzHs81XJMdeCcWo_Tu5ZZs.jpg"><br><span>姜荣华</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawR5OdF0XQOW1NekboCAPgm8.jpg"
-                        data-userid="273480"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawR5OdF0XQOW1NekboCAPgm8.jpg"><br><span>不离不弃</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawWVt1WpsFDFgKH6pLltT5U0.jpg"
-                        data-userid="273738"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawWVt1WpsFDFgKH6pLltT5U0.jpg"><br><span>小D</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawcYbjKsAPaHopL9XFslxD0k.jpg"
-                        data-userid="273330"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawcYbjKsAPaHopL9XFslxD0k.jpg"><br><span>木木</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawW9tozJSHjLIXpPdmP76pdg.jpg"
-                        data-userid="273397"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawW9tozJSHjLIXpPdmP76pdg.jpg"><br><span>敏儿🌀</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawSUgh7e4m3R4s4rrArpxAO0.jpg"
-                        data-userid="273514"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawSUgh7e4m3R4s4rrArpxAO0.jpg"><br><span>锦时</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawVGj6uOgxj1rZCQWjJO34ME.jpg"
-                        data-userid="275091"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawVGj6uOgxj1rZCQWjJO34ME.jpg"><br><span>雅然</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawaGZsCBVrODNF1sNYs-f4oY.jpg"
-                        data-userid="274779"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawaGZsCBVrODNF1sNYs-f4oY.jpg"><br><span>神龙酱</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2maweSLXOFZ0VIz50_PNAHc030.jpg"
-                        data-userid="274582"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2maweSLXOFZ0VIz50_PNAHc030.jpg"><br><span>陪衬角色</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawTuO8DEt6aoTBdBDm1le6M0.jpg"
-                        data-userid="273520"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawTuO8DEt6aoTBdBDm1le6M0.jpg"><br><span>子岸</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawWFv4KhevMbG8k3le0IfuG0.jpg"
-                        data-userid="273472"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawWFv4KhevMbG8k3le0IfuG0.jpg"><br><span>黄</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawYyCpc9xIySB2J5MEqTWHi8.jpg"
-                        data-userid="273731"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawYyCpc9xIySB2J5MEqTWHi8.jpg"><br><span>^_^^_^^_^</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawSavXbz5B5fy4AJBO4hXo9o.jpg"
-                        data-userid="274668"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawSavXbz5B5fy4AJBO4hXo9o.jpg"><br><span>海盗船长</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawSiIEEn7I_jSsLOpYcZkyGo.jpg"
-                        data-userid="274728"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawSiIEEn7I_jSsLOpYcZkyGo.jpg"><br><span>好名字</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawcHasDQs4K9tZBV4aJ4aNFg.jpg"
-                        data-userid="273508"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawcHasDQs4K9tZBV4aJ4aNFg.jpg"><br><span>TG</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawUcZuj6tCdoFzmLD3W9j2n8.jpg"
-                        data-userid="274637"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawUcZuj6tCdoFzmLD3W9j2n8.jpg"><br><span>刘洋✎﹏</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawfhPYamJlWSFMQuiHWGZSpU.jpg"
-                        data-userid="274686"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawfhPYamJlWSFMQuiHWGZSpU.jpg"><br><span>Mr. L</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawb4r5YBZsqI6tm9zOMK4jKA.jpg"
-                        data-userid="274557"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawb4r5YBZsqI6tm9zOMK4jKA.jpg"><br><span>🌞</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawQ7HxJwe20GAuMrvL199yq0.jpg"
-                        data-userid="273531"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawQ7HxJwe20GAuMrvL199yq0.jpg"><br><span>远世</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawVBOOxokTeqUjIPpAFSSjjg.jpg"
-                        data-userid="273732"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawVBOOxokTeqUjIPpAFSSjjg.jpg"><br><span>千百度</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawYU8_BRJz2YUFSdIti9g7Lw.jpg"
-                        data-userid="274789"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawYU8_BRJz2YUFSdIti9g7Lw.jpg"><br><span>知行合一</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawSGm7CxuD_jkC4V5nnHZh5Y.jpg"
-                        data-userid="273974"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawSGm7CxuD_jkC4V5nnHZh5Y.jpg"><br><span>石器兔</span>
-                    </li>
-                    <li data-headpath="/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawV7oaG6byveBevfFzkNV340.jpg"
-                        data-userid="274685"><img
-                            src="http://file.kxdpm.com/FansAvatar/201612/Weixin_gh_174598e9a5d8/oQ2mawV7oaG6byveBevfFzkNV340.jpg"><br><span>💋、筱南夕枫</span>
-                    </li>
+                    <li><img src="images/cjbg.jpg"><br><span>寂</span></li>
+                    <li><img src="images/zylogo.png"><br><span>寂</span></li>
+                    <li><img src="images/zysoft.jpg"><br><span>寂</span></li>
+                    <li><img src="images/warning.png"><br><span>寂</span></li>
                 </ul>
             </div>
         </div>

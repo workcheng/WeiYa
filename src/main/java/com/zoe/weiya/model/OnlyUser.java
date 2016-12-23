@@ -12,8 +12,18 @@ public class OnlyUser implements Serializable {
     private String depName;
     private Integer order;
     private String headImgUrl;
-    private Integer priceCount;
-    private String signFlag;//该时间段内的签到标识符
+    private String signFlag;
+
+    public OnlyUser() {
+
+    }
+
+
+//    public OnlyUser(String openId, String signFlag) {
+//        this.openId = openId;
+//        this.signFlag = signFlag;
+//    }
+
 
     public OnlyUser(String openId, String signFlag) {
         this.openId = openId;
@@ -26,14 +36,6 @@ public class OnlyUser implements Serializable {
 
     public void setSignFlag(String signFlag) {
         this.signFlag = signFlag;
-    }
-
-    public Integer getPriceCount() {
-        return priceCount;
-    }
-
-    public void setPriceCount(Integer priceCount) {
-        this.priceCount = priceCount;
     }
 
     public String getHeadImgUrl() {
@@ -77,22 +79,5 @@ public class OnlyUser implements Serializable {
     }
 
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof OnlyUser)) return false;
 
-        OnlyUser onlyUser = (OnlyUser) o;
-
-        if (!openId.equals(onlyUser.openId)) return false;
-        return signFlag.equals(onlyUser.signFlag);
-
-    }
-
-    @Override
-    public int hashCode() {
-        int result = openId.hashCode();
-        result = 31 * result + signFlag.hashCode();
-        return result;
-    }
 }

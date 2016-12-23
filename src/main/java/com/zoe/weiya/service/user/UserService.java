@@ -29,12 +29,14 @@ public class UserService {
     public void save(User u) throws HasSignException, InternalException {
         Long aLong = this.saveInSet(u.getOpenId());
         if (aLong == 1) {
-            OnlyUser onlyUser = new OnlyUser(u.getOpenId(),u.getSignFlag());
+//
+            OnlyUser onlyUser = new OnlyUser();
             onlyUser.setOpenId(u.getOpenId());
             onlyUser.setName(u.getName());
             onlyUser.setDepName(u.getDepName());
             onlyUser.setOrder(u.getOrder());
             onlyUser.setHeadImgUrl(u.getHeadImgUrl());
+//            onlyUser.setSignFlag(u.getSignFlag());
             onlyUser.setSignFlag(u.getSignFlag());
             zoeRedisTemplete.setValue(u.getOpenId(), onlyUser);
         } else if (aLong == 0) {
@@ -51,7 +53,7 @@ public class UserService {
             flag = true;
         }
         if (flag) {
-            return ZoeObject.success(ZoeErrorCode.SUCCESS);
+            return ZoeObject.failure(ZoeErrorCode.SUCCESS);
         } else {
             return ZoeObject.failure(ZoeErrorCode.ERROR);
         }
@@ -98,7 +100,7 @@ public class UserService {
         //分批次抽奖中奖名单
         List<OnlyUser> priceUser = new ArrayList<>();
         //2.进行随机筛选出一条（抽奖）
-        OnlyUser onlyUser = list.get(0);
+        User onlyUser = (User)list.get(0);
         //中奖次数+1
         onlyUser.setPriceCount(onlyUser.getPriceCount() + 1);
         if (priceUser.contains(onlyUser)) {
