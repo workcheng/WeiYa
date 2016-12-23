@@ -46,6 +46,21 @@ public class UserService {
         }
     }
 
+    public void commitLotteryPerson(List<OnlyUser> users) {
+        for (OnlyUser onlyUser : users) {
+            onlyUser.setLucky(true);
+            zoeRedisTemplete.setValue(onlyUser.getOpenId(), onlyUser);
+        }
+    }
+
+    public void resetIsLuckyFlag(List<OnlyUser> users) {
+        for (OnlyUser onlyUser : users) {
+            onlyUser.setLucky(false);
+            zoeRedisTemplete.setValue(onlyUser.getOpenId(), onlyUser);
+        }
+    }
+
+
     public ResponseMsg deleteAll(List<OnlyUser> users) {
         boolean flag = false;
         for (OnlyUser onlyUser : users) {
