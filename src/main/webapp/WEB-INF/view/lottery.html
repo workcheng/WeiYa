@@ -30,16 +30,9 @@
         var luckUl = $("#luck_user ul");
         var deleteLuckUser = '';
         var levelMaxNum;
-        $(document).ready(function () {
-            getLottery();
-            $("#beginLuck").click(function () {
-                isAuto();
-            });
-            $('#stopLuck').click(function () {
-                stopLuck();
-            });
-        })
-
+        var GetRnd = function (min, max) {
+            return parseInt(Math.random() * (max - min + 1));
+        }
         var getLottery = function () {
             var getUserList = "http://zxc.tunnel.qydev.com/user/userList";
             var alldataarr = null;
@@ -48,17 +41,21 @@
                 url: getUserList,
                 success: function (data) {
                     alldataarr = data.data;
-                    var num = alldataarr.length - 1;
-                    var radm = GetRnd(0, num);
-                    var str = '<li><img src="' + alldataarr[radm].headImgUrl + '"><br><span>' + alldataarr[radm].name + '</span></li>';
-                    luckUl.append(str);
+                    $.each(alldataarr, function (index, item) {
+                        var str = '<li><img src="' + item.headImgUrl + '"><br><span>' + item.name + '</span></li>';
+                        luckUl = $("#luck_user ul");
+                        luckUl.append(str);
+                    })
+                    /*var num = alldataarr.length - 1;
+                     var radm = GetRnd(0, num);*/
+                    /* var str = '<li><img src="' + alldataarr[radm].headImgUrl + '"><br><span>' + alldataarr[radm].name + '</span></li>';
+                     luckUl = $("#luck_user ul");
+                     luckUl.append(str);*/
                     luckUserList();
                 }
             })
         }
-        var GetRnd = function (min, max) {
-            return parseInt(Math.random() * (max - min + 1));
-        }
+
         var luckUserList = function () {
             luckUl.css("width", $("#luck_user").find("li").length * 190 * 2);
             luckUl.append(luckUl.html());
@@ -71,6 +68,7 @@
                 }
             });
         }
+
         var isAuto = function () {
             $('#showPrize').hide();  //2015-03-27
             if ($("#showNumber").find("a").text() > 1) {
@@ -283,8 +281,8 @@
         }
 
         var showLuckAnimate = function (imgUl, showLevel, userName) {
-            fireWork.show();
-            $('body').append('<div class="animate-bg"><div class="light"></div><img class="luckbg" src="' + $('#config>#FileWebHost').val() + '/ScreenTheme/default/images/luckbg.png" /><img src="' + imgUl + '" class="luckUserHead" /><div class="showLuckUserName">' + userName + '</div><div class="showLuckLevel">恭喜获得<span>' + showLevel + '</span></div></div>');
+            //fireWork.show();
+            $('body').append('<div class="animate-bg"><div class="light"></div><img class="luckbg" src="images/luckbg.png" /><img src="' + imgUl + '" class="luckUserHead" /><div class="showLuckUserName">' + userName + '</div><div class="showLuckLevel">恭喜获得<span>' + showLevel + '</span></div></div>');
             $(".luckbg").animate({
                 "width": "800px",
                 "height": "518px",
@@ -296,13 +294,23 @@
             $(".showLuckLevel").animate({"margin-top": "40px"});
             $(".showLuckUserName").animate({"opacity": "1"});
             setTimeout(function () {
-                fireWork.hide();
+                // fireWork.hide();
                 $(".animate-bg").animate({"opacity": "0"}, "slow", function () {
                     $(".animate-bg").remove();
                 });
                 $("#bgsound").remove();
             }, 3000);
         }
+        $(document).ready(function () {
+            getLottery();
+            $("#beginLuck").click(function () {
+                isAuto();
+            });
+            $('#stopLuck').click(function () {
+                stopLuck();
+            });
+        })
+
     </script>
 </head>
 <body>
@@ -314,11 +322,8 @@
                 <div class="left"></div>
                 <div class="right"></div>
                 <div class="lucky"></div>
-                <ul style="width: 31160px; left: -2680px;">
-                    <li><img src="images/cjbg.jpg"><br><span>寂</span></li>
-                    <li><img src="images/zylogo.png"><br><span>寂</span></li>
-                    <li><img src="images/zysoft.jpg"><br><span>寂</span></li>
-                    <li><img src="images/warning.png"><br><span>寂</span></li>
+                <ul style="width: 31160px; left: -200px;">
+
                 </ul>
             </div>
         </div>
@@ -364,7 +369,19 @@
         <a class="clickBtn stopBtn" id="stopLuck" style="display: none;">停止抽奖</a>
         <a class="clickBtn" id="luckIng" style="display: none;">自动抽奖中(<span></span>)</a>
     </div>
+    <!--  <div class="right">
+          <div class="title">获奖名单</div>
+          <div class="resultNum">获奖人数:<span id="luckNumber">14</span></div>
+          <div id="luckUl" class="result">
+              <div id="level_124" class="level"><label>一等奖:<a>12</a></label>
+                  <ul>
 
+                  </ul>
+              </div>
+          </div>
+          <a class="reclick" id="removeLottery">重新抽奖</a>
+          <a class="submitUser" id="submitLottery">确认名单</a>
+      </div>-->
 </div>
 </body>
 </html>

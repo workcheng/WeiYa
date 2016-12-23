@@ -56,39 +56,15 @@
                     for (var k in json.data) {
                         config[k] = json.data[k];
                     }
-                    config.debug = true;// 添加你需要的JSSDK的权限
+                    config.debug = false;// 添加你需要的JSSDK的权限
                     config.appId = config.appid;
-                    config.jsApiList = ['checkJsApi', 'getLocation', 'hideOptionMenu'];
+                    config.jsApiList = ['hideOptionMenu'];
                     config.timestamp = parseInt(config.timestamp);
                     config.nonceStr = config.noncestr;
                     config.signature = config.signature
                     wx.config(config);
                     wx.hideOptionMenu();
 
-                    wx.checkJsApi({
-                        jsApiList: [
-                            'getLocation'
-                        ],
-                        success: function (res) {
-                            console.log(JSON.stringify(res))
-                            if (res.checkResult.getLocation == false) {
-                                alert('你的微信版本太低，不支持微信JS接口，请升级到最新的微信版本！');
-                                return;
-                            }
-                        }
-                    });
-                    //地理位置
-                    /*$('#getLocation').click(function () {
-                     initWxConfig(window.location.href, '@Url.Action("GetWxConfig","Api")');//重新获取微信配置参数*/
-                    wx.getLocation({
-                        type: 'wgs84',// 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
-                        success: function (res) {
-                            console.log("res", JSON.stringify((res)));
-                        },
-                        cancel: function (res) {
-                            alert('用户拒绝授权获取地理位置');
-                        }
-                    });
 
                     wx.ready(function () {
                         var getUserInfo = "http://zxc.tunnel.qydev.com/auth/user_info";
