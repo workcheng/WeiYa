@@ -9,36 +9,6 @@
     <script src="http://apps.bdimg.com/libs/jquery/1.11.3/jquery.min.js"></script>
 
     <script>
-        var EARTH_RADIUS = 6378137.0;    //单位M
-        var PI = Math.PI;
-
-        function getRad(d) {
-            return d * PI / 180.0;
-        }
-
-        /**
-         * caculate the great circle distance
-         * @param {Object} lat1 纬度
-         * @param {Object} lng1  经度
-         * @param {Object} lat2
-         * @param {Object} lng2
-         */
-        function getGreatCircleDistance(lat1, lng1, lat2, lng2) {
-            var radLat1 = getRad(lat1);
-            var radLat2 = getRad(lat2);
-
-            var a = radLat1 - radLat2;
-            var b = getRad(lng1) - getRad(lng2);
-
-            var s = 2 * Math.asin(Math.sqrt(Math.pow(Math.sin(a / 2), 2) + Math.cos(radLat1) * Math.cos(radLat2) * Math.pow(Math.sin(b / 2), 2)));
-            s = s * EARTH_RADIUS;
-            s = Math.round(s * 10000) / 10000.0;
-
-            return s;
-        }
-
-        //  alert(getGreatCircleDistance(24.479834, 118.089425, 24.49037, 118.1744));//24.47974,118.1767203  http://lbsyun.baidu.com/jsdemo.htm#a6_1
-
         $(document).ready(function () {
             $("input[name='userName']").mouseleave(function () {
                 if ($("#userName").val() == "") {
@@ -166,7 +136,8 @@
                                                         "depName": $("select[name='dept']").val(),
                                                         "order": $("#isOrder").val(),
                                                         "headImgUrl": userInfo.headImgUrl,
-                                                        "openId": openId
+                                                        "openId": openId,
+                                                        "signFlag": 1
                                                     };
                                                     signInfo = JSON.stringify(signInfo);
                                                     console.log("info", signInfo);
@@ -177,7 +148,7 @@
                                                         data: signInfo,
                                                         success: function (json) {
                                                             var msg = json.message;
-                                                            if (msg == "成功") {
+                                                            if (msg == "已签到") {
                                                                 $("#partySign").hide();
                                                                 $("#signSuccess").show();
                                                             }
@@ -194,8 +165,6 @@
                                 })
                             }
                         })
-                    });
-                    wx.error(function (res) {
                     });
                 }
             })
@@ -240,11 +209,35 @@
                 </div>
                 <div class="field-widget">
                     <select id="field6" name="dept" class="validate-selection">
+                        <option>财务中心</option>
+                        <option>福建区</option>
+                        <option>工程稽核部</option>
                         <option>区域产品中心</option>
+                        <option>商务中心</option>
+                        <option>系统集成中心</option>
+                        <option>西藏展望</option>
+                        <option>行政中心</option>
                         <option>医院产品中心</option>
+                        <option>总裁办</option>
+                        <option>总工办公室</option>
+                        <option>东北大区</option>
+                        <option>华东大区</option>
+                        <option>华南大区</option>
+                        <option>西北大区</option>
+                        <option>西南大区</option>
+                        <option>中南大区</option>
+                        <option>北方大区</option>
+                        <option>内蒙分公司</option>
+                        <option>新疆分公司</option>
+                        <option>西藏分公司</option>
+                        <option>智业工会</option>
+                        <option>河北智业</option>
+                        <option>江西智业</option>
+                        <option>克拉玛依市智业科技有限公司</option>
+                        <option>内蒙古普诺杰</option>
+                        <option>天津天职</option>
                         <option>智业互联</option>
                         <option>云顶伟业</option>
-                        <option>福建区</option>
                     </select>
                 </div>
             </div>

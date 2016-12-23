@@ -16,6 +16,33 @@ public class User extends OnlyUser{
     @NotNull(message = "是否订餐不能为空")
     private Integer order;
 
+    private Integer priceCount;
+    private String signFlag;//该时间段内的签到标识符
+    public User() {
+        super();
+    }
+
+    public User(String openId, String signFlag) {
+        this.openId = openId;
+        this.signFlag = signFlag;
+    }
+
+    public Integer getPriceCount() {
+        return priceCount;
+    }
+
+    public void setPriceCount(Integer priceCount) {
+        this.priceCount = priceCount;
+    }
+
+    public String getSignFlag() {
+        return signFlag;
+    }
+
+    public void setSignFlag(String signFlag) {
+        this.signFlag = signFlag;
+    }
+
     public Integer getOrder() {
         return order;
     }
