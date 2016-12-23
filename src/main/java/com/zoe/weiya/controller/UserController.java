@@ -6,6 +6,7 @@ import com.zoe.weiya.comm.exception.InternalException;
 import com.zoe.weiya.comm.logger.ZoeLogger;
 import com.zoe.weiya.comm.logger.ZoeLoggerFactory;
 import com.zoe.weiya.comm.response.ZoeObject;
+import com.zoe.weiya.model.OnlyUser;
 import com.zoe.weiya.model.User;
 import com.zoe.weiya.service.user.UserService;
 import org.apache.commons.lang3.StringUtils;
@@ -13,6 +14,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created by chenghui on 2016/12/20.
@@ -78,6 +82,40 @@ public class UserController {
     public Object getUserList() {
         return ZoeObject.success(userService.getSignUser());
     }
+
+    @RequestMapping(value = "confirmLucky", method = RequestMethod.POST)
+    public Object confirmLucky(String[] openIds) {
+        List<OnlyUser> onlyUsers = new ArrayList<>();
+        try {
+            List<String> stringList = Arrays.asList(openIds);
+            for (String openId : stringList) {
+                OnlyUser onlyUser = userService.get(openId);
+                onlyUsers.add(onlyUser);
+            }
+            userService.commitLotteryPerson(onlyUsers);
+        } catch (Exception e) {
+            return ZoeObject.failure(ZoeErrorCode.ERROR);
+        }
+        return ZoeObject.success(ZoeErrorCode.SUCCESS);
+    }
+
+    @RequestMapping(value = "reLottery", method = RequestMethod.POST)
+    public Object reLottery(String[] openIds) {
+        List<OnlyUser> onlyUsers = new ArrayList<>();
+        try {
+            List<String> stringList = Arrays.asList(openIds);
+            for (String openId : stringList) {
+                OnlyUser onlyUser = userService.get(openId);
+                onlyUsers.add(onlyUser);
+            }
+            userService.resetIsLuckyFlag(onlyUsers);
+        } catch (Exception e) {
+            return ZoeObject.failure(ZoeErrorCode.ERROR);
+        }
+        return ZoeObject.success(ZoeErrorCode.SUCCESS);
+    }
+
+
 
     @RequestMapping(value = "lotterySelect", method = RequestMethod.GET)
     public Object LotterySelect() {
