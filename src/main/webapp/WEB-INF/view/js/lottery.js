@@ -18,36 +18,6 @@ var deleteLuckUser = '';
 //获取奖品信息和对应中奖用户
 var getLotteryAward = function () {
     selectPrize($('.prize a'));
-    /*$.extendGetJSON($("#GetLotteryAward").val(), {}, function (data) {
-     if (data.length > 0) {
-     $('.prize').empty();
-     $("#luckUl").empty();
-     $(data).each(function (index, element) {
-     $('.prize').append('<a data-prizeid="' + element.Id + '" data-prizeimg="' + element.PrizeImg + '" data-prizename="' + element.Name + '" data-amount="' + element.Count + '"><div>' + element.Name + '</div> <span>剩<label>' + element.Count + '</label>名</span></a>');
-     if (element.Fans.length > 0) {
-     if ($("#luckUl").find("#level_" + element.Id).length < 1) {
-     $("#luckUl").append("<div id=level_" + element.Id + " class='level'><label>" + element.Name + ":<a></a></label><ul></ul></div>");
-     }
-     $(element.Fans).each(function (i, ele) {
-     $("#level_" + element.Id).find("ul").prepend('<li data-hasluck="1" data-level="' + element.Id + '"><span></span><img onerror="imgError(this);" src="' + ele.Head + '"><font>' + ele.NickName + '</font><i class="hasSubmit">已提交</i></li>');
-     });
-     var _length = $('#level_' + element.Id + ' li').length;
-     $('#level_' + element.Id + ' li').each(function (index, element) {
-     $(this).find("span").html(_length - $(this).index());
-     });
-     $('#level_' + element.Id + ' label a').text(_length);
-     $('#luckNumber').html($('#luckUl li').length);
-     }
-     });
-     }
-
-     $('.prize a').click(function () {
-     selectPrize($(this));
-     });
-     }, function () {*/
-    //showInfo("加载失败,请重试!");
-    // loaded();
-    /*});*/
 };
 
 //获取用户
@@ -60,7 +30,7 @@ var getLottery = function () {
         success: function (data) {
             alldataarr = data.data;
             $.each(alldataarr, function (index, item) {
-                var str = '<li><img src="' + item.headImgUrl + '"><br><span>' + item.name + '</span></li>';
+                var str = '<li data-headpath="' + item.headImgUrl + '" data-userid="' + item.openId + '"><img src="' + item.headImgUrl + '"><br><span>' + item.name + '</span></li>';
                 luckUl = $("#luck_user ul");
                 luckUl.append(str);
             })
@@ -111,7 +81,7 @@ var isAuto = function () {
         deleteLuckUser = '';
     }
     if ($('#luck_user li').length < 0) {
-        console.log('当前还没有人参加活动');
+        showInfo('当前还没有人参加活动', 0);
         return false;
     }
     if ($("#luck_user li").length == 2) {
@@ -120,20 +90,20 @@ var isAuto = function () {
         luckUl.css("left", "170px");
     }
     if (luckLevel == 0) {
-        console.log("请选择抽奖等级");
+        showInfo("请选择抽奖等级", 0);
         return false;
     }
     $('#test').val(luckNumberList);
     if (luckNumberList * 1 > levelMaxNum) {
-        console.log("亲，奖品没那么多!");
+        showInfo("亲，奖品没那么多!", 0);
         return false;
     }
 
     if (isLuck != "" && luckNumber > Math.max(1, $("#luck_user li").length / 2 - 1)) {
-        console.log("抽奖人数不够!");
+        showInfo("抽奖人数不够!", 0);
         return false;
     } else if (luckNumber > Math.max(1, $("#luck_user li").length / 2)) {
-        console.log("抽奖人数不够!");
+        showInfo("抽奖人数不够!", 0);
         return false;
     }
     beginLuck();
@@ -157,7 +127,7 @@ var beginLuck = function () {  //key 0:只抽一个人奖 1:自动抽奖
         }
         //判断奖池是否已经没人了
         if ($("#luck_user li").length == 0) {
-            console.log("已经没有人了!");
+            showInfo("已经没有人了!", 0);
             $("#stopLuck").hide();
             $("#beginLuck").show();
             return false;
@@ -297,7 +267,6 @@ var deleteThis = function (v, luckLevel) {
     if (li.data("hasluck") != 1) {
         deleteLuckUser = deleteLuckUser + '<li data-userid="' + li.attr("data-isluck") + '"><img src="' + li.find("img").attr("src") + '"><br><span>' + li.find("font").html() + '</span></li>';
         $("[data-prizeid=" + luckLevel + "]").find("label").html($("[data-prizeid=" + luckLevel + "]").find("label").html() * 1 + 1);
-        // 邓辉 2016-06-17 22:39
         $("[data-prizeid=" + luckLevel + "]").attr('data-amount', $("[data-prizeid=" + luckLevel + "]").find("label").html() * 1);
         // 邓辉 2016-06-17 22:39
         //添加到需要回到奖池的数组
@@ -366,79 +335,62 @@ var showLuckAnimate = function (imgUl, showLevel, userName) {
 var SubmitLotteryFans = function (v) {
     var submitCount = $("#luckUl li[data-hasluck!=1]").size();
     if (!$("#removeLottery").hasClass("gray") && submitCount > 0) {
-        loading("正在提交，请稍后...");
+        //loading("正在提交，请稍后...");
         var submitForm = $('<form/>');
+        var submitId = "";
         $("#luckUl li[data-hasluck!=1]").each(function (index, element) {
+            var isluck = $(element).data('isluck');
             submitForm.append('<input name="[' + index + '].AwardId" type="hidden" value="' + $(element).data('level') + '" />');
-            submitForm.append('<input name="[' + index + '].FansId" type="hidden" value="' + $(element).data('isluck') + '" />');
+            submitForm.append('<input name="[' + index + '].FansId" type="hidden" value="' + isluck + '" />');
             submitForm.append('<input name="[' + index + '].FansNickName" type="hidden" value="' + $(element).find('font').text() + '" />');
             submitForm.append('<input name="[' + index + '].FansHead" type="hidden" value="' + $(element).data('headpath') + '" />');
+            //submitId.push(isluck);
         });
-
-        $.extendPost($("#SubmitLotteryFans").val(), submitForm.serializeArray(), "json", function (data) {
-            loaded("正在提交，请稍后...");
-            if (data.ResultType == 1) {
-                showInfo("提交成功", 1);
-                $("#removeLottery").addClass("gray");
-                $("#submitLottery").addClass("gray");
-                $("#luckUl li[data-hasluck!=1]").attr('data-hasluck', 1).append('<i class="hasSubmit">已提交</i>').find('a').remove();
-            }
-        });
+        alert(JSON.stringify(isLuck));
+        /*var submitLottery = "http://zxc.tunnel.qydev.com/user/submitLottert";
+         $.ajax({
+         url: submitLottery,
+         data: submitId,
+         success: function (data) {
+         loaded("正在提交，请稍后...");
+         if (data.ResultType == 1) {
+         showInfo("提交成功", 1);
+         $("#removeLottery").addClass("gray");
+         $("#submitLottery").addClass("gray");
+         $("#luckUl li[data-hasluck!=1]").attr('data-hasluck', 1).append('<i class="hasSubmit">已提交</i>').find('a').remove();
+         }
+         }
+         })*/
+        getLottery();
     }
 }
 //模拟select效果
 var selectPrize = function () {
     $("#showLevel").click(function () {
-        var e = typeof(event) == "undefined" ? arguments.callee.caller.arguments[0] : event;
-        if (e && e.stopPropagation) {
-            e.stopPropagation();
-        }
-        else {
-            window.event.cancelBubble = true;
-        }
+        stopBubble();
         $($(this).siblings(".select_option")[0]).show();
     });
 
     $("#showNumber").click(function () {
-        var e = typeof(event) == "undefined" ? arguments.callee.caller.arguments[0] : event;
-        if (e && e.stopPropagation) {
-            e.stopPropagation();
-        }
-        else {
-            window.event.cancelBubble = true;
-        }
+        stopBubble();
         $($(this).siblings(".select_option")[1]).show();
     });
 
     $(document).on("click", function () {
         $(".select_option").hide();
     })
-
-
-    /* $(v).parent().prev().find("a").html($(v).find("div").html());
-     $(v).parent().prev().find("a").attr({
-     "data-prizeid": $(v).data("prizeid"),
-     "data-amount": $(v).data("amount")
-     });
-     $(v).parent().siblings(".select_option").find(".newNumber").remove();
-     var _num = $(v).find("label").html();
-     $(v).parent().next(".select").find("a").attr("data-number", _num).html(_num);
-     if (_num > 5) {
-     $(v).parent().siblings(".select_option").append('<a class="newNumber"><div>' + _num + '</div></a>');
-     $(".newNumber").click(function () {
-     $(v).parent().prev(".select").find("a").html($(v).html());
-     })
-     }
-     $(v).parent().siblings(".select_option").find("a").each(function (index, element) {
-     if ($(this).data("number") > _num) {
-     $(this).hide();
-     } else {
-     $(this).show();
-     }
-     });*/
-
 }
 var selectLotteryNumber = function (v) {
     $(v).parent().prev().find("a").html($(v).find("div").html());
     $(v).parent().prev().find("a").attr({"data-number": $(v).data("number")});
+}
+
+var stopBubble = function () {
+    var e = typeof(event) == "undefined" ? arguments.callee.caller.arguments[0] : event;
+    if (e && e.stopPropagation) {
+        e.stopPropagation();
+    }
+    else {
+        window.event.cancelBubble = true;
+    }
 }
