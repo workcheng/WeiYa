@@ -6,6 +6,18 @@ body {
     font-family: Arial, Helvetica, sans-serif;
 }
 
+.field-content {
+    width: 300px;
+    height: 50px;
+    line-height: 20px;
+    text-align: center;
+    float: left;
+    margin-top: 100px;
+    margin-left: 20px;
+    font-size: 18px;
+    font-weight: bold
+}
+
 .form_content {
     width: 575px;
     margin: 30px auto;
@@ -15,7 +27,6 @@ body {
 
 fieldset {
     border: 0px #ebebeb solid;
-    padding: 15px 10px 15px 10px;
     margin: 0 0 10px 0;
 }
 

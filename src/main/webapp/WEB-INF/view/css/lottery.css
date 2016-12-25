@@ -13,7 +13,7 @@ body {
     width: 100%;
     height: 100%;
     overflow: hidden;
-    background: url(images/bg.jpg) top center no-repeat;
+    background: url(../images/cjbg.jpg) top center no-repeat;
     background-size: 100%;
 }
 
@@ -2997,7 +2997,7 @@ div.normalImg {
 
 /*抽奖　对对碰*/
 .luck_pair .left {
-    width: 530px;
+    width: 60%;
     margin: 30px 0 0 30px;
     float: left;
     position: relative;
@@ -3007,7 +3007,7 @@ div.normalImg {
 }
 
 .luck_pair .right {
-    width: 339px;
+    width: 30%;
     height: 485px;
     float: right;
     color: #797979;
@@ -3196,6 +3196,7 @@ div.normalImg {
 .userList {
     text-align: center;
     padding-top: 80px;
+    margin-left: 100px;
     height: 230px;
     font-size: 30px;
     white-space: nowrap;

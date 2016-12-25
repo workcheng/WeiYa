@@ -410,11 +410,9 @@ var selectPrize = function () {
         $($(this).siblings(".select_option")[1]).show();
     });
 
-    $(document).on("click",function(){
+    $(document).on("click", function () {
         $(".select_option").hide();
     })
-
-
 
 
     /* $(v).parent().prev().find("a").html($(v).find("div").html());

@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="initial-scale=1, user-scalable=0, minimal-ui">
     <link id="defaultCss" rel="stylesheet" href="css/lottery.css">
     <link id="themeCss" rel="stylesheet" href="css/lottery-9.css">
     <script src="http://apps.bdimg.com/libs/jquery/1.11.3/jquery.min.js"></script>
@@ -21,8 +22,7 @@
 
             $(".prize a").click(function () {
                 selectLotteryNumber($(this));
-            })
-
+            });
             $('#beginLuck').click(function () {
                 isAuto();
             });
@@ -44,7 +44,7 @@
     </script>
 </head>
 <body>
-<div class="module luck_pair" id="lottery" style="display: block;top: 0px;width:980px;margin:0 auto;">
+<div class="module luck_pair" id="lottery" style="display: block;top: 0px;width:90%;height:90%;margin: 30px auto;">
 
     <div class="left">
         <div class="userList">
@@ -62,7 +62,7 @@
             <div class="select" id="showLevel">
                 <a data-prizeid="124" data-amount="55">一等奖</a>
             </div>
-            <div class="select_option prize" style="left: 97.0469px; top: 380px; display: none;">
+            <div class="select_option prize" style="left: 200px; top: 380px; display: none;">
                 <a data-prizeid="124" data-prizeimg="" data-prizename="一等奖" data-amount="">
                     <div>一等奖</div>
                 </a>
@@ -74,7 +74,7 @@
             <div class="select" id="showNumber">
                 <a data-number="1">1</a>
             </div>
-            <div class="select_option showNumber" style="left: 393.672px; top: 380px; display: none;">
+            <div class="select_option showNumber" style="left: 500px; top: 380px; display: none;">
                 <a data-number="1">
                     <div>1</div>
                 </a>

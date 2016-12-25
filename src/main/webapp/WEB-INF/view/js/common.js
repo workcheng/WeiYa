@@ -33,7 +33,7 @@ var removeTips = function () {
 
 //加载中
 var loading = function (text) {
-    $('body').append('<div class="blackbg"></div><div id="loading"><img src="../images/loading.gif" width="150">' + text + '</div>');
+    $('body').append('<div class="blackbg"></div><div id="loading"><img src="/view/images/loading.gif" width="150">' + text + '</div>');
 };
 
 //加载完成

@@ -43,10 +43,10 @@ public class UserController {
         try {
             userService.save(u);
         } catch (HasSignException e) {
-            log.error("ermsg",e);
+            log.error("ermsg", e);
             return ZoeObject.failure(ZoeErrorCode.HAS_SIGN);
         } catch (InternalException e) {
-            log.error("ermsg",e);
+            log.error("ermsg", e);
             return ZoeObject.failure(ZoeErrorCode.ERROR_INTERNAL);
         }
         return ZoeObject.failure(ZoeErrorCode.HAS_SIGN);
@@ -78,6 +78,11 @@ public class UserController {
         }
     }
 
+    /**
+     * 获取签到用户信息
+     *
+     * @return
+     */
     @RequestMapping(value = "userList", method = RequestMethod.GET)
     public Object getUserList() {
         return ZoeObject.success(userService.getSignUser());
@@ -114,7 +119,6 @@ public class UserController {
         }
         return ZoeObject.success(ZoeErrorCode.SUCCESS);
     }
-
 
 
     @RequestMapping(value = "lotterySelect", method = RequestMethod.GET)

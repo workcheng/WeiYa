@@ -7,9 +7,10 @@
     <link rel="stylesheet" href="../view/css/style.css">
     <script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
     <script src="http://apps.bdimg.com/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script type="text/javascript" src="js/common.js"></script>
 
     <script>
-        $(document).ready(function () {
+        var validInput = function () {
             $("input[name='userName']").mouseleave(function () {
                 if ($("#userName").val() == "") {
                     $("#user").text("请输入您的名字！");
@@ -17,6 +18,9 @@
                     $("#user").text("");
                 }
             })
+        }
+        $(document).ready(function () {
+            validInput();
             $("#isOrder").click(function () {
                 if ($("#isOrder").is(':checked')) {
                     $(this).val(1);
@@ -82,7 +86,6 @@
                                 var userInfo = json.data;
                                 var openId = userInfo.openId;
                                 console.log(userInfo, JSON.stringify(userInfo));
-
                                 var memberUrl = "http://zxc.tunnel.qydev.com/user/isMember";
                                 $.ajax({
                                     url: memberUrl,
@@ -93,19 +96,13 @@
                                         console.log(json, JSON.stringify(json));
                                         var data = json.data;
                                         if (data == "NOT_SIGN") {
+                                            $("#loadImg").hide();
+                                            $("#partySign").show();
                                             document.querySelector('#btnSign').onclick = function () {
-                                                if ($("#userName").val() == "" && $("#phone").val() == "") {
-                                                    if ($("#userName").val() == "") {
-                                                        $("#user").text("请输入您的名字！");
-                                                    } else {
-                                                        $("#user").text("");
-                                                    }
-                                                    if ($("#phone").val() == "") {
-                                                        $("#mobile").text("请输入您的名字！");
-                                                    } else {
-                                                        $("#mobile").text("");
-                                                    }
+                                                if ($("#userName").val() == "") {
+                                                    $("#user").text("请输入您的名字！");
                                                 } else {
+                                                    $("#user").text("");
                                                     var addUserUrl = "http://zxc.tunnel.qydev.com/user/save";
                                                     var signInfo = {
                                                         "name": $("input[name='userName']").val(),
@@ -146,24 +143,11 @@
             })
         });
     </script>
-    <style type="text/css">
-        .field-content {
-            width: 300px;
-            height: 50px;
-            line-height: 20px;
-            text-align: center;
-            float: left;
-            margin-top: 100px;
-            margin-left: 20px;
-            font-size: 18px;
-            font-weight: bold
-        }
-    </style>
 </head>
 <body>
 <div>
     <fieldset>
-        <legend><img src="images/favicon.ico"></legend>
+        <!--  <legend><img src="images/favicon.ico"></legend>-->
         <div style="height: 100px;">
             <div class="form-row" style="width: 100px;height: 100px;float: left;clear: none">
                 <img src="images/zylogo.png" style="width: 100px;height: 100px">
