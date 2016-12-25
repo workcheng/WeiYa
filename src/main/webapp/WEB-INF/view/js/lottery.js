@@ -268,7 +268,6 @@ var deleteThis = function (v, luckLevel) {
         deleteLuckUser = deleteLuckUser + '<li data-userid="' + li.attr("data-isluck") + '"><img src="' + li.find("img").attr("src") + '"><br><span>' + li.find("font").html() + '</span></li>';
         $("[data-prizeid=" + luckLevel + "]").find("label").html($("[data-prizeid=" + luckLevel + "]").find("label").html() * 1 + 1);
         $("[data-prizeid=" + luckLevel + "]").attr('data-amount', $("[data-prizeid=" + luckLevel + "]").find("label").html() * 1);
-        // 邓辉 2016-06-17 22:39
         //添加到需要回到奖池的数组
         _parents = $(v).parents(".level");
         li.remove();
