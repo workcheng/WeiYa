@@ -30,45 +30,7 @@ http://www.springframework.org/schema/tx/spring-tx.xsd">
         </property>
     </bean>
 
-    <!-- 配置数据源 -->
-    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
-          destroy-method="close">
-        <property name="driverClassName" value="${jdbc.driverClassName}"/>
-        <property name="url" value="${jdbc.url}"/>
-        <property name="username" value="${jdbc.username}"/>
-        <property name="password" value="${jdbc.password}"/>
-    </bean>
-
-    <!-- 配置sqlSessionFactory -->
-    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
-        <property name="dataSource" ref="dataSource"/>
-        <property name="typeAliasesPackage" value="com.zoe.weiya.model" />
-        <property name="mapperLocations">
-            <list>
-                <value>classpath:mybatisMapper/*/*Mapper.xml</value>
-            </list>
-        </property>
-    </bean>
-
-    <!-- 配置mapper扫描路径 -->
-    <!-- <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-        <property name="basePackage" value="**.mapper"/>
-    </bean> -->
-
-    <!-- 配置事务管理器 -->
-    <bean id="transactionManager"
-          class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-        <property name="dataSource" ref="dataSource"/>
-    </bean>
-
-    <bean id="sqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate"	scope="prototype">
-        <constructor-arg index="0" ref="sqlSessionFactory" />
-    </bean>
-
     <bean id="weiya.bean.factory" class="com.zoe.weiya.comm.bean.BeanFactory"/>
-
-    <!-- 启用事务注解，后面在Service类或方法上面加上@Transactional注解 -->
-    <tx:annotation-driven transaction-manager="transactionManager" />
 
     <bean id="WxMpServiceImpl" class="me.chanjar.weixin.mp.api.impl.WxMpServiceImpl">
         <property name="wxMpConfigStorage" ref="WxMpInMemoryConfigStorage"/>
@@ -96,10 +58,6 @@ http://www.springframework.org/schema/tx/spring-tx.xsd">
     <bean id="connectionFactory" class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory"
           p:hostName="${redis.host}" p:port="${redis.port}" p:password="${redis.pass}"  p:poolConfig-ref="poolConfig"/>
 
-         <!--<bean id="redisTemplate" class="org.springframework.data.redis.core.StringRedisTemplate">-->
-            <!--<property name="connectionFactory"   ref="connectionFactory" />-->
-        <!--</bean> -->
-
     <bean id="stringRedisSerializer" class="org.springframework.data.redis.serializer.StringRedisSerializer" />
     <bean id="jdkSerializationRedisSerializer"	class="org.springframework.data.redis.serializer.JdkSerializationRedisSerializer" />
 
@@ -113,8 +71,8 @@ http://www.springframework.org/schema/tx/spring-tx.xsd">
         <property name="stringSerializer" ref="stringRedisSerializer"/>
     </bean>
 
-    <bean id="zgRedisTemplete" class="com.zoe.weiya.comm.redis.ZoeRedisTemplete">
-        <property name="redisTemplete" ref="redisTemplate"/>
+    <bean id="zgRedisTemplete" class="com.zoe.weiya.comm.redis.ZoeRedisTemplate">
+        <property name="redisTemplate" ref="redisTemplate"/>
         <property name="usePool" value="true" />
     </bean>
 
