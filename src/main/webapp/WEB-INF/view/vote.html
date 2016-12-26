@@ -6,30 +6,37 @@
     <title>投票</title>
     <script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
     <script src="http://apps.bdimg.com/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script type="text/javascript" src="js/config.js"></script>
     <script type="text/javascript">
-        var weixinUrl = location.href.split('#')[0];
-        var url = "http://zxc.tunnel.qydev.com/sign/url";
-        $.ajax({
-            url: url, //这个地址是服务器配置JSSDK的地址
-            data: {           // 这个地址是发生jssdk调用的url地址
-                // 用于服务器配置
-                url: weixinUrl
-            },
-            success: function (json) {
-                var data = json.data;
-                var config = {};
-                for (var k in json.data) {
-                    config[k] = json.data[k];
+        $(document).ready(function () {
+            var weixinUrl = location.href.split('#')[0];
+            var url = BaseUrl + "sign/url";
+            $.ajax({
+                url: url, //这个地址是服务器配置JSSDK的地址
+                data: {           // 这个地址是发生jssdk调用的url地址
+                    // 用于服务器配置
+                    url: weixinUrl
+                },
+                success: function (json) {
+                    var data = json.data;
+                    var config = {};
+                    for (var k in json.data) {
+                        config[k] = json.data[k];
+                    }
+                    config.debug = false;// 添加你需要的JSSDK的权限
+                    config.appId = config.appid;
+                    config.jsApiList = ['hideOptionMenu'];
+                    config.timestamp = parseInt(config.timestamp);
+                    config.nonceStr = config.noncestr;
+                    config.signature = config.signature
+                    wx.config(config);
+
+                    wx.ready(function () {
+                        wx.hideOptionMenu();
+                    })
+
                 }
-                config.debug = false;// 添加你需要的JSSDK的权限
-                config.appId = config.appid;
-                config.jsApiList = ['hideOptionMenu'];
-                config.timestamp = parseInt(config.timestamp);
-                config.nonceStr = config.noncestr;
-                config.signature = config.signature
-                wx.config(config);
-                wx.hideOptionMenu();
-            }
+            })
         })
     </script>
     <style type="text/css">

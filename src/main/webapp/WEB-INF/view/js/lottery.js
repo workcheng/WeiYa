@@ -22,7 +22,7 @@ var getLotteryAward = function () {
 
 //获取用户
 var getLottery = function () {
-    var getUserList = "http://zxc.tunnel.qydev.com/user/userList";
+    var getUserList = BaseUrl + "user/userList";
     var alldataarr = null;
     $.ajax({
         async: false,
@@ -347,7 +347,7 @@ var SubmitLotteryFans = function (v) {
         });
         submitId = JSON.stringify(submitId);
 
-        var submitLottery = "http://zxc.tunnel.qydev.com/user/submitLottery";
+        var submitLottery = BaseUrl + "user/submitLottery";
         $.ajax({
             type: 'POST',
             url: submitLottery,
