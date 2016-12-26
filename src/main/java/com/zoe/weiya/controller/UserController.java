@@ -89,12 +89,10 @@ public class UserController {
     }
 
     @RequestMapping(value = "confirmLucky", method = RequestMethod.POST)
-    public Object confirmLucky(String openIds) {
-        String[] ids = openIds.split(",");
+    public Object confirmLucky(@RequestBody List<String> openIds) {
         List<OnlyUser> onlyUsers = new ArrayList<>();
         try {
-            List<String> stringList = Arrays.asList(ids);
-            for (String openId : stringList) {
+            for (String openId : openIds) {
                 OnlyUser onlyUser = userService.get(openId);
                 onlyUsers.add(onlyUser);
             }
