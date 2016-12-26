@@ -300,4 +300,8 @@ public class ZoeRedisTemplete {
     return redisTemplete.opsForSet().remove(key, list);
   }
 
+  public boolean move(String key){
+    return redisTemplete.move(key,1);
+  }
+
 }

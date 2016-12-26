@@ -94,7 +94,7 @@ http://www.springframework.org/schema/tx/spring-tx.xsd">
     </bean>
 
     <bean id="connectionFactory" class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory"
-          p:host-name="${redis.host}" p:port="${redis.port}" p:password="${redis.pass}"  p:pool-config-ref="poolConfig"/>
+          p:hostName="${redis.host}" p:port="${redis.port}" p:password="${redis.pass}"  p:poolConfig-ref="poolConfig"/>
 
          <!--<bean id="redisTemplate" class="org.springframework.data.redis.core.StringRedisTemplate">-->
             <!--<property name="connectionFactory"   ref="connectionFactory" />-->
