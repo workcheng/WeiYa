@@ -8,6 +8,7 @@
     <script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
     <script src="http://apps.bdimg.com/libs/jquery/1.11.3/jquery.min.js"></script>
     <script type="text/javascript" src="js/common.js"></script>
+    <script type="text/javascript" src="js/config.js"></script>
 
     <script>
         var validInput = function () {
@@ -31,7 +32,7 @@
 
             var weixinUrl = location.href.split('#')[0];
             //用户授权
-            var authUrl = "http://zxc.tunnel.qydev.com/auth/url";
+            var authUrl = BaseUrl + "auth/url";
             $.ajax({
                 url: authUrl, //这个地址是服务器配置JSSDK的地址
                 data: {           // 这个地址是发生jssdk调用的url地址
@@ -46,7 +47,7 @@
             // 根据实际填写接口的配置地点
             // 这里的接口地址是基于node-weixin配置的。
             var weixinUrl = location.href.split('#')[0];
-            var url = "http://zxc.tunnel.qydev.com/sign/url";
+            var url = BaseUrl + "sign/url";
             // 当前的网页请求地址
             $.ajax({
                 url: url, //这个地址是服务器配置JSSDK的地址
@@ -67,11 +68,10 @@
                     config.nonceStr = config.noncestr;
                     config.signature = config.signature
                     wx.config(config);
-                    wx.hideOptionMenu();
-
 
                     wx.ready(function () {
-                        var getUserInfo = "http://zxc.tunnel.qydev.com/auth/user_info";
+                        wx.hideOptionMenu();
+                        var getUserInfo = BaseUrl + "auth/user_info";
                         var weixin = location.href.split('=')[1];
                         var code = weixin.split('&')[0];
                         //获取用户信息
@@ -86,7 +86,7 @@
                                 var userInfo = json.data;
                                 var openId = userInfo.openId;
                                 console.log(userInfo, JSON.stringify(userInfo));
-                                var memberUrl = "http://zxc.tunnel.qydev.com/user/isMember";
+                                var memberUrl = BaseUrl + "user/isMember";
                                 $.ajax({
                                     url: memberUrl,
                                     data: {
@@ -103,7 +103,7 @@
                                                     $("#user").text("请输入您的名字！");
                                                 } else {
                                                     $("#user").text("");
-                                                    var addUserUrl = "http://zxc.tunnel.qydev.com/user/save";
+                                                    var addUserUrl = BaseUrl + "user/save";
                                                     var signInfo = {
                                                         "name": $("input[name='userName']").val(),
                                                         "depName": $("select[name='dept']").val(),

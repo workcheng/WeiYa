@@ -22,7 +22,7 @@ var getLotteryAward = function () {
 
 //获取用户
 var getLottery = function () {
-    var getUserList = "http://zxc.tunnel.qydev.com/user/userList";
+    var getUserList = BaseUrl + "user/userList";
     var alldataarr = null;
     $.ajax({
         async: false,
@@ -336,30 +336,35 @@ var SubmitLotteryFans = function (v) {
     if (!$("#removeLottery").hasClass("gray") && submitCount > 0) {
         //loading("正在提交，请稍后...");
         var submitForm = $('<form/>');
-        var submitId = "";
+        var submitId = [];
         $("#luckUl li[data-hasluck!=1]").each(function (index, element) {
             var isluck = $(element).data('isluck');
             submitForm.append('<input name="[' + index + '].AwardId" type="hidden" value="' + $(element).data('level') + '" />');
             submitForm.append('<input name="[' + index + '].FansId" type="hidden" value="' + isluck + '" />');
             submitForm.append('<input name="[' + index + '].FansNickName" type="hidden" value="' + $(element).find('font').text() + '" />');
             submitForm.append('<input name="[' + index + '].FansHead" type="hidden" value="' + $(element).data('headpath') + '" />');
-            //submitId.push(isluck);
+            submitId.push(isluck);
         });
-        alert(JSON.stringify(isLuck));
-        /*var submitLottery = "http://zxc.tunnel.qydev.com/user/submitLottert";
-         $.ajax({
-         url: submitLottery,
-         data: submitId,
-         success: function (data) {
-         loaded("正在提交，请稍后...");
-         if (data.ResultType == 1) {
-         showInfo("提交成功", 1);
-         $("#removeLottery").addClass("gray");
-         $("#submitLottery").addClass("gray");
-         $("#luckUl li[data-hasluck!=1]").attr('data-hasluck', 1).append('<i class="hasSubmit">已提交</i>').find('a').remove();
-         }
-         }
-         })*/
+        submitId = JSON.stringify(submitId);
+
+        var submitLottery = BaseUrl + "user/submitLottery";
+        $.ajax({
+            type: 'POST',
+            url: submitLottery,
+            contentType: 'application/json',
+            data: submitId,
+            success: function (data) {
+                loaded("正在提交，请稍后...");
+                if (data.message == "成功") {
+                    showInfo("提交成功！", 1);
+                    $("#removeLottery").addClass("gray");
+                    $("#submitLottery").addClass("gray");
+                    $("#luckUl li[data-hasluck!=1]").attr('data-hasluck', 1).append('<i class="hasSubmit">已提交</i>').find('a').remove();
+                } else {
+                    showInfo("提交失败！", 0);
+                }
+            }
+        })
         getLottery();
     }
 }
