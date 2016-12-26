@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="initial-scale=1, user-scalable=0, minimal-ui">
+    <title>投票</title>
+    <script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+    <script src="http://apps.bdimg.com/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script type="text/javascript">
+        var weixinUrl = location.href.split('#')[0];
+        var url = "http://zxc.tunnel.qydev.com/sign/url";
+        $.ajax({
+            url: url, //这个地址是服务器配置JSSDK的地址
+            data: {           // 这个地址是发生jssdk调用的url地址
+                // 用于服务器配置
+                url: weixinUrl
+            },
+            success: function (json) {
+                var data = json.data;
+                var config = {};
+                for (var k in json.data) {
+                    config[k] = json.data[k];
+                }
+                config.debug = false;// 添加你需要的JSSDK的权限
+                config.appId = config.appid;
+                config.jsApiList = ['hideOptionMenu'];
+                config.timestamp = parseInt(config.timestamp);
+                config.nonceStr = config.noncestr;
+                config.signature = config.signature
+                wx.config(config);
+                wx.hideOptionMenu();
+            }
+        })
+    </script>
+    <style type="text/css">
+        html, body {
+            height: 100%;
+            overflow: hidden;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+    </style>
+</head>
+<body>
+<iframe src="http://dwz.cn/4V9Gel" style="width:100%;" onload="this.height=body.offsetHeight" width="100%"
+        scrolling="true" frameborder="0"></iframe>
+</body>
+</html>
