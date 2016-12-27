@@ -3063,15 +3063,15 @@ div.normalImg {
 }
 
 #luck_user, #pro_luck_user {
-    width: 530px;
+    width: 584px;
     height: 245px;
     overflow: hidden;
     position: relative;
 }
 
 #luck_user div.lucky, #pro_luck_user div.lucky {
-    width: 184px;
-    height: 230px;
+    width: 204px;
+    height: 250px;
     border: 5px solid #ffa200;
     position: absolute;
     z-index: 9999;
@@ -3079,11 +3079,11 @@ div.normalImg {
 }
 
 #luck_user div.left, #pro_luck_user div.left, #luck_user div.right, #pro_luck_user div.right {
-    width: 170px;
+    width: 205px;
     background: rgba(0, 0, 0, 0.7);
     position: absolute;
     left: 0px;
-    height: 230px;
+    height: 250px;
     z-index: 9999;
     top: 5px;
     margin: 0;
@@ -3110,7 +3110,7 @@ div.normalImg {
 
 #luckIng, #pairIng, #pro_luckIng {
     bottom: 26px;
-    position: absolute;
+    /*   position: absolute;*/
     left: 135px;
 }
 
@@ -3199,7 +3199,7 @@ div.normalImg {
 .userList {
     text-align: center;
     padding-top: 80px;
-    margin-left: 7%;
+    margin-left: 15%;
     height: 230px;
     font-size: 30px;
     white-space: nowrap;
