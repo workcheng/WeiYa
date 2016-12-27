@@ -16,6 +16,16 @@
         <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Service"/>
     </context:component-scan>
 
+
+    <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <list>
+                <value>classpath:/config/db/db.properties</value>
+                <value>classpath:/config/date/date.properties</value>
+                <value>classpath:/config/redis/redis.properties</value>
+            </list>
+        </property>
+    </bean>
     <!-- 视图解析 -->
     <bean id="validator"
           class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean">
@@ -102,11 +112,20 @@
     <mvc:interceptors>
         <mvc:interceptor>
             <mvc:mapping path="/view/*"/>
-            <bean class="com.zoe.weiya.interceptor.time.TimeBasedAccessInterceptor">
-                <property name="openingTime" value="9"/>
-                <property name="closingTime" value="12"/>
-                <property name="closingDay" value="21"/>
+            <bean id="1" class="com.zoe.weiya.interceptor.time.TimeBasedAccessInterceptor">
+                <property name="openingTime" value="${sign.openIngTime}"/>
+                <property name="closingTime" value="${sign.closingTime}"/>
+                <property name="closingDay" value="${sign.closingDay}"/>
                 <property name="mappingURL" value=".*/view/form.*"/>
+            </bean>
+        </mvc:interceptor>
+        <mvc:interceptor>
+            <mvc:mapping path="/view/*"/>
+            <bean id="2" class="com.zoe.weiya.interceptor.time.TimeBasedAccessInterceptor">
+                <property name="openingTime" value="${sign.openIngTime2}"/>
+                <property name="closingTime" value="${sign.closingTime2}"/>
+                <property name="closingDay" value="${sign.closingDay2}"/>
+                <property name="mappingURL" value=".*/view/lottery.*"/>
             </bean>
         </mvc:interceptor>
     </mvc:interceptors>

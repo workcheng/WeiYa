@@ -5,7 +5,7 @@
     <artifactId>weiya</artifactId>
     <packaging>war</packaging>
     <version>0.0.1-SNAPSHOT</version>
-    <name>wechat Maven Webapp</name>
+    <name>config.wechat Maven Webapp</name>
     <url>http://maven.apache.org</url>
 
     <properties>

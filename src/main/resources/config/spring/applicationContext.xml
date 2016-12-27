@@ -75,10 +75,10 @@ http://www.springframework.org/schema/tx/spring-tx.xsd">
     </bean>
 
     <bean id="WxMpInMemoryConfigStorage" class="me.chanjar.weixin.mp.api.WxMpInMemoryConfigStorage">
-        <property name="appId" value="${wechat.APP_ID}"/>
-        <property name="secret" value="${wechat.SECRET}"/>
-        <property name="aesKey" value="${wechat.AES_KEY}"/>
-        <property name="token" value="${wechat.TOKEN}"/>
+        <property name="appId" value="${config.wechat.APP_ID}"/>
+        <property name="secret" value="${config.wechat.SECRET}"/>
+        <property name="aesKey" value="${config.wechat.AES_KEY}"/>
+        <property name="token" value="${config.wechat.TOKEN}"/>
     </bean>
 
     <bean id="wxMpMessageRouter" class="me.chanjar.weixin.mp.api.WxMpMessageRouter" scope="singleton">

@@ -12,10 +12,7 @@ import com.zoe.weiya.util.RandomUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by andy on 2016/12/20.
@@ -41,7 +38,7 @@ public class UserService {
             zoeRedisTemplete.setValue(u.getOpenId(), onlyUser);
         } else if (aLong == 0) {
             throw new HasSignException(ZoeErrorCode.HAS_SIGN.getDescription());
-        }else{
+        } else {
             throw new InternalException(ZoeErrorCode.ERROR_INTERNAL.getDescription());
         }
     }
@@ -108,22 +105,23 @@ public class UserService {
         return list;
     }
 
+    //后端判断抽奖重复
+
+    //签到的跟抽奖的分离出来，签到以五份数据保存，抽奖保存在一份，五个key->value
+
+
     public OnlyUser LotterySelect() {
         //1.获取所有签到人员的信息
         List<OnlyUser> signUser = getSignUser();
         List<OnlyUser> list = RandomUtil.createRandomList(signUser, 1);
         //分批次抽奖中奖名单
-        List<OnlyUser> priceUser = new ArrayList<>();
+        Set<OnlyUser> priceUser = new HashSet<>();
         //2.进行随机筛选出一条（抽奖）
-        User onlyUser = (User)list.get(0);
-        //中奖次数+1
-        onlyUser.setPriceCount(onlyUser.getPriceCount() + 1);
-        if (priceUser.contains(onlyUser)) {
-            return LotterySelect();
-        } else {
-            priceUser.add(onlyUser);
-            return onlyUser;
-        }
+        User onlyUser = (User) list.get(0);
+
+        priceUser.add(onlyUser);
+        return onlyUser;
+
     }
 
 }
