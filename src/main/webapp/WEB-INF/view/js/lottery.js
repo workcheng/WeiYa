@@ -15,10 +15,6 @@ var stopLuckTime; //强制停止抽奖
 var luckUl = $("#luck_user ul");
 var deleteLuckUser = '';
 
-//获取奖品信息和对应中奖用户
-var getLotteryAward = function () {
-    selectPrize($('.prize a'));
-};
 
 //获取用户
 var getLottery = function () {
@@ -55,19 +51,21 @@ var removeUserList = function () {
 
 var isAuto = function () {
     $('#showPrize').hide();
-    if ($("#showNumber").find("a").text() > 1) {
+    var userNum = $("select[name='userNum']").val();
+    var prize = $("select[name='prize']").val();
+    if (userNum > 1) {
         autoLuck = true;
-        luckNumberList = $("#showNumber").find("a").text();
-        selectNumber = $("#showNumber").find("a").text();
+        luckNumberList = userNum;
+        selectNumber = userNum;
     } else {
         autoLuck = false;
         selectNumber = 1;
         luckNumberList = 1;
     }
-    luckLevel = $("#showLevel").find("a").attr("data-prizeid");
+    luckLevel = prize;
     levelMaxNum = $("#showLevel").find("a").attr("data-amount") * 1;
-    luckNumber = $("#showNumber").find("a").text() * 1;
-    showLevel = $("#showLevel").find("a").html();
+    luckNumber = userNum * 1;
+    showLevel = prize;
     if (isLuck != "") {
         luckUl.find('li[data-userid=' + isLuck + ']').remove();
         luckUl.width(luckUl.width() - 380); //移除已中奖人后重新设置宽度
@@ -112,6 +110,8 @@ var isAuto = function () {
 var beginLuck = function () {  //key 0:只抽一个人奖 1:自动抽奖
     stopLuckTime = 0;
     if (autoLuck == true) {
+        $("#beginLuck").hide();
+        $("#stopLuck").hide();
         $("#luckIng").show();
         $("#luckIng span").text(luckNumberList);
         setTimeout(function () {
@@ -368,26 +368,7 @@ var SubmitLotteryFans = function (v) {
         getLottery();
     }
 }
-//模拟select效果
-var selectPrize = function () {
-    $("#showLevel").click(function () {
-        stopBubble();
-        $($(this).siblings(".select_option")[0]).show();
-    });
 
-    $("#showNumber").click(function () {
-        stopBubble();
-        $($(this).siblings(".select_option")[1]).show();
-    });
-
-    $(document).on("click", function () {
-        $(".select_option").hide();
-    })
-}
-var selectLotteryNumber = function (v) {
-    $(v).parent().prev().find("a").html($(v).find("div").html());
-    $(v).parent().prev().find("a").attr({"data-number": $(v).data("number")});
-}
 
 var stopBubble = function () {
     var e = typeof(event) == "undefined" ? arguments.callee.caller.arguments[0] : event;

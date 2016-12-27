@@ -17,7 +17,6 @@
     <script>
         $(document).ready(function () {
             getLottery();
-            getLotteryAward();
             $('.showNumber a').click(function () {
                 selectLotteryNumber($(this));
             });
@@ -53,50 +52,27 @@
                 <div class="left"></div>
                 <div class="right"></div>
                 <div class="lucky"></div>
-                <ul style="width: 31160px; left: -200px;">
+                <ul style="width: 31160px; left: -210px;">
 
                 </ul>
             </div>
         </div>
         <div class="condition">
-            奖项:
-            <div class="select" id="showLevel">
-                <a data-prizeid="124" data-amount="55">一等奖</a>
-            </div>
-            <div class="select_option prize" style="left: 221px; top: 380px; display: none;">
-                <a data-prizeid="124" data-prizeimg="" data-prizename="一等奖" data-amount="">
-                    <div>一等奖</div>
-                </a>
-                <a data-prizeid="125" data-prizeimg="" data-prizename="二等奖"
-                   data-amount="">
-                    <div>二等奖</div>
-                </a>
-                <a data-prizeid="126" data-prizeimg="" data-prizename="三等奖"
-                   data-amount="">
-                    <div>三等奖</div>
-                </a>
-            </div>
-            人数:
-            <div class="select" id="showNumber">
-                <a data-number="1">1</a>
-            </div>
-            <div class="select_option showNumber" style="left: 517px; top: 380px; display: none;">
-                <a data-number="1">
-                    <div>1</div>
-                </a>
-                <a data-number="2">
-                    <div>2</div>
-                </a>
-                <a data-number="3">
-                    <div>3</div>
-                </a>
-                <a data-number="4">
-                    <div>4</div>
-                </a>
-                <a data-number="5">
-                    <div>5</div>
-                </a>
-            </div>
+            <label>奖项:</label>
+            <select class="select" name="prize">
+                <option value="一等奖">一等奖</option>
+                <option value="二等奖">二等奖</option>
+                <option value="三等奖">三等奖</option>
+            </select>
+            <label>人数:</label>
+            <select class="select" name="userNum">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="10">10</option>
+            </select>
         </div>
         <a class="clickBtn" id="beginLuck" style="display: inline-block;">开始抽奖</a>
         <a class="clickBtn stopBtn" id="stopLuck" style="display: none;">停止抽奖</a>

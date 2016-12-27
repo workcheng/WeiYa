@@ -373,11 +373,13 @@ a.gray:hover {
 
 /*select模拟*/
 .select {
+    appearance: none;
+    -moz-appearance: none;
+    -webkit-appearance: none;
     width: 150px;
     padding-left: 10px;
     display: inline-block;
     position: relative;
-    top: 10px;
     background: #fff;
     border-radius: 5px;
     height: 32px;
@@ -408,7 +410,6 @@ a.gray:hover {
     font-size: 18px;
     padding-bottom: 5px;
     padding-top: 5px;
-    display: none;
     z-index: 99999;
     max-height: 180px;
     overflow-y: auto;
@@ -3197,7 +3198,7 @@ div.normalImg {
 .userList {
     text-align: center;
     padding-top: 80px;
-    margin-left: 124px;
+    margin-left: 7%;
     height: 230px;
     font-size: 30px;
     white-space: nowrap;
