@@ -51,6 +51,7 @@ public class UserServiceTest extends AbstractTestCase {
             String randomName = getRandomName();
             u.setName(randomName);
             u.setOpenId(ZoeUUID.random());
+            //56 640 728 750 748 1242
             String headUrl="http://fpoimg.com/{0}x{1}?text={2}";
             int length = (Integer.valueOf(String.valueOf(Math.round(Math.random() * 25))) + 1) * 30;
            /* if(length < 100){
