@@ -4,11 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="initial-scale=1, user-scalable=0, minimal-ui">
     <link id="defaultCss" rel="stylesheet" href="css/lottery.css">
-    <link id="themeCss" rel="stylesheet" href="css/lottery-9.css">
+    <!--<link id="themeCss" rel="stylesheet" href="css/lottery-9.css">-->
     <script src="http://apps.bdimg.com/libs/jquery/1.11.3/jquery.min.js"></script>
     <script type="text/javascript" src="js/jquery.js"></script>
     <script type="text/javascript" src="js/lottery.js"></script>
     <script type="text/javascript" src="js/common.js"></script>
+    <script type="text/javascript" src="js/config.js"></script>
     <!--<script type="text/javascript" src="js/awardRotate.js"></script>
     <script type="text/javascript" src="js/jquery.barrager.js"></script>
     <script type="text/javascript" src="js/jquery.extensions.js"></script>-->
@@ -16,6 +17,7 @@
     <script>
         $(document).ready(function () {
             getLottery();
+            getLotteryAward();
             $('.showNumber a').click(function () {
                 selectLotteryNumber($(this));
             });
@@ -37,7 +39,7 @@
             $('#luckUl').on('click', 'a', function () {
                 deleteThis($(this), $(this).parent().data('level'));
             });
-            getLotteryAward();
+
         });
 
     </script>
@@ -61,7 +63,7 @@
             <div class="select" id="showLevel">
                 <a data-prizeid="124" data-amount="55">一等奖</a>
             </div>
-            <div class="select_option prize" style="left: 200px; top: 380px; display: none;">
+            <div class="select_option prize" style="left: 221px; top: 380px; display: none;">
                 <a data-prizeid="124" data-prizeimg="" data-prizename="一等奖" data-amount="">
                     <div>一等奖</div>
                 </a>
@@ -78,7 +80,7 @@
             <div class="select" id="showNumber">
                 <a data-number="1">1</a>
             </div>
-            <div class="select_option showNumber" style="left: 500px; top: 380px; display: none;">
+            <div class="select_option showNumber" style="left: 517px; top: 380px; display: none;">
                 <a data-number="1">
                     <div>1</div>
                 </a>

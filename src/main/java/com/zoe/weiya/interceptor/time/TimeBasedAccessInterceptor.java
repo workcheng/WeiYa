@@ -6,7 +6,6 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.text.MessageFormat;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -38,8 +37,8 @@ public class TimeBasedAccessInterceptor extends HandlerInterceptorAdapter {
   public boolean preHandle(HttpServletRequest request,
       HttpServletResponse response, Object handler) throws Exception {
     String url = request.getRequestURL().toString();
-    log.error("url="+url);
-    log.error("mappingURL="+mappingURL);
+    log.info("url="+url);
+    log.info("mappingURL="+mappingURL);
     if (mappingURL == null || url.matches(mappingURL)) {//如果匹配url，是所要控制的页面
       Calendar c = Calendar.getInstance();
       c.setTime(new Date());

@@ -88,7 +88,7 @@ public class UserController {
         return ZoeObject.success(userService.getSignUser());
     }
 
-    @RequestMapping(value = "confirmLucky", method = RequestMethod.POST)
+    @RequestMapping(value = "submitLottery", method = RequestMethod.POST)
     public Object confirmLucky(@RequestBody List<String> openIds) {
         List<OnlyUser> onlyUsers = new ArrayList<>();
         try {

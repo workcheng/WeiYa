@@ -12,7 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
  */
 public class ZoeRedisTempleteTest extends AbstractTestCase{
     private static final ZoeLogger log = ZoeLoggerFactory.getLogger(ZoeRedisTempleteTest.class);
-    @Autowired ZoeRedisTemplete zoeRedisTemplete;
+    @Autowired
+    ZoeRedisTemplate zoeRedisTemplate;
 
     @Test
     public void test() throws Exception{
@@ -20,7 +21,7 @@ public class ZoeRedisTempleteTest extends AbstractTestCase{
         com.zoe.weiya.model.OnlyUser onlyUser = new OnlyUser();
         onlyUser.setName("test");
         zoeRedisTemplete.setValue(key,onlyUser);*/
-        OnlyUser value = (OnlyUser) zoeRedisTemplete.getValue("111");
+        OnlyUser value = (OnlyUser) zoeRedisTemplate.getValue("111");
         if(value != null){
             log.info("info:"+ value.getName());
         }else{
