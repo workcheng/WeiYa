@@ -63,7 +63,6 @@ http://www.springframework.org/schema/tx/spring-tx.xsd">
 
     <bean id="redisTemplate" class="org.springframework.data.redis.core.RedisTemplate">
         <property name="connectionFactory" ref="connectionFactory"/>
-
         <property name="keySerializer" ref="stringRedisSerializer"/>
         <property name="valueSerializer" ref="jdkSerializationRedisSerializer"/>
         <property name="hashKeySerializer" ref="stringRedisSerializer"/>
@@ -71,7 +70,7 @@ http://www.springframework.org/schema/tx/spring-tx.xsd">
         <property name="stringSerializer" ref="stringRedisSerializer"/>
     </bean>
 
-    <bean id="zgRedisTemplete" class="com.zoe.weiya.comm.redis.ZoeRedisTemplate">
+    <bean id="zoeRedisTemplate" class="com.zoe.weiya.comm.redis.ZoeRedisTemplate">
         <property name="redisTemplate" ref="redisTemplate"/>
         <property name="usePool" value="true" />
     </bean>
