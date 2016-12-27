@@ -25,6 +25,7 @@ public class SignController {
     @Autowired
     protected WxMpServiceImpl wxMpService;
 
+    @Deprecated
     @RequestMapping(value = "if_over_area",method = RequestMethod.POST)
     public Object ifOverArea(Area area){
         //TODO 判断位置范围，返回是否在这个范围当中
@@ -35,13 +36,23 @@ public class SignController {
         }
     }
 
-    @RequestMapping("url")
+    @RequestMapping(value = "url",method = RequestMethod.GET)
     public Object getSign(@RequestParam String url){
         try {
             return ZoeObject.success(wxMpService.createJsapiSignature(url));
         } catch (WxErrorException e) {
             log.error(CommonConstant.ERROR+e.toString());
             return ZoeObject.failure(ZoeErrorCode.ERROR_WECHAT);
+        }
+    }
+
+    @RequestMapping(value = "id", method = RequestMethod.GET)
+    public Object getUserInfo(@RequestParam String id){
+        try {
+            return ZoeObject.success(wxMpService.getUserService().userInfo(id));
+        } catch (WxErrorException e) {
+            log.error("error",e);
+            return ZoeObject.failure(ZoeErrorCode.ERROR_OPENID);
         }
     }
 }
