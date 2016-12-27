@@ -2998,9 +2998,10 @@ div.normalImg {
 }
 
 /*抽奖　对对碰*/
+
 .luck_pair .left {
-    width: 60%;
-    margin: 30px 0 0 30px;
+    width: 65%;
+    margin: 30px 20px 0 30px;
     float: left;
     position: relative;
     background: rgba(0, 0, 0, 0.5);
@@ -3009,7 +3010,7 @@ div.normalImg {
 }
 
 .luck_pair .right {
-    width: 30%;
+    width: 25%;
     height: 485px;
     float: right;
     color: #797979;
@@ -3017,7 +3018,7 @@ div.normalImg {
     background: url(../images/luck_pair_right.png) no-repeat;
     padding-top: 50px;
     padding-left: 40px;
-    padding-right: 20px;
+    padding-right: 40px;
 }
 
 .luck_pair .right div.title {
