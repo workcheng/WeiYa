@@ -88,6 +88,15 @@ public class UserController {
         return ZoeObject.success(userService.getSignUser());
     }
 
+    /**
+     * 获取签到用户信息列表set
+     * @return
+     */
+    @RequestMapping(value = "userSet", method = RequestMethod.GET)
+    public Object userSet() {
+        return ZoeObject.success(userService.getSignUserSet());
+    }
+
     @RequestMapping(value = "submitLottery", method = RequestMethod.POST)
     public Object confirmLucky(@RequestBody List<String> openIds) {
         List<OnlyUser> onlyUsers = new ArrayList<>();

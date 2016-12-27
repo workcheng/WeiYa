@@ -12,10 +12,7 @@ import com.zoe.weiya.util.RandomUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by andy on 2016/12/20.
@@ -96,9 +93,23 @@ public class UserService {
         Set<String> openIdSet = this.getOpenIdSet();
         List<OnlyUser> list = new ArrayList<>();
         if (null != openIdSet) {
-            Iterator i = openIdSet.iterator();//先迭代出来
+            Iterator<String> i = openIdSet.iterator();//迭代
             while (i.hasNext()) {//遍历
-                String openId = (String) i.next();
+                String openId = i.next();
+                OnlyUser onlyUser = (OnlyUser) zoeRedisTemplate.getValue(openId);
+                list.add(onlyUser);
+            }
+        }
+        return list;
+    }
+
+    public Set<OnlyUser> getSignUserSet() {
+        Set<String> idSet = this.getOpenIdSet();
+        Set<OnlyUser> list = new HashSet<>();
+        if (null != idSet) {
+            Iterator<String> i = idSet.iterator();
+            while (i.hasNext()) {
+                String openId = i.next();
                 OnlyUser onlyUser = (OnlyUser) zoeRedisTemplate.getValue(openId);
                 list.add(onlyUser);
             }
