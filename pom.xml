@@ -186,6 +186,7 @@
         </dependency>
     </dependencies>
     <build>
+        <finalName>weiya</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
