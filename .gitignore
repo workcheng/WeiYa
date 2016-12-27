@@ -7,4 +7,4 @@ target/
 *.log
 *.log*
 *.orig
-/src/main/resources/config/config.wechat/config.wechat.properties
+/src/main/resources/config/wechat.properties
