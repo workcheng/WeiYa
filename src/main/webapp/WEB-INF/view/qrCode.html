@@ -9,13 +9,14 @@
     <script type="text/javascript" src="js/jquery-1.8.3.js"></script>
     <script type="text/javascript" src="js/qrcode.js"></script>
     <script type="text/javascript" src="js/jquery.qrcode.js"></script>
+    <script type="text/javascript" src="js/config.js"></script>
     <script>
-        var authUrl = "http://zxc.tunnel.qydev.com/auth/url";
+        var authUrl = BaseUrl + "auth/url";
         $.ajax({
             url: authUrl, //这个地址是服务器配置JSSDK的地址
             data: {           // 这个地址是发生jssdk调用的url地址
                 // 用于服务器配置
-                url: "http://zxc.tunnel.qydev.com/view/form.html",
+                url: BaseUrl + "view/form.html",
                 state: ''
             }, success: function (data) {
                 console.log(JSON.stringify(data.data));

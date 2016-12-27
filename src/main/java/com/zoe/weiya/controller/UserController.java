@@ -88,13 +88,20 @@ public class UserController {
         return ZoeObject.success(userService.getSignUser());
     }
 
-    @RequestMapping(value = "confirmLucky", method = RequestMethod.POST)
-    public Object confirmLucky(String openIds) {
-        String[] ids = openIds.split(",");
+    /**
+     * 获取签到用户信息列表set
+     * @return
+     */
+    @RequestMapping(value = "userSet", method = RequestMethod.GET)
+    public Object userSet() {
+        return ZoeObject.success(userService.getSignUserSet());
+    }
+
+    @RequestMapping(value = "submitLottery", method = RequestMethod.POST)
+    public Object confirmLucky(@RequestBody List<String> openIds) {
         List<OnlyUser> onlyUsers = new ArrayList<>();
         try {
-            List<String> stringList = Arrays.asList(ids);
-            for (String openId : stringList) {
+            for (String openId : openIds) {
                 OnlyUser onlyUser = userService.get(openId);
                 onlyUsers.add(onlyUser);
             }
