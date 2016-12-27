@@ -12,6 +12,7 @@ import com.zoe.weiya.util.RandomUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -42,10 +43,9 @@ public class UserService {
     }
 
     public void commitLotteryPerson(List<OnlyUser> users) {
-        for (OnlyUser onlyUser : users) {
-            onlyUser.setLucky(true);
-            zoeRedisTemplate.setValue(onlyUser.getOpenId(), onlyUser);
-        }
+        SimpleDateFormat sdf = new SimpleDateFormat();
+        sdf.format(new Date());
+        zoeRedisTemplate.setHash(sdf.toString(), users);
     }
 
     public void resetIsLuckyFlag(List<OnlyUser> users) {
