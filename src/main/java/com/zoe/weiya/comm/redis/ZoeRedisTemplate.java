@@ -30,7 +30,7 @@ public class ZoeRedisTemplate {
   }
 
   public void setRedisTemplate(RedisTemplate<String, Object> redisTemplate) {
-    this.redisTemplate = this.redisTemplate;
+    this.redisTemplate = redisTemplate;
   }
 
   public void setValue(final String key, Object value) {
