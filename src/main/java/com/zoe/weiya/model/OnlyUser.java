@@ -13,7 +13,6 @@ public class OnlyUser implements Serializable {
     private Integer order;
     private String headImgUrl;
     private String signFlag;
-    private boolean isLucky;
 
     public OnlyUser() {
 
@@ -29,14 +28,6 @@ public class OnlyUser implements Serializable {
     public OnlyUser(String openId, String signFlag) {
         this.openId = openId;
         this.signFlag = signFlag;
-    }
-
-    public boolean isLucky() {
-        return isLucky;
-    }
-
-    public void setLucky(boolean lucky) {
-        isLucky = lucky;
     }
 
     public String getSignFlag() {

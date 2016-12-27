@@ -48,12 +48,6 @@ public class UserService {
         zoeRedisTemplate.setValue(format,users);
     }
 
-    public void resetIsLuckyFlag(List<OnlyUser> users) {
-        for (OnlyUser onlyUser : users) {
-            onlyUser.setLucky(false);
-            zoeRedisTemplate.setValue(onlyUser.getOpenId(), onlyUser);
-        }
-    }
 
 
     public ResponseMsg deleteAll(List<OnlyUser> users) {
