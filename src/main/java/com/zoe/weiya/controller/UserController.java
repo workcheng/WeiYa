@@ -112,22 +112,7 @@ public class UserController {
         return ZoeObject.success(ZoeErrorCode.SUCCESS);
     }
 
-    @RequestMapping(value = "reLottery", method = RequestMethod.POST)
-    public Object reLottery(String openIds) {
-        String[] ids = openIds.split(",");
-        List<OnlyUser> onlyUsers = new ArrayList<>();
-        try {
-            List<String> stringList = Arrays.asList(ids);
-            for (String openId : stringList) {
-                OnlyUser onlyUser = userService.get(openId);
-                onlyUsers.add(onlyUser);
-            }
-            userService.resetIsLuckyFlag(onlyUsers);
-        } catch (Exception e) {
-            return ZoeObject.failure(ZoeErrorCode.ERROR);
-        }
-        return ZoeObject.success(ZoeErrorCode.SUCCESS);
-    }
+
 
 
     @RequestMapping(value = "lotterySelect", method = RequestMethod.GET)
