@@ -178,12 +178,6 @@
             <artifactId>reflectasm</artifactId>
             <version>1.11.3</version>
         </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-test</artifactId>
-            <version>${org.springframework-version}</version>
-            <scope>test</scope>
-        </dependency>
     </dependencies>
     <build>
         <finalName>weiya</finalName>
