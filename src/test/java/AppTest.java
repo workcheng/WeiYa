@@ -1,17 +1,8 @@
-import com.zoe.weiya.AbstractTestCase;
-import com.zoe.weiya.comm.logger.ZoeLogger;
-import com.zoe.weiya.comm.logger.ZoeLoggerFactory;
-import me.chanjar.weixin.mp.api.impl.WxMpServiceImpl;
-import org.springframework.beans.factory.annotation.Autowired;
-
 /**
  * Created by chenghui on 2016/12/23.
  */
-public class AppTest extends AbstractTestCase {
-    private static final ZoeLogger log = ZoeLoggerFactory.getLogger(AppTest.class);
-
-    @Autowired
-    WxMpServiceImpl wxMpService;
+public class AppTest  {
+    //private static final ZoeLogger log = ZoeLoggerFactory.getLogger(AppTest.class);
 
     @org.junit.Test
     public void test() throws Exception{
@@ -19,5 +10,6 @@ public class AppTest extends AbstractTestCase {
 //        System.out.println("=="+wxMpService.getQrcodeService().qrCodePictureUrl("test"));
         // 临时ticket
 //        WxMpQrCodeTicket ticket = wxMpService.getQrcodeService().qrCodeCreateTmpTicket(scene, expire_seconds);
+        System.out.println(Math.round(Math.random()*26));
     }
 }

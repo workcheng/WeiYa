@@ -6,7 +6,6 @@ import com.zoe.weiya.comm.logger.ZoeLogger;
 import com.zoe.weiya.comm.logger.ZoeLoggerFactory;
 import com.zoe.weiya.model.OnlyUser;
 import com.zoe.weiya.model.User;
-import com.zoe.weiya.service.ZoeTestService;
 import com.zoe.weiya.service.user.UserService;
 import com.zoe.weiya.util.IpUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +15,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -28,8 +26,6 @@ import java.util.Map;
 public class ZoeTestController {
     private static final ZoeLogger log = ZoeLoggerFactory.getLogger(ZoeTestController.class);
     @Autowired
-    private ZoeTestService testService;
-    @Autowired
     private UserService userService;
 
     @RequestMapping("hello")
@@ -37,16 +33,6 @@ public class ZoeTestController {
         Map<String,Object> test = new HashMap<>();
         test.put("hi",code);
         return test;
-    }
-
-    @RequestMapping("test")
-    public Object test2(@RequestParam(value = "test") String test){
-        try {
-            return testService.getTest();
-        } catch (SQLException e) {
-            log.error("error",e);
-        }
-        return null;
     }
 
     @RequestMapping(value = "redis",method = RequestMethod.POST)

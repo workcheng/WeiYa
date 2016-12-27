@@ -3,7 +3,7 @@ package com.zoe.weiya.service.user;
 import com.zoe.weiya.comm.constant.ZoeErrorCode;
 import com.zoe.weiya.comm.exception.HasSignException;
 import com.zoe.weiya.comm.exception.InternalException;
-import com.zoe.weiya.comm.redis.ZoeRedisTemplete;
+import com.zoe.weiya.comm.redis.ZoeRedisTemplate;
 import com.zoe.weiya.comm.response.ResponseMsg;
 import com.zoe.weiya.comm.response.ZoeObject;
 import com.zoe.weiya.model.OnlyUser;
@@ -12,10 +12,7 @@ import com.zoe.weiya.util.RandomUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by andy on 2016/12/20.
@@ -24,21 +21,19 @@ import java.util.Set;
 public class UserService {
     private static final String USER = "user";
     @Autowired
-    private ZoeRedisTemplete zoeRedisTemplete;
+    private ZoeRedisTemplate zoeRedisTemplate;
 
     public void save(User u) throws HasSignException, InternalException {
         Long aLong = this.saveInSet(u.getOpenId());
         if (aLong == 1) {
-//
             OnlyUser onlyUser = new OnlyUser();
             onlyUser.setOpenId(u.getOpenId());
             onlyUser.setName(u.getName());
             onlyUser.setDepName(u.getDepName());
             onlyUser.setOrder(u.getOrder());
             onlyUser.setHeadImgUrl(u.getHeadImgUrl());
-//            onlyUser.setSignFlag(u.getSignFlag());
             onlyUser.setSignFlag(u.getSignFlag());
-            zoeRedisTemplete.setValue(u.getOpenId(), onlyUser);
+            zoeRedisTemplate.setValue(u.getOpenId(), onlyUser);
         } else if (aLong == 0) {
             throw new HasSignException(ZoeErrorCode.HAS_SIGN.getDescription());
         }else{
@@ -49,14 +44,14 @@ public class UserService {
     public void commitLotteryPerson(List<OnlyUser> users) {
         for (OnlyUser onlyUser : users) {
             onlyUser.setLucky(true);
-            zoeRedisTemplete.setValue(onlyUser.getOpenId(), onlyUser);
+            zoeRedisTemplate.setValue(onlyUser.getOpenId(), onlyUser);
         }
     }
 
     public void resetIsLuckyFlag(List<OnlyUser> users) {
         for (OnlyUser onlyUser : users) {
             onlyUser.setLucky(false);
-            zoeRedisTemplete.setValue(onlyUser.getOpenId(), onlyUser);
+            zoeRedisTemplate.setValue(onlyUser.getOpenId(), onlyUser);
         }
     }
 
@@ -64,7 +59,7 @@ public class UserService {
     public ResponseMsg deleteAll(List<OnlyUser> users) {
         boolean flag = false;
         for (OnlyUser onlyUser : users) {
-            zoeRedisTemplete.deleteHash(onlyUser.getOpenId());
+            zoeRedisTemplate.deleteHash(onlyUser.getOpenId());
             flag = true;
         }
         if (flag) {
@@ -75,33 +70,47 @@ public class UserService {
     }
 
     public OnlyUser get(String openId) {
-        return (OnlyUser) zoeRedisTemplete.getValue(openId);
+        return (OnlyUser) zoeRedisTemplate.getValue(openId);
     }
 
     public Long saveInSet(String openId) {
-        return zoeRedisTemplete.setSet(USER, openId);
+        return zoeRedisTemplate.setSet(USER, openId);
     }
 
     public Set<String> getOpenIdSet() {
-        return (Set) zoeRedisTemplete.getSet(USER);
+        return (Set) zoeRedisTemplate.getSet(USER);
     }
 
     public boolean isMember(String openId) {
-        return zoeRedisTemplete.isMember(USER, openId);
+        return zoeRedisTemplate.isMember(USER, openId);
     }
 
     public Long getUserSize() {
-        return zoeRedisTemplete.getSetSize(USER);
+        return zoeRedisTemplate.getSetSize(USER);
     }
 
     public List<OnlyUser> getSignUser() {
         Set<String> openIdSet = this.getOpenIdSet();
         List<OnlyUser> list = new ArrayList<>();
         if (null != openIdSet) {
-            Iterator i = openIdSet.iterator();//先迭代出来
+            Iterator<String> i = openIdSet.iterator();//迭代
             while (i.hasNext()) {//遍历
-                String openId = (String) i.next();
-                OnlyUser onlyUser = (OnlyUser) zoeRedisTemplete.getValue(openId);
+                String openId = i.next();
+                OnlyUser onlyUser = (OnlyUser) zoeRedisTemplate.getValue(openId);
+                list.add(onlyUser);
+            }
+        }
+        return list;
+    }
+
+    public Set<OnlyUser> getSignUserSet() {
+        Set<String> idSet = this.getOpenIdSet();
+        Set<OnlyUser> list = new HashSet<>();
+        if (null != idSet) {
+            Iterator<String> i = idSet.iterator();
+            while (i.hasNext()) {
+                String openId = i.next();
+                OnlyUser onlyUser = (OnlyUser) zoeRedisTemplate.getValue(openId);
                 list.add(onlyUser);
             }
         }

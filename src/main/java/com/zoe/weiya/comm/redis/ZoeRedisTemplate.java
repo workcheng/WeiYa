@@ -21,35 +21,35 @@ import java.util.concurrent.TimeUnit;
  * @author Chenghui
  *
  */
-public class ZoeRedisTemplete {
-  private RedisTemplate<String, Object> redisTemplete = null;
+public class ZoeRedisTemplate {
+  private RedisTemplate<String, Object> redisTemplate = null;
   private boolean                       usePool       = true;
 
   public void setUsePool(boolean usePool) {
     this.usePool = usePool;
   }
 
-  public void setRedisTemplete(RedisTemplate<String, Object> redisTemplete) {
-    this.redisTemplete = redisTemplete;
+  public void setRedisTemplate(RedisTemplate<String, Object> redisTemplate) {
+    this.redisTemplate = this.redisTemplate;
   }
 
   public void setValue(final String key, Object value) {
-    redisTemplete.opsForValue().set(key, value);
+    redisTemplate.opsForValue().set(key, value);
   }
 
   public void setValue(String key, Object value, int timeout) {
-    redisTemplete.opsForValue().set(key, value, timeout, TimeUnit.MINUTES);
+    redisTemplate.opsForValue().set(key, value, timeout, TimeUnit.MINUTES);
   }
 
   public Object getValue(Object key) {
-    return redisTemplete.opsForValue().get(key);
+    return redisTemplate.opsForValue().get(key);
   }
 
   public String getByteValue(final String key) {
-    return redisTemplete.execute(new RedisCallback<String>() {
+    return redisTemplate.execute(new RedisCallback<String>() {
       @Override
       public String doInRedis(RedisConnection connection) throws DataAccessException {
-        RedisSerializer<String> serializer = redisTemplete.getStringSerializer();
+        RedisSerializer<String> serializer = redisTemplate.getStringSerializer();
         String result = "";
         byte[] b = connection.get(serializer.serialize(key));
         if (null != b && b.length > 0) {
@@ -61,11 +61,11 @@ public class ZoeRedisTemplete {
   }
 
   public Object getValueExpire(final String key, final int timeout) {
-    return redisTemplete.execute(new RedisCallback<Object>() {
+    return redisTemplate.execute(new RedisCallback<Object>() {
 
       @Override
       public Object doInRedis(RedisConnection connection) throws DataAccessException {
-        BoundValueOperations<String, Object> boundValueOperations = redisTemplete.boundValueOps(key);
+        BoundValueOperations<String, Object> boundValueOperations = redisTemplate.boundValueOps(key);
         boundValueOperations.expire(timeout, TimeUnit.MINUTES);
         return boundValueOperations.get();
       }
@@ -73,15 +73,15 @@ public class ZoeRedisTemplete {
   }
 
   public void setHash(final String key, final String hashKey, final String value) {
-    redisTemplete.opsForHash().put(key, hashKey, value);
+    redisTemplate.opsForHash().put(key, hashKey, value);
   }
 
   public void setHash(final String key, final Object hashKey, final Object value, final int timeout) {
-    redisTemplete.execute(new RedisCallback<Object>() {
+    redisTemplate.execute(new RedisCallback<Object>() {
 
       @Override
       public Object doInRedis(RedisConnection connection) throws DataAccessException {
-        BoundHashOperations<String, Object, Object> boundHashOperations = redisTemplete.boundHashOps(key);
+        BoundHashOperations<String, Object, Object> boundHashOperations = redisTemplate.boundHashOps(key);
         boundHashOperations.put(hashKey, value);
         boundHashOperations.expire(timeout, TimeUnit.MINUTES);
         return null;
@@ -98,10 +98,10 @@ public class ZoeRedisTemplete {
    * @return
    */
   public boolean setNX(final String key, final String value, final int timeout) {
-    return redisTemplete.execute(new RedisCallback<Boolean>() {
+    return redisTemplate.execute(new RedisCallback<Boolean>() {
       @Override
       public Boolean doInRedis(RedisConnection connection) throws DataAccessException {
-        RedisSerializer<String> serializer = redisTemplete.getStringSerializer();
+        RedisSerializer<String> serializer = redisTemplate.getStringSerializer();
         if (connection.setNX(serializer.serialize(key), serializer.serialize(value))) {
           connection.expire(serializer.serialize(key), timeout);
           return true;
@@ -113,14 +113,14 @@ public class ZoeRedisTemplete {
   }
 
   public Map<String, String> hGetAll(final String key) {
-    Map<byte[], byte[]> map = redisTemplete.execute(new RedisCallback<Map<byte[], byte[]>>() {
+    Map<byte[], byte[]> map = redisTemplate.execute(new RedisCallback<Map<byte[], byte[]>>() {
       @Override
       public Map<byte[], byte[]> doInRedis(RedisConnection connection) throws DataAccessException {
-        RedisSerializer<String> serializer = redisTemplete.getStringSerializer();
+        RedisSerializer<String> serializer = redisTemplate.getStringSerializer();
         return connection.hGetAll(serializer.serialize(key));
       }
     });
-    RedisSerializer<String> serializer = redisTemplete.getStringSerializer();
+    RedisSerializer<String> serializer = redisTemplate.getStringSerializer();
     Map<String, String> result = new HashMap<String, String>();
     if (null != map && map.size() > 0) {
       Iterator<byte[]> it = map.keySet().iterator();
@@ -135,12 +135,12 @@ public class ZoeRedisTemplete {
   }
 
   public void setHash(final String key, final Object obj) {
-    redisTemplete.execute(new RedisCallback<Object>() {
+    redisTemplate.execute(new RedisCallback<Object>() {
 
       @SuppressWarnings("unchecked")
       @Override
       public Object doInRedis(RedisConnection connection) throws DataAccessException {
-        BoundHashOperations<String, Object, Object> boundHashOperations = redisTemplete.boundHashOps(key);
+        BoundHashOperations<String, Object, Object> boundHashOperations = redisTemplate.boundHashOps(key);
         if (obj instanceof Map) {
           for (Map.Entry<String, Object> mapitem : ((Map<String, Object>) obj).entrySet()) {
             boundHashOperations.put(mapitem.getKey(), mapitem.getValue());
@@ -178,12 +178,12 @@ public class ZoeRedisTemplete {
   }
 
   public void setHash(final String key, final Object obj, final int timeout) {
-    redisTemplete.execute(new RedisCallback<Object>() {
+    redisTemplate.execute(new RedisCallback<Object>() {
 
       @SuppressWarnings("unchecked")
       @Override
       public Object doInRedis(RedisConnection connection) throws DataAccessException {
-        BoundHashOperations<String, Object, Object> boundHashOperations = redisTemplete.boundHashOps(key);
+        BoundHashOperations<String, Object, Object> boundHashOperations = redisTemplate.boundHashOps(key);
         if (obj instanceof Map) {
           for (Map.Entry<String, Object> mapitem : ((Map<String, Object>) obj).entrySet()) {
             boundHashOperations.put(mapitem.getKey(), mapitem.getValue());
@@ -221,15 +221,15 @@ public class ZoeRedisTemplete {
   }
 
   public Object getHash(String key, Object hashKey) {
-    return redisTemplete.opsForHash().get(key, hashKey);
+    return redisTemplate.opsForHash().get(key, hashKey);
   }
 
   public Object getHash(final String key, final Object hashKey, final int timeout) {
-    return redisTemplete.execute(new RedisCallback<Object>() {
+    return redisTemplate.execute(new RedisCallback<Object>() {
 
       @Override
       public Object doInRedis(RedisConnection connection) throws DataAccessException {
-        BoundHashOperations<String, Object, Object> boundHashOperations = redisTemplete.boundHashOps(key);
+        BoundHashOperations<String, Object, Object> boundHashOperations = redisTemplate.boundHashOps(key);
         boundHashOperations.expire(timeout, TimeUnit.MINUTES);
         return boundHashOperations.get(hashKey);
       }
@@ -237,67 +237,71 @@ public class ZoeRedisTemplete {
   };
 
   public void incr(final String key) {
-    redisTemplete.execute(new RedisCallback<Long>() {
+    redisTemplate.execute(new RedisCallback<Long>() {
       @Override
       public Long doInRedis(RedisConnection connection) throws DataAccessException {
-        RedisSerializer<String> serializer = redisTemplete.getStringSerializer();
+        RedisSerializer<String> serializer = redisTemplate.getStringSerializer();
         return connection.incr(serializer.serialize(key));
       }
     });
   }
 
   public void deleteHash(String key) {
-    redisTemplete.opsForHash().delete(key);
+    redisTemplate.opsForHash().delete(key);
   }
 
   public void deleteValue(String key) {
-    redisTemplete.delete(key);
+    redisTemplate.delete(key);
   }
 
   public Set<String> getAllSessionkey() {
 
-    Set<String> sets = redisTemplete.keys("00:session:*");
+    Set<String> sets = redisTemplate.keys("00:session:*");
     return sets;
   }
 
   public long getExpire(String key) {
-    return redisTemplete.getExpire(key);
+    return redisTemplate.getExpire(key);
   }
 
   public long getExpire(String key, TimeUnit timeUnit) {
-    return redisTemplete.getExpire(key, timeUnit);
+    return redisTemplate.getExpire(key, timeUnit);
   }
 
   public Long setSet(String key, Object obj){
-    return redisTemplete.opsForSet().add(key,obj);
+    return redisTemplate.opsForSet().add(key,obj);
   }
 
   public boolean isMember(String key, Object obj){
-    return redisTemplete.opsForSet().isMember(key,obj);
+    return redisTemplate.opsForSet().isMember(key,obj);
   }
 
   public Long getSetSize(String key){
-    return redisTemplete.opsForSet().size(key);
+    return redisTemplate.opsForSet().size(key);
   }
 
   public Object pop(String key){
-    return redisTemplete.opsForSet().pop(key);
+    return redisTemplate.opsForSet().pop(key);
   }
 
   public Set<Object> getSet(String key){
-    return redisTemplete.opsForSet().members(key);
+    return redisTemplate.opsForSet().members(key);
   }
 
   public Object randomMember(String key){
-    return redisTemplete.opsForSet().randomMember(key);
+    return redisTemplate.opsForSet().randomMember(key);
   }
 
   public List<Object> randomMember(String key, long l){
-    return redisTemplete.opsForSet().randomMembers(key,l);
+    return redisTemplate.opsForSet().randomMembers(key,l);
   }
 
   public Long remove(String key, List<Object> list){
-    return redisTemplete.opsForSet().remove(key, list);
+    return redisTemplate.opsForSet().remove(key, list);
+  }
+
+  public boolean move(String key){
+    return redisTemplate.move(key,1);
   }
 
 }

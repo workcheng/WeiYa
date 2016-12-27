@@ -62,7 +62,7 @@
             <artifactId>spring-jdbc</artifactId>
             <version>${org.springframework-version}</version>
         </dependency>
-        <dependency>
+        <!--<dependency>
             <groupId>org.mybatis</groupId>
             <artifactId>mybatis</artifactId>
             <version>3.3.0</version>
@@ -71,7 +71,7 @@
             <groupId>org.mybatis</groupId>
             <artifactId>mybatis-spring</artifactId>
             <version>1.2.3</version>
-        </dependency>
+        </dependency>-->
         <!-- Log -->
         <dependency>
             <groupId>log4j</groupId>
@@ -166,26 +166,21 @@
             <version>2.6.2</version>
         </dependency>
         <!-- mysql -->
-        <dependency>
+        <!--<dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
             <version>5.1.30</version>
             <scope>compile</scope>
-        </dependency>
+        </dependency>-->
         <!-- reflectasm see https://github.com/EsotericSoftware/reflectasm -->
         <dependency>
             <groupId>com.esotericsoftware</groupId>
             <artifactId>reflectasm</artifactId>
             <version>1.11.3</version>
         </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-test</artifactId>
-            <version>${org.springframework-version}</version>
-            <scope>test</scope>
-        </dependency>
     </dependencies>
     <build>
+        <finalName>weiya</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
