@@ -98,20 +98,11 @@
     <mvc:interceptors>
         <mvc:interceptor>
             <mvc:mapping path="/view/*"/>
-            <bean id="1" class="com.zoe.weiya.interceptor.time.TimeBasedAccessInterceptor">
+            <bean class="com.zoe.weiya.interceptor.time.TimeBasedAccessInterceptor">
                 <property name="openingTime" value="${sign.openIngTime}"/>
                 <property name="closingTime" value="${sign.closingTime}"/>
                 <property name="closingDay" value="${sign.closingDay}"/>
                 <property name="mappingURL" value=".*/view/form.*"/>
-            </bean>
-        </mvc:interceptor>
-        <mvc:interceptor>
-            <mvc:mapping path="/view/*"/>
-            <bean id="2" class="com.zoe.weiya.interceptor.time.TimeBasedAccessInterceptor">
-                <property name="openingTime" value="${sign.openIngTime2}"/>
-                <property name="closingTime" value="${sign.closingTime2}"/>
-                <property name="closingDay" value="${sign.closingDay2}"/>
-                <property name="mappingURL" value=".*/view/lottery.*"/>
             </bean>
         </mvc:interceptor>
     </mvc:interceptors>

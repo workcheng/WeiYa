@@ -15,8 +15,8 @@ http://www.springframework.org/schema/tx/spring-tx.xsd">
     <!-- 如果将service和dao的扫描放到springmvc-servlet.xml中会发现事务不能生效 -->
     <!-- 如果将controller的扫描也放到applicationContext.xml中会发现URI Mapping有问题 -->
     <!-- 所以，在这里将controller的扫描和service、dao的扫描分开 -->
-    <context:component-scan base-package="**.service" />
-    <context:component-scan base-package="**.dao" />
+    <context:component-scan base-package="**.service"/>
+    <context:component-scan base-package="**.dao"/>
 
     <!-- 加载数据库连接信息db.properties -->
     <!-- <context:property-placeholder location="classpath:/config/db/db.properties" /> -->
@@ -37,29 +37,30 @@ http://www.springframework.org/schema/tx/spring-tx.xsd">
     </bean>
 
     <bean id="WxMpInMemoryConfigStorage" class="me.chanjar.weixin.mp.api.WxMpInMemoryConfigStorage">
-        <property name="appId" value="${config.wechat.APP_ID}"/>
-        <property name="secret" value="${config.wechat.SECRET}"/>
-        <property name="aesKey" value="${config.wechat.AES_KEY}"/>
-        <property name="token" value="${config.wechat.TOKEN}"/>
+        <property name="appId" value="${wechat.APP_ID}"/>
+        <property name="secret" value="${wechat.SECRET}"/>
+        <property name="aesKey" value="${wechat.AES_KEY}"/>
+        <property name="token" value="${wechat.TOKEN}"/>
     </bean>
 
     <bean id="wxMpMessageRouter" class="me.chanjar.weixin.mp.api.WxMpMessageRouter" scope="singleton">
-        <constructor-arg index="0" ref="WxMpServiceImpl" />
+        <constructor-arg index="0" ref="WxMpServiceImpl"/>
     </bean>
 
     <!-- Redis -->
     <bean id="poolConfig" class="redis.clients.jedis.JedisPoolConfig">
-        <property name="maxIdle" value="${redis.maxIdle}" />
-         <!--<property name="maxActive" value="${redis.maxActive}" />-->
-         <!--<property name="maxWait" value="${redis.maxWait}" />-->
-        <property name="testOnBorrow" value="${redis.testOnBorrow}" />
+        <property name="maxIdle" value="${redis.maxIdle}"/>
+        <!--<property name="maxActive" value="${redis.maxActive}" />-->
+        <!--<property name="maxWait" value="${redis.maxWait}" />-->
+        <property name="testOnBorrow" value="${redis.testOnBorrow}"/>
     </bean>
 
     <bean id="connectionFactory" class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory"
-          p:hostName="${redis.host}" p:port="${redis.port}" p:password="${redis.pass}"  p:poolConfig-ref="poolConfig"/>
+          p:hostName="${redis.host}" p:port="${redis.port}" p:password="${redis.pass}" p:poolConfig-ref="poolConfig"/>
 
-    <bean id="stringRedisSerializer" class="org.springframework.data.redis.serializer.StringRedisSerializer" />
-    <bean id="jdkSerializationRedisSerializer"	class="org.springframework.data.redis.serializer.JdkSerializationRedisSerializer" />
+    <bean id="stringRedisSerializer" class="org.springframework.data.redis.serializer.StringRedisSerializer"/>
+    <bean id="jdkSerializationRedisSerializer"
+          class="org.springframework.data.redis.serializer.JdkSerializationRedisSerializer"/>
 
     <bean id="redisTemplate" class="org.springframework.data.redis.core.RedisTemplate">
         <property name="connectionFactory" ref="connectionFactory"/>
@@ -72,7 +73,7 @@ http://www.springframework.org/schema/tx/spring-tx.xsd">
 
     <bean id="zoeRedisTemplate" class="com.zoe.weiya.comm.redis.ZoeRedisTemplate">
         <property name="redisTemplate" ref="redisTemplate"/>
-        <property name="usePool" value="true" />
+        <property name="usePool" value="true"/>
     </bean>
 
 </beans>

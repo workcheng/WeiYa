@@ -72,8 +72,8 @@
                     wx.ready(function () {
                         wx.hideOptionMenu();
                         var getUserInfo = BaseUrl + "auth/user_info";
-                        var weixin = location.href.split('?')[1];
-                        var code = weixin.split('=')[0];
+                        var weixin = location.href.split('=')[1];
+                        var code = weixin.split('&')[0];
                         //获取用户信息
                         $.ajax({
                             url: getUserInfo, //这个地址是服务器配置JSSDK的地址
