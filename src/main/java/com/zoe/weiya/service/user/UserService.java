@@ -44,8 +44,8 @@ public class UserService {
 
     public void commitLotteryPerson(List<OnlyUser> users) {
         SimpleDateFormat sdf = new SimpleDateFormat();
-        sdf.format(new Date());
-        zoeRedisTemplate.setHash(sdf.toString(), users);
+        String format = sdf.format(new Date());
+        zoeRedisTemplate.setValue(format,users);
     }
 
     public void resetIsLuckyFlag(List<OnlyUser> users) {
