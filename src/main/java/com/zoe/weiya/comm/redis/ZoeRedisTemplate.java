@@ -305,4 +305,11 @@ public class ZoeRedisTemplate {
       return redisTemplate.opsForList();
   }
 
+  public SetOperations<String, Object> getSetOperations(){
+      return redisTemplate.opsForSet();
+  }
+
+  public ZSetOperations<String, Object> getZSetOperations(){
+      return redisTemplate.opsForZSet();
+  }
 }

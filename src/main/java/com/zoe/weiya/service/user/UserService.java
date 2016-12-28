@@ -13,6 +13,7 @@ import com.zoe.weiya.model.ZoeDate;
 import com.zoe.weiya.util.RandomUtil;
 import com.zoe.weiya.util.ZoeDateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.ScanOptions;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
@@ -25,34 +26,24 @@ import java.util.*;
 public class UserService {
     private static final String SIGN_USER_FIRST_DAY_MORNING = "1";
     private static final String SIGN_USER_FIRST_DAY_NOON = "2";
-    private static final String SIGN_USER_SECOND_DAY_synonym = "3";
+    private static final String SIGN_USER_SECOND_DAY_MORNING = "3";
     private static final String SIGN_USER_SECOND_DAY_NOON = "4";
     private static final String SIGN_USER_SECOND_DAY_NIGHT = "5";
     private static final String LOTTERY = "lottery";
     private static final String USER = "user";
+    private static final String MORNING = "MORNING";
+    private static final String NOON = "NOON";
+    private static final String NIGHT = "NIGHT";
+    private static final String FIRST_DAY = "FIRST";
+    private static final String SECOND_DAY = "SECOND";
     @Autowired
     private ZoeRedisTemplate zoeRedisTemplate;
 
-    private String getIndex() throws Exception{
-        ZoeDate now = ZoeDateUtil.moment();
-        ZoeDate startTime = ZoeProperties.getStartTime();
-        if(now.getYear() == startTime.getYear()){
-            if(now.getMonth() >= startTime.getMonth()){
-                if(now.getHour() > 0 &&now.getHour() <= 12){
-                 //morning
-                }else if(now.getHour() > 12 && now.getHour() <= 18){
-                    //noon
-                }else if(now.getHour() > 18){
-                    //night
-                }
-            }
-        }
-        throw new Exception(ZoeErrorCode.NOT_START.getDescription());
+    public void saveO(User u) throws Exception {
+        ScanOptions scanOptions = ScanOptions.scanOptions().match("110").build();
+        zoeRedisTemplate.getSetOperations().scan(getIndex(),scanOptions);
+        zoeRedisTemplate.getSetOperations().add(getIndex(),u);
     }
-
-/*    public void save(){
-        zoeRedisTemplate.getListOperations().leftPush()
-    }*/
 
     public void save(User u) throws HasSignException, InternalException {
         Long aLong = this.saveInSet(u.getOpenId());
@@ -154,7 +145,59 @@ public class UserService {
         //2.进行随机筛选出一条（抽奖）
         User onlyUser = (User) list.get(0);
         return onlyUser;
+    }
 
+    private String getTime(ZoeDate now){
+        if( now.getHour() <= 12){
+            return UserService.MORNING;
+        }else if(now.getHour() > 12 && now.getHour() <= 18){
+            return UserService.NOON;
+        }else if(now.getHour() > 18){
+            return UserService.NIGHT;
+        }
+        return null;
+    }
+
+    private String whichDay(ZoeDate now){
+        ZoeDate startTime = ZoeProperties.getStartTime();
+        String whichDay[] = {UserService.FIRST_DAY,UserService.SECOND_DAY};
+        return whichDay[now.getDay()-startTime.getDay()];
+    }
+
+
+    private String getIndex() throws Exception{
+        //TODO 考虑跨年跨月的情况
+        ZoeDate now = ZoeDateUtil.moment();
+        ZoeDate startTime = ZoeProperties.getStartTime();
+        if(now.getYear() == startTime.getYear()){
+            if(now.getMonth() >= startTime.getMonth()){
+                if(now.getDay() >= startTime.getDay()){
+                    if(UserService.FIRST_DAY.equals(whichDay(now))){
+                        switch (getTime(now)){
+                            case UserService.MORNING:
+                                return UserService.SIGN_USER_FIRST_DAY_MORNING;
+                            case UserService.NOON:
+                                return UserService.SIGN_USER_FIRST_DAY_NOON;
+                            default:
+                                throw new Exception(ZoeErrorCode.NOT_START.getDescription());
+                        }
+                    }else if(UserService.SECOND_DAY.equals(whichDay(now))){
+                        switch (getTime(now)){
+                            case UserService.MORNING:
+                                return UserService.SIGN_USER_SECOND_DAY_MORNING;
+                            case UserService.NOON:
+                                return UserService.SIGN_USER_SECOND_DAY_NOON;
+                            case UserService.NIGHT:
+                                return UserService.SIGN_USER_SECOND_DAY_NIGHT;
+                            default:
+                                throw new Exception(ZoeErrorCode.NOT_START.getDescription());
+                        }
+                    }
+
+                }
+            }
+        }
+        throw new Exception(ZoeErrorCode.NOT_START.getDescription());
     }
 
 }
