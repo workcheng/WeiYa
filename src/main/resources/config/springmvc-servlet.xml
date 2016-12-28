@@ -16,22 +16,20 @@
         <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Service"/>
     </context:component-scan>
 
-
-    <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-        <property name="locations">
-            <list>
-                <value>classpath:/config/db/db.properties</value>
-                <value>classpath:/config/date/date.properties</value>
-                <value>classpath:/config/redis/redis.properties</value>
-            </list>
-        </property>
-    </bean>
     <!-- 视图解析 -->
     <bean id="validator"
           class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean">
         <property name="providerClass" value="org.hibernate.validator.HibernateValidator"/>
         <!--不设置则默认为classpath下的 ValidationMessages.properties -->
         <property name="validationMessageSource" ref="messageSource"/>
+    </bean>
+
+    <bean id="propertyConfigure" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <list>
+                <value>classpath:/config/date/date.properties</value>
+            </list>
+        </property>
     </bean>
 
     <bean id="jacksonObjectMapper" class="com.fasterxml.jackson.databind.ObjectMapper">
@@ -98,11 +96,22 @@
     <mvc:interceptors>
         <mvc:interceptor>
             <mvc:mapping path="/view/*"/>
-            <bean class="com.zoe.weiya.interceptor.time.TimeBasedAccessInterceptor">
-                <property name="openingTime" value="${sign.openIngTime}"/>
-                <property name="closingTime" value="${sign.closingTime}"/>
-                <property name="closingDay" value="${sign.closingDay}"/>
-                <property name="mappingURL" value=".*/view/form.*"/>
+            <bean id="1" class="com.zoe.weiya.interceptor.time.TimeBasedAccessInterceptor">
+                <property name="oneAmOpeningTime" value="${am.openIngTime}"/>
+                <property name="oneAmClosingTime" value="${am.closingTime}"/>
+                <property name="oneClosingDay" value="${one.ClosingDay}"/>
+                <property name="onePmOpeningTime" value="${pm.openIngTime}"/>
+                <property name="onePmClosingTime" value="${pm.closingTime}"/>
+                <property name="twoAmOpeningTime" value="${am.openIngTime}"/>
+                <property name="twoAmClosingTime" value="${am.closingTime}"/>
+                <property name="twoClosingDay" value="${two.ClosingDay}"/>
+                <property name="twoPmOpeningTime" value="${pm.openIngTime}"/>
+                <property name="twoPmClosingTime" value="${pm.closingTime}"/>
+                <property name="finalOpeningTime" value="${final.openIngTime}"/>
+                <property name="finalClosingTime" value="${final.closingTime}"/>
+
+
+                <property name="mappingURL" value=".*/view/*.*"/>
             </bean>
         </mvc:interceptor>
     </mvc:interceptors>
