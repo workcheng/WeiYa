@@ -2,7 +2,7 @@ body {
     color: #333;
     background: url(../images/bg.gif) repeat;
     padding: 0px;
-    font-size: 12px;
+    font-size: 14px;
     font-family: Arial, Helvetica, sans-serif;
 }
 
@@ -45,7 +45,7 @@ legend.optional {
 .form-row {
     clear: both;
     float: left;
-    padding: 5px 5px 5px 5px;
+    padding: 10px 5px 10px 5px;
 }
 
 .form-row-select {
@@ -57,6 +57,7 @@ legend.optional {
 .field-label {
     width: 150px;
     float: left;
+    padding-bottom: 2px;
     line-height: 25px;
     font-size: 18px;
 
@@ -80,7 +81,7 @@ label.left {
 
 input.required {
     width: 300px;
-    height: 22px;
+    height: 30px;
     border: 1px solid #95E0EF;
     background-color: #f3fcfe;
     border-left-width: 2px;
@@ -99,7 +100,7 @@ input.optional {
 
 select.validate-selection {
     width: 305px;
-    height: 28px;
+    height: 37px;
     border: 1px solid #95E0EF;
     background-color: #f3fcfe;
     border-left-width: 2px;
@@ -125,12 +126,14 @@ textarea.optional {
 }
 
 input.submit {
-    height: 30px;
+    width: 305px;
+    height: 38px;
     line-height: 30px;
     padding: 0 30px;
     color: #FFFFFF;
-    background-color: #66ffff;
-    border-radius: 200px;
+    font-size: 18px;
+    background-color: #3498ed;
+    border-radius: 5px;
     cursor: pointer;
     border: none;
 }

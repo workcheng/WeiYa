@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="initial-scale=1, user-scalable=0, minimal-ui">
-    <link id="defaultCss" rel="stylesheet" href="css/lottery.css" media="screen">
-    <!--<link id="themeCss" rel="stylesheet" href="css/lottery-9.css">-->
+    <link id="defaultCss" rel="stylesheet" href="css/lottery.css">
+    <link id="themeCss" rel="stylesheet" href="css/lottery-9.css">
     <script src="http://apps.bdimg.com/libs/jquery/1.11.3/jquery.min.js"></script>
     <script type="text/javascript" src="js/jquery.js"></script>
     <script type="text/javascript" src="js/lottery.js"></script>
@@ -44,51 +44,53 @@
     </script>
 </head>
 <body>
-<div class="module luck_pair" id="lottery" style="display: block;top: 0px;height:90%;margin: 30px auto;">
+<div id="main">
+    <div class="module luck_pair" id="lottery" style="display: block;top: 50px;">
 
-    <div class="left">
-        <div class="userList">
-            <div id="luck_user">
-                <div class="left"></div>
-                <div class="right"></div>
-                <div class="lucky"></div>
-                <ul style="width: 31160px; left: -2100px;">
+        <div class="left">
+            <div class="userList">
+                <div id="luck_user">
+                    <div class="left"></div>
+                    <div class="right"></div>
+                    <div class="lucky"></div>
+                    <ul style="width: 31160px; left: -2100px;">
 
-                </ul>
+                    </ul>
+                </div>
             </div>
-        </div>
-        <div class="condition">
-            <label>奖项:</label>
-            <select class="select" name="prize">
-                <option value="一等奖">一等奖</option>
-                <option value="二等奖">二等奖</option>
-                <option value="三等奖">三等奖</option>
-            </select>
-            <label>人数:</label>
-            <select class="select" name="userNum">
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-                <option value="10">10</option>
-            </select>
-        </div>
-        <a class="clickBtn" id="beginLuck" style="display: inline-block;">开始抽奖</a>
-        <a class="clickBtn stopBtn" id="stopLuck" style="display: none;">停止抽奖</a>
-        <a class="clickBtn" id="luckIng" style="display: none;">自动抽奖中(<span></span>)</a>
-    </div>
-    <div class="right">
-        <div class="title">获奖名单</div>
-        <div id="luckUl" class="result">
-            <div id="level_124" class="level">
-                <ul>
-
-                </ul>
+            <div class="condition">
+                <!--<label>奖项:</label>
+                <select class="select" name="prize">
+                    <option value="一等奖">一等奖</option>
+                    <option value="二等奖">二等奖</option>
+                    <option value="三等奖">三等奖</option>
+                </select>
+                <label>人数:</label>
+                <select class="select" name="userNum">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="10">10</option>
+                </select>-->
             </div>
+            <a class="clickBtn" id="beginLuck" style="display: inline-block;">开始抽奖</a>
+            <a class="clickBtn stopBtn" id="stopLuck" style="display: none;">停止抽奖</a>
+            <!--<a class="clickBtn" id="luckIng" style="display: none;">自动抽奖中(<span></span>)</a>-->
         </div>
-        <a class="reclick" id="removeLottery">重新抽奖</a>
-        <a class="submitUser" id="submitLottery">确认名单</a>
+        <div class="right">
+            <div class="title">获奖名单</div>
+            <div id="luckUl" class="result">
+                <div id="level_124" class="level">
+                    <ul>
+
+                    </ul>
+                </div>
+            </div>
+            <a class="reclick" id="removeLottery">重新抽奖</a>
+            <!-- <a class="submitUser" id="submitLottery">确认名单</a>-->
+        </div>
     </div>
 </div>
 </body>

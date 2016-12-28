@@ -51,21 +51,21 @@ var removeUserList = function () {
 
 var isAuto = function () {
     $('#showPrize').hide();
-    var userNum = $("select[name='userNum']").val();
-    var prize = $("select[name='prize']").val();
-    if (userNum > 1) {
-        autoLuck = true;
-        luckNumberList = userNum;
-        selectNumber = userNum;
-    } else {
-        autoLuck = false;
-        selectNumber = 1;
-        luckNumberList = 1;
-    }
-    luckLevel = prize;
-    levelMaxNum = $("#showLevel").find("a").attr("data-amount") * 1;
-    luckNumber = userNum * 1;
-    showLevel = prize;
+    //var userNum = $("select[name='userNum']").val();
+    //var prize = $("select[name='prize']").val();
+    /*if (userNum > 1) {
+     autoLuck = true;
+     luckNumberList = userNum;
+     selectNumber = userNum;
+     } else {*/
+    autoLuck = false;
+    selectNumber = 1;
+    luckNumberList = 1;
+    //}
+    //luckLevel = prize;
+    //levelMaxNum = $("#showLevel").find("a").attr("data-amount") * 1;
+    // luckNumber = userNum * 1;
+    //showLevel = prize;
     if (isLuck != "") {
         luckUl.find('li[data-userid=' + isLuck + ']').remove();
         luckUl.width(luckUl.width() - 380); //移除已中奖人后重新设置宽度
@@ -87,37 +87,38 @@ var isAuto = function () {
         luckUl.width(190);
         luckUl.css("left", "170px");
     }
-    if (luckLevel == 0) {
-        showInfo("请选择抽奖等级", 0);
-        return false;
-    }
-    $('#test').val(luckNumberList);
-    if (luckNumberList * 1 > levelMaxNum) {
-        showInfo("亲，奖品没那么多!", 0);
-        return false;
-    }
+    /*if (luckLevel == 0) {
+     showInfo("请选择抽奖等级", 0);
+     return false;
+     }
+     $('#test').val(luckNumberList);
+     if (luckNumberList * 1 > levelMaxNum) {
+     showInfo("亲，奖品没那么多!", 0);
+     return false;
+     }*/
 
-    if (isLuck != "" && luckNumber > Math.max(1, $("#luck_user li").length / 2 - 1)) {
-        showInfo("抽奖人数不够!", 0);
-        return false;
-    } else if (luckNumber > Math.max(1, $("#luck_user li").length / 2)) {
-        showInfo("抽奖人数不够!", 0);
-        return false;
-    }
+    /*if (isLuck != "" && luckNumber > Math.max(1, $("#luck_user li").length / 2 - 1)) {
+     showInfo("抽奖人数不够!", 0);
+     return false;
+     } else if (luckNumber > Math.max(1, $("#luck_user li").length / 2)) {
+     showInfo("抽奖人数不够!", 0);
+     return false;
+     }*/
     beginLuck();
-    $('#lottery .condition').addClass('disabled');
+    //$('#lottery .condition').addClass('disabled');
 }
 var beginLuck = function () {  //key 0:只抽一个人奖 1:自动抽奖
     stopLuckTime = 0;
-    if (autoLuck == true) {
-        $("#beginLuck").hide();
-        $("#stopLuck").hide();
-        $("#luckIng").show();
-        $("#luckIng span").text(luckNumberList);
-        setTimeout(function () {
-            stopLuck(luckNumberList);
-        }, 3000);
-    }
+    /*if (autoLuck == true) {
+     $("#beginLuck").hide();
+     $("#stopLuck").hide();
+     $("#luckIng").show();
+     $("#luckIng span").text(luckNumberList);
+     setTimeout(function () {
+     stopLuck(luckNumberList);
+     }, 3000);
+     }*/
+    autoLuck == false;
     if (luckState) {
         $("#stopLuck").show();
         $("#beginLuck").hide();
@@ -159,7 +160,7 @@ var beginLuck = function () {  //key 0:只抽一个人奖 1:自动抽奖
             }, luckScrollTime);
         }
     } else {
-        console.log("抽奖进行中...");
+        showInfo("抽奖进行中...");
     }
 
 }
@@ -211,14 +212,14 @@ var stopLuck = function () {
                         var userName = luckLi.find("span").html();
                         var headPath = luckLi.data("headpath");
                         if ($("#luckUl").find("#level_" + luckLevel).length < 1) {
-                            $("#luckUl").prepend("<div id=level_" + luckLevel + " class='level'><label>" + showLevel + ":<a></a></label><ul></ul></div>");
+                            $("#luckUl").prepend("<div id=level_" + luckLevel + " class='level'></label><ul></ul></div>");
                         }
                         $("#level_" + luckLevel).find("ul").prepend('<li data-hasluck="0" data-headpath="' + headPath + '" data-isluck="' + isLuck + '" data-level="' + luckLevel + '"><span></span><a href="javascript:void(0)">x</a><img src="' + imgUl + '"><font>' + userName + '</font></li>');
 
                         $("#level_" + luckLevel + " li").each(function (index, element) {
                             $(this).find("span").html($("#level_" + luckLevel + " li").length - $(this).index());
                         });
-                        $("#level_" + luckLevel + " label a").text($("#level_" + luckLevel + " li").length);
+                        // $("#level_" + luckLevel + " label a").text($("#level_" + luckLevel + " li").length);
                         $("#luckNumber").html($("#luckUl li").length);
                         if (luckNumberList > 1) {
                             luckNumberList--;
@@ -246,14 +247,14 @@ var stopLuck = function () {
             var userName = $("#luck_user li").find("span").html();
             var headPath = $("#luck_user li").data("headpath");
             if ($("#luckUl").find("#level_" + luckLevel).length < 1) {
-                $("#luckUl").prepend("<div id=level_" + luckLevel + " class='level'><label>" + showLevel + ":<a></a></label><ul></ul></div>");
+                $("#luckUl").prepend("<div id=level_" + luckLevel + " class='level'><ul></ul></div>");
             }
             $("#level_" + luckLevel).find("ul").prepend('<li data-hasluck="0" data-headpath="' + headPath + '" data-isluck="' + isLuck + '" data-level="' + luckLevel + '"><span></span><a href="javascript:void(0)">x</a><img src="' + imgUl + '"><font>' + userName + '</font></li>');
 
             $("#level_" + luckLevel + " li").each(function (index, element) {
                 $(this).find("span").html($("#level_" + luckLevel + " li").length - $(this).index());
             });
-            $("#level_" + luckLevel + " label a").text($("#level_" + luckLevel + " li").length);
+            //$("#level_" + luckLevel + " label a").text($("#level_" + luckLevel + " li").length);
             $("#luckNumber").html($("#luckUl li").length);
             $("#luck_number").val(selectNumber); //重新赋值给抽奖人数
             $("#luckIng").css("display", "none");
@@ -305,13 +306,14 @@ var removeLottery = function () {
                 $("#luckNumber").html($("#luckUl li").length);
             }
         });
+        luckUserList();
     }
 }
 
 //显示抽奖动画
 var showLuckAnimate = function (imgUl, showLevel, userName) {
     //fireWork.show();
-    $('body').append('<div class="animate-bg"><div class="light"></div><img class="luckbg" src="images/luckbg.png" /><img src="' + imgUl + '" class="luckUserHead" /><div class="showLuckUserName">' + userName + '</div><div class="showLuckLevel">恭喜获得<span>' + showLevel + '</span></div></div>');
+    $('body').append('<div class="animate-bg"><div class="light"></div><img class="luckbg" src="images/luckbg.png" /><img src="' + imgUl + '" class="luckUserHead" /><div class="showLuckUserName">' + userName + '</div><div class="showLuckLevel">恭喜<span>' + userName + '</span> 获奖！</div></div>');
     $(".luckbg").animate({
         "width": "800px",
         "height": "518px",

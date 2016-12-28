@@ -30,20 +30,6 @@
                 }
             })
 
-            /*var weixinUrl = location.href.split('#')[0];
-             //用户授权
-             var authUrl = BaseUrl + "auth/url";
-             $.ajax({
-             url: authUrl, //这个地址是服务器配置JSSDK的地址
-             data: {           // 这个地址是发生jssdk调用的url地址
-             // 用于服务器配置
-             url: weixinUrl,
-             state: ''
-             }, success: function (data) {
-             console.log(JSON.stringify(data.data));
-             }
-             })*/
-
             // 根据实际填写接口的配置地点
             // 这里的接口地址是基于node-weixin配置的。
             var weixinUrl = location.href.split('#')[0];
@@ -70,22 +56,22 @@
                     wx.config(config);
 
                     wx.ready(function () {
+                        $('body').append('<div id="loading"><img src="/view/images/loading.gif" style="width: 150px;margin-left: 97px;"></div>');
                         wx.hideOptionMenu();
-                        var getUserInfo = BaseUrl + "auth/user_info";
-                        var weixin = location.href.split('=')[1];
-                        var code = weixin.split('&')[0];
+                        var getUserInfo = BaseUrl + "sign/getUserInfo";//"auth/user_info";
+                        var weixin = location.href.split('?')[1];
+                        var code = weixin.split('=')[1];
                         //获取用户信息
                         $.ajax({
                             url: getUserInfo, //这个地址是服务器配置JSSDK的地址
                             data: {           // 这个地址是发生jssdk调用的url地址
                                 // 用于服务器配置
-                                code: code,
+                                id: code,
                                 lang: ''
                             },
                             success: function (json) {
                                 var userInfo = json.data;
                                 var openId = userInfo.openId;
-                                console.log(userInfo, JSON.stringify(userInfo));
                                 var memberUrl = BaseUrl + "user/isMember";
                                 $.ajax({
                                     url: memberUrl,
@@ -93,10 +79,9 @@
                                         id: openId
                                     },
                                     success: function (json) {
-                                        console.log(json, JSON.stringify(json));
                                         var data = json.data;
                                         if (data == "NOT_SIGN") {
-                                            $("#loadImg").hide();
+                                            $("#loading").hide();
                                             $("#partySign").show();
                                             document.querySelector('#btnSign').onclick = function () {
                                                 if ($("#userName").val() == "") {
@@ -113,7 +98,6 @@
                                                         "signFlag": 1
                                                     };
                                                     signInfo = JSON.stringify(signInfo);
-                                                    console.log("info", signInfo);
                                                     $.ajax({
                                                         type: 'POST',
                                                         url: addUserUrl,
@@ -123,15 +107,16 @@
                                                             var msg = json.message;
                                                             if (msg == "已签到") {
                                                                 $("#partySign").hide();
+                                                                $("#loading").hide();
                                                                 $("#signSuccess").show();
                                                             }
-                                                            console.log(JSON.stringify(json.message));
                                                         }
                                                     })
                                                 }
                                             }
                                         } else {
                                             $("#partySign").hide();
+                                            $("#loading").hide();
                                             $("#reSign").show();
                                         }
                                     }
@@ -170,7 +155,7 @@
                 <span>感谢您参加智业年会，请登记您的签到信息。</span>
             </div>
         </div>
-        <div id="partySign">
+        <div id="partySign" style="display: none;">
             <div class="form-row">
                 <div class="field-label" style="width: 50px"><label for="userName">姓名</label>:</div>
                 <span style="color: red;" id="user"></span>
@@ -215,14 +200,14 @@
                 </div>
             </div>
             <div class="form-row">
-                <div class="field-label"><label></label></div>
                 <div class="field-widget">
                     <label class="field-label" style="width: 80px;" for="phone">是否点餐:</label>
-                    <input type="checkbox" name="isOrder" id="isOrder" value="0" style="margin-top: 6px;">
+                    <input type="checkbox" name="isOrder" id="isOrder" value="0"
+                           style="margin-top: 3px;width: 18px;height: 18px;">
                 </div>
             </div>
             <div class="form-row" style="float: right;margin-right: 30px;">
-                <input type="submit" class="submit" id="btnSign" value="签到"/>
+                <input type="button" class="submit" id="btnSign" value="签到"/>
             </div>
         </div>
         <div id="signSuccess" style="width: 300px;height: 306px;display: none">
