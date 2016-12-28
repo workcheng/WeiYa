@@ -6,10 +6,7 @@ package com.zoe.weiya.comm.redis;
 
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.redis.connection.RedisConnection;
-import org.springframework.data.redis.core.BoundHashOperations;
-import org.springframework.data.redis.core.BoundValueOperations;
-import org.springframework.data.redis.core.RedisCallback;
-import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.*;
 import org.springframework.data.redis.serializer.RedisSerializer;
 
 import java.lang.reflect.Field;
@@ -302,6 +299,10 @@ public class ZoeRedisTemplate {
 
   public boolean move(String key){
     return redisTemplate.move(key,1);
+  }
+
+  public ListOperations<String, Object> getListOperations(){
+      return redisTemplate.opsForList();
   }
 
 }

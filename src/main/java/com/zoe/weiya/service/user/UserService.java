@@ -3,12 +3,15 @@ package com.zoe.weiya.service.user;
 import com.zoe.weiya.comm.constant.ZoeErrorCode;
 import com.zoe.weiya.comm.exception.HasSignException;
 import com.zoe.weiya.comm.exception.InternalException;
+import com.zoe.weiya.comm.properties.ZoeProperties;
 import com.zoe.weiya.comm.redis.ZoeRedisTemplate;
 import com.zoe.weiya.comm.response.ResponseMsg;
 import com.zoe.weiya.comm.response.ZoeObject;
 import com.zoe.weiya.model.OnlyUser;
 import com.zoe.weiya.model.User;
+import com.zoe.weiya.model.ZoeDate;
 import com.zoe.weiya.util.RandomUtil;
+import com.zoe.weiya.util.ZoeDateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,9 +23,36 @@ import java.util.*;
  */
 @Service
 public class UserService {
+    private static final String SIGN_USER_FIRST_DAY_MORNING = "1";
+    private static final String SIGN_USER_FIRST_DAY_NOON = "2";
+    private static final String SIGN_USER_SECOND_DAY_synonym = "3";
+    private static final String SIGN_USER_SECOND_DAY_NOON = "4";
+    private static final String SIGN_USER_SECOND_DAY_NIGHT = "5";
+    private static final String LOTTERY = "lottery";
     private static final String USER = "user";
     @Autowired
     private ZoeRedisTemplate zoeRedisTemplate;
+
+    private String getIndex() throws Exception{
+        ZoeDate now = ZoeDateUtil.moment();
+        ZoeDate startTime = ZoeProperties.getStartTime();
+        if(now.getYear() == startTime.getYear()){
+            if(now.getMonth() >= startTime.getMonth()){
+                if(now.getHour() > 0 &&now.getHour() <= 12){
+                 //morning
+                }else if(now.getHour() > 12 && now.getHour() <= 18){
+                    //noon
+                }else if(now.getHour() > 18){
+                    //night
+                }
+            }
+        }
+        throw new Exception(ZoeErrorCode.NOT_START.getDescription());
+    }
+
+/*    public void save(){
+        zoeRedisTemplate.getListOperations().leftPush()
+    }*/
 
     public void save(User u) throws HasSignException, InternalException {
         Long aLong = this.saveInSet(u.getOpenId());

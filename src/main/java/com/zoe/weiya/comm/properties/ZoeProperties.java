@@ -6,6 +6,7 @@ package com.zoe.weiya.comm.properties;
 
 import com.zoe.weiya.comm.logger.ZoeLogger;
 import com.zoe.weiya.comm.logger.ZoeLoggerFactory;
+import com.zoe.weiya.model.ZoeDate;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -58,14 +59,24 @@ public class ZoeProperties {
   }
 
   public static int getServerNumber() {
-    int defalutValue = 1;
+    int defaultValue = 1;
     try {
-      defalutValue = Integer.valueOf(get("config/algorithm/config.properties", "server.number"));
+      defaultValue = Integer.valueOf(get("config/algorithm/config.properties", "server.number"));
     } catch (Exception e) {
         log.error("System error", e);
         e.printStackTrace();
     }
-    return defalutValue;
+    return defaultValue;
   }
 
+    public static ZoeDate getStartTime(){
+        int startYear = 2017;
+        int startMonth = 1;
+        int startDay = 22;
+        startYear = Integer.valueOf(get("config/static/static.properties", "start.year"));
+        startMonth = Integer.valueOf(get("config/static/static.properties", "start.month"));
+        startDay = Integer.valueOf(get("config/static/static.properties", "start.day"));
+        ZoeDate zoeDate = new ZoeDate(startYear,startMonth,startDay,null,null,null);
+        return zoeDate;
+    }
 }

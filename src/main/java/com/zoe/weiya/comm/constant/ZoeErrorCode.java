@@ -11,7 +11,8 @@ public enum ZoeErrorCode {
     HAS_SIGN(2001, "已签到"),
     NOT_SIGN(2002, "未签到"),
     NOT_SUBSCRIBE(2003, "未关注公众号无法签到"),
-    ERROR_OPENID(2004,"错误的id信息");
+    ERROR_OPENID(2004,"错误的id信息"),
+    NOT_START(2005,"活动未开始");
 
     ZoeErrorCode(int code, String description) {
         this.code = code;

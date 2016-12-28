@@ -5,46 +5,82 @@ package com.zoe.weiya.model;
  */
 public class ZoeDate {
 
-    private String day;
-    private String hour;
-    private String minute;
+    private Integer year;
+    private Integer month;
+    private Integer day;
+    private Integer hour;
+    private Integer minute;
+    private Integer second;
 
-    public ZoeDate(String day, String hour, String minute) {
+    public ZoeDate() {
+    }
+
+    public ZoeDate(Integer year, Integer month, Integer day, Integer hour, Integer minute, Integer second) {
+        this.year = year;
+        this.month = month;
         this.day = day;
         this.hour = hour;
         this.minute = minute;
+        this.second = second;
     }
 
-    public String getDay() {
+    public Integer getYear() {
+        return year;
+    }
+
+    public void setYear(Integer year) {
+        this.year = year;
+    }
+
+    public Integer getMonth() {
+        return month;
+    }
+
+    public void setMonth(Integer month) {
+        this.month = month;
+    }
+
+    public Integer getDay() {
         return day;
     }
 
-    public void setDay(String day) {
+    public void setDay(Integer day) {
         this.day = day;
     }
 
-    public String getHour() {
+    public Integer getHour() {
         return hour;
     }
 
-    public void setHour(String hour) {
+    public void setHour(Integer hour) {
         this.hour = hour;
     }
 
-    public String getMinute() {
+    public Integer getMinute() {
         return minute;
     }
 
-    public void setMinute(String minute) {
+    public void setMinute(Integer minute) {
         this.minute = minute;
+    }
+
+    public Integer getSecond() {
+        return second;
+    }
+
+    public void setSecond(Integer second) {
+        this.second = second;
     }
 
     @Override
     public String toString() {
         return "ZoeDate{" +
-                "day=" + day +
-                ", hour='" + hour + '\'' +
-                ", minute='" + minute + '\'' +
+                "year=" + year +
+                ", month=" + month +
+                ", day=" + day +
+                ", hour=" + hour +
+                ", minute=" + minute +
+                ", second=" + second +
                 '}';
     }
 }
