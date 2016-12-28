@@ -115,17 +115,14 @@ public class UserService {
 
     //签到的跟抽奖的分离出来，签到以五份数据保存，抽奖保存在一份，五个key->value
 
-
+    //抽奖
     public OnlyUser LotterySelect() {
         //1.获取所有签到人员的信息
         List<OnlyUser> signUser = getSignUser();
         List<OnlyUser> list = RandomUtil.createRandomList(signUser, 1);
         //分批次抽奖中奖名单
-        Set<OnlyUser> priceUser = new HashSet<>();
         //2.进行随机筛选出一条（抽奖）
         User onlyUser = (User) list.get(0);
-
-        priceUser.add(onlyUser);
         return onlyUser;
 
     }
