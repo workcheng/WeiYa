@@ -9,8 +9,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.text.MessageFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 public class TimeBasedAccessInterceptor extends HandlerInterceptorAdapter {
     private static ZoeLogger log = ZoeLoggerFactory.getLogger(TimeBasedAccessInterceptor.class);
@@ -155,7 +153,7 @@ public class TimeBasedAccessInterceptor extends HandlerInterceptorAdapter {
                 return "true";
             }
         }
-        String msg = "签到开放时间：{0}�{1}:00-{2}:00";
+        String msg = "签到开放时间：{0}日{1}:00-{2}:00";
         String format = MessageFormat.format(msg, matchingDay, openTime, closeTime);
         return format;
     }
@@ -222,7 +220,7 @@ public class TimeBasedAccessInterceptor extends HandlerInterceptorAdapter {
                 return true;
         }
 
-//            String msg = "签到开放时间：{0}�{1}:00-{2}:00";
+//            String msg = "签到开放时间：{0}日{1}:00-{2}:00";
 //            String format = MessageFormat.format(msg, closingDay, openingTime, closingTime);
         request.setAttribute("msg", msg);
         request.getRequestDispatcher("/msg.jsp").forward(request, response);
