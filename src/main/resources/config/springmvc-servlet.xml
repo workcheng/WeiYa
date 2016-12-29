@@ -118,5 +118,6 @@
 
     <mvc:resources mapping="/view/**" location="/WEB-INF/view/"/>
     <mvc:resources mapping="/lottery/**" location="/WEB-INF/lottery/"/>
+    <mvc:resources mapping="/vote/**" location="/WEB-INF/vote/"/>
 
 </beans>
