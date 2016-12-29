@@ -92,6 +92,7 @@ public class UserService {
                 String openId = i.next();
                 OnlyUser onlyUser = (OnlyUser) zoeRedisTemplate.getValue(openId);
                 list.add(onlyUser);
+                
             }
         }
         return list;
