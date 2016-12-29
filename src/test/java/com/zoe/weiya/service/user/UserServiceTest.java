@@ -19,6 +19,13 @@ public class UserServiceTest extends AbstractTestCase {
     private static final ZoeLogger log = ZoeLoggerFactory.getLogger(UserServiceTest.class);
     @Autowired UserService userService;
 
+    @Test
+    public void saveO() throws Exception {
+        User user = new User();
+        user.setOpenId("oChiIs03wk41iBRrAHV-Kv8a2jeg");
+        userService.saveO(user);
+    }
+
     private String[] nameList = {
             "a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"
     };

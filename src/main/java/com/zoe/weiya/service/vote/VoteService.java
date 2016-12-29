@@ -10,6 +10,7 @@ import me.chanjar.weixin.common.exception.WxErrorException;
 import me.chanjar.weixin.mp.api.impl.WxMpServiceImpl;
 import me.chanjar.weixin.mp.bean.result.WxMpUser;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 /**
@@ -22,9 +23,10 @@ public class VoteService {
     private static final String VOTE_2 = "VOTE2";
 
     @Autowired
-    private ZoeRedisTemplate zoeRedisTemplate;
+    @Qualifier("zoeRedisTemplate0")
+    private ZoeRedisTemplate zoeRedisTemplate0;
     @Autowired
-    protected WxMpServiceImpl wxMpService;
+    private WxMpServiceImpl wxMpService;
 
     public void save(String openId) throws HasVoteException, VoteException, WxErrorException {
         try {
@@ -41,7 +43,7 @@ public class VoteService {
                 throw new WxErrorException(error);
             }
         }
-        Long add = zoeRedisTemplate.getSetOperations().add(VOTE_1, openId);
+        Long add = zoeRedisTemplate0.getSetOperations().add(VOTE_1, openId);
         if(add == 0){
             throw new HasVoteException();
         }else if(add != 1){

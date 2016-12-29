@@ -7,6 +7,7 @@ import com.zoe.weiya.model.OnlyUser;
 import com.zoe.weiya.model.User;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.redis.core.Cursor;
 import org.springframework.data.redis.core.ScanOptions;
 import org.springframework.data.redis.core.ZSetOperations;
@@ -17,6 +18,7 @@ import org.springframework.data.redis.core.ZSetOperations;
 public class ZoeRedisTemplateTest extends AbstractTestCase{
     private static final ZoeLogger log = ZoeLoggerFactory.getLogger(ZoeRedisTemplateTest.class);
     private String key = "key";
+    @Qualifier("zoeRedisTemplate0")
     @Autowired ZoeRedisTemplate zoeRedisTemplate;
 
     @Test

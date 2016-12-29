@@ -56,15 +56,23 @@ http://www.springframework.org/schema/tx/spring-tx.xsd">
         <property name="testOnBorrow" value="${redis.testOnBorrow}"/>
     </bean>
 
-    <bean id="connectionFactory" class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory"
-          p:hostName="${redis.host}" p:port="${redis.port}" p:password="${redis.pass}" p:poolConfig-ref="poolConfig"/>
+    <bean id="connectionFactory0" class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory"
+          p:hostName="${redis.host}" p:port="${redis.port}" p:password="${redis.pass}" p:poolConfig-ref="poolConfig" p:database="0"/>
+    <bean id="connectionFactory1" class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory"
+          p:hostName="${redis.host}" p:port="${redis.port}" p:password="${redis.pass}" p:poolConfig-ref="poolConfig"  p:database="1"/>
+    <bean id="connectionFactory2" class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory"
+          p:hostName="${redis.host}" p:port="${redis.port}" p:password="${redis.pass}" p:poolConfig-ref="poolConfig"  p:database="2"/>
+    <bean id="connectionFactory3" class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory"
+          p:hostName="${redis.host}" p:port="${redis.port}" p:password="${redis.pass}" p:poolConfig-ref="poolConfig"  p:database="3"/>
+    <bean id="connectionFactory4" class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory"
+          p:hostName="${redis.host}" p:port="${redis.port}" p:password="${redis.pass}" p:poolConfig-ref="poolConfig"  p:database="4"/>
 
     <bean id="stringRedisSerializer" class="org.springframework.data.redis.serializer.StringRedisSerializer"/>
     <bean id="jdkSerializationRedisSerializer"
           class="org.springframework.data.redis.serializer.JdkSerializationRedisSerializer"/>
 
-    <bean id="redisTemplate" class="org.springframework.data.redis.core.RedisTemplate">
-        <property name="connectionFactory" ref="connectionFactory"/>
+    <bean id="redisTemplate0" class="org.springframework.data.redis.core.RedisTemplate">
+        <property name="connectionFactory" ref="connectionFactory0"/>
         <property name="keySerializer" ref="stringRedisSerializer"/>
         <property name="valueSerializer" ref="jdkSerializationRedisSerializer"/>
         <property name="hashKeySerializer" ref="stringRedisSerializer"/>
@@ -72,8 +80,57 @@ http://www.springframework.org/schema/tx/spring-tx.xsd">
         <property name="stringSerializer" ref="stringRedisSerializer"/>
     </bean>
 
-    <bean id="zoeRedisTemplate" class="com.zoe.weiya.comm.redis.ZoeRedisTemplate">
-        <property name="redisTemplate" ref="redisTemplate"/>
+    <bean id="redisTemplate1" class="org.springframework.data.redis.core.RedisTemplate">
+        <property name="connectionFactory" ref="connectionFactory1"/>
+        <property name="keySerializer" ref="stringRedisSerializer"/>
+        <property name="valueSerializer" ref="jdkSerializationRedisSerializer"/>
+        <property name="hashKeySerializer" ref="stringRedisSerializer"/>
+        <property name="hashValueSerializer" ref="jdkSerializationRedisSerializer"/>
+        <property name="stringSerializer" ref="stringRedisSerializer"/>
+    </bean>
+    <bean id="redisTemplate2" class="org.springframework.data.redis.core.RedisTemplate">
+        <property name="connectionFactory" ref="connectionFactory2"/>
+        <property name="keySerializer" ref="stringRedisSerializer"/>
+        <property name="valueSerializer" ref="jdkSerializationRedisSerializer"/>
+        <property name="hashKeySerializer" ref="stringRedisSerializer"/>
+        <property name="hashValueSerializer" ref="jdkSerializationRedisSerializer"/>
+        <property name="stringSerializer" ref="stringRedisSerializer"/>
+    </bean>
+    <bean id="redisTemplate3" class="org.springframework.data.redis.core.RedisTemplate">
+        <property name="connectionFactory" ref="connectionFactory3"/>
+        <property name="keySerializer" ref="stringRedisSerializer"/>
+        <property name="valueSerializer" ref="jdkSerializationRedisSerializer"/>
+        <property name="hashKeySerializer" ref="stringRedisSerializer"/>
+        <property name="hashValueSerializer" ref="jdkSerializationRedisSerializer"/>
+        <property name="stringSerializer" ref="stringRedisSerializer"/>
+    </bean>
+    <bean id="redisTemplate4" class="org.springframework.data.redis.core.RedisTemplate">
+        <property name="connectionFactory" ref="connectionFactory4"/>
+        <property name="keySerializer" ref="stringRedisSerializer"/>
+        <property name="valueSerializer" ref="jdkSerializationRedisSerializer"/>
+        <property name="hashKeySerializer" ref="stringRedisSerializer"/>
+        <property name="hashValueSerializer" ref="jdkSerializationRedisSerializer"/>
+        <property name="stringSerializer" ref="stringRedisSerializer"/>
+    </bean>
+
+    <bean id="zoeRedisTemplate0" class="com.zoe.weiya.comm.redis.ZoeRedisTemplate">
+        <property name="redisTemplate" ref="redisTemplate0"/>
+        <property name="usePool" value="true"/>
+    </bean>
+    <bean id="zoeRedisTemplate1" class="com.zoe.weiya.comm.redis.ZoeRedisTemplate">
+        <property name="redisTemplate" ref="redisTemplate1"/>
+        <property name="usePool" value="true"/>
+    </bean>
+    <bean id="zoeRedisTemplate2" class="com.zoe.weiya.comm.redis.ZoeRedisTemplate">
+        <property name="redisTemplate" ref="redisTemplate2"/>
+        <property name="usePool" value="true"/>
+    </bean>
+    <bean id="zoeRedisTemplate3" class="com.zoe.weiya.comm.redis.ZoeRedisTemplate">
+        <property name="redisTemplate" ref="redisTemplate3"/>
+        <property name="usePool" value="true"/>
+    </bean>
+    <bean id="zoeRedisTemplate4" class="com.zoe.weiya.comm.redis.ZoeRedisTemplate">
+        <property name="redisTemplate" ref="redisTemplate4"/>
         <property name="usePool" value="true"/>
     </bean>
 
