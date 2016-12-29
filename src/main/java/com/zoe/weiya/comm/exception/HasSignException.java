@@ -6,6 +6,7 @@ package com.zoe.weiya.comm.exception;
 public class HasSignException extends Exception {
 
     public HasSignException() {
+        super();
     }
 
     public HasSignException(String message) {
@@ -20,7 +21,7 @@ public class HasSignException extends Exception {
         super(cause);
     }
 
-    public HasSignException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+    protected HasSignException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
 }
