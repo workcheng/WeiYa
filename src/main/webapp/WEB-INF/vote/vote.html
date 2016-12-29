@@ -33,8 +33,21 @@
 
                     wx.ready(function () {
                         wx.hideOptionMenu();
+
                     })
 
+                }
+            })
+            var vote = BaseUrl + "vote";
+            var openId = {"id": "ofj0MwjAxBL7kh_m89q0R2FiNqEY"};
+            openId = JSON.stringify((openId));
+            $.ajax({
+                type: 'POST',
+                url: vote,
+                contentType: 'application/json',
+                data: openId,
+                success: function (data) {
+                    alert(JSON.stringify(data));
                 }
             })
         })
