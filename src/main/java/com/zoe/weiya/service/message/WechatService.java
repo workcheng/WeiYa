@@ -47,7 +47,27 @@ public class WechatService {
                 return null;
             }
         };
+        return test;
+    }
 
+    public WxMpMessageHandler sendVoteMessage() {
+        WxMpMessageHandler test = new WxMpMessageHandler() {
+            public WxMpXmlOutMessage handle(WxMpXmlMessage wxMessage, Map<String, Object> context,
+                                            WxMpService wxMpService, WxSessionManager sessionManager) throws WxErrorException {
+                WxMpKefuMessage.WxArticle article1 = new WxMpKefuMessage.WxArticle();
+                String url = MessageFormat.format(ZoeProperties.get("config/static/static.properties", "vote.url"),wxMessage.getFromUser());
+                article1.setUrl(url);
+                article1.setPicUrl("https://mmbiz.qlogo.cn/mmbiz/bVoOkrvEGHqgetjIc7VcFoCWgLCNaTOnZaXvR9J04EgxMfbm3WM9OreMfTcMcKN8UFkWtDwUbiatU7Qtxsutglg/0?wx_fmt=png");
+                article1.setDescription("为你喜爱的节目投票");
+                article1.setTitle("投票");
+
+                WxMpKefuMessage message = WxMpKefuMessage.NEWS()
+                        .toUser(wxMessage.getFromUser()).addArticle(article1)
+                        .build();
+                wxMpService.getKefuService().sendKefuMessage(message);
+                return null;
+            }
+        };
         return test;
     }
 }
