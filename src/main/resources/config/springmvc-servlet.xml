@@ -111,11 +111,13 @@
                 <property name="finalClosingTime" value="${final.closingTime}"/>
 
 
-                <property name="mappingURL" value=".*/view/*.*"/>
+                <property name="mappingURL" value=".*/*/*.*"/>
             </bean>
         </mvc:interceptor>
     </mvc:interceptors>
 
     <mvc:resources mapping="/view/**" location="/WEB-INF/view/"/>
+    <mvc:resources mapping="/lottery/**" location="/WEB-INF/lottery/"/>
+    <mvc:resources mapping="/vote/**" location="/WEB-INF/vote/"/>
 
 </beans>

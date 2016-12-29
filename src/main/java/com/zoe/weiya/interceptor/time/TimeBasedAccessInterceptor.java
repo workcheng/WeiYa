@@ -147,7 +147,7 @@ public class TimeBasedAccessInterceptor extends HandlerInterceptorAdapter {
 
     private String msgTime(int now, int day, int matchingDay, int openTime, int closeTime) {
         if (day == matchingDay) {
-            if (openTime < now && now < closeTime) {//如果时间在这之内，则让其签到
+            if (openTime <= now && now <= closeTime) {//如果时间在这之内，则让其签到
                 log.info("closingDay=" + day);
                 log.info("now=" + now);
                 return "true";
@@ -162,6 +162,7 @@ public class TimeBasedAccessInterceptor extends HandlerInterceptorAdapter {
     public boolean preHandle(HttpServletRequest request,
                              HttpServletResponse response, Object handler) throws Exception {
         String url = request.getRequestURL().toString();
+        log.info("url="+url);
         int failureCount = 0;
         int successCount = 0;
         String msg = "";
