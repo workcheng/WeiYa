@@ -146,7 +146,7 @@ public class TimeBasedAccessInterceptor extends HandlerInterceptorAdapter {
     }
 
     private String msgTime(int now, int day, int matchingDay, int openTime, int closeTime) {
-        if (now == matchingDay) {
+        if (day == matchingDay) {
             if (openTime < now && now < closeTime) {//如果时间在这之内，则让其签到
                 log.info("closingDay=" + day);
                 log.info("now=" + now);
