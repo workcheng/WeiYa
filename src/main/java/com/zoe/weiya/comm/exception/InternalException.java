@@ -6,6 +6,7 @@ package com.zoe.weiya.comm.exception;
 public class InternalException extends Exception {
 
     public InternalException() {
+        super();
     }
 
     public InternalException(String message) {
@@ -20,7 +21,7 @@ public class InternalException extends Exception {
         super(cause);
     }
 
-    public InternalException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+    protected InternalException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
 }
