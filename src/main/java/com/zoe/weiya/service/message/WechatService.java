@@ -70,4 +70,12 @@ public class WechatService {
         };
         return test;
     }
+
+    public void sendMessage(String openId, String name, Integer degree) throws Exception{
+        String[] degreeList = {"一","二","三"};
+        String messageText = "{0}，恭喜您获得了{1}等奖，请凭借这条消息找工作人员兑奖！";
+        String format = MessageFormat.format(messageText, name, degreeList[degree]);
+        WxMpKefuMessage message = WxMpKefuMessage.TEXT().content(format).toUser(openId).build();
+        wxMpService.getKefuService().sendKefuMessage(message);
+    }
 }

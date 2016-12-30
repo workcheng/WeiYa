@@ -92,6 +92,10 @@ public class UserService {
         this.getZoeRedisTemplate().setValue(u.getOpenId(), u);
     }
 
+    public User getUserInfo(String openId) throws NotStartException {
+        return (User) this.getZoeRedisTemplate().getValue(openId);
+    }
+
     @Deprecated
     public void save(User u) throws HasSignException, InternalException {
         Long aLong = this.saveInSet(u.getOpenId());
