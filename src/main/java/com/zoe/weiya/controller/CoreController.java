@@ -53,14 +53,14 @@ public class CoreController {
 
     private void init() throws ServletException {
         WxMpMessageHandler test = test();
-        WxMpMessageHandler reply = reply();
+        // WxMpMessageHandler reply = reply();
         wxMpMessageRouter
-            .rule().async(false).content("andy").handler(test).end()
-            .rule().async(false).content("签到").handler(wechatService.sendSignMessage()).end()//回复签到
-            .rule().async(false).content("投票").handler(wechatService.sendVoteMessage()).end()//回复投票
-            .rule().async(false).event(WxConsts.EVT_SUBSCRIBE).handler(wechatService.sendSignMessage()).end()//关注事件
-            .rule().async(false).msgType(WxConsts.XML_MSG_EVENT).event(WxConsts.EVT_SCAN).handler(wechatService.sendSignMessage()).end()//扫码事件
-            .rule().async(false).handler(reply).end()
+                .rule().async(false).content("andy").handler(test).end()
+                .rule().async(false).content("签到").handler(wechatService.sendSignMessage()).end()//回复签到
+                .rule().async(false).content("投票").handler(wechatService.sendVoteMessage()).end()//回复投票
+                .rule().async(false).event(WxConsts.EVT_SUBSCRIBE).handler(wechatService.sendSignMessage()).end()//关注事件
+                .rule().async(false).msgType(WxConsts.XML_MSG_EVENT).event(WxConsts.EVT_SCAN).handler(wechatService.sendSignMessage()).end()//扫码事件
+        //.rule().async(false).handler(reply).end()
         ;
     }
 
@@ -93,9 +93,9 @@ public class CoreController {
             // 明文传输的消息
             WxMpXmlMessage inMessage = WxMpXmlMessage.fromXml(request.getInputStream());
             WxMpXmlOutMessage outMessage = wxMpMessageRouter.route(inMessage);
-             if (null != outMessage) {
+            if (null != outMessage) {
                 response.getWriter().write(outMessage.toXml());
-             }
+            }
             return;
         }
 
@@ -128,7 +128,7 @@ public class CoreController {
         return test;
     }
 
-    private WxMpMessageHandler reply() {
+   /* private WxMpMessageHandler reply() {
         WxMpMessageHandler test = new WxMpMessageHandler() {
             public WxMpXmlOutMessage handle(WxMpXmlMessage wxMessage, Map<String, Object> context,
                                             WxMpService wxMpService, WxSessionManager sessionManager) throws WxErrorException {
@@ -138,5 +138,5 @@ public class CoreController {
             }
         };
         return test;
-    }
+    }*/
 }

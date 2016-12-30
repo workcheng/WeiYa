@@ -10,7 +10,7 @@ var luckLevel; //等级ID
 var showLevel; //等级名称
 var autoLuck = false; //自动抽奖
 var selectNumber = 1; //保存上一次抽奖人的数量,
-var luckScrollTime = 30;
+var luckScrollTime = 10;
 var stopLuckTime; //强制停止抽奖
 var luckUl = $("#luck_user ul");
 var deleteLuckUser = '';
