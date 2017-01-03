@@ -1,6 +1,7 @@
 package com.zoe.weiya.model.responseModel;
 
 import com.zoe.weiya.model.OnlyUser;
+import com.zoe.weiya.model.ZoeDate;
 
 import java.util.List;
 
@@ -11,6 +12,15 @@ public class MealOrder {
 
     private int orderCount;
     private List<OnlyUser> orderUsers;
+    private ZoeDate now;
+
+    public ZoeDate getNow() {
+        return now;
+    }
+
+    public void setNow(ZoeDate now) {
+        this.now = now;
+    }
 
     public int getOrderCount() {
         return orderCount;

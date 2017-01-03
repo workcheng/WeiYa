@@ -4,6 +4,7 @@ import com.zoe.weiya.comm.response.ZoeObject;
 import com.zoe.weiya.model.OnlyUser;
 import com.zoe.weiya.model.responseModel.MealOrder;
 import com.zoe.weiya.service.user.UserService;
+import com.zoe.weiya.util.ZoeDateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -40,6 +41,7 @@ public class MealController {
         }
         mealOrder.setOrderUsers(userList);
         mealOrder.setOrderCount(userList.size());
+        mealOrder.setNow(ZoeDateUtil.moment());
         return ZoeObject.success(mealOrder);
     }
 }
