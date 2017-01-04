@@ -118,4 +118,9 @@
     <mvc:resources mapping="/lottery/**" location="/WEB-INF/lottery/"/>
     <mvc:resources mapping="/vote/**" location="/WEB-INF/vote/"/>
 
+    <!--<bean class="org.apache.tomcat.util.buf.B2CConverter">
+        <constructor-arg index="0" type="java.nio.charset.Charset" name="encoding" value="UTF-8"/>
+        &lt;!&ndash;<constructor-arg name="replaceOnError" value="true"/>&ndash;&gt;
+    </bean>-->
+
 </beans>

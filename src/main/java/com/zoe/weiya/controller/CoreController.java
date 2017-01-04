@@ -1,5 +1,6 @@
 package com.zoe.weiya.controller;
 
+import com.zoe.weiya.controller.echo.MyMessageInbound;
 import com.zoe.weiya.service.message.WechatService;
 import me.chanjar.weixin.common.api.WxConsts;
 import me.chanjar.weixin.common.exception.WxErrorException;
@@ -17,11 +18,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.nio.CharBuffer;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by andy on 2016/12/15.
@@ -42,7 +46,7 @@ public class CoreController {
     @RequestMapping("")
     public void wechat(HttpServletRequest request, HttpServletResponse response) {
         try {
-            init();
+            init(request);
             service(request, response);
         } catch (ServletException e) {
             e.printStackTrace();
@@ -51,16 +55,16 @@ public class CoreController {
         }
     }
 
-    private void init() throws ServletException {
+    private void init(HttpServletRequest request) throws ServletException {
         WxMpMessageHandler test = test();
-        // WxMpMessageHandler reply = reply();
+         WxMpMessageHandler reply = reply(request);
         wxMpMessageRouter
                 .rule().async(false).content("andy").handler(test).end()
                 .rule().async(false).content("签到").handler(wechatService.sendSignMessage()).end()//回复签到
                 .rule().async(false).content("投票").handler(wechatService.sendVoteMessage()).end()//回复投票
                 .rule().async(false).event(WxConsts.EVT_SUBSCRIBE).handler(wechatService.sendSignMessage()).end()//关注事件
-                .rule().async(false).msgType(WxConsts.XML_MSG_EVENT).event(WxConsts.EVT_SCAN).handler(wechatService.sendSignMessage()).end()//扫码事件
-        //.rule().async(false).handler(reply).end()
+//                .rule().async(false).msgType(WxConsts.XML_MSG_EVENT).event(WxConsts.EVT_SCAN).handler(wechatService.sendSignMessage()).end()//扫码事件
+        .rule().async(false).handler(reply).end()
         ;
     }
 
@@ -128,15 +132,36 @@ public class CoreController {
         return test;
     }
 
-   /* private WxMpMessageHandler reply() {
+    private WxMpMessageHandler reply(HttpServletRequest request) {
         WxMpMessageHandler test = new WxMpMessageHandler() {
             public WxMpXmlOutMessage handle(WxMpXmlMessage wxMessage, Map<String, Object> context,
                                             WxMpService wxMpService, WxSessionManager sessionManager) throws WxErrorException {
+                broadcast("hello world!", request);//将微信消息组装的弹幕格式的消息传入websocket通道
                 WxMpXmlOutTextMessage m = WxMpXmlOutMessage.TEXT().content("维护中。。。").fromUser(wxMessage.getToUser())
                         .toUser(wxMessage.getFromUser()).build();
                 return m;
             }
         };
         return test;
-    }*/
+    }
+
+    @SuppressWarnings("deprecation")
+    private void broadcast(String message, HttpServletRequest request) {//将消息传入websocket通道中
+        ServletContext application=request.getServletContext();
+        @SuppressWarnings("unchecked")
+        Set<MyMessageInbound> connections =
+                (Set<MyMessageInbound>)application.getAttribute("connections");
+        if(connections == null){
+            return;
+        }
+
+        for (MyMessageInbound connection : connections) {
+            try {
+                CharBuffer buffer = CharBuffer.wrap(message);
+                connection.getWsOutbound().writeTextMessage(buffer);
+            } catch (IOException ignore) {
+                // Ignore
+            }
+        }
+    }
 }
