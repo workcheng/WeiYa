@@ -1,5 +1,6 @@
 package com.zoe.weiya.service.user;
 
+import com.zoe.weiya.comm.constant.CommonConstant;
 import com.zoe.weiya.comm.constant.ZoeErrorCode;
 import com.zoe.weiya.comm.exception.HasSignException;
 import com.zoe.weiya.comm.exception.InternalException;
@@ -7,13 +8,11 @@ import com.zoe.weiya.comm.exception.NotStartException;
 import com.zoe.weiya.comm.exception.VoteException;
 import com.zoe.weiya.comm.logger.ZoeLogger;
 import com.zoe.weiya.comm.logger.ZoeLoggerFactory;
-import com.zoe.weiya.comm.properties.ZoeProperties;
 import com.zoe.weiya.comm.redis.ZoeRedisTemplate;
 import com.zoe.weiya.comm.response.ResponseMsg;
 import com.zoe.weiya.comm.response.ZoeObject;
 import com.zoe.weiya.model.OnlyUser;
 import com.zoe.weiya.model.User;
-import com.zoe.weiya.model.ZoeDate;
 import com.zoe.weiya.util.RandomUtil;
 import com.zoe.weiya.util.ZoeDateUtil;
 import me.chanjar.weixin.common.bean.result.WxError;
@@ -34,25 +33,6 @@ import java.util.*;
 @Service
 public class UserService {
     private static final ZoeLogger log = ZoeLoggerFactory.getLogger(UserService.class);
-    private static final String SIGN_USER_FIRST_DAY_MORNING = "0";
-    private static final String SIGN_USER_FIRST_DAY_NOON = "1";
-    private static final String SIGN_USER_SECOND_DAY_MORNING = "2";
-    private static final String SIGN_USER_SECOND_DAY_NOON = "3";
-    private static final String SIGN_USER_SECOND_DAY_NIGHT = "4";
-    private static final String LOTTERY = "lottery";
-    private static final String USER = "USER";
-    private static final String MORNING = "MORNING";
-    private static final String NOON = "NOON";
-    private static final String NIGHT = "NIGHT";
-    private static final String FIRST_DAY = "FIRST";
-    private static final String SECOND_DAY = "SECOND";
-    private static final String ONE_SET= "SET1";
-    private static final String TWO_SET= "SET2";
-    private static final String THREE_SET= "SET3";
-    private static final String FOUR_SET= "SET4";
-    private static final String FIVE_SET= "SET5";
-    private static final String SET= "SET";
-
     @Qualifier("zoeRedisTemplate0")
     @Autowired private ZoeRedisTemplate zoeRedisTemplate0;
     @Qualifier("zoeRedisTemplate1")
@@ -69,7 +49,7 @@ public class UserService {
     private ZoeRedisTemplate getZoeRedisTemplate() throws NotStartException {
         ZoeRedisTemplate[] zoeRedisTemplateIndexList = {
             zoeRedisTemplate0,zoeRedisTemplate1,zoeRedisTemplate2,zoeRedisTemplate3,zoeRedisTemplate4};
-            return zoeRedisTemplateIndexList[Integer.valueOf(getIndex())];
+            return zoeRedisTemplateIndexList[Integer.valueOf(ZoeDateUtil.getIndex())];
     }
 
     public void save(User u) throws NotStartException, InternalException, HasSignException, WxErrorException, VoteException {
@@ -86,7 +66,7 @@ public class UserService {
                 throw new WxErrorException(error);
             }
         }
-        Long add = this.getZoeRedisTemplate().getSetOperations().add(UserService.USER, u.getOpenId());
+        Long add = this.getZoeRedisTemplate().getSetOperations().add(CommonConstant.USER, u.getOpenId());
         if(add == 0){
             throw new HasSignException("已经签到");
         }
@@ -134,19 +114,19 @@ public class UserService {
     }
 
     public Long saveInSet(String openId) throws NotStartException {
-        return getZoeRedisTemplate().setSet(USER, openId);
+        return getZoeRedisTemplate().setSet(CommonConstant.USER, openId);
     }
 
     public Set<String> getOpenIdSet() throws NotStartException {
-        return (Set) getZoeRedisTemplate().getSet(USER);
+        return (Set) getZoeRedisTemplate().getSet(CommonConstant.USER);
     }
 
     public boolean isMember(String openId) throws NotStartException {
-        return getZoeRedisTemplate().isMember(USER, openId);
+        return getZoeRedisTemplate().isMember(CommonConstant.USER, openId);
     }
 
     public Long getUserSize() throws NotStartException {
-        return getZoeRedisTemplate().getSetSize(USER);
+        return getZoeRedisTemplate().getSetSize(CommonConstant.USER);
     }
 
     public List<User> getSignUser() throws NotStartException {
@@ -188,62 +168,6 @@ public class UserService {
         //2.进行随机筛选出一条（抽奖）
         User user = list.get(0);
         return user;
-    }
-
-    private String getTime(ZoeDate now){
-        if( now.getHour() <= 12){
-            return UserService.MORNING;
-        }else if(now.getHour() > 12 && now.getHour() <= 18){
-            return UserService.NOON;
-        }else if(now.getHour() > 18){
-            return UserService.NIGHT;
-        }
-        return null;
-    }
-
-    private String whichDay(ZoeDate now){
-        ZoeDate startTime = ZoeProperties.getStartTime();
-        String whichDay[] = {UserService.FIRST_DAY,UserService.SECOND_DAY};
-        return whichDay[now.getDay()-startTime.getDay()];
-    }
-
-    private String getIndex() throws NotStartException{
-        //TODO 考虑跨年跨月的情况
-        ZoeDate now = ZoeDateUtil.moment();
-        ZoeDate startTime = ZoeProperties.getStartTime();
-        if(now.getYear().equals(startTime.getYear())){
-            if(now.getMonth() >= startTime.getMonth()){
-                if(now.getDay() >= startTime.getDay()){
-                    if(UserService.FIRST_DAY.equals(whichDay(now))){
-                        switch (getTime(now)){
-                            case UserService.MORNING:
-                                return UserService.SIGN_USER_FIRST_DAY_MORNING;
-                            case UserService.NOON:
-                                return UserService.SIGN_USER_FIRST_DAY_NOON;
-                            default:
-                                throw new NotStartException(ZoeErrorCode.NOT_START.getDescription());
-                        }
-                    }else if(UserService.SECOND_DAY.equals(whichDay(now))){
-                        switch (getTime(now)){
-                            case UserService.MORNING:
-                                return UserService.SIGN_USER_SECOND_DAY_MORNING;
-                            case UserService.NOON:
-                                return UserService.SIGN_USER_SECOND_DAY_NOON;
-                            case UserService.NIGHT:
-                                return UserService.SIGN_USER_SECOND_DAY_NIGHT;
-                            default:
-                                throw new NotStartException(ZoeErrorCode.NOT_START.getDescription());
-                        }
-                    }
-
-                }
-            }
-        }
-        throw new NotStartException(ZoeErrorCode.NOT_START.getDescription());
-    }
-
-    private String getSetIndex() throws NotStartException {
-        return UserService.SET+getIndex();
     }
 
 }
