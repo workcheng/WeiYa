@@ -371,6 +371,9 @@ a.gray:hover {
 
 /*select模拟*/
 .select {
+    appearance: none;
+    -moz-appearance: none;
+    -webkit-appearance: none;
     width: 150px;
     padding-left: 10px;
     display: inline-block;
@@ -382,7 +385,7 @@ a.gray:hover {
     font-size: 16px;
     line-height: 32px;
     overflow: hidden;
-    background: url(images/select.png) right 13px no-repeat;
+    background: url(../images/select.png) right 13px no-repeat;
     background-color: #fff;
     text-align: left;
     color: #383838;
@@ -469,7 +472,7 @@ a.clickBtn, a.btn {
 
 /*按钮背景色*/
 a.clickBtn:hover, a.btn:hover {
-    background: #079287;
+    background: #3498ed;
 }
 
 a.stopBtn {
@@ -2444,7 +2447,7 @@ a.disabled:hover {
     overflow: hidden;
     text-overflow: ellipsis;
     z-index: 9999;
-    font-size: 30px;
+    font-size: 16px;
     margin-top: -39px;
     opacity: 0;
 }
@@ -2674,11 +2677,11 @@ div.pairRight {
 }
 
 #prizelottery a.reclick {
-    margin-left: -112px;
+    left: 60px;
 }
 
 #prizelottery a.submitUser {
-    margin-left: 10px;
+    margin-left: 63px;
 }
 
 .prize-box {

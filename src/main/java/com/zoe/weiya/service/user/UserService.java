@@ -56,7 +56,7 @@ public class UserService {
         if(StringUtils.isEmpty(u.getOpenId())){
             throw new InternalException("openid不能为空");
         }
-        try {
+        /*try {
             WxMpUser wxMpUser = wxMpService.getUserService().userInfo(u.getOpenId());
             u.setNickName(wxMpUser.getNickname());
         } catch (WxErrorException e) {
@@ -65,7 +65,7 @@ public class UserService {
             if(null != error){
                 throw new WxErrorException(error);
             }
-        }
+        }*/
         Long add = this.getZoeRedisTemplate().getSetOperations().add(CommonConstant.USER, u.getOpenId());
         if(add == 0){
             throw new HasSignException("已经签到");

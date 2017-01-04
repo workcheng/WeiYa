@@ -23,8 +23,9 @@ public class AppTest  extends AbstractTestCase{
     @org.junit.Test
     public void test() throws Exception{
         WxMpInMemoryConfigStorage config = new WxMpInMemoryConfigStorage();
-//        config.setAppId("wx3b2f04cd718a6f57"); // 设置微信公众号的appid
-        config.setAppId("wx5149e1919bfc8aee"); // 设置微信公众号的appid
+        config.setAppId("wx3b2f04cd718a6f57"); // 设置微信公众号的appid
+//        config.setAppId("wx5149e1919bfc8aee"); // 设置微信公众号的appid
+        config.setSecret("81ac3fa27b21c86d730b8280586907c5");
         config.setToken("andy"); // 设置微信公众号的token
         config.setAesKey("..."); // 设置微信公众号的EncodingAESKey
 

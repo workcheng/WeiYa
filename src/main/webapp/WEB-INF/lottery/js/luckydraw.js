@@ -1,3 +1,6 @@
+/**
+ * Created by zhangxingcai on 2017/1/4 0004.
+ */
 var beginTimer; //开始抽奖
 var stopTimer; //停止抽奖
 var luckTimer;
@@ -14,9 +17,9 @@ var luckScrollTime = 1;
 var stopLuckTime; //强制停止抽奖
 var luckUl = $("#luck_user ul");
 var deleteLuckUser = '';
-var alldataarr=[];
-var setintIndex=0;
-function getRandom(min, max){
+var alldataarr = [];
+var setintIndex = 0;
+function getRandom(min, max) {
     var r = Math.random() * (max - min);
     var re = Math.round(r + min);
     re = Math.max(Math.min(re, max), min)
@@ -42,8 +45,6 @@ var getLottery = function () {
             //停止
 
 
-
-
         }
     })
 }
@@ -65,13 +66,13 @@ var removeUserList = function () {
 var isAuto = function () {
     //换人var alldataarr=[];
 
-    setintIndex=setInterval(function(){
-        var user_index=getRandom(0,alldataarr.length);
+    setintIndex = setInterval(function () {
+        var user_index = getRandom(0, alldataarr.length);
 
         $("#span_name").html(alldataarr[user_index].name);
-        $("#img_user").attr("src",alldataarr[user_index].headImgUrl);
+        $("#img_user").attr("src", alldataarr[user_index].headImgUrl);
 
-    },100)
+    }, 100)
 
     $('#showPrize').hide();
     var userNum = $("select[name='userNum']").val();
@@ -152,7 +153,7 @@ var beginLuck = function () {  //key 0:只抽一个人奖 1:自动抽奖
             luckUl.width(luckUl.width() - 380); //移除已中奖人后重新设置宽度
         }
         //判断奖池是否已经没人了
-              if ($("#luck_user li").length == 0) {
+        if ($("#luck_user li").length == 0) {
             showInfo("已经没有人了!", 0);
             $("#stopLuck").hide();
             $("#beginLuck").show();
@@ -193,16 +194,18 @@ var beginLuck = function () {  //key 0:只抽一个人奖 1:自动抽奖
 
 //停止抽奖
 var stopLuck = function () {
-  //
+    //
     clearInterval(setintIndex);
 //后台选择
-    var data=[1,2,3];
-    var index=0;
-    setInterval(function(){
+    var data = [1, 2, 3];
+    var index = 0;
+    setInterval(function () {
 
-       console.log("恭喜您中奖了"+data[index]);   index+=1;}
+            console.log("恭喜您中奖了" + data[index]);
+            index += 1;
+        }
 
-        ,1000)
+        , 1000)
 
 
     return false;
