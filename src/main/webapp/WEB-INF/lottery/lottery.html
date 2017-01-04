@@ -7,6 +7,7 @@
     <link id="themeCss" rel="stylesheet" href="css/lottery-9.css">
     <script src="http://apps.bdimg.com/libs/jquery/1.11.3/jquery.min.js"></script>
     <script type="text/javascript" src="../lottery/js/jquery.js"></script>
+    <script type="text/javascript" src="../lottery/js/jquery.fullbg.js"></script>
     <script type="text/javascript" src="../lottery/js/lottery.js"></script>
     <script type="text/javascript" src="../lottery/js/common.js"></script>
     <script type="text/javascript" src="../lottery/js/config.js"></script>
@@ -38,14 +39,25 @@
             $('#luckUl').on('click', 'a', function () {
                 deleteThis($(this), $(this).parent().data('level'));
             });
+            $(window).load(function() {
+                $("#background").fullBg();
+            });
 
         });
 
     </script>
+    <style>
+        .fullBg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            overflow: hidden;
+        }
+    </style>
 </head>
 <body>
 <div id="main">
-    <div class="module luck_pair" id="lottery" style="display: block;top: 50px;margin: 0 auto">
+    <div class="module luck_pair" id="lottery" style="display: block;top: 70px;margin: 0 auto">
 
         <div class="left">
             <div class="userList">
@@ -100,6 +112,9 @@
             <a class="submitUser" id="submitLottery" style="margin-left: 60px;">确认名单</a>
         </div>
     </div>
+</div>
+<div class="wy-bg"  style="position: fixed; right: 0px; top: 0px; overflow: hidden; z-index: -1;">
+    <img src="images/1366.png" id="background" >
 </div>
 </body>
 </html>
