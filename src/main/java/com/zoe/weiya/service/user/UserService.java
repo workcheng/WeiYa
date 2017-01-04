@@ -14,7 +14,7 @@ import com.zoe.weiya.comm.response.ZoeObject;
 import com.zoe.weiya.model.OnlyUser;
 import com.zoe.weiya.model.User;
 import com.zoe.weiya.util.RandomUtil;
-import com.zoe.weiya.util.ZoeDateUtil;
+import com.zoe.weiya.util.ZoeUtil;
 import me.chanjar.weixin.common.bean.result.WxError;
 import me.chanjar.weixin.common.exception.WxErrorException;
 import me.chanjar.weixin.mp.api.impl.WxMpServiceImpl;
@@ -49,7 +49,7 @@ public class UserService {
     private ZoeRedisTemplate getZoeRedisTemplate() throws NotStartException {
         ZoeRedisTemplate[] zoeRedisTemplateIndexList = {
             zoeRedisTemplate0,zoeRedisTemplate1,zoeRedisTemplate2,zoeRedisTemplate3,zoeRedisTemplate4};
-            return zoeRedisTemplateIndexList[Integer.valueOf(ZoeDateUtil.getIndex())];
+            return zoeRedisTemplateIndexList[Integer.valueOf(ZoeUtil.getIndex())];
     }
 
     public void save(User u) throws NotStartException, InternalException, HasSignException, WxErrorException, VoteException {

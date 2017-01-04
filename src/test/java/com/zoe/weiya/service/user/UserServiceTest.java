@@ -4,7 +4,6 @@ import com.zoe.weiya.AbstractTestCase;
 import com.zoe.weiya.comm.logger.ZoeLogger;
 import com.zoe.weiya.comm.logger.ZoeLoggerFactory;
 import com.zoe.weiya.comm.uuid.ZoeUUID;
-import com.zoe.weiya.model.OnlyUser;
 import com.zoe.weiya.model.User;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,10 +19,10 @@ public class UserServiceTest extends AbstractTestCase {
     @Autowired UserService userService;
 
     @Test
-    public void saveO() throws Exception {
+    public void save() throws Exception {
         User user = new User();
         user.setOpenId("oChiIs03wk41iBRrAHV-Kv8a2jeg");
-        userService.saveO(user);
+        userService.save(user);
     }
 
     private String[] nameList = {
@@ -47,7 +46,7 @@ public class UserServiceTest extends AbstractTestCase {
 
     @Test
     public void testGetSignUser() throws Exception {
-        List<OnlyUser> signUser = userService.getSignUser();
+        List<User> signUser = userService.getSignUser();
         log.info("info:"+ signUser.size());
     }
 
