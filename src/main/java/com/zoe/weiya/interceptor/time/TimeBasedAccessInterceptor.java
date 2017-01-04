@@ -2,49 +2,50 @@ package com.zoe.weiya.interceptor.time;
 
 import com.zoe.weiya.comm.logger.ZoeLogger;
 import com.zoe.weiya.comm.logger.ZoeLoggerFactory;
+import com.zoe.weiya.util.ZoeDateUtil;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.text.MessageFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
 public class TimeBasedAccessInterceptor extends HandlerInterceptorAdapter {
     private static ZoeLogger log = ZoeLoggerFactory.getLogger(TimeBasedAccessInterceptor.class);
 
-    private int oneAmOpeningTime;
-    private int oneAmClosingTime;
-    private int oneClosingDay;
-    private int onePmOpeningTime;
-    private int onePmClosingTime;
+    private String oneAmOpeningTime;
+    private String oneAmClosingTime;
 
-    private int twoAmOpeningTime;
-    private int twoAmClosingTime;
-    private int twoClosingDay;
-    private int twoPmOpeningTime;
-    private int twoPmClosingTime;
+    private String onePmOpeningTime;
+    private String onePmClosingTime;
 
+    private String twoAmOpeningTime;
+    private String twoAmClosingTime;
 
-    private int finalOpeningTime;
-    private int finalClosingTime;
+    private String twoPmOpeningTime;
+    private String twoPmClosingTime;
+
+    private String finalOpeningTime;
+    private String finalClosingTime;
 
 
     private String mappingURL; // 利用正则映射到需要拦截的路径
 
-    public int getFinalClosingTime() {
+    public String getFinalClosingTime() {
         return finalClosingTime;
     }
 
-    public void setFinalClosingTime(int finalClosingTime) {
+    public void setFinalClosingTime(String finalClosingTime) {
         this.finalClosingTime = finalClosingTime;
     }
 
-    public int getFinalOpeningTime() {
+    public String getFinalOpeningTime() {
         return finalOpeningTime;
     }
 
-    public void setFinalOpeningTime(int finalOpeningTime) {
+    public void setFinalOpeningTime(String finalOpeningTime) {
         this.finalOpeningTime = finalOpeningTime;
     }
 
@@ -56,7 +57,6 @@ public class TimeBasedAccessInterceptor extends HandlerInterceptorAdapter {
         TimeBasedAccessInterceptor.log = log;
     }
 
-
     public String getMappingURL() {
         return mappingURL;
     }
@@ -65,96 +65,78 @@ public class TimeBasedAccessInterceptor extends HandlerInterceptorAdapter {
         this.mappingURL = mappingURL;
     }
 
-    public int getOneAmClosingTime() {
+    public String getOneAmClosingTime() {
         return oneAmClosingTime;
     }
 
-    public void setOneAmClosingTime(int oneAmClosingTime) {
+    public void setOneAmClosingTime(String oneAmClosingTime) {
         this.oneAmClosingTime = oneAmClosingTime;
     }
 
-    public int getOneAmOpeningTime() {
+    public String getOneAmOpeningTime() {
         return oneAmOpeningTime;
     }
 
-    public void setOneAmOpeningTime(int oneAmOpeningTime) {
+    public void setOneAmOpeningTime(String oneAmOpeningTime) {
         this.oneAmOpeningTime = oneAmOpeningTime;
     }
 
-    public int getOneClosingDay() {
-        return oneClosingDay;
-    }
-
-    public void setOneClosingDay(int oneClosingDay) {
-        this.oneClosingDay = oneClosingDay;
-    }
-
-    public int getOnePmClosingTime() {
+    public String getOnePmClosingTime() {
         return onePmClosingTime;
     }
 
-    public void setOnePmClosingTime(int onePmClosingTime) {
+    public void setOnePmClosingTime(String onePmClosingTime) {
         this.onePmClosingTime = onePmClosingTime;
     }
 
-    public int getOnePmOpeningTime() {
+    public String getOnePmOpeningTime() {
         return onePmOpeningTime;
     }
 
-    public void setOnePmOpeningTime(int onePmOpeningTime) {
+    public void setOnePmOpeningTime(String onePmOpeningTime) {
         this.onePmOpeningTime = onePmOpeningTime;
     }
 
-    public int getTwoAmClosingTime() {
+    public String getTwoAmClosingTime() {
         return twoAmClosingTime;
     }
 
-    public void setTwoAmClosingTime(int twoAmClosingTime) {
+    public void setTwoAmClosingTime(String twoAmClosingTime) {
         this.twoAmClosingTime = twoAmClosingTime;
     }
 
-    public int getTwoAmOpeningTime() {
+    public String getTwoAmOpeningTime() {
         return twoAmOpeningTime;
     }
 
-    public void setTwoAmOpeningTime(int twoAmOpeningTime) {
+    public void setTwoAmOpeningTime(String twoAmOpeningTime) {
         this.twoAmOpeningTime = twoAmOpeningTime;
     }
 
-    public int getTwoClosingDay() {
-        return twoClosingDay;
-    }
-
-    public void setTwoClosingDay(int twoClosingDay) {
-        this.twoClosingDay = twoClosingDay;
-    }
-
-    public int getTwoPmClosingTime() {
+    public String getTwoPmClosingTime() {
         return twoPmClosingTime;
     }
 
-    public void setTwoPmClosingTime(int twoPmClosingTime) {
+    public void setTwoPmClosingTime(String twoPmClosingTime) {
         this.twoPmClosingTime = twoPmClosingTime;
     }
 
-    public int getTwoPmOpeningTime() {
+    public String getTwoPmOpeningTime() {
         return twoPmOpeningTime;
     }
 
-    public void setTwoPmOpeningTime(int twoPmOpeningTime) {
+    public void setTwoPmOpeningTime(String twoPmOpeningTime) {
         this.twoPmOpeningTime = twoPmOpeningTime;
     }
 
-    private String msgTime(int now, int day, int matchingDay, int openTime, int closeTime) {
-        if (day == matchingDay) {
-            if (openTime <= now && now <= closeTime) {//如果时间在这之内，则让其签到
-                log.info("closingDay=" + day);
-                log.info("now=" + now);
-                return "true";
-            }
+    private String msgTime(Date now, Date openTime, Date closeTime) {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd日 kk:mm:ss");
+        if (ZoeDateUtil.compare(openTime, now) && ZoeDateUtil.compare(now, closeTime)) {//如果时间在这之内，则让其签到
+            log.info("now=" + sdf.format(now));
+            return "true";
         }
-        String msg = "签到开放时间：{0}日{1}:00-{2}:00";
-        String format = MessageFormat.format(msg, matchingDay, openTime, closeTime);
+        String msg = "签到开放时间：{0}-{1}";
+        String format = MessageFormat.format(msg, sdf.format(openTime), sdf.format(closeTime));
         return format;
     }
 
@@ -162,15 +144,16 @@ public class TimeBasedAccessInterceptor extends HandlerInterceptorAdapter {
     public boolean preHandle(HttpServletRequest request,
                              HttpServletResponse response, Object handler) throws Exception {
         String url = request.getRequestURL().toString();
-        log.info("url="+url);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd kk:mm:ss");
+        log.info("url=" + url);
         int failureCount = 0;
         int successCount = 0;
         String msg = "";
         if (mappingURL == null || url.matches(mappingURL)) {//如果匹配url，是所要控制的页面
-            Calendar c = Calendar.getInstance();
-            c.setTime(new Date());
-            int now = c.get(Calendar.HOUR_OF_DAY);
-            int day = c.get(Calendar.DATE);
+//            Calendar c = Calendar.getInstance();
+//            c.setTime(new Date());
+//            int now = c.get(Calendar.HOUR_OF_DAY);
+//            int day = c.get(Calendar.DATE);
 //            if (day == oneClosingDay) {
 //                if (oneAmOpeningTime < now && now < oneAmClosingTime) {//如果时间在这之内，则让其签到
 //                    log.info("closingDay=" + oneClosingDay);
@@ -181,36 +164,36 @@ public class TimeBasedAccessInterceptor extends HandlerInterceptorAdapter {
 //                    log.info("now=" + now);
 //                    return true;
 //                }
-
-            String am1 = msgTime(now, day, oneClosingDay, oneAmOpeningTime, oneAmClosingTime);
+            Date date = new Date();
+            String am1 = msgTime(date, sdf.parse(oneAmOpeningTime), sdf.parse(oneAmClosingTime));
             if (!am1.equals("true")) {
                 failureCount++;
                 msg = am1;
             } else {
                 successCount++;
             }
-            String pm1 = msgTime(now, day, oneClosingDay, onePmOpeningTime, onePmClosingTime);
+            String pm1 = msgTime(date, sdf.parse(onePmOpeningTime), sdf.parse(onePmClosingTime));
             if (!pm1.equals("true")) {
                 failureCount++;
                 msg = pm1;
             } else {
                 successCount++;
             }
-            String am2 = msgTime(now, day, twoClosingDay, twoAmOpeningTime, twoAmClosingTime);
+            String am2 = msgTime(date, sdf.parse(twoAmOpeningTime), sdf.parse(twoAmClosingTime));
             if (!am2.equals("true")) {
                 failureCount++;
                 msg = am2;
             } else {
                 successCount++;
             }
-            String pm2 = msgTime(now, day, twoClosingDay, twoPmOpeningTime, twoPmClosingTime);
+            String pm2 = msgTime(date, sdf.parse(twoAmOpeningTime), sdf.parse(twoAmClosingTime));
             if (!pm2.equals("true")) {
                 failureCount++;
                 msg = pm2;
             } else {
                 successCount++;
             }
-            String last = msgTime(now, day, twoClosingDay, finalOpeningTime, finalClosingTime);
+            String last = msgTime(date, sdf.parse(twoPmOpeningTime), sdf.parse(twoPmClosingTime));
             if (!last.equals("true")) {
                 failureCount++;
                 msg = last;

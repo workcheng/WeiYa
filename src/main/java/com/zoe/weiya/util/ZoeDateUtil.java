@@ -28,4 +28,18 @@ public class ZoeDateUtil {
         return zoeDate;
     }
 
+    public static boolean compare(Date time1, Date time2) {
+        //Date类的一个方法，如果a早于b返回true，否则返回false
+        if (time1.before(time2))
+            return true;
+        else
+            return false;
+        /*
+        if(a.getTime()-b.getTime()<0)
+            return true;
+        else
+            return false;
+        */
+    }
+
 }
