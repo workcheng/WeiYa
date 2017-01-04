@@ -15,7 +15,7 @@ public class User extends OnlyUser{
     private String name;
     @NotNull(message = "是否订餐不能为空")
     private Integer order;
-
+    private String nickName;
     private Integer priceCount;
     private String signFlag;//该时间段内的签到标识符
     public User() {
@@ -25,6 +25,14 @@ public class User extends OnlyUser{
     public User(String openId, String signFlag) {
         this.openId = openId;
         this.signFlag = signFlag;
+    }
+
+    public String getNickName() {
+        return nickName;
+    }
+
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
     }
 
     public Integer getPriceCount() {

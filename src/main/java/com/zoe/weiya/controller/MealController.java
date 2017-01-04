@@ -1,5 +1,7 @@
 package com.zoe.weiya.controller;
 
+import com.zoe.weiya.comm.constant.ZoeErrorCode;
+import com.zoe.weiya.comm.exception.NotStartException;
 import com.zoe.weiya.comm.response.ZoeObject;
 import com.zoe.weiya.model.OnlyUser;
 import com.zoe.weiya.model.responseModel.MealOrder;
@@ -26,22 +28,26 @@ public class MealController {
 
     @RequestMapping(value = "order", method = RequestMethod.GET)
     public Object getOrder(){
-        Set<String> openIdSet = userService.getOpenIdSet();
-        MealOrder mealOrder = new MealOrder();
-        List<OnlyUser> userList = new ArrayList<>();
-        if(null != openIdSet){
-            Iterator<String> iterator = openIdSet.iterator();
-            while (iterator.hasNext()){
-                String next = iterator.next();
-                OnlyUser onlyUser = userService.get(next);
-                if("1".equals(onlyUser.getOrder())){
-                    userList.add(onlyUser);
+        try {
+            Set<String> openIdSet =  userService.getOpenIdSet();
+            MealOrder mealOrder = new MealOrder();
+            List<OnlyUser> userList = new ArrayList<>();
+            if(null != openIdSet){
+                Iterator<String> iterator = openIdSet.iterator();
+                while (iterator.hasNext()){
+                    String next = iterator.next();
+                    OnlyUser onlyUser = userService.get(next);
+                    if("1".equals(onlyUser.getOrder())){
+                        userList.add(onlyUser);
+                    }
                 }
             }
+            mealOrder.setOrderUsers(userList);
+            mealOrder.setOrderCount(userList.size());
+            mealOrder.setNow(ZoeDateUtil.moment());
+            return ZoeObject.success(mealOrder);
+        } catch (NotStartException e) {
+            return ZoeObject.failure(ZoeErrorCode.NOT_START);
         }
-        mealOrder.setOrderUsers(userList);
-        mealOrder.setOrderCount(userList.size());
-        mealOrder.setNow(ZoeDateUtil.moment());
-        return ZoeObject.success(mealOrder);
     }
 }
