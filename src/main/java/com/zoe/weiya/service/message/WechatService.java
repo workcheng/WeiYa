@@ -1,6 +1,7 @@
 package com.zoe.weiya.service.message;
 
 import com.zoe.weiya.comm.properties.ZoeProperties;
+import com.zoe.weiya.model.LuckyUser;
 import me.chanjar.weixin.common.exception.WxErrorException;
 import me.chanjar.weixin.common.session.WxSessionManager;
 import me.chanjar.weixin.mp.api.WxMpMessageHandler;
@@ -13,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.text.MessageFormat;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -77,5 +79,12 @@ public class WechatService {
         String format = MessageFormat.format(messageText, name, degreeList[degree]);
         WxMpKefuMessage message = WxMpKefuMessage.TEXT().content(format).toUser(openId).build();
         wxMpService.getKefuService().sendKefuMessage(message);
+    }
+
+    public void sendMessage(List<LuckyUser> luckyUsers) throws Exception{
+        for (int i=0; i<luckyUsers.size(); i++){
+            LuckyUser user = luckyUsers.get(i);
+            this.sendMessage(user.getOpenId(),user.getName(),user.getDegree());
+        }
     }
 }

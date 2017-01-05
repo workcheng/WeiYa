@@ -15,7 +15,6 @@ import com.zoe.weiya.model.OnlyUser;
 import com.zoe.weiya.model.User;
 import com.zoe.weiya.util.RandomUtil;
 import com.zoe.weiya.util.ZoeUtil;
-import me.chanjar.weixin.common.bean.result.WxError;
 import me.chanjar.weixin.common.exception.WxErrorException;
 import me.chanjar.weixin.mp.api.impl.WxMpServiceImpl;
 import me.chanjar.weixin.mp.bean.result.WxMpUser;
@@ -45,6 +44,7 @@ public class UserService {
     @Autowired private ZoeRedisTemplate zoeRedisTemplate4;
     @Autowired
     private WxMpServiceImpl wxMpService;
+    private static final String LUCKY_USER = "LUCKY";
 
     private ZoeRedisTemplate getZoeRedisTemplate() throws NotStartException {
         ZoeRedisTemplate[] zoeRedisTemplateIndexList = {
@@ -170,4 +170,51 @@ public class UserService {
         return user;
     }
 
+    private List<String> getRandomOpenIds(Integer count) throws NotStartException {
+        return (List)getZoeRedisTemplate().randomMember(CommonConstant.USER,count);
+    }
+
+    public List<User> getRandomUser(Integer count) throws NotStartException,InternalException {
+        List<String> randomOpenIds = this.getRandomOpenIds(count);
+        List<User> userList = new ArrayList<>();
+        for(int i=0; i<randomOpenIds.size(); i++){
+            String openId = randomOpenIds.get(i);
+                long inLuckySet= saveInLuckySet(openId);//存入中奖池
+                if(inLuckySet == 0){//已经获奖,重新抽
+                    List<String> openIds = this.getRandomOpenIds(1);
+                    randomOpenIds.remove(openId);
+                    randomOpenIds.add(openIds.get(0));
+                    i = i - 1;//移除-1，当前位置被占用
+                } else if(inLuckySet == 1){
+                    User value = (User)getZoeRedisTemplate().getValue(openId);
+                    userList.add(value);
+                }
+        }
+        return userList;
+    }
+
+    private Long saveInLuckySet(String openId) throws NotStartException, InternalException {
+        Long aLong = getZoeRedisTemplate().setSet(UserService.LUCKY_USER, openId);
+        if(aLong == 1){
+            //success
+            return aLong;
+        }else if(aLong ==0){
+            //fail
+            return aLong;
+        }else{
+            throw new InternalException("失败");
+        }
+    }
+
+    public List<User> getLuckySet() throws NotStartException {
+        Set<String> set = (Set)getZoeRedisTemplate().getSet(UserService.LUCKY_USER);
+        List<User> userList = new ArrayList<>();
+        Iterator<String> iterator = set.iterator();
+        while (iterator.hasNext()){
+            String openId = iterator.next();
+            User user = (User) getZoeRedisTemplate().getValue(openId);
+            userList.add(user);
+        }
+        return userList;
+    }
 }
