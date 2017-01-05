@@ -28,14 +28,15 @@
                 document.getElementById("content").innerHTML += '弹幕通道已开启! Welcome!<br />';
             };
             ws.onmessage = function (event) {
+                var contentMessage = $.parseJSON(event.data);
                 var item = {
-                    'img': '../danmu/images/heisenberg.png',
+                    'img': contentMessage.headImgUrl,
                     'href': 'http://www.baidu.com',
-                    'info': event.data,
+                    'info': contentMessage.content,
                     close: false
                 };
                 $('body').barrager(item);
-            };
+        };
             ws.onclose = function () {
                 document.getElementById("content").innerHTML += '弹幕通道关闭! Byebye!<br />';
             };
