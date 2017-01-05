@@ -56,7 +56,7 @@
     </style>
 </head>
 <body>
-<div id="main">
+<!--<div id="main">
     <div class="module luck_pair" id="lottery" style="display: block;top: 70px;margin: 0 auto">
 
         <div class="left">
@@ -65,13 +65,15 @@
                     <div class="left"></div>
                     <div class="right"></div>
                     <div class="lucky"></div>
-                    <ul style="width: 31160px; left: -2100px;">
-
+                    <ul style="">
+                        <li id="oFw9WuG3V49iEE1oStv64da_qYjc" data-headpath="http://wx.qlogo.cn/mmopen/Q3auHgzwzM5v0xoJqddxfDibNJh3GBE0l2Zl77ibRYBibWpeFJicFfo4XFnCribQibU4IDiaKv18rZDAkAxCkVnAVB1roNc5ibezAQDacp936H1eLUI/0" data-userid="oFw9WuG3V49iEE1oStv64da_qYjc"><br><span></span></li>
+                        <li id="oFw9WuG3V49iEE1oStv64da_qYjc" data-headpath="http://wx.qlogo.cn/mmopen/Q3auHgzwzM5v0xoJqddxfDibNJh3GBE0l2Zl77ibRYBibWpeFJicFfo4XFnCribQibU4IDiaKv18rZDAkAxCkVnAVB1roNc5ibezAQDacp936H1eLUI/0" data-userid="oFw9WuG3V49iEE1oStv64da_qYjc"><img src="" id="img_user"><br><span id="span_name">八月半</span></li>
+                        <li id="oFw9WuG3V49iEE1oStv64da_qYjc" data-headpath="http://wx.qlogo.cn/mmopen/Q3auHgzwzM5v0xoJqddxfDibNJh3GBE0l2Zl77ibRYBibWpeFJicFfo4XFnCribQibU4IDiaKv18rZDAkAxCkVnAVB1roNc5ibezAQDacp936H1eLUI/0" data-userid="oFw9WuG3V49iEE1oStv64da_qYjc"><br><span></span></li>
                     </ul>
                 </div>
             </div>
             <div class="condition">
-                <!--<label>奖项:</label>
+                <label>奖项:</label>
                 <select class="select" name="prize">
                     <option value="一等奖">一等奖</option>
                     <option value="二等奖">二等奖</option>
@@ -85,11 +87,17 @@
                     <option value="4">4</option>
                     <option value="5">5</option>
                     <option value="10">10</option>
-                </select>-->
+                    <option value="15">15</option>
+                    <option value="20">20</option>
+                    <option value="25">25</option>
+                    <option value="30">30</option>
+                    <option value="35">35</option>
+                    <option value="40">40</option>
+                </select>
             </div>
             <a class="clickBtn" id="beginLuck" style="display: inline-block;">开始抽奖</a>
             <a class="clickBtn stopBtn" id="stopLuck" style="display: none;">停止抽奖</a>
-            <!--<a class="clickBtn" id="luckIng" style="display: none;">自动抽奖中(<span></span>)</a>-->
+            <a class="clickBtn" id="luckIng" style="height: 60px;display: none">自动抽奖中(<span></span>)</a>
         </div>
         <div class="right">
             <div class="title">获奖名单</div>
@@ -100,13 +108,61 @@
                     </ul>
                 </div>
             </div>
-            <a class="reclick" id="removeLottery">重新抽奖</a>
-            <!-- <a class="submitUser" id="submitLottery">确认名单</a>-->
+            <a class="reclick" id="removeLottery" style="left: 60px;">重新抽奖</a>
+            <a class="submitUser" id="submitLottery" style="margin-left: 60px;">确认名单</a>
         </div>
     </div>
 </div>
 <div class="wy-bg"  style="position: fixed; right: 0px; top: 0px; overflow: hidden; z-index: -1;">
     <img src="images/1366.png" id="background" >
+</div>-->
+<div class="container">
+<div class="top">
+    <div class="left">
+        <img class="logo" src="images/logo.png">
+    </div>
+    <div class="center">
+        <span class="title" style="font-size: 35px;">现场抽奖系统</span>
+    </div>
+    <div class="right">
+
+        <img class="qrcode" src="images/code.png">
+    </div>
+</div>
+    <div class="main">
+<div class="wrapper">
+    <div class="header">
+        <p class="total-join">共有 <span class="J-num">750</span> 人参与抽奖</p>
+    </div>
+    <div>
+        <div class="turn-box">
+<div class="box-wrapper">
+    <div class="box-crown"></div>
+    <div class="box-pic-wrapper">
+        <ul class="box-pic">
+            <li><img src="images/default.png" title="默认头像"></li>
+        </ul>
+    </div>
+    <div class="box-name-wrapper">
+        <ul class="box-name" id="box_name">
+            <li>求中奖</li>
+        </ul>
+    </div>
+</div>
+            <div class="box-btn">开始抽奖</div>
+        </div>
+       <div class="award-list">
+<div class="award-list-wrapper">
+    <div class="list-header">
+        <p>获奖名单</p>
+        <p>获奖人数：<span class="J-award-num">0</span></p>
+    </div>
+    <div class="list-container" ><p class="empty-list">暂时无人中奖，请踊跃参与哦</p></div>
+</div>
+       </div>
+    </div>
+</div>
+    </div>
 </div>
 </body>
 </html>

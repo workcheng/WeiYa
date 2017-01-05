@@ -1,6 +1,8 @@
 ﻿html {
     height: 100%;
     width: 100%;
+    margin:0;
+    overflow:auto;
 }
 
 body {
@@ -16,6 +18,9 @@ body {
     background: url(../images/zylucky.jpg)  top center ;
  !*   background-size: 100%;*!
     background-size: cover;*/
+    height:100%;
+    background: url(../images/1024.png)  center ;
+    background-size: 100% 100%;
 }
 
 ul, li {
@@ -31,6 +36,9 @@ img {
 .c {
     clear: both;
 }
+p{color:#222;
+    margin: 0;
+    padding: 0;}
 
 a.clickBtn {
     padding: 0 40px;
@@ -84,7 +92,7 @@ a.middleBtn {
     cursor: pointer;
 }
 
-span.title {
+/*span.title {
     font-size: 24px;
     padding: 0 180px 0 30px;
     height: 50px;
@@ -94,7 +102,7 @@ span.title {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-}
+}*/
 
 a {
     text-decoration: none;
@@ -372,6 +380,9 @@ a.gray:hover {
 
 /*select模拟*/
 .select {
+    appearance: none;
+    -moz-appearance: none;
+    -webkit-appearance: none;
     width: 150px;
     padding-left: 10px;
     display: inline-block;
@@ -383,7 +394,7 @@ a.gray:hover {
     font-size: 16px;
     line-height: 32px;
     overflow: hidden;
-    background: url(images/select.png) right 13px no-repeat;
+    background: url(../images/select.png) right 13px no-repeat;
     background-color: #fff;
     text-align: left;
     color: #383838;
@@ -470,7 +481,7 @@ a.clickBtn, a.btn {
 
 /*按钮背景色*/
 a.clickBtn:hover, a.btn:hover {
-    background: #079287;
+    background: #3498ed;
 }
 
 a.stopBtn {
@@ -2445,7 +2456,7 @@ a.disabled:hover {
     overflow: hidden;
     text-overflow: ellipsis;
     z-index: 9999;
-    font-size: 30px;
+    font-size: 16px;
     margin-top: -39px;
     opacity: 0;
 }
@@ -2675,11 +2686,11 @@ div.pairRight {
 }
 
 #prizelottery a.reclick {
-    margin-left: -112px;
+    left: 60px;
 }
 
 #prizelottery a.submitUser {
-    margin-left: 10px;
+    margin-left: 63px;
 }
 
 .prize-box {
@@ -3219,8 +3230,181 @@ a.countmoney-submit {
     top: 5px;
 }
 
-
-
-
-
-
+.container{
+    width: 960px;
+    margin: 0 auto;
+    position: relative;
+    overflow: hidden;
+}
+.container .top{
+    height: 80px;
+    margin-top: 20px;
+    background: url(../images/topbg.png);
+    background-size: 100% 100%;
+    clear: both;
+}
+.container .top>div {
+    float: left;
+    height: 100%;
+}
+.container .top .left .logo {
+    width: 190px;
+    height: 68px;
+    margin-top: 8px;
+}
+.container .top .center {
+    width: 550px;
+    text-align: center;
+    overflow: hidden;
+}
+.container .top .center span.title {
+    line-height: 80px;
+    color: #fff604;
+    font-size: 36px;
+    font-weight: bold;}
+.container .main {
+    position: relative;
+    height: 463px;
+    margin-top: 20px;
+    z-index: 1050;
+}
+.wrapper{width:860px;}
+.wrapper .header {
+    overflow: hidden;
+    width: 100%;
+}
+.wrapper .header .total-join {
+    float: right;
+    margin-bottom: 10px;
+    color: #fff;
+    font-size: 19px;
+}
+.wrapper .header .total-join>span {
+    color: #fef703;
+    font-size: 24px;
+}
+.turn-box {
+    float: left;
+    margin-top: 50px;
+    position: relative;
+}
+.turn-box .box-wrapper .box-crown {
+    z-index: -1;
+    position: absolute;
+    left:146px;
+    top: -68px;
+    width: 160px;
+    height: 92px;
+    background: url(../images/crown.png) no-repeat center  0/100%;
+}
+.turn-box .box-wrapper .box-pic-wrapper {
+    z-index: 1;
+    position: absolute;
+    top: 2px;
+    left: 128px;
+}
+ .turn-box .box-wrapper .box-pic-wrapper ul.box-pic {
+    overflow: hidden;
+    position: relative;
+    height: 204px;
+    width: 204px;
+}
+.turn-box .box-wrapper .box-pic-wrapper ul.box-pic>li {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 204px;
+    width: 204px;
+}
+ .turn-box .box-wrapper .box-pic-wrapper ul.box-pic>li>img {
+    -moz-border-radius: 50%;
+    -webkit-border-radius: 50%;
+    border-radius: 50%;
+     width:100%;height:100%;
+}
+ .turn-box .box-wrapper .box-name-wrapper {
+    z-index: 2;
+    position: relative;
+    height: 270px;
+    width: 378px;
+    background: url(../images/box_bg.png) no-repeat center 0/100%;
+}
+.turn-box .box-wrapper .box-name-wrapper ul.box-name {
+    overflow: hidden;
+    position: absolute;
+    bottom: 14px;
+    left: 130px;
+    width: 200px;
+    height: 45px;
+    text-align: center;
+}
+.turn-box .box-wrapper .box-name-wrapper ul.box-name>li {
+    position: absolute;
+    top: 0;
+    left: 0;
+    font-size: 28px;
+    width: 200px;
+    height: 45px;
+    color: #fd0a49;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.turn-box .box-btn {
+    margin: 0px 0 0 122px;
+    width: 220px;
+    height: 80px;
+    line-height: 97px;
+    letter-spacing: 2px;
+    text-align: center;
+    cursor: pointer;
+    font-size: 23px;
+    font-weight: bold;
+    color: #ff0253;
+    background: url(../images/start.png) no-repeat center 0/100%;
+}
+.container .award-list {
+    float: right;
+    margin: -36px -45px 0 0;
+    height: 480px;
+    width: 500px;
+    background: url(../images/award_bg.png) no-repeat center 0/100% 100%;
+}
+ .award-list .award-list-wrapper {
+    margin: 0 auto;
+    width: 350px;
+    font-size: 16px;
+}
+ .award-list .award-list-wrapper .list-header {
+    overflow: hidden;
+    margin-top: 58px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #e8e3e2;
+}
+.award-list .award-list-wrapper .list-header>p:first-child {
+    float: left;
+    margin-left: 20px;
+    font-weight: bold;
+}
+ .award-list .award-list-wrapper .list-header>p:last-child {
+    float: right;
+    margin-right: 2px;
+}
+.award-list .award-list-wrapper .list-container {
+    overflow-x: hidden;
+    overflow-y: auto;
+    margin-top: 5px;
+    height: 320px;
+}
+.award-list .award-list-wrapper .list-container .empty-list {
+    margin-top: 120px;
+    text-align: center;
+    font-size: 22px;
+}
+.container .top .right .qrcode {
+    width: 65px;
+    height: 65px;
+    margin-top: 8px;
+    margin-left: 90px;
+    cursor: pointer;
+}
