@@ -29,7 +29,7 @@ public class MessageController {
     public void sendMessage(@RequestBody List<String> openIds){
         for (int i=0; i<openIds.size(); i++){
             try {
-                User userInfo = userService.getUserInfo(openIds.get(i));
+                User userInfo = userService.get(openIds.get(i));
                 if(null != userInfo){
                     wechatService.sendMessage(userInfo.getOpenId(),userInfo.getName(),0);
                 }

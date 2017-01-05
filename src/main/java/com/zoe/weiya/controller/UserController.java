@@ -3,19 +3,21 @@ package com.zoe.weiya.controller;
 import com.zoe.weiya.comm.constant.ZoeErrorCode;
 import com.zoe.weiya.comm.exception.HasSignException;
 import com.zoe.weiya.comm.exception.InternalException;
+import com.zoe.weiya.comm.exception.NotStartException;
+import com.zoe.weiya.comm.exception.VoteException;
 import com.zoe.weiya.comm.logger.ZoeLogger;
 import com.zoe.weiya.comm.logger.ZoeLoggerFactory;
 import com.zoe.weiya.comm.response.ZoeObject;
 import com.zoe.weiya.model.OnlyUser;
 import com.zoe.weiya.model.User;
 import com.zoe.weiya.service.user.UserService;
+import me.chanjar.weixin.common.exception.WxErrorException;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -43,11 +45,20 @@ public class UserController {
         try {
             userService.save(u);
         } catch (HasSignException e) {
-            log.error("ermsg", e);
+            log.error("error", e);
             return ZoeObject.failure(ZoeErrorCode.HAS_SIGN);
         } catch (InternalException e) {
-            log.error("ermsg", e);
+            log.error("error", e);
             return ZoeObject.failure(ZoeErrorCode.ERROR_INTERNAL);
+        } catch (VoteException e) {
+            log.error("error", e);
+            return ZoeObject.failure(ZoeErrorCode.ERROR_VOTE);
+        } catch (NotStartException e){
+            log.error("error", e);
+            return ZoeObject.failure(ZoeErrorCode.NOT_START);
+        } catch (WxErrorException e) {
+            log.error("error", e);
+            return ZoeObject.failure(e);
         }
         return ZoeObject.failure(ZoeErrorCode.HAS_SIGN);
     }
@@ -60,7 +71,12 @@ public class UserController {
      */
     @RequestMapping(value = "getUser", method = RequestMethod.GET)
     public Object get(@RequestParam(value = "id") String openId) {
-        return ZoeObject.success(userService.get(openId));
+        try {
+            return ZoeObject.success(userService.get(openId));
+        } catch (NotStartException e) {
+            log.error("error", e);
+            return ZoeObject.failure(ZoeErrorCode.NOT_START);
+        }
     }
 
     /**
@@ -71,10 +87,15 @@ public class UserController {
      */
     @RequestMapping(value = "isMember", method = RequestMethod.GET)
     public Object isMember(@RequestParam(value = "id") String openId) {
-        if (userService.isMember(openId)) {
-            return ZoeObject.success(ZoeErrorCode.HAS_SIGN);
-        } else {
-            return ZoeObject.success(ZoeErrorCode.NOT_SIGN);
+        try {
+            if (userService.isMember(openId)) {
+                return ZoeObject.success(ZoeErrorCode.HAS_SIGN);
+            } else {
+                return ZoeObject.success(ZoeErrorCode.NOT_SIGN);
+            }
+        } catch (NotStartException e) {
+            log.error("error", e);
+            return ZoeObject.failure(ZoeErrorCode.NOT_START);
         }
     }
 
@@ -85,7 +106,12 @@ public class UserController {
      */
     @RequestMapping(value = "userList", method = RequestMethod.GET)
     public Object getUserList() {
-        return ZoeObject.success(userService.getSignUser());
+        try {
+            return ZoeObject.success(userService.getSignUser());
+        } catch (NotStartException e) {
+            log.error("error", e);
+            return ZoeObject.failure(ZoeErrorCode.NOT_START);
+        }
     }
 
     /**
@@ -94,7 +120,12 @@ public class UserController {
      */
     @RequestMapping(value = "userSet", method = RequestMethod.GET)
     public Object userSet() {
-        return ZoeObject.success(userService.getSignUserSet());
+        try {
+            return ZoeObject.success(userService.getSignUserSet());
+        } catch (NotStartException e) {
+            log.error("error", e);
+            return ZoeObject.failure(ZoeErrorCode.NOT_START);
+        }
     }
 
     @RequestMapping(value = "submitLottery", method = RequestMethod.POST)
@@ -117,7 +148,12 @@ public class UserController {
 
     @RequestMapping(value = "lotterySelect", method = RequestMethod.GET)
     public Object LotterySelect() {
-        return ZoeObject.success(userService.LotterySelect());
+        try {
+            return ZoeObject.success(userService.LotterySelect());
+        } catch (NotStartException e) {
+            log.error("error", e);
+            return ZoeObject.failure(ZoeErrorCode.NOT_START);
+        }
     }
 
 }
