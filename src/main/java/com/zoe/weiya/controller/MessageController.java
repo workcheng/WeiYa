@@ -2,16 +2,19 @@ package com.zoe.weiya.controller;
 
 import com.zoe.weiya.comm.logger.ZoeLogger;
 import com.zoe.weiya.comm.logger.ZoeLoggerFactory;
+import com.zoe.weiya.controller.echo.MyMessageInbound;
 import com.zoe.weiya.model.User;
 import com.zoe.weiya.service.message.WechatService;
 import com.zoe.weiya.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
+import java.nio.CharBuffer;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by andy on 2016/12/30.
@@ -37,5 +40,25 @@ public class MessageController {
                 e.printStackTrace();
             }
         }
+    }
+
+    @RequestMapping("danmu")
+    public void sendDanmuMessage(@RequestParam String message, HttpServletRequest request){//将消息传入websocket通道中
+            ServletContext application = request.getServletContext();
+            Set<MyMessageInbound> connections =
+                    (Set<MyMessageInbound>)application.getAttribute("connections");
+            if(connections == null){
+                return;
+            }
+
+            for (MyMessageInbound connection : connections) {
+                try {
+                    CharBuffer buffer = CharBuffer.wrap(message);
+                    connection.getWsOutbound().writeTextMessage(buffer);
+                } catch (IOException e) {
+                    log.error("error",e);
+                    e.printStackTrace();
+                }
+            }
     }
 }

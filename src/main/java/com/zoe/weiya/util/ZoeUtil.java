@@ -5,6 +5,10 @@ import com.zoe.weiya.comm.constant.ZoeErrorCode;
 import com.zoe.weiya.comm.exception.NotStartException;
 import com.zoe.weiya.comm.properties.ZoeProperties;
 import com.zoe.weiya.model.ZoeDate;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * Created by chenghui on 2017/1/4.
@@ -49,5 +53,9 @@ public class ZoeUtil {
 
     public String getSetIndex() throws NotStartException {
         return CommonConstant.SET+getIndex();
+    }
+
+    public static HttpServletRequest getHttpServletRequest(){
+        return ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
     }
 }
