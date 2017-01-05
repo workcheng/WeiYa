@@ -3,7 +3,9 @@ package com.zoe.weiya.controller;
 import com.zoe.weiya.comm.logger.ZoeLogger;
 import com.zoe.weiya.comm.logger.ZoeLoggerFactory;
 import com.zoe.weiya.controller.echo.MyMessageInbound;
+import com.zoe.weiya.model.responseModel.ZoeMessage;
 import com.zoe.weiya.service.message.WechatService;
+import com.zoe.weiya.util.JacksonJsonUtil;
 import com.zoe.weiya.util.ZoeUtil;
 import me.chanjar.weixin.common.api.WxConsts;
 import me.chanjar.weixin.common.exception.WxErrorException;
@@ -16,6 +18,7 @@ import me.chanjar.weixin.mp.api.impl.WxMpServiceImpl;
 import me.chanjar.weixin.mp.bean.message.WxMpXmlMessage;
 import me.chanjar.weixin.mp.bean.message.WxMpXmlOutMessage;
 import me.chanjar.weixin.mp.bean.message.WxMpXmlOutTextMessage;
+import me.chanjar.weixin.mp.bean.result.WxMpUser;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -149,7 +152,9 @@ public class CoreController {
                 }
 
                 try {
-                    broadcast(wxMessage.getContent(), request);//将微信消息组装的弹幕格式的消息传入websocket通道
+                    WxMpUser wxMpUser = wxMpService.getUserService().userInfo(wxMessage.getFromUser());
+//                    broadcast(wxMessage.getContent(), request);//将微信消息组装的弹幕格式的消息传入websocket通道
+                    broadcast(wxMessage.getContent(),wxMpUser.getHeadImgUrl(), request);//将微信消息组装的弹幕格式的消息传入websocket通道
                 } catch (Exception e) {
                     log.error("error",e);
                     e.printStackTrace();
@@ -183,6 +188,41 @@ public class CoreController {
                     CharBuffer buffer = CharBuffer.wrap(message);
                     connection.getWsOutbound().writeTextMessage(buffer);
                 } catch (IOException e) {
+                    log.error("error",e);
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    private void broadcast(String message, String headImgUrl, HttpServletRequest request) {//将消息传入websocket通道中
+        if(null == request){
+            request = ZoeUtil.getHttpServletRequest();
+        }
+        if(null != request){
+            ServletContext application= null;
+            try {
+                application = request.getServletContext();
+            } catch (Exception e) {
+                request = ZoeUtil.getHttpServletRequest();
+                application = request.getServletContext();
+            }
+            Set<MyMessageInbound> connections =
+                    (Set<MyMessageInbound>)application.getAttribute("connections");
+            if(connections == null){
+                return;
+            }
+            for (MyMessageInbound connection : connections) {
+                try {
+                    ZoeMessage zoeMessage = new ZoeMessage();
+                    zoeMessage.setContent(message);
+                    zoeMessage.setHeadImgUrl(headImgUrl);
+                    CharBuffer buffer = CharBuffer.wrap(JacksonJsonUtil.beanToJson(zoeMessage));
+                    connection.getWsOutbound().writeTextMessage(buffer);
+                } catch (IOException e) {
+                    log.error("error",e);
+                    e.printStackTrace();
+                } catch (Exception e){
                     log.error("error",e);
                     e.printStackTrace();
                 }
