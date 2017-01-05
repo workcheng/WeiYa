@@ -182,18 +182,21 @@
            <groupId>org.apache.tomcat</groupId>
             <artifactId>tomcat-coyote</artifactId>
           <version>7.0.73</version>
+            <scope>provided</scope>
           <!--<version>7.0.39</version>-->
        </dependency>
       <dependency>
            <groupId>org.apache.tomcat</groupId>
           <artifactId>tomcat-catalina</artifactId>
            <version>7.0.73</version>
+          <scope>provided</scope>
            <!--<version>7.0.39</version>-->
       </dependency>
       <dependency>
            <groupId>org.apache.tomcat</groupId>
         <artifactId>tomcat-annotations-api</artifactId>
            <version>7.0.73</version>
+          <scope>provided</scope>
            <!--<version>7.0.39</version>-->
       </dependency>
     </dependencies>
