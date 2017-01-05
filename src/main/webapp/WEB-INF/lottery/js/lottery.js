@@ -1,4 +1,5 @@
-var alldataarr = [];
+var getAllUserInfo = [];
+var luckyUser = null;
 var setintIndex = 0;
 function getRandom(min, max) {
     var r = Math.random() * (max - min);
@@ -15,30 +16,19 @@ var getLottery = function () {
         async: true,
         url: getUserList,
         success: function (data) {
-            alldataarr = data.data;
-            //$.each(alldataarr, function (index, item) {
-            //    var str = '<li id="'+item.openId+'" data-headpath="' + item.headImgUrl + '" data-userid="' + item.openId + '"><img src="' + item.headImgUrl + '"><br><span>' + item.name + '</span></li>';
-            //    luckUl = $("#luck_user ul");
-            //    luckUl.append(str);
-            //})
-            //luckUserList();
-
-            //停止
-
-
+            getAllUserInfo = data.data;
         }
     })
 }
 
 
 var isAuto = function () {
-    //换人var alldataarr=[];
 
     setintIndex = setInterval(function () {
-        var user_index = getRandom(0, alldataarr.length);
+        var user_index = getRandom(0, 500);
 
-        $("#span_name").html(alldataarr[user_index].name);
-        $("#img_user").attr("src", alldataarr[user_index].headImgUrl);
+        $("#userName").html(getAllUserInfo[user_index].name);
+        $("#userImg").attr("src", getAllUserInfo[user_index].headImgUrl);
 
     }, 100);
 
@@ -59,14 +49,40 @@ var stopLuck = function () {
     //
     clearInterval(setintIndex);
 //后台选择
-    var data = [1, 2, 3];
-    var index = 0;
-    setInterval(function () {
+    var luckyLevel = $("select[name='prize']").val();
+    var userNum = $("select[name='userNum']").val();
+    var getLotteryUser = BaseUrl + "user/lotterySelect";
+    $.ajax({
+        url: getLotteryUser,
+        success: function (data) {
+            luckyUser = data.data;
+            luckyUser = luckyUser;
+            $("#userName").html(luckyUser.name);
+            $("#userImg").attr("src", luckyUser.headImgUrl);
+            var userName = luckyUser.name;
+            var imgUl = luckyUser.headImgUrl;
+            showLuckAnimate(imgUl, luckyLevel, userName);
+            var listContent = $("<li></li>").addClass("list-content clearfix");
+            var listIdx = $("<div></div>").addClass("list-idx").text(1);
+            var listUser = $("<div></div>").addClass("list-user");
+            var jqImg = $("<img>").attr("src", imgUl);
+            var jqName = $("<p></p>").addClass("text-overflow").text(userName);
+            var jqPrize = $("<div></div>").addClass("list-prize-name text-overflow").text(luckyLevel);
+            listUser.append(jqImg).append(jqName);
+            listContent.append(listIdx).append(listUser).append(jqPrize);
 
-        console.log("恭喜您中奖了" + data[index]);
-        showLuckAnimate("", "", "");
-        index += 1;
-    }, 1000);
+            $("#luckyUser").find("ul").prepend(listContent);
+        }
+    })
+
+
+    /*setInterval(function () {
+     $("#userName").html(luckyUser[index].name);
+     $("#userImg").attr("src", luckyUser[index].headImgUrl);
+     console.log("恭喜您中奖了" + data[index]);
+     showLuckAnimate(luckyUser[index].headImgUrl, "一等奖", luckyUser[index].name);
+     index += 1;
+     }, 1000);*/
 
     $("#beginLuck").show();
     $("#stopLuck").hide();
@@ -76,7 +92,7 @@ var stopLuck = function () {
 
 //显示抽奖动画
 var showLuckAnimate = function (imgUl, showLevel, userName) {
-    $('body').append('<div class="animate-bg"><div class="light"></div><img class="luckbg" src="images/luckbg.png" /><img src="' + imgUl + '" class="luckUserHead" /><div class="showLuckUserName">' + userName + '</div><div class="showLuckLevel">恭喜<span>' + userName + '</span> 获<span>' + luckLevel + '</span>！</div></div>');
+    $('body').append('<div class="animate-bg"><div class="light"></div><img class="luckbg" src="images/luckbg.png" /><img src="' + imgUl + '" class="luckUserHead" /><div class="showLuckUserName">' + userName + '</div><div class="showLuckLevel">恭喜<span>' + userName + '</span> 获<span>' + showLevel + '</span>！</div></div>');
     $(".luckbg").animate({
         "width": "800px",
         "height": "518px",

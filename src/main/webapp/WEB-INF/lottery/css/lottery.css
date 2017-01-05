@@ -1,8 +1,8 @@
 ﻿html {
     height: 100%;
     width: 100%;
-    margin:0;
-    overflow:auto;
+    margin: 0;
+    overflow: auto;
 }
 
 body {
@@ -12,14 +12,14 @@ body {
     -webkit-user-select: none;
     word-wrap: break-word;
     word-break: break-all;
-/*    width: 100%;
+    /*    width: 100%;
+        height: 100%;
+        !*overflow: hidden;*!
+        background: url(../images/zylucky.jpg)  top center ;
+     !*   background-size: 100%;*!
+        background-size: cover;*/
     height: 100%;
-    !*overflow: hidden;*!
-    background: url(../images/zylucky.jpg)  top center ;
- !*   background-size: 100%;*!
-    background-size: cover;*/
-    height:100%;
-    background: url(../images/1024.png)  center ;
+    background: url(../images/1024.png) center;
     background-size: 100% 100%;
 }
 
@@ -36,9 +36,12 @@ img {
 .c {
     clear: both;
 }
-p{color:#222;
+
+p {
+    color: #222;
     margin: 0;
-    padding: 0;}
+    padding: 0;
+}
 
 a.clickBtn {
     padding: 0 40px;
@@ -383,7 +386,7 @@ a.gray:hover {
     appearance: none;
     -moz-appearance: none;
     -webkit-appearance: none;
-    width: 150px;
+    width: 120px;
     padding-left: 10px;
     display: inline-block;
     position: relative;
@@ -3230,105 +3233,127 @@ a.countmoney-submit {
     top: 5px;
 }
 
-.container{
+.container {
     width: 960px;
     margin: 0 auto;
     position: relative;
     overflow: hidden;
 }
-.container .top{
+
+.container .top {
     height: 80px;
     margin-top: 20px;
     background: url(../images/topbg.png);
     background-size: 100% 100%;
     clear: both;
 }
-.container .top>div {
+
+.container .top > div {
     float: left;
     height: 100%;
 }
+
 .container .top .left .logo {
     width: 190px;
     height: 68px;
     margin-top: 8px;
 }
+
 .container .top .center {
     width: 550px;
     text-align: center;
     overflow: hidden;
 }
+
 .container .top .center span.title {
     line-height: 80px;
     color: #fff604;
     font-size: 36px;
-    font-weight: bold;}
+    font-weight: bold;
+}
+
 .container .main {
     position: relative;
     height: 463px;
     margin-top: 20px;
     z-index: 1050;
 }
-.wrapper{width:860px;}
+
+.wrapper {
+    width: 860px;
+}
+
 .wrapper .header {
     overflow: hidden;
     width: 100%;
 }
+
 .wrapper .header .total-join {
     float: right;
     margin-bottom: 10px;
     color: #fff;
     font-size: 19px;
 }
-.wrapper .header .total-join>span {
+
+.wrapper .header .total-join > span {
     color: #fef703;
     font-size: 24px;
 }
+
 .turn-box {
     float: left;
     margin-top: 50px;
     position: relative;
 }
+
 .turn-box .box-wrapper .box-crown {
     z-index: -1;
     position: absolute;
-    left:146px;
+    left: 146px;
     top: -68px;
     width: 160px;
     height: 92px;
-    background: url(../images/crown.png) no-repeat center  0/100%;
+    background: url(../images/crown.png) no-repeat center 0/100%;
 }
+
 .turn-box .box-wrapper .box-pic-wrapper {
     z-index: 1;
     position: absolute;
     top: 2px;
     left: 128px;
 }
- .turn-box .box-wrapper .box-pic-wrapper ul.box-pic {
+
+.turn-box .box-wrapper .box-pic-wrapper ul.box-pic {
     overflow: hidden;
     position: relative;
     height: 204px;
     width: 204px;
 }
-.turn-box .box-wrapper .box-pic-wrapper ul.box-pic>li {
+
+.turn-box .box-wrapper .box-pic-wrapper ul.box-pic > li {
     position: absolute;
     top: 0;
     left: 0;
     height: 204px;
     width: 204px;
 }
- .turn-box .box-wrapper .box-pic-wrapper ul.box-pic>li>img {
+
+.turn-box .box-wrapper .box-pic-wrapper ul.box-pic > li > img {
     -moz-border-radius: 50%;
     -webkit-border-radius: 50%;
     border-radius: 50%;
-     width:100%;height:100%;
+    width: 100%;
+    height: 100%;
 }
- .turn-box .box-wrapper .box-name-wrapper {
+
+.turn-box .box-wrapper .box-name-wrapper {
     z-index: 2;
     position: relative;
     height: 270px;
     width: 378px;
     background: url(../images/box_bg.png) no-repeat center 0/100%;
 }
+
 .turn-box .box-wrapper .box-name-wrapper ul.box-name {
     overflow: hidden;
     position: absolute;
@@ -3338,7 +3363,8 @@ a.countmoney-submit {
     height: 45px;
     text-align: center;
 }
-.turn-box .box-wrapper .box-name-wrapper ul.box-name>li {
+
+.turn-box .box-wrapper .box-name-wrapper ul.box-name > li {
     position: absolute;
     top: 0;
     left: 0;
@@ -3350,6 +3376,7 @@ a.countmoney-submit {
     text-overflow: ellipsis;
     white-space: nowrap;
 }
+
 .turn-box .box-btn {
     margin: 0px 0 0 122px;
     width: 220px;
@@ -3363,6 +3390,7 @@ a.countmoney-submit {
     color: #ff0253;
     background: url(../images/start.png) no-repeat center 0/100%;
 }
+
 .container .award-list {
     float: right;
     margin: -36px -45px 0 0;
@@ -3370,37 +3398,113 @@ a.countmoney-submit {
     width: 500px;
     background: url(../images/award_bg.png) no-repeat center 0/100% 100%;
 }
- .award-list .award-list-wrapper {
+
+.award-list .award-list-wrapper {
     margin: 0 auto;
     width: 350px;
     font-size: 16px;
 }
- .award-list .award-list-wrapper .list-header {
+
+.award-list .award-list-wrapper .list-header {
     overflow: hidden;
     margin-top: 58px;
     padding-bottom: 10px;
     border-bottom: 2px solid #e8e3e2;
 }
-.award-list .award-list-wrapper .list-header>p:first-child {
+
+.award-list .award-list-wrapper .list-header > p:first-child {
     float: left;
     margin-left: 20px;
     font-weight: bold;
 }
- .award-list .award-list-wrapper .list-header>p:last-child {
+
+.award-list .award-list-wrapper .list-header > p:last-child {
     float: right;
     margin-right: 2px;
 }
+
 .award-list .award-list-wrapper .list-container {
     overflow-x: hidden;
     overflow-y: auto;
     margin-top: 5px;
     height: 320px;
 }
+
 .award-list .award-list-wrapper .list-container .empty-list {
     margin-top: 120px;
     text-align: center;
     font-size: 22px;
 }
+
+.container .award-list .award-list-wrapper .list-container .list-content {
+    padding: 3px 0;
+}
+
+.clearfix {
+    zoom: 1;
+}
+
+.container .award-list .award-list-wrapper .list-container .list-content .list-idx {
+    float: left;
+    margin-top: 11px;
+    height: 22px;
+    width: 22px;
+    line-height: 22px;
+    text-align: center;
+    background-color: #e8e3e2;
+    -moz-border-radius: 50%;
+    -webkit-border-radius: 50%;
+    border-radius: 50%;
+}
+
+.container .award-list .award-list-wrapper .list-container .list-content .list-user {
+    float: left;
+    margin: 0 10px;
+}
+
+.container .award-list .award-list-wrapper .list-container .list-content .list-user img {
+    display: block;
+    margin: 0 auto;
+    height: 33px;
+    width: 33px;
+    border: 2px solid #e8e3e2;
+    -moz-border-radius: 50%;
+    -webkit-border-radius: 50%;
+    border-radius: 50%;
+}
+
+.container .award-list .award-list-wrapper .list-container .list-content .list-user p {
+    height: 22px;
+    width: 72px;
+    text-align: center;
+    font-size: 14px;
+}
+
+.container .award-list .award-list-wrapper .list-container .list-content .list-prize {
+    float: left;
+    margin: 18px 10px 0 10px;
+    height: 33px;
+    width: 75px;
+    text-align: center;
+    font-size: 18px;
+}
+
+.container .award-list .award-list-wrapper .list-container .list-content .list-prize-name {
+    float: right;
+    margin-top: 18px;
+    width: 135px;
+    height: 33px;
+    text-align: center;
+    font-size: 18px;
+    color: #7e2137;
+}
+
+.text-overflow {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
 .container .top .right .qrcode {
     width: 65px;
     height: 65px;
