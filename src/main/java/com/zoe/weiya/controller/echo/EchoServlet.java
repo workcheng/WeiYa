@@ -12,16 +12,12 @@ import org.apache.catalina.websocket.WebSocketServlet;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
-
-//@RequestMapping("echo")
-//@Controller
 @SuppressWarnings("deprecation")
 // 处理WebSocket的Servlet需要继承自WebSocketServlet
 public class EchoServlet extends WebSocketServlet {
     private static final ZoeLogger log = ZoeLoggerFactory.getLogger(EchoServlet.class);
     private static final long serialVersionUID = 1L;
 
-//    @RequestMapping("")
     @Override
     public StreamInbound createWebSocketInbound(String subProtocol,
                                                    HttpServletRequest request) {
