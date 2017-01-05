@@ -3,9 +3,16 @@ package com.zoe.weiya.controller.echo;
 /**
  * Created by andy on 2017/1/4.
  */
+import com.zoe.weiya.util.RandomUtil;
+import me.chanjar.weixin.mp.api.impl.WxMpServiceImpl;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -28,8 +35,16 @@ import org.dxlab.danmu.websocket.MyMessageInbound;*/
  * @author wdj
  * 核心请求处理servlet
  * */
-public class CoreServlet extends HttpServlet {
-    private static final long serialVersionUID = 1L;
+@RequestMapping("coreServlet")
+@Controller
+public class CoreServlet {
+    @Autowired
+    private WxMpServiceImpl wxMpService;
+
+    public void setWxMpService(WxMpServiceImpl wxMpService) {
+        this.wxMpService = wxMpService;
+    }
+
     private static final HashMap<Integer,String> color = new HashMap<Integer,String>(){//弹幕颜色
         private static final long serialVersionUID = 1L;
         {
@@ -44,18 +59,14 @@ public class CoreServlet extends HttpServlet {
     public CoreServlet() {
         super();
     }
-
-    public void destroy() {
-        super.destroy(); // Just puts "destroy" string in log
-        // Put your code here
-    }
-
-
     /*
      * 确认请求来自微信服务器
      * */
+    @RequestMapping(method = RequestMethod.GET)
     public void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        response.setContentType("text/html;charset=utf-8");
+        response.setStatus(HttpServletResponse.SC_OK);
         // 微信加密签名
         String signature = request.getParameter("signature");
         // 时间戳
@@ -67,9 +78,16 @@ public class CoreServlet extends HttpServlet {
 
         PrintWriter out = response.getWriter();
         // 通过检验signature对请求进行校验，若校验成功则原样返回echostr，表示接入成功，否则接入失败
-        /*if (SignUtil.checkSignature(signature, timestamp, nonce)) {
-            out.print(echostr);
-        }*/
+        if (!wxMpService.checkSignature(signature, timestamp, nonce)) {
+            out.println("非法请求警告");
+        }
+        if (StringUtils.isNotBlank(echostr)) {
+            // 说明是一个仅仅用来验证的请求，回显echostr
+            out.println(echostr);
+            out.close();
+            out = null;
+            return;
+        }
         out.close();
         out = null;
     }
@@ -77,13 +95,12 @@ public class CoreServlet extends HttpServlet {
     /*
      *处理微信服务器发来的信息
      */
+    @RequestMapping(method = RequestMethod.POST)
     public void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         // 将请求、响应的编码均设置为UTF-8（防止中文乱码）
-        request.setCharacterEncoding("UTF-8");
-        response.setCharacterEncoding("UTF-8");
-
-
+        response.setContentType("text/html;charset=utf-8");
+        response.setStatus(HttpServletResponse.SC_OK);
         try {
             //解析微信发送来的XML
 //            Map<String, String> requestMap = MessageUtil.parseXml(request);
@@ -125,27 +142,29 @@ public class CoreServlet extends HttpServlet {
             }
             String danmuText = "{ \"text\":\"加油\",\"color\":\"white\",\"size\":\"1\",\"position\":\"0\",\"time\":";
             //随机选取发送的弹幕的类型和颜色
-/*            int ranNum = coreService.getRandomNum();
-            int position = coreService.getPosition();
+            int ranNum = RandomUtil.getRandomInt(25);
+//            int position = coreService.getPosition();
+            int position = 10;
             if(ranNum<10){
                 danmuText = "{ \"text\":\""+message+"\",\"color\":\""+color.get(ranNum/5)+"\",\"size\":\""+position+"\",\"position\":\"1\",\"time\":";
             }else if(ranNum<20){
                 danmuText = "{ \"text\":\""+message+"\",\"color\":\""+color.get(ranNum/5)+"\",\"size\":\""+position+"\",\"position\":\"2\",\"time\":";
             }else{
                 danmuText = "{ \"text\":\""+message+"\",\"color\":\""+color.get(ranNum/5)+"\",\"size\":\""+position+"\",\"position\":\"0\",\"time\":";
-            }*/
+            }
             // 调用核心业务类接收消息、处理消息
-            /*respMessage = coreService.processRequest(textMessage);
-            if(coreService.isHeXie(message)){
-                broadcast(danmuText);//将微信消息组装的弹幕格式的消息传入websocket通道
+//            respMessage = coreService.processRequest(textMessage);
+//            if(coreService.isHeXie(message)){
+            if(true){
+                broadcast(danmuText,request);//将微信消息组装的弹幕格式的消息传入websocket通道
             }else{
-                textMessage.setContent("呀，您发送的弹幕可能包含不和谐的词语呢╮(╯_╰)╭");
-                respMessage = MessageUtil.textMessageToXml(textMessage);
-            }*/
+                /*textMessage.setContent("呀，您发送的弹幕可能包含不和谐的词语呢╮(╯_╰)╭");
+                respMessage = MessageUtil.textMessageToXml(textMessage);*/
+            }
             // 响应消息
             PrintWriter out = response.getWriter();
-
-            out.print(respMessage);
+            out.println("world!");
+//            out.print(respMessage);
             out.close();
         }catch(Exception e){
             e.printStackTrace();
@@ -158,8 +177,8 @@ public class CoreServlet extends HttpServlet {
     }
 
     @SuppressWarnings("deprecation")
-    private void broadcast(String message) {//将消息传入websocket通道中
-        ServletContext application=this.getServletContext();
+    private void broadcast(String message, HttpServletRequest httpServlet) {//将消息传入websocket通道中
+        ServletContext application=httpServlet.getServletContext();
         @SuppressWarnings("unchecked")
         Set<MyMessageInbound> connections =
                 (Set<MyMessageInbound>)application.getAttribute("connections");

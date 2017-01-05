@@ -2,11 +2,11 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>damu app</title>
     <script type="application/javascript">
         var ws = null;
         function startServer() {
-            var url = "ws://"+window.location.host+"/echo";
+            var url = "ws://"+window.location.host+"/echoServlet";
             console.info("window.location.host",window.location.host);
             console.info("url",url);
             if ('WebSocket' in window) {
@@ -19,17 +19,17 @@
             }
 
             ws.onopen = function() {
-                //document.getElementById("content").innerHTML += '弹幕通道已开启! Welcome!<br />';
+                document.getElementById("content").innerHTML += '弹幕通道已开启! Welcome!<br />';
             };
             ws.onmessage = function(event) {
-                // document.getElementById("content").innerHTML += event.data + '<br />';
+                 document.getElementById("content").innerHTML += event.data + '<br />';
                 //下面是将接收消息转成符合弹幕的格式，并输出到弹幕区域
-                var text_obj = event.data;
+                /*var text_obj = event.data;
                 var time = $('#danmu').data("nowtime");
                 text_obj=text_obj+time+'}';
                 var new_obj=eval('('+text_obj+')');
-                $('#danmu').danmu("add_danmu",new_obj);
-                console.info("hahaha");
+                $('#danmu').danmu("add_danmu",new_obj);*/
+                console.info(event,event.data);
             };
             ws.onclose = function() {
                 document.getElementById("content").innerHTML += '弹幕通道关闭! Byebye!<br />';
@@ -39,6 +39,10 @@
     </script>
 </head>
 <body>
-
+<div>
+    <h3>damu app</h3>
+    <h1 id="content"></h1>
+    <h2 class="danmu"></h2>
+</div>
 </body>
 </html>
