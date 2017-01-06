@@ -26,6 +26,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import javax.annotation.PostConstruct;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -58,7 +59,6 @@ public class CoreController {
     @RequestMapping()
     public void wechat(HttpServletRequest request, HttpServletResponse response) {
         try {
-            init(request, response);
             service(request, response, wxMpService);
         } catch (ServletException e) {
             log.error("error", e);
@@ -69,9 +69,10 @@ public class CoreController {
         }
     }
 
-    private void init(HttpServletRequest request, HttpServletResponse response) throws ServletException {
+    @PostConstruct
+    public void init() throws ServletException {
         WxMpMessageHandler test = test();
-        WxMpMessageHandler reply = reply(request, response);
+        WxMpMessageHandler reply = reply();
         wxMpMessageRouter
                 .rule().async(false).content("andy").handler(test).end()
                 .rule().async(false).content("签到").handler(wechatService.sendSignMessage()).end()//回复签到
@@ -145,23 +146,23 @@ public class CoreController {
         return test;
     }
 
-    private WxMpMessageHandler reply(HttpServletRequest request, HttpServletResponse response) {
+    private WxMpMessageHandler reply() {
         WxMpMessageHandler test = new WxMpMessageHandler() {
             public WxMpXmlOutMessage handle(WxMpXmlMessage wxMessage, Map<String, Object> context,
                                             WxMpService wxMpService, WxSessionManager sessionManager) throws WxErrorException {
                 /*WxMpXmlOutTextMessage m = WxMpXmlOutMessage.TEXT().content("维护中。。。").fromUser(wxMessage.getToUser())
                         .toUser(wxMessage.getFromUser()).build();*/
-                try {
+                /*try {
                     response.getWriter().write("");
                 } catch (IOException e) {
                     log.error("error", e);
                     e.printStackTrace();
-                }
+                }*/
 
                 try {
                     WxMpUser wxMpUser = wxMpService.getUserService().userInfo(wxMessage.getFromUser());
 //                    broadcast(wxMessage.getContent(), request);//将微信消息组装的弹幕格式的消息传入websocket通道
-                    broadcast(wxMessage.getContent(), wxMpUser.getHeadImgUrl(), request);//将微信消息组装的弹幕格式的消息传入websocket通道
+                    broadcast(wxMessage.getContent(),wxMpUser.getHeadImgUrl());//将微信消息组装的弹幕格式的消息传入websocket通道
                 } catch (Exception e) {
                     log.error("error", e);
                     e.printStackTrace();
@@ -172,11 +173,8 @@ public class CoreController {
         return test;
     }
 
-    @RequestMapping("broadcast")
-    private void broadcast(String message, HttpServletRequest request) {//将消息传入websocket通道中
-        if (null == request) {
-            request = ZoeUtil.getHttpServletRequest();
-        }
+    private void broadcast(String message) {//将消息传入websocket通道中
+        HttpServletRequest  request = ZoeUtil.getHttpServletRequest();
         if (null != request) {
             ServletContext application = null;
             try {
@@ -205,10 +203,8 @@ public class CoreController {
         }
     }
 
-    private void broadcast(String message, String headImgUrl, HttpServletRequest request) {//将消息传入websocket通道中
-        if (null == request) {
-            request = ZoeUtil.getHttpServletRequest();
-        }
+    private void broadcast(String message, String headImgUrl) {//将消息传入websocket通道中
+        HttpServletRequest  request = ZoeUtil.getHttpServletRequest();
         if (null != request) {
             ServletContext application = null;
             try {
