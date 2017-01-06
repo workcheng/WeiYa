@@ -1,0 +1,107 @@
+  .select-wrapper{
+    font: normal 14px '\5FAE\8F6F\96C5\9ED1';
+    width: 240px;
+    height: 34px;
+    position: relative;
+    cursor: pointer;
+    display: inline-block;
+    *display: inline;
+    *float: left;
+    *margin-right: 10px;
+    background: #fff;
+    border-radius: 3px;
+    border: 1px solid #e3e3e3;
+  }
+  .select-wrapper.focus{
+    border: 1px solid #61b988;
+  }
+  .select-button{
+    font: normal 14px '\5FAE\8F6F\96C5\9ED1';
+    width: 238px;
+    height: 34px;
+    border: 0;
+    border-radius: 3px;
+    background: #fff;
+    cursor: pointer;
+    padding: 0 26px 0 10px;
+    overflow: hidden;
+    text-align: left;
+    outline: none;
+    white-space: nowrap;
+    word-break: keep-all;
+    text-overflow: ellipsis;
+  }
+  .select-down{
+    position: absolute;
+    top: 21px;
+    right: 12px;
+    height:0;
+    width:0;
+    overflow: hidden;
+    font-size: 0;
+    border-color: #333 transparent transparent transparent;
+    border-style: solid;
+    border-width: 6px;
+  }  
+  .disabled{
+    color: #cccccc;
+  }
+  .select-list{
+    width: 238px;
+    background: #fff;
+    border: 1px solid #e8e8e8;
+    box-shadow: 0 0 3px #ddd;
+    border-radius: 3px;
+    display: none;
+    z-index: 2;
+    position: absolute;
+    left: -1px;
+    top: 35px;
+    overflow: hidden;
+  }
+  .select-list ul{
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+    line-height: 34px;
+    max-height: 240px;
+  }
+  .select-list ul li{
+    width: auto;
+    height: 34px;
+    padding-left: 10px;
+    cursor: pointer;
+    overflow: hidden;
+    white-space: nowrap;
+    word-break: keep-all;
+    text-overflow: ellipsis;
+  }
+  .select-list ul li.selected,
+  .select-list ul li:hover{
+    color: #fff;
+    background: #61b988;
+  }
+  
+  /* 下拉列表不可用样式 */
+  .select-button-disable{
+    color: #ccc;
+    width: 238px;
+    height: 34px;
+    border: 1px solid #e3e3e3;
+    border-radius: 3px;
+    background: #fff;
+    cursor: pointer;
+    padding-left: 10px;
+    overflow: hidden;
+    text-align: left;
+    outline: none;
+  }
+  .select-down-disable{
+   color: #ccc;
+    font-size: 18px;
+    position: absolute;
+    top: 0;
+    right: 10px;
+   line-height: 34px;
+  }

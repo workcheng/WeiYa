@@ -16,7 +16,12 @@ var getLottery = function () {
         async: true,
         url: getUserList,
         success: function (data) {
-            getAllUserInfo = data.data;
+            if (data.data.message == "活动未开始") {
+                showInfo("活动未开始!", 0);
+            } else {
+                getAllUserInfo = data.data;
+            }
+
         }
     })
 }
