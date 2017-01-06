@@ -1,7 +1,7 @@
 var getAllUserInfo = [];
-var luckyUser = null;
 var setintIndex = 0;
-
+var luckCount = 0;
+var userCount = 1;
 var getRandom = function (min, max) {
     var r = Math.random() * (max - min);
     var re = Math.round(r + min);
@@ -17,25 +17,44 @@ var getLottery = function () {
         url: getUserList,
         success: function (data) {
             getAllUserInfo = data.data;
-            $("#userCount").text();
+            $("#userCount").text(getAllUserInfo.length);
         }
     })
 }
+/**
+ * 获取幸运用户
+ */
+var getLuckyUser = function (callback) {
 
+    var userNum = $("select[name='userNum']").val();
+    var getLotteryUser = BaseUrl + "user/lotteryUserList?time=" + getRandom(1, 1000);//lotterySelect
+
+    $.ajax({
+
+        url: getLotteryUser,
+        data: {count: userNum},
+        success: function (data) {
+
+            if (typeof(callback) === "function") {
+                callback(data);
+            }
+        }
+
+    });
+}
 var isAuto = function () {
     setintIndex = setInterval(function () {
         var user_index = getRandom(0, getAllUserInfo.length - 1);
         $("#userName").html(getAllUserInfo[user_index].name);
         $("#userImg").attr("src", getAllUserInfo[user_index].headImgUrl);
     }, 100);
-
     beginLuck();
     $('.condition').addClass('disabled');
     return false;
 }
 var beginLuck = function () {
-    $("#stopLuck").show();
     $("#beginLuck").hide();
+    $("#stopLuck").show();
 }
 
 /**
@@ -43,29 +62,28 @@ var beginLuck = function () {
  * @returns {boolean}
  */
 var stopLuck = function () {
-
+    $("#beginLuck").show();
+    $("#stopLuck").hide();
     var luckyLevel = $("select[name='prize']").val();
     var userNum = $("select[name='userNum']").val();
-    var getLotteryUser = BaseUrl + "user/lotterySelect";//lotterySelect
+    var getLotteryUser = BaseUrl + "user/lotterySelect?time=" + getRandom(1, 1000);//lotterySelect
     $.ajax({
         url: getLotteryUser,
         success: function (data) {
-
-            var index = 0;
-            $.each(data.data, function (index, item) {
-                luckyUser = item;
-            })
+            var luckyUser = data.data[0]
             $("#userName").html(luckyUser.name);
             $("#userImg").attr("src", luckyUser.headImgUrl);
             var userName = luckyUser.name;
             var imgUl = luckyUser.headImgUrl;
             showLuckAnimate(imgUl, luckyLevel, userName);
             clearInterval(setintIndex);
-            showLuckyUser(1, imgUl, userName, luckyLevel);
+            showLuckyUser(userCount, imgUl, userName, luckyLevel);
+            userCount += 1;
         }
+
     });
-    $("#beginLuck").show();
-    $("#stopLuck").hide();
+
+
     return false;
 }
 /**
@@ -86,6 +104,8 @@ var showLuckyUser = function (idx, imgUI, userName, luckyLevel) {
     listUser.append(jqImg).append(jqName);
     listContent.append(listIdx).append(listUser).append(listPrize).append(jqPrize);
     $("#luckyUser").find("ul").prepend(listContent);
+
+
 }
 
 /**
@@ -111,5 +131,43 @@ var showLuckAnimate = function (imgUl, showLevel, userName) {
             $(".animate-bg").remove();
         });
         $("#bgsound").remove();
+
+        var userNum = $("select[name='userNum']").val();
+        if (userNum != 1) {
+            isAuto();
+            var t = setTimeout(function () {
+                stopLuck();
+                luckCount += 1;
+            }, 2000);
+            if (luckCount == userNum) {
+                clearTimeout(t);
+                clearInterval(setintIndex);
+                luckCount = 0;
+                $("#beginLuck").show();
+                $("#stopLuck").hide();
+            }
+        }
+
+
     }, 3000);
 }
+$(document).ready(function () {
+    getLottery();
+    // setInterval('getLottery();', 10000);
+    $('#beginLuck').click(function () {
+        var userNum = $("select[name='userNum']").val();
+        if (userNum > 1) {
+            setTimeout(function () {
+                stopLuck();
+                luckCount = 1;
+            }, 2000);
+        }
+        isAuto();
+    });
+    $("#stopLuck").click(function () {
+        stopLuck();
+    })
+    $(window).load(function () {
+        $("#background").fullBg();
+    });
+});
