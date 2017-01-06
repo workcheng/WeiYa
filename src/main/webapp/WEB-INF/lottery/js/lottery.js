@@ -16,20 +16,15 @@ var getLottery = function () {
         async: true,
         url: getUserList,
         success: function (data) {
-            if (data.data.message == "活动未开始") {
-                showInfo("活动未开始!", 0);
-            } else {
-                getAllUserInfo = data.data;
-            }
-
+            getAllUserInfo = data.data;
+            $("#userCount").text();
         }
     })
 }
 
 var isAuto = function () {
-
     setintIndex = setInterval(function () {
-        var user_index = getRandom(0, 500);
+        var user_index = getRandom(0, 5);
         $("#userName").html(getAllUserInfo[user_index].name);
         $("#userImg").attr("src", getAllUserInfo[user_index].headImgUrl);
     }, 100);
@@ -51,12 +46,14 @@ var stopLuck = function () {
 
     var luckyLevel = $("select[name='prize']").val();
     var userNum = $("select[name='userNum']").val();
-    var getLotteryUser = BaseUrl + "user/lotterySelect";
+    var getLotteryUser = BaseUrl + "user/lotterySelect";//lotterySelect
     $.ajax({
         url: getLotteryUser,
         success: function (data) {
             luckyUser = data.data;
-            luckyUser = luckyUser;
+            /*$.each(data.data, function (index, item) {
+             luckyUser = item;
+             })*/
             $("#userName").html(luckyUser.name);
             $("#userImg").attr("src", luckyUser.headImgUrl);
             var userName = luckyUser.name;
