@@ -65,14 +65,15 @@ public class CoreController {
 
     private void init(HttpServletRequest request, HttpServletResponse response) throws ServletException {
         WxMpMessageHandler test = test();
-         WxMpMessageHandler reply = reply(request, response);
+        WxMpMessageHandler reply = reply(request, response);
         wxMpMessageRouter
                 .rule().async(false).content("andy").handler(test).end()
                 .rule().async(false).content("签到").handler(wechatService.sendSignMessage()).end()//回复签到
                 .rule().async(false).content("投票").handler(wechatService.sendVoteMessage()).end()//回复投票
                 .rule().async(false).event(WxConsts.EVT_SUBSCRIBE).handler(wechatService.sendSignMessage()).end()//关注事件
 //                .rule().async(false).msgType(WxConsts.XML_MSG_EVENT).event(WxConsts.EVT_SCAN).handler(wechatService.sendSignMessage()).end()//扫码事件
-        .rule().async(false).handler(reply).end()
+                .rule().async(false).msgType(WxConsts.MASS_MSG_TEXT).handler(reply).end()
+                .rule().async(false).handler(test).end();
         ;
     }
 
@@ -129,7 +130,7 @@ public class CoreController {
         WxMpMessageHandler test = new WxMpMessageHandler() {
             public WxMpXmlOutMessage handle(WxMpXmlMessage wxMessage, Map<String, Object> context,
                                             WxMpService wxMpService, WxSessionManager sessionManager) throws WxErrorException {
-                WxMpXmlOutTextMessage m = WxMpXmlOutMessage.TEXT().content("andy").fromUser(wxMessage.getToUser())
+                WxMpXmlOutTextMessage m = WxMpXmlOutMessage.TEXT().content("你的消息我们已收到，我们会尽快回复你的！").fromUser(wxMessage.getToUser())
                         .toUser(wxMessage.getFromUser()).build();
                 return m;
             }
