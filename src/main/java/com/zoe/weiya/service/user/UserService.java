@@ -175,8 +175,14 @@ public class UserService {
     }
 
     public List<User> getRandomUser(Integer count) throws NotStartException,InternalException {
+        //TODO 数量超过返回错误
         List<String> randomOpenIds = this.getRandomOpenIds(count);
         List<User> userList = new ArrayList<>();
+        Long luckySetSize = getLuckySetSize();
+        Long userSize = getUserSize();
+        if(luckySetSize == userSize){//TODO REVIEW
+            throw new InternalException("中奖池已满");
+        }
         for(int i=0; i<randomOpenIds.size(); i++){
             String openId = randomOpenIds.get(i);
                 long inLuckySet= saveInLuckySet(openId);//存入中奖池
@@ -216,5 +222,10 @@ public class UserService {
             userList.add(user);
         }
         return userList;
+    }
+
+    public Long getLuckySetSize() throws NotStartException {
+        Long setSize = getZoeRedisTemplate().getSetSize(UserService.LUCKY_USER);
+        return setSize;
     }
 }
