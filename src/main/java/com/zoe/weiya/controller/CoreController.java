@@ -2,6 +2,8 @@ package com.zoe.weiya.controller;
 
 import com.zoe.weiya.comm.logger.ZoeLogger;
 import com.zoe.weiya.comm.logger.ZoeLoggerFactory;
+import com.zoe.weiya.service.sensitative.SensitiveWordInit;
+import com.zoe.weiya.service.sensitative.SensitivewordFilter;
 import com.zoe.weiya.controller.echo.MyMessageInbound;
 import com.zoe.weiya.service.message.WechatService;
 import com.zoe.weiya.util.ZoeUtil;
@@ -45,6 +47,10 @@ public class CoreController {
     protected WxMpConfigStorage wxMpConfigStorage;
     @Autowired
     protected WechatService wechatService;
+    @Autowired
+    protected SensitivewordFilter sensitiveService;
+    @Autowired
+    protected SensitiveWordInit sensitiveWordInit;
 
     @RequestMapping()
     public void wechat(HttpServletRequest request, HttpServletResponse response) {
@@ -180,7 +186,9 @@ public class CoreController {
 
             for (MyMessageInbound connection : connections) {
                 try {
-                    CharBuffer buffer = CharBuffer.wrap(message);
+                    sensitiveWordInit = new SensitiveWordInit();
+                    String replaceMessage = sensitiveService.replaceSensitiveWord(message, 1, "*");
+                    CharBuffer buffer = CharBuffer.wrap(replaceMessage);
                     connection.getWsOutbound().writeTextMessage(buffer);
                 } catch (IOException e) {
                     log.error("error",e);
