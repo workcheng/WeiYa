@@ -24,7 +24,7 @@ var getLottery = function () {
 
 var isAuto = function () {
     setintIndex = setInterval(function () {
-        var user_index = getRandom(0, 5);
+        var user_index = getRandom(0, getAllUserInfo.length - 1);
         $("#userName").html(getAllUserInfo[user_index].name);
         $("#userImg").attr("src", getAllUserInfo[user_index].headImgUrl);
     }, 100);
@@ -50,10 +50,11 @@ var stopLuck = function () {
     $.ajax({
         url: getLotteryUser,
         success: function (data) {
-            luckyUser = data.data;
-            /*$.each(data.data, function (index, item) {
-             luckyUser = item;
-             })*/
+
+            var index = 0;
+            $.each(data.data, function (index, item) {
+                luckyUser = item;
+            })
             $("#userName").html(luckyUser.name);
             $("#userImg").attr("src", luckyUser.headImgUrl);
             var userName = luckyUser.name;
@@ -62,17 +63,7 @@ var stopLuck = function () {
             clearInterval(setintIndex);
             showLuckyUser(1, imgUl, userName, luckyLevel);
         }
-    })
-
-
-    /*setInterval(function () {
-     $("#userName").html(luckyUser[index].name);
-     $("#userImg").attr("src", luckyUser[index].headImgUrl);
-     console.log("恭喜您中奖了" + data[index]);
-     showLuckAnimate(luckyUser[index].headImgUrl, "一等奖", luckyUser[index].name);
-     index += 1;
-     }, 1000);*/
-
+    });
     $("#beginLuck").show();
     $("#stopLuck").hide();
     return false;
