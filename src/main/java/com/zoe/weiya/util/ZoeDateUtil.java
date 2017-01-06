@@ -32,7 +32,7 @@ public class ZoeDateUtil {
 
 
     public static String getTime(ZoeDate now){
-        if( now.getHour() <= 12){
+        if( now.getHour() <= 22){
             return CommonConstant.MORNING;
         }else if(now.getHour() > 12 && now.getHour() <= 22){
             return CommonConstant.NOON;

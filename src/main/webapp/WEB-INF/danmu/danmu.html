@@ -6,10 +6,13 @@
     <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" media="screen"/>
     <link rel="stylesheet" type="text/css" href="css/style.css"/>
     <link rel="stylesheet" type="text/css" href="css/barrager.css">
+    <link rel="stylesheet" type="text/css" href="css/jquery.emoji.css">
+    <link rel="stylesheet" type="text/css" href="css/index.css">
     <script type="text/javascript" src="js/jquery-1.9.1.min.js"></script>
     <script type="text/javascript" src="js/bootstrap.min.js"></script>
     <script type="text/javascript" src="js/tinycolor-0.9.15.min.js"></script>
     <script type="text/javascript" src="js/jquery.barrager.min.js"></script>
+    <script type="text/javascript" src="js/jquery.emoji.js"></script>
     <script type="application/javascript">
 
         var ws = null;
@@ -36,7 +39,7 @@
                     close: false
                 };
                 $('body').barrager(item);
-        };
+            };
             ws.onclose = function () {
                 document.getElementById("content").innerHTML += '弹幕通道关闭! Byebye!<br />';
             };

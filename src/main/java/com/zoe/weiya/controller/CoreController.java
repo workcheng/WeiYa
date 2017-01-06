@@ -2,6 +2,8 @@ package com.zoe.weiya.controller;
 
 import com.zoe.weiya.comm.logger.ZoeLogger;
 import com.zoe.weiya.comm.logger.ZoeLoggerFactory;
+import com.zoe.weiya.service.sensitative.SensitiveWordInit;
+import com.zoe.weiya.service.sensitative.SensitivewordFilter;
 import com.zoe.weiya.controller.echo.MyMessageInbound;
 import com.zoe.weiya.model.responseModel.ZoeMessage;
 import com.zoe.weiya.service.message.WechatService;
@@ -49,16 +51,20 @@ public class CoreController {
     protected WxMpConfigStorage wxMpConfigStorage;
     @Autowired
     protected WechatService wechatService;
+    @Autowired
+    protected SensitivewordFilter sensitiveService;
+    @Autowired
+    protected SensitiveWordInit sensitiveWordInit;
 
     @RequestMapping()
     public void wechat(HttpServletRequest request, HttpServletResponse response) {
         try {
             service(request, response, wxMpService);
         } catch (ServletException e) {
-            log.error("error",e);
+            log.error("error", e);
             e.printStackTrace();
         } catch (IOException e) {
-            log.error("error",e);
+            log.error("error", e);
             e.printStackTrace();
         }
     }
@@ -149,7 +155,7 @@ public class CoreController {
                 /*try {
                     response.getWriter().write("");
                 } catch (IOException e) {
-                    log.error("error",e);
+                    log.error("error", e);
                     e.printStackTrace();
                 }*/
 
@@ -158,7 +164,7 @@ public class CoreController {
 //                    broadcast(wxMessage.getContent(), request);//将微信消息组装的弹幕格式的消息传入websocket通道
                     broadcast(wxMessage.getContent(),wxMpUser.getHeadImgUrl());//将微信消息组装的弹幕格式的消息传入websocket通道
                 } catch (Exception e) {
-                    log.error("error",e);
+                    log.error("error", e);
                     e.printStackTrace();
                 }
                 return null;
@@ -169,8 +175,8 @@ public class CoreController {
 
     private void broadcast(String message) {//将消息传入websocket通道中
         HttpServletRequest  request = ZoeUtil.getHttpServletRequest();
-        if(null != request){
-            ServletContext application= null;
+        if (null != request) {
+            ServletContext application = null;
             try {
                 application = request.getServletContext();
             } catch (Exception e) {
@@ -178,17 +184,19 @@ public class CoreController {
                 application = request.getServletContext();
             }
             Set<MyMessageInbound> connections =
-                    (Set<MyMessageInbound>)application.getAttribute("connections");
-            if(connections == null){
+                    (Set<MyMessageInbound>) application.getAttribute("connections");
+            if (connections == null) {
                 return;
             }
 
             for (MyMessageInbound connection : connections) {
                 try {
-                    CharBuffer buffer = CharBuffer.wrap(message);
+                    sensitiveWordInit = new SensitiveWordInit();
+                    String replaceMessage = sensitiveService.replaceSensitiveWord(message, 1, "*");
+                    CharBuffer buffer = CharBuffer.wrap(replaceMessage);
                     connection.getWsOutbound().writeTextMessage(buffer);
                 } catch (IOException e) {
-                    log.error("error",e);
+                    log.error("error", e);
                     e.printStackTrace();
                 }
             }
@@ -197,8 +205,8 @@ public class CoreController {
 
     private void broadcast(String message, String headImgUrl) {//将消息传入websocket通道中
         HttpServletRequest  request = ZoeUtil.getHttpServletRequest();
-        if(null != request){
-            ServletContext application= null;
+        if (null != request) {
+            ServletContext application = null;
             try {
                 application = request.getServletContext();
             } catch (Exception e) {
@@ -206,22 +214,23 @@ public class CoreController {
                 application = request.getServletContext();
             }
             Set<MyMessageInbound> connections =
-                    (Set<MyMessageInbound>)application.getAttribute("connections");
-            if(connections == null){
+                    (Set<MyMessageInbound>) application.getAttribute("connections");
+            if (connections == null) {
                 return;
             }
             for (MyMessageInbound connection : connections) {
                 try {
                     ZoeMessage zoeMessage = new ZoeMessage();
-                    zoeMessage.setContent(message);
+                    String replaceMessage = sensitiveService.replaceSensitiveWord(message, 1, "*");
+                    zoeMessage.setContent(replaceMessage);
                     zoeMessage.setHeadImgUrl(headImgUrl);
                     CharBuffer buffer = CharBuffer.wrap(JacksonJsonUtil.beanToJson(zoeMessage));
                     connection.getWsOutbound().writeTextMessage(buffer);
                 } catch (IOException e) {
-                    log.error("error",e);
+                    log.error("error", e);
                     e.printStackTrace();
-                } catch (Exception e){
-                    log.error("error",e);
+                } catch (Exception e) {
+                    log.error("error", e);
                     e.printStackTrace();
                 }
             }

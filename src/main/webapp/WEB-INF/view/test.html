@@ -15,8 +15,6 @@
         var ws = null;
         function startServer() {
             var url = "ws://" + window.location.host + "/echoServlet";
-            console.info("window.location.host", window.location.host);
-            console.info("url", url);
             if ('WebSocket' in window) {
                 ws = new WebSocket(url);
             } else if ('MozWebSocket' in window) {
@@ -30,11 +28,12 @@
                 document.getElementById("content").innerHTML += '弹幕通道已开启! Welcome!<br />';
             };
             ws.onmessage = function (event) {
-                //document.getElementById("content").innerHTML += event.data + '<br />';
+                var contentMessage = $.parseJSON(event.data);
                 var item = {
-                    'img': '../danmu/images/heisenberg.png',
+                    'img': contentMessage.headImgUrl,
                     'href': 'http://www.baidu.com',
-                    'info': event.data
+                    'info': contentMessage.content,
+                    close: false
                 };
                 $('body').barrager(item);
             };
@@ -52,7 +51,6 @@
 <body>
 <div>
     <h1 id="content" style="text-align: center;color:#3498ed"></h1>
-    <h2 class="danmu"></h2>
 </div>
 </body>
 </html>

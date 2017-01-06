@@ -2438,9 +2438,15 @@ a.disabled:hover {
 
 .condition {
     text-align: center;
-    padding-top: 25px;
+    padding-top: 20px;
     font-size: 20px;
     margin-bottom: 20px;
+    margin-left: 20px;
+}
+
+.condition label {
+    vertical-align: bottom;
+    margin-left: 10px;
 }
 
 .showLuckUserName {
@@ -3274,7 +3280,7 @@ a.countmoney-submit {
 
 .container .main {
     position: relative;
-    height: 463px;
+    height: 506px;
     margin-top: 20px;
     z-index: 1050;
 }
@@ -3290,7 +3296,7 @@ a.countmoney-submit {
 
 .wrapper .header .total-join {
     float: right;
-    margin-bottom: 10px;
+    margin-bottom: 4px;
     color: #fff;
     font-size: 19px;
 }
@@ -3394,7 +3400,7 @@ a.countmoney-submit {
 .container .award-list {
     float: right;
     margin: -36px -45px 0 0;
-    height: 480px;
+    height: 550px;
     width: 500px;
     background: url(../images/award_bg.png) no-repeat center 0/100% 100%;
 }
@@ -3427,7 +3433,7 @@ a.countmoney-submit {
     overflow-x: hidden;
     overflow-y: auto;
     margin-top: 5px;
-    height: 320px;
+    height: 360px;
 }
 
 .award-list .award-list-wrapper .list-container .empty-list {
@@ -3510,6 +3516,6 @@ a.countmoney-submit {
     width: 65px;
     height: 65px;
     margin-top: 8px;
-    margin-left: 90px;
+    margin-left: 110px;
     cursor: pointer;
 }

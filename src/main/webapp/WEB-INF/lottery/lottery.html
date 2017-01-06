@@ -11,38 +11,22 @@
     <script type="text/javascript" src="../lottery/js/lottery.js"></script>
     <script type="text/javascript" src="../lottery/js/common.js"></script>
     <script type="text/javascript" src="../lottery/js/config.js"></script>
-    <!--<script type="text/javascript" src="js/awardRotate.js"></script>
-    <script type="text/javascript" src="js/jquery.barrager.js"></script>
-    <script type="text/javascript" src="js/jquery.extensions.js"></script>-->
     <title>年会抽奖系统</title>
     <script>
         $(document).ready(function () {
             getLottery();
-            $('.showNumber a').click(function () {
-                selectLotteryNumber($(this));
-            });
-            $(".prize a").click(function () {
-                selectLotteryNumber($(this));
-            });
+
             $('#beginLuck').click(function () {
                 isAuto();
             });
             $('#stopLuck').click(function () {
                 stopLuck();
             });
-            $('#removeLottery').click(function () {
-                removeLottery();
-            });
-            $('#submitLottery').click(function () {
-                SubmitLotteryFans();
-            });
-            $('#luckUl').on('click', 'a', function () {
-                deleteThis($(this), $(this).parent().data('level'));
-            });
+
+
             $(window).load(function () {
                 $("#background").fullBg();
             });
-
         });
 
     </script>
@@ -53,6 +37,7 @@
             left: 0;
             overflow: hidden;
         }
+
     </style>
 </head>
 <body>
@@ -71,7 +56,7 @@
     <div class="main">
         <div class="wrapper">
             <div class="header">
-                <p class="total-join">共有 <span class="J-num">750</span> 人参与抽奖</p>
+                <p class="total-join">共有 <span class="J-num" id="userCount">-</span> 人参与抽奖</p>
             </div>
             <div>
                 <div class="turn-box">
@@ -101,15 +86,12 @@
                         <select class="select" name="userNum">
                             <option value="1">1</option>
                             <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
                             <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="8">8</option>
                             <option value="10">10</option>
-                            <option value="15">15</option>
                             <option value="20">20</option>
-                            <option value="25">25</option>
                             <option value="30">30</option>
-                            <option value="35">35</option>
                             <option value="40">40</option>
                         </select>
                     </div>

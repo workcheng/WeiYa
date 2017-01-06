@@ -108,16 +108,24 @@
                                                             if (msg == "已签到") {
                                                                 $("#partySign").hide();
                                                                 $("#loading").hide();
+                                                                $("#unStart").hide();
                                                                 $("#signSuccess").show();
                                                             }
                                                         }
                                                     })
                                                 }
                                             }
+                                        }
+                                        else if (json.status == "2005") {
+                                            $("#partySign").hide();
+                                            $("#loading").hide();
+                                            $("#reSign").hide();
+                                            $("#unStart").show();
                                         } else {
                                             $("#partySign").hide();
                                             $("#loading").hide();
-                                            $("#reSign").show();
+                                            $("#reSign").hide();
+                                            $("#unStart").hide();
                                         }
                                     }
                                 })
@@ -218,6 +226,11 @@
         <div id="reSign" style="display: none" class="field-content">
             <span>
                 对不起，您已经签到一次了，不能重复签到！
+            </span>
+        </div>
+        <div id="unStart" style="display: none" class="field-content">
+            <span>
+                活动未开始！
             </span>
         </div>
     </fieldset>
