@@ -25,7 +25,6 @@ var getLottery = function () {
  * 获取幸运用户
  */
 var getLuckyUser = function (callback) {
-
     var userNum = $("select[name='userNum']").val();
     var getLotteryUser = BaseUrl + "user/lotteryUserList?time=" + getRandom(1, 1000);//lotterySelect
 
@@ -95,7 +94,7 @@ var stopLuck = function () {
  */
 var showLuckyUser = function (idx, imgUI, userName, luckyLevel) {
     var listContent = $("<li></li>").addClass("list-content clearfix");
-    var listIdx = $("<div></div>").addClass("list-idx").text(idx);
+       var listIdx = $("<div></div>").addClass("list-idx").text(idx);
     var listUser = $("<div></div>").addClass("list-user");
     var jqImg = $("<img>").attr("src", imgUI);
     var jqName = $("<p></p>").addClass("text-overflow").text(userName);

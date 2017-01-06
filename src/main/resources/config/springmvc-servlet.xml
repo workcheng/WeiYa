@@ -118,6 +118,7 @@
     <mvc:resources mapping="/lottery/**" location="/WEB-INF/lottery/"/>
     <mvc:resources mapping="/vote/**" location="/WEB-INF/vote/"/>
     <mvc:resources mapping="/danmu/**" location="/WEB-INF/danmu/"/>
+    <mvc:resources mapping="/comment/**" location="/WEB-INF/comment/"/>
 
     <!--<bean class="org.apache.tomcat.util.buf.B2CConverter">
         <constructor-arg index="0" type="java.nio.charset.Charset" name="encoding" value="UTF-8"/>
