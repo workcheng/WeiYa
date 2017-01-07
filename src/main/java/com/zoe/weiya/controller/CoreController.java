@@ -2,13 +2,8 @@ package com.zoe.weiya.controller;
 
 import com.zoe.weiya.comm.logger.ZoeLogger;
 import com.zoe.weiya.comm.logger.ZoeLoggerFactory;
-import com.zoe.weiya.service.sensitative.SensitiveWordInit;
-import com.zoe.weiya.service.sensitative.SensitivewordFilter;
-import com.zoe.weiya.controller.echo.MyMessageInbound;
-import com.zoe.weiya.model.responseModel.ZoeMessage;
 import com.zoe.weiya.service.message.WechatService;
-import com.zoe.weiya.util.JacksonJsonUtil;
-import com.zoe.weiya.util.ZoeUtil;
+import com.zoe.weiya.service.websocket.WebSocketService;
 import me.chanjar.weixin.common.api.WxConsts;
 import me.chanjar.weixin.common.exception.WxErrorException;
 import me.chanjar.weixin.common.session.WxSessionManager;
@@ -27,14 +22,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.annotation.PostConstruct;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.nio.CharBuffer;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * Created by andy on 2016/12/15.
@@ -52,9 +44,7 @@ public class CoreController {
     @Autowired
     protected WechatService wechatService;
     @Autowired
-    protected SensitivewordFilter sensitiveService;
-    @Autowired
-    protected SensitiveWordInit sensitiveWordInit;
+    private WebSocketService webSocketService;
 
     @RequestMapping()
     public void wechat(HttpServletRequest request, HttpServletResponse response) {
@@ -150,19 +140,9 @@ public class CoreController {
         WxMpMessageHandler test = new WxMpMessageHandler() {
             public WxMpXmlOutMessage handle(WxMpXmlMessage wxMessage, Map<String, Object> context,
                                             WxMpService wxMpService, WxSessionManager sessionManager) throws WxErrorException {
-                /*WxMpXmlOutTextMessage m = WxMpXmlOutMessage.TEXT().content("维护中。。。").fromUser(wxMessage.getToUser())
-                        .toUser(wxMessage.getFromUser()).build();*/
-                /*try {
-                    response.getWriter().write("");
-                } catch (IOException e) {
-                    log.error("error", e);
-                    e.printStackTrace();
-                }*/
-
                 try {
                     WxMpUser wxMpUser = wxMpService.getUserService().userInfo(wxMessage.getFromUser());
-//                    broadcast(wxMessage.getContent(), request);//将微信消息组装的弹幕格式的消息传入websocket通道
-                    broadcast(wxMessage.getContent(),wxMpUser.getHeadImgUrl());//将微信消息组装的弹幕格式的消息传入websocket通道
+                    webSocketService.broadcast(wxMessage.getContent(),wxMpUser.getHeadImgUrl());//将微信消息组装的弹幕格式的消息传入websocket通道
                 } catch (Exception e) {
                     log.error("error", e);
                     e.printStackTrace();
@@ -173,67 +153,4 @@ public class CoreController {
         return test;
     }
 
-    private void broadcast(String message) {//将消息传入websocket通道中
-        HttpServletRequest  request = ZoeUtil.getHttpServletRequest();
-        if (null != request) {
-            ServletContext application = null;
-            try {
-                application = request.getServletContext();
-            } catch (Exception e) {
-                request = ZoeUtil.getHttpServletRequest();
-                application = request.getServletContext();
-            }
-            Set<MyMessageInbound> connections =
-                    (Set<MyMessageInbound>) application.getAttribute("connections");
-            if (connections == null) {
-                return;
-            }
-
-            for (MyMessageInbound connection : connections) {
-                try {
-                    sensitiveWordInit = new SensitiveWordInit();
-                    String replaceMessage = sensitiveService.replaceSensitiveWord(message, 1, "*");
-                    CharBuffer buffer = CharBuffer.wrap(replaceMessage);
-                    connection.getWsOutbound().writeTextMessage(buffer);
-                } catch (IOException e) {
-                    log.error("error", e);
-                    e.printStackTrace();
-                }
-            }
-        }
-    }
-
-    private void broadcast(String message, String headImgUrl) {//将消息传入websocket通道中
-        HttpServletRequest  request = ZoeUtil.getHttpServletRequest();
-        if (null != request) {
-            ServletContext application = null;
-            try {
-                application = request.getServletContext();
-            } catch (Exception e) {
-                request = ZoeUtil.getHttpServletRequest();
-                application = request.getServletContext();
-            }
-            Set<MyMessageInbound> connections =
-                    (Set<MyMessageInbound>) application.getAttribute("connections");
-            if (connections == null) {
-                return;
-            }
-            for (MyMessageInbound connection : connections) {
-                try {
-                    ZoeMessage zoeMessage = new ZoeMessage();
-                    String replaceMessage = sensitiveService.replaceSensitiveWord(message, 1, "*");
-                    zoeMessage.setContent(replaceMessage);
-                    zoeMessage.setHeadImgUrl(headImgUrl);
-                    CharBuffer buffer = CharBuffer.wrap(JacksonJsonUtil.beanToJson(zoeMessage));
-                    connection.getWsOutbound().writeTextMessage(buffer);
-                } catch (IOException e) {
-                    log.error("error", e);
-                    e.printStackTrace();
-                } catch (Exception e) {
-                    log.error("error", e);
-                    e.printStackTrace();
-                }
-            }
-        }
-    }
 }
