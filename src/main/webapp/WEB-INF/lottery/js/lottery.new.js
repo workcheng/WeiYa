@@ -97,7 +97,7 @@ var lottery = {
         $("#stop_lottery").hide();
         console.log("显示开始抽奖按钮");
     },
-    autoHanle:0,
+    autoHanle: 0,
     stopLottery: function () {
         this.isLotter = false;
         var luckyLevel = $("select[name='prize']").val();
@@ -140,9 +140,8 @@ var lottery = {
                     lottery.showLuckyUser(lottery.userCount, imgUrl, userName, luckyLevel);
                 }
                 else {
-                    lottery.showLuckAnimate("images/default.png", "", "小伙伴们都已经中奖啦！");
-                    if(lottery.autoHanle!=0)
-                    {
+                    lottery.showLuckAnimate("images/default.png", "", "小伙伴们都已经中奖啦！",true);
+                    if (lottery.autoHanle != 0) {
                         clearInterval(lottery.autoHanle);
                         lottery.autoHanle = 0;
 
@@ -170,8 +169,14 @@ var lottery = {
         listContent.append(listIdx).append(listUser).append(listPrize).append(jqPrize);
         $("#luckyUser").find("ul").prepend(listContent);
     },
-    showLuckAnimate: function (imgUl, showLevel, userName) {
-        $('body').append('<div class="animate-bg"><div class="light"></div><img class="luckbg" src="images/luckbg.png" /><img src="' + imgUl + '" class="luckUserHead" /><div class="showLuckUserName">' + userName + '</div><div class="showLuckLevel">恭喜<span>' + userName + '</span> 获<span>' + showLevel + '</span>！</div></div>');
+    showLuckAnimate: function (imgUl, showLevel, userName, isFinish) {
+        if (isFinish) {
+            $('body').append('<div class="animate-bg"><div class="light"></div><img class="luckbg" src="images/luckbg.png" /><img src="' + imgUl + '" class="luckUserHead" /><div class="showLuckUserName">' + userName + '</div><div class="showLuckLevel"><span>' + userName + '</span></div></div>');
+        }
+        else {
+            $('body').append('<div class="animate-bg"><div class="light"></div><img class="luckbg" src="images/luckbg.png" /><img src="' + imgUl + '" class="luckUserHead" /><div class="showLuckUserName">' + userName + '</div><div class="showLuckLevel">恭喜<span>' + userName + '</span> 获<span>' + showLevel + '</span>！</div></div>');
+        }
+
         $(".luckbg").animate({
             "width": "800px",
             "height": "518px",
@@ -216,5 +221,4 @@ $(document).ready(function () {
     })
     $("#background").fullBg();
     setInterval(function () { lottery.getCnt(); }, 1000 * 10)
-    //还需要一个获取已经抽奖的名单
 });
