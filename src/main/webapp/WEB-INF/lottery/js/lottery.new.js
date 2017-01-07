@@ -36,7 +36,7 @@ var lottery = {
             async: true,
             url: getUserList,
             success: function (data) {
-                $("#userCount").text(_this.allLotteryUser.length);
+                $("#userCount").text(data.data.length);
             }
         })
     },
@@ -220,5 +220,5 @@ $(document).ready(function () {
         lottery.stopLottery();
     })
     $("#background").fullBg();
-    setInterval(function () { lottery.getCnt(); }, 1000 * 10)
+    setInterval(function () { lottery.getCnt(); }, 1000 * 5)
 });
