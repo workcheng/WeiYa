@@ -1,10 +1,11 @@
 
 var lottery = {
-    allLotteryyUser: [],//签到用户
+    allLotteryUser: [],//签到用户
     autoExchangeIndex: 0,
     luckCount: 0,//等待抽奖人数
     userCount: 0,//用户个数
-    changeUserDelay:200,//切换照片的时间延迟，毫秒
+    changeUserDelay: 100,//切换照片的时间延迟，毫秒
+    isLotter: false,//是否在抽奖
     getRandom: function (min, max) {
         var r = Math.random() * (max - min);
         var re = Math.round(r + min);
@@ -13,35 +14,51 @@ var lottery = {
     },
     //获取用户
     getLotteryUser: function () {
-        var _this=this;
+        var _this = this;
         //出现正在获取最新签到成员，请稍候...todo：这里有问题，不能获取全部的签到用户，不然会卡
         var getUserList = BaseUrl + "user/userList";
         $.ajax({
             async: true,
             url: getUserList,
             success: function (data) {
-                _this.allLotteryyUser= data.data;
-                $("#userCount").text(_this.allLotteryyUser.length);
+                _this.allLotteryUser = data.data;
 
+                $("#userCount").text(_this.allLotteryUser.length);
             }
         })
     },
-    appendUser:function(){//插入li,防止图片切换卡顿
-      try{
-
-      } catch (ex)      {
-
-      }
-
+    appendUser: function () {//插入li,防止图片切换卡顿
+        var _this = this;
+        //
+        var box_pic_object = "<li><img src='images/default.png' title='求中奖' id='user_img'></li>";
+        var box_name_object = "<li><span id='user_name'>求中奖</span></li>";
+        for (var i = 0; i < _this.allLotteryUser.length; i++) {
+            box_pic_object += "<li class='hide' style='display: none;'><img src='" + _this.allLotteryUser[i].headImgUrl + "' title='用户头像'></li>";
+            box_name_object += "<li class='hide' style='display: none;'>" + _this.allLotteryUser[i].name + "</li>";
+        }
+        //$("#box_pic,#box_name").html();
+        $("#box_name").html(box_name_object);
+        $("#box_pic").html(box_pic_object);
     },
     exchangeUser: function () {
         var _this = this;
-        if (this.autoExchangeIndex ==0) {//防止多次点击，只有停止清除事件后才能继续点
-            if (_this.allLotteryyUser.length>0) {//如果没人，不进行点击
+        _this.appendUser();
+        if (this.autoExchangeIndex == 0) {//防止多次点击，只有停止清除事件后才能继续点
+            if (_this.allLotteryUser.length > 0) {//如果没人，不进行点击
+                var i = 1;
                 _this.autoExchangeIndex = setInterval(function () {
-                    var user_index = _this.getRandom(0, _this.allLotteryyUser.length - 1);
-                    $("#user_name").html(_this.allLotteryyUser[user_index].name);
-                    $("#user_img").attr("src", _this.allLotteryyUser[user_index].headImgUrl);
+                    if (_this.isLotter) {
+                        $("#box_name li").hide();
+                        $("#box_pic li").hide();
+                        $("#box_name li:eq(" + i + ")").show();
+                        $("#box_pic li:eq(" + i + ")").show();
+                        i++;
+                        if (i == _this.allLotteryUser.length + 1) {
+                            i = 1;
+                        }
+                    } else {
+
+                    }
                 }, _this.changeUserDelay);
             }
             else {
@@ -49,6 +66,10 @@ var lottery = {
                 _this.showBeginBtn();
             }
         }
+    },
+    clearAutoExchange: function () {
+        clearInterval(this.autoExchangeIndex);
+        this.autoExchangeIndex = 0;
     },
     autoLotter: function (count) {//自动抽奖
 
@@ -64,32 +85,48 @@ var lottery = {
         console.log("显示开始抽奖按钮");
     },
     stopLottery: function () {
+        this.isLotter = false;
+
         var luckyLevel = $("select[name='prize']").val();
         var userNum = $("select[name='userNum']").val();
-        var getLotteryUser = BaseUrl + "user/lotterySelect?time=" + getRandom(1, 1000);//lotterySelect
+        //抽N次
+        this.lotter(luckyLevel);
+    },
+    lotter: function (luckyLevel) {
+        var getLotteryUser = BaseUrl + "user/lotterySelect?time=" + this.getRandom(1, 1000);//lotterySelect
         $.ajax({
             url: getLotteryUser,
             success: function (data) {
-                var luckyUser = data.data[0]
-                $("#userName").html(luckyUser.name);
-                $("#userImg").attr("src", luckyUser.headImgUrl);
-                var userName = luckyUser.name;
-                var imgUl = luckyUser.headImgUrl;
-                showLuckAnimate(imgUl, luckyLevel, userName);
-                clearInterval(setintIndex);
-                showLuckyUser(userCount, imgUl, userName, luckyLevel);
-                userCount += 1;
-            }
+                lottery.clearAutoExchange();
+                lottery.showBeginBtn();
+                if (data.data.length > 0) {//抽出人了
+                    var luckyUser = data.data[0]
+                    var userName = luckyUser.name;
+                    var imgUrl = luckyUser.headImgUrl;
 
+                    var box_pic_object = "<li><img src='" + imgUrl + "' title='中奖啦' ></li>";
+                    var box_name_object = "<li><span id='user_name'>" + userName + "</span></li>";
+                    $("#box_name").html(box_name_object);
+                    $("#box_pic").html(box_pic_object);
+                    lottery.userCount++;
+                    lottery.showLuckAnimate(imgUrl, luckyLevel, userName);
+                    lottery.showLuckyUser(lottery.userCount, imgUrl, userName, luckyLevel);
+                }
+                {
+                    console.log("小伙伴们都已经中奖啦");
+                    lottery.showLuckAnimate("images/default.png", "", "小伙伴们都已经中奖啦！");
+                }
+            }
         });
     },
     startLottery: function () {
+        this.isLotter = true;
         console.log("开始抽奖");
         this.showStopBtn();
         console.log("开始变");
         this.exchangeUser();//开始变
     },
-    showLuckUser: function (idx, imgUI, userName, luckyLevel) {
+    showLuckyUser: function (idx, imgUI, userName, luckyLevel) {
         var listContent = $("<li></li>").addClass("list-content clearfix");
         var listIdx = $("<div></div>").addClass("list-idx").text(idx);
         var listUser = $("<div></div>").addClass("list-user");
@@ -100,19 +137,33 @@ var lottery = {
         listUser.append(jqImg).append(jqName);
         listContent.append(listIdx).append(listUser).append(listPrize).append(jqPrize);
         $("#luckyUser").find("ul").prepend(listContent);
+    },
+    showLuckAnimate: function (imgUl, showLevel, userName) {
+        $('body').append('<div class="animate-bg"><div class="light"></div><img class="luckbg" src="images/luckbg.png" /><img src="' + imgUl + '" class="luckUserHead" /><div class="showLuckUserName">' + userName + '</div><div class="showLuckLevel">恭喜<span>' + userName + '</span> 获<span>' + showLevel + '</span>！</div></div>');
+        $(".luckbg").animate({
+            "width": "800px",
+            "height": "518px",
+            "margin-top": "-330px",
+            "margin-left": "-400px",
+            "opacity": "1"
+        }, "fast");
+        $(".luckUserHead").animate({ "margin-top": "-275px" });
+        $(".showLuckLevel").animate({ "margin-top": "40px" });
+        $(".showLuckUserName").animate({ "opacity": "1" });
+
+        setTimeout(function () {
+            $(".animate-bg").animate({ "opacity": "0" }, "slow", function () {
+                $(".animate-bg").remove();
+            });
+            $("#bgsound").remove();
+        }, 3000);
+        $("#bgsound").remove();
     }
 
 };
-
-
-
-
-
-
-
 var isAuto = function () {
 
-   
+
     $('.condition').addClass('disabled');
     return false;
 }
@@ -128,7 +179,7 @@ var beginLuck = function () {
 var stopLuck = function () {
 
 }
- 
+
 /**
  * 显示抽奖动画
  * @param imgUl
@@ -147,7 +198,7 @@ $(document).ready(function () {
         lottery.startLottery();
     });
     $("#stop_lottery").click(function () {
-       // stopLuck();
+        lottery.stopLottery();
     })
     $("#background").fullBg();
 });

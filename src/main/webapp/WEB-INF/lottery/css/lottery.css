@@ -2447,6 +2447,7 @@ a.disabled:hover {
 .condition label {
     vertical-align: bottom;
     margin-left: 10px;
+    line-height: 14px;
 }
 
 .showLuckUserName {
