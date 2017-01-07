@@ -42,11 +42,7 @@ var getLuckyUser = function (callback) {
     });
 }
 var isAuto = function () {
-    setintIndex = setInterval(function () {
-        var user_index = getRandom(0, getAllUserInfo.length - 1);
-        $("#userName").html(getAllUserInfo[user_index].name);
-        $("#userImg").attr("src", getAllUserInfo[user_index].headImgUrl);
-    }, 100);
+
     beginLuck();
     $('.condition').addClass('disabled');
     return false;
@@ -56,6 +52,20 @@ var beginLuck = function () {
     $("#stopLuck").show();
 }
 
+
+/*
+*
+* */
+function  exchangeImg(){
+    if(setintIndex==0)
+    {
+    setintIndex = setInterval(function () {
+        var user_index = getRandom(0, getAllUserInfo.length - 1);
+        $("#userName").html(getAllUserInfo[user_index].name);
+        $("#userImg").attr("src", getAllUserInfo[user_index].headImgUrl);
+    }, 100);
+    }
+}
 /**
  * 停止抽奖
  * @returns {boolean}
@@ -155,6 +165,8 @@ $(document).ready(function () {
     // setInterval('getLottery();', 10000);
     $('#beginLuck').click(function () {
         var userNum = $("select[name='userNum']").val();
+        //判断是否有人签到
+
         if (userNum > 1) {
             setTimeout(function () {
                 stopLuck();
