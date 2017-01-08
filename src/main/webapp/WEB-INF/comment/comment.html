@@ -3,14 +3,88 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
-    <title>Title</title>
-    <link type="text/css" href="../comment/css/index.css">
-    <script type="text/javascript" src="js/megapix-image.js"></script>
-    <script type="text/javascript" src="js/zepto.min.js"></script>
-    <style type="text/css" id="_zoom">.zoom {
-        zoom: 0.48;
-        -webkit-text-size-adjust: auto !important;
-    }</style>
+    <title>评论上墙</title>
+    <link rel="stylesheet" href="../comment/css/style.css">
+    <script type="text/javascript" src="../lottery/js/jquery-1.8.3.js"></script>
+    <script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+    <script type="text/javascript" src="../lottery/js/config.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            var weixinUrl = location.href.split('#')[0];
+            var url = BaseUrl + "sign/url";
+            // 当前的网页请求地址
+            $.ajax({
+                url: url, //这个地址是服务器配置JSSDK的地址
+                data: {           // 这个地址是发生jssdk调用的url地址
+                    // 用于服务器配置
+                    url: weixinUrl
+                },
+                success: function (json) {
+                    var data = json.data;
+                    var config = {};
+                    for (var k in json.data) {
+                        config[k] = json.data[k];
+                    }
+                    config.debug = false;// 添加你需要的JSSDK的权限
+                    config.appId = config.appid;
+                    config.jsApiList = ['hideOptionMenu'];
+                    config.timestamp = parseInt(config.timestamp);
+                    config.nonceStr = config.noncestr;
+                    config.signature = config.signature
+                    wx.config(config);
+
+                    wx.ready(function () {
+                        wx.hideOptionMenu();
+                        var getUserInfo = BaseUrl + "sign/getUserInfo";
+                        // var weixin = location.href.split('?')[1];
+                        //var code = weixin.split('=')[1];
+                        //获取用户信息
+                        $.ajax({
+                            url: getUserInfo, //这个地址是服务器配置JSSDK的地址
+                            data: {           // 这个地址是发生jssdk调用的url地址
+                                // 用于服务器配置
+                                id: 'ofj0MwjAxBL7kh_m89q0R2FiNqEY',
+                                lang: ''
+                            },
+                            success: function (json) {
+                                var userInfo = json.data;
+                                $("#headImgUrl").attr("src", userInfo.headImgUrl);
+                                $("#nickName").text(userInfo.nickname);
+
+                                document.querySelector('#saveMsg').onclick = function () {
+                                    var msgUrl = BaseUrl + "message/danmu";
+                                    var msgInfo = $("#msgDanmu").val();
+
+                                    var daumuMsg = {
+                                        "content": msgInfo,
+                                        "headImgUrl": userInfo.headImgUrl
+                                    }
+                                    if (msgInfo) {
+                                        $.ajax({
+                                            type: 'POST',
+                                            url: msgUrl,
+                                            data: daumuMsg,
+                                            success: function (data) {
+                                                alert(JSON.stringify(data));
+                                                console.log("data", JSON.stringify(data));
+                                            }
+                                        })
+                                    } else {
+                                        // $('body').append('<div class="error_dialog"><img src = "images/error.png"><p> 不能为空！</p></div>');
+                                        console.log("请输入信息！");
+                                    }
+                                }
+
+                            }
+
+                        })
+                    });
+                }
+            })
+        });
+
+    </script>
 </head>
 <body>
 <div id="container">
@@ -25,84 +99,35 @@
                     <img alt src="images/fgx.png">
                 </div>
             </div>
-            <div class="signIn1" style="margin-top: 20px;">
+            <div class="signIn2" style="margin-top: 20px;">
                 <div class="head_box">
                     <div class="headbox">
-                        <img alt src="images/headbox.png">
+                        <img alt src="" id="headImgUrl">
                     </div>
                     <img src="images/0.jpg">
                 </div>
-                <div class="userName">张兴财</div>
+                <div class="userName" id="nickName"></div>
             </div>
             <div class="send_words">
                 <p>上墙留言：</p>
                 <div class="wordsedit1">
-                    <textarea name="memo" placeholder="请输入留言" maxlength="70"></textarea>
+                    <textarea name="memo" placeholder="请输入留言" maxlength="70" id="msgDanmu"></textarea>
                 </div>
                 <div class="senddiv">
-                    <div class="sendimg">
-                        <a id="upload" href="javascript:void (0);">
-                            <img alt src="images/upload_img.png">
-                        </a>
-                    </div>
+
                     <div class="fasong">
-                        <a id="saveMsg" href="javascript:void (0);">发送</a>
+                        <input type="button" id="saveMsg" value="发送">
                     </div>
                     <div class="clear"></div>
                     <input type="file" style="display: none" name="photo" id="photo">
                 </div>
-                <p>留言记录：</p>
-                <div class="inner">
-                    <div class="lists">
-                        <div class="listMarks"></div>
-                    </div>
-                </div>
             </div>
-
+            <div class="error_dialog" style="display: none">
+                <img src="images/error.png">
+                <p> 不能为空！</p>
+            </div>
         </div>
     </div>
-    <script type="text/javascript">
-        window.qiniuUpToken = 'X4i0IvBkFPckPsI5RDPYuri-srb3tlMjtZlm08lE:3AFz7HmHN1w3T-JUPK0D5dP7Y7U=:eyJzY29wZSI6InlvdXl1IiwiZGVhZGxpbmUiOjE0ODM3OTg3NTJ9';
-        window.uploadBasePath = "base64upload/meeting/753/";	// 图片上传
-        $('#upload').click(function () {
-            if ($(this).hasClass('disabled'))            return;
-            $('#photo').click();
-        });
-        $('#photo').change(function () {
-            var index = 1;
-            var dom = $("<span class='imgField' data-index=" + index + "><img src='imagestouming.png' /><i>×</i></span>");
-            $('#photo').before(dom);		// 开始处理上传图片
-            imgPreview(dom.find('img'), this, function (imgUrl) {			//图片上传成功回调方法
-                var $btn = $('#upload');
-                $btn.addClass("disabled");
-                var submitData = {"aid": "753", "picture": imgUrl};
-                $.post('/mobile/meeting/message', submitData, function (data) {
-                    $btn.removeClass("disabled");
-                    var message = "";
-                    var time = new Date(data.model.msg.sendTime).Format("yyyy-MM-dd hh:mm:ss");
-                    if (data.ret == 0) {
-                        if (data.model.msg.status == 2) {
-                            message = '<div class="words_record">' + '<span>' + '已上墙' + '</span>' + '<p>' + time + '</p>' + '<div>' + '<img src="http://imgcdn.youyu.365huaer.com/' + data.model.msg.picture + '"/>' + '</div>' + '</div>';
-                        } else {
-                            message = '<div class="words_record">' + '<p>' + time + '</p>' + '<div>' + '<img src="http://imgcdn.youyu.365huaer.com/' + data.model.msg.picture + '"/>' + '</div>' + '</div>';
-                        }
-                        $('.listMarks').after(message);
-                        $('.imgField').hide();
-                    } else {
-                        $(".error_dialog p").html(data.msg);
-                        $(".error_dialog").show();
-                        setTimeout(function () {
-                            $(".error_dialog").hide()
-                        }, 3000);
-                        return;
-                    }
-                }, "json");
-            });
-            if ($('.senddiv').find('.imgField').length > 0) {
-                $('#upload').addClass('disabled');
-            }
-        });
-    </script>
 </div>
 </body>
 </html>
