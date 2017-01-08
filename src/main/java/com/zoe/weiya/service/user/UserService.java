@@ -45,7 +45,6 @@ public class UserService {
     @Autowired private ZoeRedisTemplate zoeRedisTemplate4;
     @Autowired
     private WxMpServiceImpl wxMpService;
-    private static final String LUCKY_USER = "LUCKY";
     private List<ZoeRedisTemplate> zoeRedisTemplateIndexList;
 
 
@@ -215,7 +214,7 @@ public class UserService {
     }
 
     private Long saveInLuckySet(String openId) throws NotStartException, InternalException {
-        Long aLong = getZoeRedisTemplate().setSet(UserService.LUCKY_USER, openId);
+        Long aLong = getZoeRedisTemplate().setSet(CommonConstant.LUCKY_USER, openId);
         if(aLong == 1){
             //success
             return aLong;
@@ -228,7 +227,7 @@ public class UserService {
     }
 
     public List<User> getLuckySet() throws NotStartException {
-        Set<String> set = (Set)getZoeRedisTemplate().getSet(UserService.LUCKY_USER);
+        Set<String> set = (Set)getZoeRedisTemplate().getSet(CommonConstant.LUCKY_USER);
         List<User> userList = new ArrayList<>();
         Iterator<String> iterator = set.iterator();
         while (iterator.hasNext()){
@@ -240,7 +239,7 @@ public class UserService {
     }
 
     public Long getLuckySetSize() throws NotStartException {
-        Long setSize = getZoeRedisTemplate().getSetSize(UserService.LUCKY_USER);
+        Long setSize = getZoeRedisTemplate().getSetSize(CommonConstant.LUCKY_USER);
         return setSize;
     }
 }
