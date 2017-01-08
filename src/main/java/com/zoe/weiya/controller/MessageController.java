@@ -47,7 +47,7 @@ public class MessageController {
     }
 
     @RequestMapping(value = "danmu", method = RequestMethod.POST)
-    public void sendDanmuMessage(@RequestBody @Validated ZoeMessage zoeMessage){//将消息传入websocket通道中
+    public Object sendDanmuMessage(@RequestBody @Validated ZoeMessage zoeMessage){//将消息传入websocket通道中
         if(StringUtils.isBlank(zoeMessage.getHeadImgUrl())){
             String defaultHeadImage = "http://" + request.getServerName() //服务器地址
                     + ":"
@@ -57,6 +57,12 @@ public class MessageController {
             zoeMessage.setHeadImgUrl(defaultHeadImage);
         }
 
-        webSocketService.broadcast(zoeMessage.getContent(),zoeMessage.getHeadImgUrl());
+        try {
+            webSocketService.broadcast(zoeMessage.getContent(),zoeMessage.getHeadImgUrl());
+            return ZoeObject.success();
+        } catch (Exception e) {
+            log.error("error",e);
+            return ZoeObject.failure(e);
+        }
     }
 }
