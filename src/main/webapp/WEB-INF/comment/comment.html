@@ -8,87 +8,15 @@
     <script type="text/javascript" src="../lottery/js/jquery-1.8.3.js"></script>
     <script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
     <script type="text/javascript" src="../lottery/js/config.js"></script>
-    <script type="text/javascript">
-        $(document).ready(function () {
-
-            var weixinUrl = location.href.split('#')[0];
-            var url = BaseUrl + "sign/url";
-            // 当前的网页请求地址
-            $.ajax({
-                url: url, //这个地址是服务器配置JSSDK的地址
-                data: {           // 这个地址是发生jssdk调用的url地址
-                    // 用于服务器配置
-                    url: weixinUrl
-                },
-                success: function (json) {
-                    var data = json.data;
-                    var config = {};
-                    for (var k in json.data) {
-                        config[k] = json.data[k];
-                    }
-                    config.debug = false;// 添加你需要的JSSDK的权限
-                    config.appId = config.appid;
-                    config.jsApiList = ['hideOptionMenu'];
-                    config.timestamp = parseInt(config.timestamp);
-                    config.nonceStr = config.noncestr;
-                    config.signature = config.signature
-                    wx.config(config);
-
-                    wx.ready(function () {
-                        wx.hideOptionMenu();
-                        var getUserInfo = BaseUrl + "sign/getUserInfo";
-                        // var weixin = location.href.split('?')[1];
-                        //var code = weixin.split('=')[1];
-                        //获取用户信息
-                        $.ajax({
-                            url: getUserInfo, //这个地址是服务器配置JSSDK的地址
-                            data: {           // 这个地址是发生jssdk调用的url地址
-                                // 用于服务器配置
-                                id: 'ofj0MwjAxBL7kh_m89q0R2FiNqEY',
-                                lang: ''
-                            },
-                            success: function (json) {
-                                var userInfo = json.data;
-                                $("#headImgUrl").attr("src", userInfo.headImgUrl);
-                                $("#nickName").text(userInfo.nickname);
-
-                                document.querySelector('#saveMsg').onclick = function () {
-                                    var msgUrl = BaseUrl + "message/danmu";
-                                    var msgInfo = $("#msgDanmu").val();
-
-                                    var daumuMsg = {
-                                        "content": msgInfo,
-                                        "headImgUrl": userInfo.headImgUrl
-                                    }
-                                    if (msgInfo) {
-                                        $.ajax({
-                                            type: 'POST',
-                                            url: msgUrl,
-                                            data: daumuMsg,
-                                            success: function (data) {
-                                                alert(JSON.stringify(data));
-                                                console.log("data", JSON.stringify(data));
-                                            }
-                                        })
-                                    } else {
-                                        // $('body').append('<div class="error_dialog"><img src = "images/error.png"><p> 不能为空！</p></div>');
-                                        console.log("请输入信息！");
-                                    }
-                                }
-
-                            }
-
-                        })
-                    });
-                }
-            })
-        });
-
-    </script>
+    <script type="text/javascript" src="../comment/js/comment.js"></script>
 </head>
 <body>
 <div id="container">
     <div class="zoom">
+        <div class="error_dialog" style="display: none">
+            <img src="images/error.png">
+            <p></p>
+        </div>
         <div class="wrapper gowall" style="background-repeat: repeat">
             <div class="companyLogo">
                 <img alt src="images/flower.png">
@@ -99,7 +27,7 @@
                     <img alt src="images/fgx.png">
                 </div>
             </div>
-            <div class="signIn2" style="margin-top: 20px;">
+            <div class="signIn2">
                 <div class="head_box">
                     <div class="headbox">
                         <img alt src="" id="headImgUrl">
@@ -119,12 +47,7 @@
                         <input type="button" id="saveMsg" value="发送">
                     </div>
                     <div class="clear"></div>
-                    <input type="file" style="display: none" name="photo" id="photo">
                 </div>
-            </div>
-            <div class="error_dialog" style="display: none">
-                <img src="images/error.png">
-                <p> 不能为空！</p>
             </div>
         </div>
     </div>
