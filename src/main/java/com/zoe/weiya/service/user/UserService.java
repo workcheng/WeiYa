@@ -23,6 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -45,11 +46,25 @@ public class UserService {
     @Autowired
     private WxMpServiceImpl wxMpService;
     private static final String LUCKY_USER = "LUCKY";
+    private List<ZoeRedisTemplate> zoeRedisTemplateIndexList;
+
+
+    @PostConstruct
+    private void init(){
+        zoeRedisTemplateIndexList = new ArrayList<ZoeRedisTemplate>(){
+            private static final long serialVersionUID = 1L;
+            {
+                add(zoeRedisTemplate0);
+                add(zoeRedisTemplate1);
+                add(zoeRedisTemplate2);
+                add(zoeRedisTemplate3);
+                add(zoeRedisTemplate4);
+            }
+        };
+    }
 
     private ZoeRedisTemplate getZoeRedisTemplate() throws NotStartException {
-        ZoeRedisTemplate[] zoeRedisTemplateIndexList = {
-            zoeRedisTemplate0,zoeRedisTemplate1,zoeRedisTemplate2,zoeRedisTemplate3,zoeRedisTemplate4};
-            return zoeRedisTemplateIndexList[Integer.valueOf(ZoeUtil.getIndex())];
+            return zoeRedisTemplateIndexList.get(Integer.valueOf(ZoeUtil.getIndex()));
     }
 
     public void save(User u) throws NotStartException, InternalException, HasSignException, WxErrorException, VoteException {

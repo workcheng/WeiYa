@@ -99,4 +99,8 @@ public class UserServiceTest {
         list.remove(1);
         System.out.println(list.toString());
     }
+
+    @Test
+    public void move() throws Exception {
+    }
 }
