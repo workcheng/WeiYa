@@ -1,3 +1,4 @@
+import com.zoe.weiya.model.User;
 import redis.clients.jedis.Jedis;
 
 /**
@@ -55,4 +56,9 @@ public class Test{
         jedis.hset("lotteryPerson", "ID003", "王五");
     }
 
+    @org.junit.Test
+    public void testUser(){
+        User user = new User();
+        System.out.println(user.getSignDate());
+    }
 }

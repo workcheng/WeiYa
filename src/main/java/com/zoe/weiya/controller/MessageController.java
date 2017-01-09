@@ -32,7 +32,7 @@ public class MessageController {
     UserService userService;
     @Autowired
     WebSocketService webSocketService;
-    @Autowired
+    @Autowired(required = false)
     HttpServletRequest request;
 
     @RequestMapping(value = "", method = RequestMethod.POST)

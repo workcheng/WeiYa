@@ -114,7 +114,7 @@ public class UserController {
             if(null == count){
                 count = 100;
             }
-            return ZoeObject.success(userService.randomUsers(50));
+            return ZoeObject.success(userService.randomUsers(count));
         } catch (NotStartException e) {
             log.error("error", e);
             return ZoeObject.failure(ZoeErrorCode.NOT_START);
