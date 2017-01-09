@@ -175,6 +175,35 @@ input.validation-passed, textarea.validation-passed {
     font-weight: bold;
 }
 
+.error_dialog {
+    position: fixed;
+    width: 550px;
+    height: 340px;
+    left: 100px;
+    top: 50%;
+    margin-top: -170px;
+    background: #000;
+    opacity: .8 !important;
+    z-index: 21500;
+    border-radius: 11px;
+}
+
+.error_dialog img {
+    position: relative;
+    width: 80px;
+    height: 90px;
+    margin: 80px 235px 40px;
+}
+
+.error_dialog p {
+    position: relative;
+    width: 100%;
+    height: 60px;
+    color: #fff;
+    text-align: center;
+    font-size: 36px;
+}
+
 
 
 
