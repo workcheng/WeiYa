@@ -32,14 +32,13 @@ public class ZoeDateUtil {
 
 
     public static String getTime(ZoeDate now){
-        if( now.getHour() <= 12){
+        if( now.getHour() <= ZoeProperties.getNoonHour()){//小于中午的时间-早上
             return CommonConstant.MORNING;
-        }else if(now.getHour() > 12 && now.getHour() <= 22){
-            return CommonConstant.NOON;
-        }else if(now.getHour() > 18){
+        }else if(now.getHour() >= ZoeProperties.getOffWorkHour()){//大于下班的时间-晚上
             return CommonConstant.NIGHT;
+        }else {//处于上面两个时间的中间，也就是-下午
+            return CommonConstant.NOON;
         }
-        return null;
     }
 
     public static String whichDay(ZoeDate now){

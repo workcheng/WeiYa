@@ -95,7 +95,7 @@
     <!-- 以下配置将拦截特有的URL请求 -->
     <mvc:interceptors>
         <mvc:interceptor>
-            <mvc:mapping path="/user/*"/>
+            <mvc:mapping path=".*/view/*.*"/>
             <bean id="1" class="com.zoe.weiya.interceptor.time.TimeBasedAccessInterceptor">
                 <property name="oneAmOpeningTime" value="${one.am.openIngTime}"/>
                 <property name="oneAmClosingTime" value="${one.am.closingTime}"/>
@@ -109,7 +109,7 @@
                 <property name="finalClosingTime" value="${final.closingTime}"/>
 
 
-                <property name="mappingURL" value=".*/*/*.*"/>
+                <property name="mappingURL" value=".*/view/*.*"/>
             </bean>
         </mvc:interceptor>
     </mvc:interceptors>
@@ -117,6 +117,8 @@
     <mvc:resources mapping="/view/**" location="/WEB-INF/view/"/>
     <mvc:resources mapping="/lottery/**" location="/WEB-INF/lottery/"/>
     <mvc:resources mapping="/vote/**" location="/WEB-INF/vote/"/>
+    <mvc:resources mapping="/danmu/**" location="/WEB-INF/danmu/"/>
+    <mvc:resources mapping="/comment/**" location="/WEB-INF/comment/"/>
 
     <!--<bean class="org.apache.tomcat.util.buf.B2CConverter">
         <constructor-arg index="0" type="java.nio.charset.Charset" name="encoding" value="UTF-8"/>

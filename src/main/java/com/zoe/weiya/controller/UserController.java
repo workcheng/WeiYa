@@ -149,10 +149,27 @@ public class UserController {
     @RequestMapping(value = "lotterySelect", method = RequestMethod.GET)
     public Object LotterySelect() {
         try {
-            return ZoeObject.success(userService.LotterySelect());
+//            return ZoeObject.success(userService.LotterySelect());
+            return ZoeObject.success(userService.getRandomUser(1));
         } catch (NotStartException e) {
             log.error("error", e);
             return ZoeObject.failure(ZoeErrorCode.NOT_START);
+        } catch (InternalException e){
+            log.error("error", e);
+            return ZoeObject.failure(ZoeErrorCode.ERROR);
+        }
+    }
+
+    @RequestMapping(value = "lotteryUserList", method = RequestMethod.GET)
+    public Object LotteryUser(@RequestParam Integer count) {
+        try {
+            return ZoeObject.success(userService.getRandomUser(count));
+        } catch (NotStartException e) {
+            log.error("error", e);
+            return ZoeObject.failure(ZoeErrorCode.NOT_START);
+        } catch (InternalException e){
+            log.error("error", e);
+            return ZoeObject.failure(ZoeErrorCode.ERROR);
         }
     }
 

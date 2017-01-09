@@ -1,6 +1,5 @@
 package com.zoe.weiya.service.user;
 
-import com.zoe.weiya.AbstractTestCase;
 import com.zoe.weiya.comm.logger.ZoeLogger;
 import com.zoe.weiya.comm.logger.ZoeLoggerFactory;
 import com.zoe.weiya.comm.uuid.ZoeUUID;
@@ -9,12 +8,14 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by andy on 2016/12/21.
  */
-public class UserServiceTest extends AbstractTestCase {
+//public class UserServiceTest extends AbstractTestCase {
+public class UserServiceTest {
     private static final ZoeLogger log = ZoeLoggerFactory.getLogger(UserServiceTest.class);
     @Autowired UserService userService;
 
@@ -75,5 +76,31 @@ public class UserServiceTest extends AbstractTestCase {
             u.setHeadImgUrl(formatUrl);
             userService.save(u);
         }
+    }
+
+    @Test
+    public void testGetRandomUser() throws Exception {
+//        List<String> randomUser = userService.getRandomOpenIds(5);
+//        log.info(randomUser.toString());
+    }
+
+    @Test
+    public void testGetRandomUser1() throws Exception {
+        ArrayList list = new ArrayList<String>(){
+            {
+                add("0");
+                add("1");
+                add("2");
+                add("3");
+                add("4");
+                add("5");
+            }
+        };
+        list.remove(1);
+        System.out.println(list.toString());
+    }
+
+    @Test
+    public void move() throws Exception {
     }
 }

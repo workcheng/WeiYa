@@ -2,15 +2,21 @@ package com.zoe.weiya.controller;
 
 import com.zoe.weiya.comm.logger.ZoeLogger;
 import com.zoe.weiya.comm.logger.ZoeLoggerFactory;
-import com.zoe.weiya.model.User;
+import com.zoe.weiya.comm.response.ZoeObject;
+import com.zoe.weiya.model.LuckyUser;
+import com.zoe.weiya.model.responseModel.ZoeMessage;
 import com.zoe.weiya.service.message.WechatService;
 import com.zoe.weiya.service.user.UserService;
+import com.zoe.weiya.service.websocket.WebSocketService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -24,18 +30,39 @@ public class MessageController {
     WechatService wechatService;
     @Autowired
     UserService userService;
+    @Autowired
+    WebSocketService webSocketService;
+    @Autowired
+    HttpServletRequest request;
 
     @RequestMapping(value = "", method = RequestMethod.POST)
-    public void sendMessage(@RequestBody List<String> openIds){
-        for (int i=0; i<openIds.size(); i++){
-            try {
-                User userInfo = userService.get(openIds.get(i));
-                if(null != userInfo){
-                    wechatService.sendMessage(userInfo.getOpenId(),userInfo.getName(),0);
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+    public Object sendMessage(@RequestBody List<LuckyUser> users){
+        try {
+            wechatService.sendMessage(users);
+            return ZoeObject.success();
+        } catch (Exception e) {
+            log.error("error",e);
+            return ZoeObject.failure(e.toString());
+        }
+    }
+
+    @RequestMapping(value = "danmu", method = RequestMethod.POST)
+    public Object sendDanmuMessage(@RequestBody @Validated ZoeMessage zoeMessage){//将消息传入websocket通道中
+        if(StringUtils.isBlank(zoeMessage.getHeadImgUrl())){
+            String defaultHeadImage = "http://" + request.getServerName() //服务器地址
+                    + ":"
+                    + request.getServerPort()           //端口号
+                    + request.getContextPath()      //项目名称
+                    +"/danmu/images/wechat_logo.jpg"; //图片地址
+            zoeMessage.setHeadImgUrl(defaultHeadImage);
+        }
+
+        try {
+            webSocketService.broadcast(zoeMessage.getContent(),zoeMessage.getHeadImgUrl());
+            return ZoeObject.success();
+        } catch (Exception e) {
+            log.error("error",e);
+            return ZoeObject.failure(e);
         }
     }
 }

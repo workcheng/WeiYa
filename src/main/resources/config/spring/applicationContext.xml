@@ -134,4 +134,7 @@ http://www.springframework.org/schema/tx/spring-tx.xsd">
         <property name="usePool" value="true"/>
     </bean>
 
+    <!--<bean id="coreServlet" class="com.zoe.weiya.controller.echo.CoreServlet">
+        <property name="wxMpService" ref="WxMpServiceImpl"/>
+    </bean>-->
 </beans>

@@ -20,9 +20,13 @@ public class CommonConstant {
   public final static String ERROR = "错误信息：";
   public static final String SIGN_USER_FIRST_DAY_MORNING = "0";
   public static final String SIGN_USER_FIRST_DAY_NOON = "1";
-  public static final String SIGN_USER_SECOND_DAY_MORNING = "2";
-  public static final String SIGN_USER_SECOND_DAY_NOON = "3";
-  public static final String SIGN_USER_SECOND_DAY_NIGHT = "4";
+  public static final String SIGN_USER_FIRST_DAY_NIGHT = "2";
+  public static final String SIGN_USER_SECOND_DAY_MORNING = "3";
+  public static final String SIGN_USER_SECOND_DAY_NOON = "4";
+  public static final String SIGN_USER_SECOND_DAY_NIGHT = "5";
+  public static final String SIGN_USER_THIRD_DAY_MORNING = "6";
+  public static final String SIGN_USER_THIRD_DAY_NOON = "7";
+  public static final String SIGN_USER_THIRD_DAY_NIGHT = "8";
   public static final String LOTTERY = "lottery";
   public static final String USER = "USER";
   public static final String MORNING = "MORNING";
@@ -31,10 +35,6 @@ public class CommonConstant {
   public static final String FIRST_DAY = "FIRST";
   public static final String SECOND_DAY = "SECOND";
   public static final String THIRD_DAY = "THIRD";
-  public static final String ONE_SET= "SET1";
-  public static final String TWO_SET= "SET2";
-  public static final String THREE_SET= "SET3";
-  public static final String FOUR_SET= "SET4";
-  public static final String FIVE_SET= "SET5";
   public static final String SET= "SET";
+  public static final String LUCKY_USER = "LUCKY";
 }

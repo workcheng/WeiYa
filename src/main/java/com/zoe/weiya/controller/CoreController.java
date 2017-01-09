@@ -1,7 +1,9 @@
 package com.zoe.weiya.controller;
 
-import com.zoe.weiya.controller.echo.MyMessageInbound;
+import com.zoe.weiya.comm.logger.ZoeLogger;
+import com.zoe.weiya.comm.logger.ZoeLoggerFactory;
 import com.zoe.weiya.service.message.WechatService;
+import com.zoe.weiya.service.websocket.WebSocketService;
 import me.chanjar.weixin.common.api.WxConsts;
 import me.chanjar.weixin.common.exception.WxErrorException;
 import me.chanjar.weixin.common.session.WxSessionManager;
@@ -13,19 +15,18 @@ import me.chanjar.weixin.mp.api.impl.WxMpServiceImpl;
 import me.chanjar.weixin.mp.bean.message.WxMpXmlMessage;
 import me.chanjar.weixin.mp.bean.message.WxMpXmlOutMessage;
 import me.chanjar.weixin.mp.bean.message.WxMpXmlOutTextMessage;
+import me.chanjar.weixin.mp.bean.result.WxMpUser;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import javax.servlet.ServletContext;
+import javax.annotation.PostConstruct;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.nio.CharBuffer;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * Created by andy on 2016/12/15.
@@ -33,7 +34,7 @@ import java.util.Set;
 @RequestMapping("core")
 @Controller
 public class CoreController {
-
+    private static final ZoeLogger log = ZoeLoggerFactory.getLogger(CoreController.class);
     @Autowired
     protected WxMpServiceImpl wxMpService;
     @Autowired
@@ -42,37 +43,41 @@ public class CoreController {
     protected WxMpConfigStorage wxMpConfigStorage;
     @Autowired
     protected WechatService wechatService;
+    @Autowired
+    private WebSocketService webSocketService;
 
-    @RequestMapping("")
+    @RequestMapping()
     public void wechat(HttpServletRequest request, HttpServletResponse response) {
         try {
-            init(request);
-            service(request, response);
+            service(request, response, wxMpService);
         } catch (ServletException e) {
+            log.error("error", e);
             e.printStackTrace();
         } catch (IOException e) {
+            log.error("error", e);
             e.printStackTrace();
         }
     }
 
-    private void init(HttpServletRequest request) throws ServletException {
+    @PostConstruct
+    public void init() throws ServletException {
         WxMpMessageHandler test = test();
-         WxMpMessageHandler reply = reply(request);
+        WxMpMessageHandler reply = reply();
         wxMpMessageRouter
                 .rule().async(false).content("andy").handler(test).end()
                 .rule().async(false).content("签到").handler(wechatService.sendSignMessage()).end()//回复签到
                 .rule().async(false).content("投票").handler(wechatService.sendVoteMessage()).end()//回复投票
                 .rule().async(false).event(WxConsts.EVT_SUBSCRIBE).handler(wechatService.sendSignMessage()).end()//关注事件
 //                .rule().async(false).msgType(WxConsts.XML_MSG_EVENT).event(WxConsts.EVT_SCAN).handler(wechatService.sendSignMessage()).end()//扫码事件
-        .rule().async(false).handler(reply).end()
+                .rule().async(false).msgType(WxConsts.MASS_MSG_TEXT).handler(reply).end()
+                .rule().async(false).handler(test).end();
         ;
     }
 
-    private void service(HttpServletRequest request, HttpServletResponse response)
+    private void service(HttpServletRequest request, HttpServletResponse response, WxMpServiceImpl wxMpService)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=utf-8");
         response.setStatus(HttpServletResponse.SC_OK);
-
         String signature = request.getParameter("signature");
         String nonce = request.getParameter("nonce");
         String timestamp = request.getParameter("timestamp");
@@ -82,7 +87,6 @@ public class CoreController {
             response.getWriter().println("非法请求警告");
             return;
         }
-
         String echostr = request.getParameter("echostr");
         if (StringUtils.isNotBlank(echostr)) {
             // 说明是一个仅仅用来验证的请求，回显echostr
@@ -123,7 +127,7 @@ public class CoreController {
         WxMpMessageHandler test = new WxMpMessageHandler() {
             public WxMpXmlOutMessage handle(WxMpXmlMessage wxMessage, Map<String, Object> context,
                                             WxMpService wxMpService, WxSessionManager sessionManager) throws WxErrorException {
-                WxMpXmlOutTextMessage m = WxMpXmlOutMessage.TEXT().content("andy").fromUser(wxMessage.getToUser())
+                WxMpXmlOutTextMessage m = WxMpXmlOutMessage.TEXT().content("你的消息我们已收到，我们会尽快回复你的！").fromUser(wxMessage.getToUser())
                         .toUser(wxMessage.getFromUser()).build();
                 return m;
             }
@@ -132,36 +136,21 @@ public class CoreController {
         return test;
     }
 
-    private WxMpMessageHandler reply(HttpServletRequest request) {
+    private WxMpMessageHandler reply() {
         WxMpMessageHandler test = new WxMpMessageHandler() {
             public WxMpXmlOutMessage handle(WxMpXmlMessage wxMessage, Map<String, Object> context,
                                             WxMpService wxMpService, WxSessionManager sessionManager) throws WxErrorException {
-                broadcast("hello world!", request);//将微信消息组装的弹幕格式的消息传入websocket通道
-                WxMpXmlOutTextMessage m = WxMpXmlOutMessage.TEXT().content("维护中。。。").fromUser(wxMessage.getToUser())
-                        .toUser(wxMessage.getFromUser()).build();
-                return m;
+                try {
+                    WxMpUser wxMpUser = wxMpService.getUserService().userInfo(wxMessage.getFromUser());
+                    webSocketService.broadcast(wxMessage.getContent(),wxMpUser.getHeadImgUrl());//将微信消息组装的弹幕格式的消息传入websocket通道
+                } catch (Exception e) {
+                    log.error("error", e);
+                    e.printStackTrace();
+                }
+                return null;
             }
         };
         return test;
     }
 
-    @SuppressWarnings("deprecation")
-    private void broadcast(String message, HttpServletRequest request) {//将消息传入websocket通道中
-        ServletContext application=request.getServletContext();
-        @SuppressWarnings("unchecked")
-        Set<MyMessageInbound> connections =
-                (Set<MyMessageInbound>)application.getAttribute("connections");
-        if(connections == null){
-            return;
-        }
-
-        for (MyMessageInbound connection : connections) {
-            try {
-                CharBuffer buffer = CharBuffer.wrap(message);
-                connection.getWsOutbound().writeTextMessage(buffer);
-            } catch (IOException ignore) {
-                // Ignore
-            }
-        }
-    }
 }

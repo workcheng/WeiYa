@@ -1,0 +1,57 @@
+html {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    overflow: hidden;
+}
+h2{margin:0;padding:0;}
+body {
+    margin: 0px;
+    padding: 0px;
+    font-family: "微软雅黑";
+    -webkit-user-select: none;
+    word-wrap: break-word;
+    word-break: break-all;
+    height: 100%;
+    background: url(../images/hb3.png) center no-repeat;
+    background-size: 100% 100%;
+}
+.grid_table{width:960px;margin:0 auto;margin-top:50px;}
+table.dataintable {
+    border-collapse: collapse;
+    border: 1px solid #8a8a8a;
+    width: 100%;
+    font-size: 14px;
+    table-layout: fixed;
+    color: #222;
+}
+table.dataintable th {
+    vertical-align: baseline;
+    padding: 4px 15px 5px 6px;
+    background-color: #f0f4f6;
+    border: 1px solid #c5dbec;
+    text-align: left;
+    color: #2e6e9e;
+    background:#dfeffc url(../images/u.png) 50% 50% repeat-x;
+}
+table.dataintable td {
+    vertical-align: text-top;
+    padding: 4px 15px 4px 6px;
+    border: 1px solid #a6c9e2;
+    word-break: break-all;
+    background: #fcfdfd url(../images/u2.png) 50% bottom repeat-x;
+}
+.ui-widget-header {
+    border: 1px solid #4297d7;
+    background: #5c9ccc url(../images/ui-bg.png) 50% 50% repeat-x;
+    color: #ffffff;
+}
+ .ui-jqgrid-title {
+     font-size: 22px;
+     margin: 4px 0;
+     text-align: center;
+     font-weight:500;
+}
+.eat-number{float:right;margin:10px 30px 0 0;}
+.eat-number .number{color:#2e6e9e;font-weight:bold;}
+

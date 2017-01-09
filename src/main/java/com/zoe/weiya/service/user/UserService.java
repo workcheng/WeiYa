@@ -15,7 +15,6 @@ import com.zoe.weiya.model.OnlyUser;
 import com.zoe.weiya.model.User;
 import com.zoe.weiya.util.RandomUtil;
 import com.zoe.weiya.util.ZoeUtil;
-import me.chanjar.weixin.common.bean.result.WxError;
 import me.chanjar.weixin.common.exception.WxErrorException;
 import me.chanjar.weixin.mp.api.impl.WxMpServiceImpl;
 import me.chanjar.weixin.mp.bean.result.WxMpUser;
@@ -24,6 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -45,11 +45,25 @@ public class UserService {
     @Autowired private ZoeRedisTemplate zoeRedisTemplate4;
     @Autowired
     private WxMpServiceImpl wxMpService;
+    private List<ZoeRedisTemplate> zoeRedisTemplateIndexList;
+
+
+    @PostConstruct
+    private void init(){
+        zoeRedisTemplateIndexList = new ArrayList<ZoeRedisTemplate>(){
+            private static final long serialVersionUID = 1L;
+            {
+                add(zoeRedisTemplate0);
+                add(zoeRedisTemplate1);
+                add(zoeRedisTemplate2);
+                add(zoeRedisTemplate3);
+                add(zoeRedisTemplate4);
+            }
+        };
+    }
 
     private ZoeRedisTemplate getZoeRedisTemplate() throws NotStartException {
-        ZoeRedisTemplate[] zoeRedisTemplateIndexList = {
-            zoeRedisTemplate0,zoeRedisTemplate1,zoeRedisTemplate2,zoeRedisTemplate3,zoeRedisTemplate4};
-            return zoeRedisTemplateIndexList[Integer.valueOf(ZoeUtil.getIndex())];
+            return zoeRedisTemplateIndexList.get(Integer.valueOf(ZoeUtil.getIndex()));
     }
 
     public void save(User u) throws NotStartException, InternalException, HasSignException, WxErrorException, VoteException {
@@ -170,4 +184,62 @@ public class UserService {
         return user;
     }
 
+    private List<String> getRandomOpenIds(Integer count) throws NotStartException {
+        return (List)getZoeRedisTemplate().randomMember(CommonConstant.USER,count);
+    }
+
+    public List<User> getRandomUser(Integer count) throws NotStartException,InternalException {
+        //TODO 数量超过返回错误
+        List<String> randomOpenIds = this.getRandomOpenIds(count);
+        List<User> userList = new ArrayList<>();
+        Long luckySetSize = getLuckySetSize();
+        Long userSize = getUserSize();
+        if(luckySetSize == userSize){//TODO REVIEW
+            throw new InternalException("中奖池已满");
+        }
+        for(int i=0; i<randomOpenIds.size(); i++){
+            String openId = randomOpenIds.get(i);
+                long inLuckySet= saveInLuckySet(openId);//存入中奖池
+                if(inLuckySet == 0){//已经获奖,重新抽
+                    List<String> openIds = this.getRandomOpenIds(1);
+                    randomOpenIds.remove(openId);
+                    randomOpenIds.add(openIds.get(0));
+                    i = i - 1;//移除-1，当前位置被占用
+                } else if(inLuckySet == 1){
+                    User value = (User)getZoeRedisTemplate().getValue(openId);
+                    userList.add(value);
+                }
+        }
+        return userList;
+    }
+
+    private Long saveInLuckySet(String openId) throws NotStartException, InternalException {
+        Long aLong = getZoeRedisTemplate().setSet(CommonConstant.LUCKY_USER, openId);
+        if(aLong == 1){
+            //success
+            return aLong;
+        }else if(aLong ==0){
+            //fail
+            return aLong;
+        }else{
+            throw new InternalException("失败");
+        }
+    }
+
+    public List<User> getLuckySet() throws NotStartException {
+        Set<String> set = (Set)getZoeRedisTemplate().getSet(CommonConstant.LUCKY_USER);
+        List<User> userList = new ArrayList<>();
+        Iterator<String> iterator = set.iterator();
+        while (iterator.hasNext()){
+            String openId = iterator.next();
+            User user = (User) getZoeRedisTemplate().getValue(openId);
+            userList.add(user);
+        }
+        return userList;
+    }
+
+    public Long getLuckySetSize() throws NotStartException {
+        Long setSize = getZoeRedisTemplate().getSetSize(CommonConstant.LUCKY_USER);
+        return setSize;
+    }
 }
