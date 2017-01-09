@@ -82,5 +82,6 @@ var saveMsgClick = function (headImgUrl) {
                 console.log("data", JSON.stringify(data));
             }
         })
+        $btn.removeClass("disabled");
     })
 }

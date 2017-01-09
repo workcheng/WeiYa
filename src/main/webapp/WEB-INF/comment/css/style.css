@@ -44,8 +44,17 @@ html, body {
 }
 
 @media screen and(max-width: 320px) {
+    .gowall .send_words {
+        margin-left: 45px;
+    }
+
     .gowall .send_words .wordsedit1 textarea {
+        width: 600px !important;
         font-size: 30px !important;
+    }
+
+    .senddiv .fasong input {
+        width: 600px !important;
     }
 }
 

@@ -3,6 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <script type="text/javascript" src="../lottery/js/config.js"></script>
+    <script src="http://apps.bdimg.com/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script type="text/javascript">
+        var mealUrl = BaseUrl + "meal/order";
+        $.ajax({
+            url: mealUrl,
+            success: function (json) {
+                alert(JSON.stringify(json));
+            }
+        })
+    </script>
 </head>
 <body>
 
