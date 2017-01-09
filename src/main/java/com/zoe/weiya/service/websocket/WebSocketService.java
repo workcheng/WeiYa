@@ -72,12 +72,12 @@ public class WebSocketService {
             if (connections == null) {
                 return;
             }
+            ZoeMessage zoeMessage = new ZoeMessage();
+            String replaceMessage = sensitiveService.replaceSensitiveWord(message, 1, "*");
+            zoeMessage.setContent(replaceMessage);
+            zoeMessage.setHeadImgUrl(headImgUrl);
             for (MyMessageInbound connection : connections) {
                 try {
-                    ZoeMessage zoeMessage = new ZoeMessage();
-                    String replaceMessage = sensitiveService.replaceSensitiveWord(message, 1, "*");
-                    zoeMessage.setContent(replaceMessage);
-                    zoeMessage.setHeadImgUrl(headImgUrl);
                     CharBuffer buffer = CharBuffer.wrap(JacksonJsonUtil.beanToJson(zoeMessage));
                     connection.getWsOutbound().writeTextMessage(buffer);
                 } catch (IOException e) {
