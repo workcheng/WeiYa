@@ -109,25 +109,12 @@ public class UserController {
      * @return
      */
     @RequestMapping(value = "userList", method = RequestMethod.GET)
-    public Object getUserList() {
+    public Object getUserList(int count) {
         try {
-            return ZoeObject.success(userService.getSignUser());
-        } catch (NotStartException e) {
-            log.error("error", e);
-            return ZoeObject.failure(ZoeErrorCode.NOT_START);
-        } catch (InternalException e) {
-            return ZoeObject.failure(e);
-        }
-    }
-
-    /**
-     * 获取签到用户信息列表set
-     * @return
-     */
-    @RequestMapping(value = "userSet", method = RequestMethod.GET)
-    public Object userSet() {
-        try {
-            return ZoeObject.success(userService.getSignUserSet());
+            if(count == 0){
+                count = 50;
+            }
+            return ZoeObject.success(userService.randomUsers(50));
         } catch (NotStartException e) {
             log.error("error", e);
             return ZoeObject.failure(ZoeErrorCode.NOT_START);
@@ -151,14 +138,10 @@ public class UserController {
         return ZoeObject.success(ZoeErrorCode.SUCCESS);
     }
 
-
-
-
     @RequestMapping(value = "lotterySelect", method = RequestMethod.GET)
     public Object LotterySelect() {
         try {
-//            return ZoeObject.success(userService.LotterySelect());
-            return ZoeObject.success(userService.getRandomUser(1));
+            return ZoeObject.success(userService.randomUser(1));
         } catch (NotStartException e) {
             log.error("error", e);
             return ZoeObject.failure(ZoeErrorCode.NOT_START);
@@ -171,7 +154,7 @@ public class UserController {
     @RequestMapping(value = "lotteryUserList", method = RequestMethod.GET)
     public Object LotteryUser(@RequestParam Integer count) {
         try {
-            return ZoeObject.success(userService.getRandomUser(count));
+            return ZoeObject.success(userService.randomUser(count));
         } catch (NotStartException e) {
             log.error("error", e);
             return ZoeObject.failure(ZoeErrorCode.NOT_START);
@@ -181,4 +164,29 @@ public class UserController {
         }
     }
 
+    @RequestMapping(value = "allUserList", method = RequestMethod.GET)
+    public Object getUserList() {
+        try {
+            return ZoeObject.success(userService.randomUsers());
+        } catch (NotStartException e) {
+            log.error("error", e);
+            return ZoeObject.failure(ZoeErrorCode.NOT_START);
+        } catch (InternalException e) {
+            log.error("error", e);
+            return ZoeObject.failure(e);
+        }
+    }
+
+    @RequestMapping(value = "userListCount", method = RequestMethod.GET)
+    public Object getUserListCount() {
+        try {
+            return ZoeObject.success(userService.getUserSize());
+        } catch (NotStartException e) {
+            log.error("error", e);
+            return ZoeObject.failure(ZoeErrorCode.NOT_START);
+        } catch (InternalException e) {
+            log.error("error", e);
+            return ZoeObject.failure(e);
+        }
+    }
 }
