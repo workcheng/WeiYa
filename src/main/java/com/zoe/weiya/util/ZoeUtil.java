@@ -28,8 +28,6 @@ public class ZoeUtil {
                                 return CommonConstant.SIGN_USER_FIRST_DAY_MORNING;
                             case CommonConstant.NOON:
                                 return CommonConstant.SIGN_USER_FIRST_DAY_NOON;
-                            case CommonConstant.NIGHT:
-                                return CommonConstant.SIGN_USER_FIRST_DAY_NIGHT;
                             default:
                                 throw new NotStartException(ZoeErrorCode.NOT_START.getDescription());
                         }
@@ -41,17 +39,6 @@ public class ZoeUtil {
                                 return CommonConstant.SIGN_USER_SECOND_DAY_NOON;
                             case CommonConstant.NIGHT:
                                 return CommonConstant.SIGN_USER_SECOND_DAY_NIGHT;
-                            default:
-                                throw new NotStartException(ZoeErrorCode.NOT_START.getDescription());
-                        }
-                    }else if(CommonConstant.THIRD_DAY.equals(ZoeDateUtil.whichDay(now))){
-                        switch (ZoeDateUtil.getTime(now)){
-                            case CommonConstant.MORNING:
-                                return CommonConstant.SIGN_USER_THIRD_DAY_MORNING;
-                            case CommonConstant.NOON:
-                                return CommonConstant.SIGN_USER_THIRD_DAY_NOON;
-                            case CommonConstant.NIGHT:
-                                return CommonConstant.SIGN_USER_THIRD_DAY_NIGHT;
                             default:
                                 throw new NotStartException(ZoeErrorCode.NOT_START.getDescription());
                         }

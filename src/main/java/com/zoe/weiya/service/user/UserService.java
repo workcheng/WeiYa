@@ -62,8 +62,12 @@ public class UserService {
         };
     }
 
-    private ZoeRedisTemplate getZoeRedisTemplate() throws NotStartException {
+    private ZoeRedisTemplate getZoeRedisTemplate() throws NotStartException,InternalException {
+        try {
             return zoeRedisTemplateIndexList.get(Integer.valueOf(ZoeUtil.getIndex()));
+        } catch (IndexOutOfBoundsException e) {
+            throw new InternalException("时间设置不对");
+        }
     }
 
     public void save(User u) throws NotStartException, InternalException, HasSignException, WxErrorException, VoteException {
@@ -104,13 +108,13 @@ public class UserService {
         }
     }
 
-    public void commitLotteryPerson(List<OnlyUser> users) throws NotStartException {
+    public void commitLotteryPerson(List<OnlyUser> users) throws NotStartException, InternalException {
         SimpleDateFormat sdf = new SimpleDateFormat();
         String format = sdf.format(new Date());
         getZoeRedisTemplate().setValue(format,users);
     }
 
-    public ResponseMsg deleteAll(List<OnlyUser> users) throws NotStartException {
+    public ResponseMsg deleteAll(List<OnlyUser> users) throws NotStartException, InternalException {
         boolean flag = false;
         for (OnlyUser onlyUser : users) {
             getZoeRedisTemplate().deleteHash(onlyUser.getOpenId());
@@ -123,27 +127,27 @@ public class UserService {
         }
     }
 
-    public User get(String openId) throws NotStartException {
+    public User get(String openId) throws NotStartException, InternalException {
         return (User) getZoeRedisTemplate().getValue(openId);
     }
 
-    public Long saveInSet(String openId) throws NotStartException {
+    public Long saveInSet(String openId) throws NotStartException, InternalException {
         return getZoeRedisTemplate().setSet(CommonConstant.USER, openId);
     }
 
-    public Set<String> getOpenIdSet() throws NotStartException {
+    public Set<String> getOpenIdSet() throws NotStartException, InternalException {
         return (Set) getZoeRedisTemplate().getSet(CommonConstant.USER);
     }
 
-    public boolean isMember(String openId) throws NotStartException {
+    public boolean isMember(String openId) throws NotStartException, InternalException {
         return getZoeRedisTemplate().isMember(CommonConstant.USER, openId);
     }
 
-    public Long getUserSize() throws NotStartException {
+    public Long getUserSize() throws NotStartException, InternalException {
         return getZoeRedisTemplate().getSetSize(CommonConstant.USER);
     }
 
-    public List<User> getSignUser() throws NotStartException {
+    public List<User> getSignUser() throws NotStartException, InternalException {
         Set<String> openIdSet = this.getOpenIdSet();
         List<User> list = new ArrayList<>();
         if (null != openIdSet) {
@@ -158,7 +162,7 @@ public class UserService {
         return list;
     }
 
-    public Set<User> getSignUserSet() throws NotStartException {
+    public Set<User> getSignUserSet() throws NotStartException, InternalException {
         Set<String> idSet = this.getOpenIdSet();
         Set<User> list = new HashSet<>();
         if (null != idSet) {
@@ -174,7 +178,7 @@ public class UserService {
     //TODO 后端判断抽奖重复
     //TODO 签到的跟抽奖的分离出来，签到以五份数据保存，抽奖保存在一份，五个key->value
     //抽奖
-    public User LotterySelect() throws NotStartException {
+    public User LotterySelect() throws NotStartException, InternalException {
         //1.获取所有签到人员的信息
         List<User> signUser = getSignUser();
         List<User> list = RandomUtil.createRandomList(signUser, 1);
@@ -184,7 +188,7 @@ public class UserService {
         return user;
     }
 
-    private List<String> getRandomOpenIds(Integer count) throws NotStartException {
+    private List<String> getRandomOpenIds(Integer count) throws NotStartException, InternalException {
         return (List)getZoeRedisTemplate().randomMember(CommonConstant.USER,count);
     }
 
@@ -226,7 +230,7 @@ public class UserService {
         }
     }
 
-    public List<User> getLuckySet() throws NotStartException {
+    public List<User> getLuckySet() throws NotStartException, InternalException {
         Set<String> set = (Set)getZoeRedisTemplate().getSet(CommonConstant.LUCKY_USER);
         List<User> userList = new ArrayList<>();
         Iterator<String> iterator = set.iterator();
@@ -238,7 +242,7 @@ public class UserService {
         return userList;
     }
 
-    public Long getLuckySetSize() throws NotStartException {
+    public Long getLuckySetSize() throws NotStartException, InternalException {
         Long setSize = getZoeRedisTemplate().getSetSize(CommonConstant.LUCKY_USER);
         return setSize;
     }
