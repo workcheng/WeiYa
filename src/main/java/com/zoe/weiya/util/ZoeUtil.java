@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 public class ZoeUtil {
 
     public static String getIndex() throws NotStartException {
-        //TODO 考虑跨年跨月的情况,目前只支持两天，第一天上下午，第二天上下午和晚上
+        //TODO 考虑跨年跨月的情况,目前只支持三天，活动当天上下午和晚上，获得第二天第三天上下午和晚上
         ZoeDate now = ZoeDateUtil.moment();
         ZoeDate startTime = ZoeProperties.getStartTime();
         if(now.getYear().equals(startTime.getYear())){
@@ -28,6 +28,8 @@ public class ZoeUtil {
                                 return CommonConstant.SIGN_USER_FIRST_DAY_MORNING;
                             case CommonConstant.NOON:
                                 return CommonConstant.SIGN_USER_FIRST_DAY_NOON;
+                            case CommonConstant.NIGHT:
+                                return CommonConstant.SIGN_USER_FIRST_DAY_NIGHT;
                             default:
                                 throw new NotStartException(ZoeErrorCode.NOT_START.getDescription());
                         }
@@ -39,6 +41,17 @@ public class ZoeUtil {
                                 return CommonConstant.SIGN_USER_SECOND_DAY_NOON;
                             case CommonConstant.NIGHT:
                                 return CommonConstant.SIGN_USER_SECOND_DAY_NIGHT;
+                            default:
+                                throw new NotStartException(ZoeErrorCode.NOT_START.getDescription());
+                        }
+                    }else if(CommonConstant.THIRD_DAY.equals(ZoeDateUtil.whichDay(now))){
+                        switch (ZoeDateUtil.getTime(now)){
+                            case CommonConstant.MORNING:
+                                return CommonConstant.SIGN_USER_THIRD_DAY_MORNING;
+                            case CommonConstant.NOON:
+                                return CommonConstant.SIGN_USER_THIRD_DAY_NOON;
+                            case CommonConstant.NIGHT:
+                                return CommonConstant.SIGN_USER_THIRD_DAY_NIGHT;
                             default:
                                 throw new NotStartException(ZoeErrorCode.NOT_START.getDescription());
                         }

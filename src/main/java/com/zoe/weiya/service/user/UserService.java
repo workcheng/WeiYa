@@ -23,6 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -44,12 +45,25 @@ public class UserService {
     @Autowired private ZoeRedisTemplate zoeRedisTemplate4;
     @Autowired
     private WxMpServiceImpl wxMpService;
-    private static final String LUCKY_USER = "LUCKY";
+    private List<ZoeRedisTemplate> zoeRedisTemplateIndexList;
+
+
+    @PostConstruct
+    private void init(){
+        zoeRedisTemplateIndexList = new ArrayList<ZoeRedisTemplate>(){
+            private static final long serialVersionUID = 1L;
+            {
+                add(zoeRedisTemplate0);
+                add(zoeRedisTemplate1);
+                add(zoeRedisTemplate2);
+                add(zoeRedisTemplate3);
+                add(zoeRedisTemplate4);
+            }
+        };
+    }
 
     private ZoeRedisTemplate getZoeRedisTemplate() throws NotStartException {
-        ZoeRedisTemplate[] zoeRedisTemplateIndexList = {
-            zoeRedisTemplate0,zoeRedisTemplate1,zoeRedisTemplate2,zoeRedisTemplate3,zoeRedisTemplate4};
-            return zoeRedisTemplateIndexList[Integer.valueOf(ZoeUtil.getIndex())];
+            return zoeRedisTemplateIndexList.get(Integer.valueOf(ZoeUtil.getIndex()));
     }
 
     public void save(User u) throws NotStartException, InternalException, HasSignException, WxErrorException, VoteException {
@@ -200,7 +214,7 @@ public class UserService {
     }
 
     private Long saveInLuckySet(String openId) throws NotStartException, InternalException {
-        Long aLong = getZoeRedisTemplate().setSet(UserService.LUCKY_USER, openId);
+        Long aLong = getZoeRedisTemplate().setSet(CommonConstant.LUCKY_USER, openId);
         if(aLong == 1){
             //success
             return aLong;
@@ -213,7 +227,7 @@ public class UserService {
     }
 
     public List<User> getLuckySet() throws NotStartException {
-        Set<String> set = (Set)getZoeRedisTemplate().getSet(UserService.LUCKY_USER);
+        Set<String> set = (Set)getZoeRedisTemplate().getSet(CommonConstant.LUCKY_USER);
         List<User> userList = new ArrayList<>();
         Iterator<String> iterator = set.iterator();
         while (iterator.hasNext()){
@@ -225,7 +239,7 @@ public class UserService {
     }
 
     public Long getLuckySetSize() throws NotStartException {
-        Long setSize = getZoeRedisTemplate().getSetSize(UserService.LUCKY_USER);
+        Long setSize = getZoeRedisTemplate().getSetSize(CommonConstant.LUCKY_USER);
         return setSize;
     }
 }

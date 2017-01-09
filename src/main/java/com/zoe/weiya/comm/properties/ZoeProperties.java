@@ -79,4 +79,11 @@ public class ZoeProperties {
         ZoeDate zoeDate = new ZoeDate(startYear,startMonth,startDay,null,null,null);
         return zoeDate;
     }
+
+    public static int getNoonHour(){
+        return Integer.valueOf(get("config/static/static.properties", "zoe.date.noon"));
+    }
+    public static int getOffWorkHour(){
+        return Integer.valueOf(get("config/static/static.properties", "zoe.date.off.work"));
+    }
 }
