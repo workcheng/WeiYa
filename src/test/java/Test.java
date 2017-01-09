@@ -1,10 +1,9 @@
-import com.zoe.weiya.AbstractTestCase;
 import redis.clients.jedis.Jedis;
 
 /**
  * Created by chenghui on 2016/12/20.
  */
-public class Test extends AbstractTestCase{
+public class Test{
 
 
     public static void main(String[] args) {
@@ -23,10 +22,9 @@ public class Test extends AbstractTestCase{
         System.out.println(GetDistance(lat1,lng1,lat2,lng2));
     }
 
-    private void method(){
-
-
-
+    @org.junit.Test
+    public void method(){
+        System.out.println(Long.valueOf(1));
     }
 
     private static double rad(double d)

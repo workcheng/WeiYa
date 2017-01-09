@@ -147,40 +147,35 @@ public class UserService {
         return getZoeRedisTemplate().getSetSize(CommonConstant.USER);
     }
 
-    public List<User> getSignUser() throws NotStartException, InternalException {
-        Set<String> openIdSet = this.getOpenIdSet();
-        List<User> list = new ArrayList<>();
-        if (null != openIdSet) {
-            Iterator<String> i = openIdSet.iterator();//迭代
-            while (i.hasNext()) {//遍历
-                String openId = i.next();
-                User user = (User) getZoeRedisTemplate().getValue(openId);
-                list.add(user);
-                
-            }
-        }
-        return list;
+    public List<String> randomOpenIds(Long count) throws InternalException, NotStartException {
+        return (List) getZoeRedisTemplate().randomMember(CommonConstant.USER, count);
     }
 
-    public Set<User> getSignUserSet() throws NotStartException, InternalException {
-        Set<String> idSet = this.getOpenIdSet();
-        Set<User> list = new HashSet<>();
-        if (null != idSet) {
-            Iterator<String> i = idSet.iterator();
-            while (i.hasNext()) {
-                String openId = i.next();
-                User user = (User) getZoeRedisTemplate().getValue(openId);
-                list.add(user);
-            }
+    public List<User> randomUsers(int count) throws InternalException, NotStartException {
+        List<User> result = new ArrayList<>();
+        List<String> list = randomOpenIds(Long.valueOf(count));
+        for (int i=0; i<list.size(); i++){
+            User user = (User) getZoeRedisTemplate().getValue(list.get(i));
+            result.add(user);
         }
-        return list;
+        return result;
+    }
+
+    public List<User> randomUsers() throws InternalException, NotStartException {
+        List<User> result = new ArrayList<>();
+        List<String> list = randomOpenIds(getUserSize());
+        for (int i=0; i<list.size(); i++){
+            User user = (User) getZoeRedisTemplate().getValue(list.get(i));
+            result.add(user);
+        }
+        return result;
     }
     //TODO 后端判断抽奖重复
     //TODO 签到的跟抽奖的分离出来，签到以五份数据保存，抽奖保存在一份，五个key->value
     //抽奖
     public User LotterySelect() throws NotStartException, InternalException {
         //1.获取所有签到人员的信息
-        List<User> signUser = getSignUser();
+        List<User> signUser = randomUsers();
         List<User> list = RandomUtil.createRandomList(signUser, 1);
         //分批次抽奖中奖名单
         //2.进行随机筛选出一条（抽奖）
@@ -188,13 +183,9 @@ public class UserService {
         return user;
     }
 
-    private List<String> getRandomOpenIds(Integer count) throws NotStartException, InternalException {
-        return (List)getZoeRedisTemplate().randomMember(CommonConstant.USER,count);
-    }
-
-    public List<User> getRandomUser(Integer count) throws NotStartException,InternalException {
+    public List<User> randomUser(Integer count) throws NotStartException,InternalException {
         //TODO 数量超过返回错误
-        List<String> randomOpenIds = this.getRandomOpenIds(count);
+        List<String> randomOpenIds = this.randomOpenIds(Long.valueOf(count));
         List<User> userList = new ArrayList<>();
         Long luckySetSize = getLuckySetSize();
         Long userSize = getUserSize();
@@ -205,7 +196,7 @@ public class UserService {
             String openId = randomOpenIds.get(i);
                 long inLuckySet= saveInLuckySet(openId);//存入中奖池
                 if(inLuckySet == 0){//已经获奖,重新抽
-                    List<String> openIds = this.getRandomOpenIds(1);
+                    List<String> openIds = this.randomOpenIds(Long.valueOf(1));
                     randomOpenIds.remove(openId);
                     randomOpenIds.add(openIds.get(0));
                     i = i - 1;//移除-1，当前位置被占用
@@ -245,5 +236,21 @@ public class UserService {
     public Long getLuckySetSize() throws NotStartException, InternalException {
         Long setSize = getZoeRedisTemplate().getSetSize(CommonConstant.LUCKY_USER);
         return setSize;
+    }
+
+    public List<User> orderMealUserList() throws InternalException, NotStartException {
+        Set<String> openIdSet =  getOpenIdSet();
+        List<User> userList = new ArrayList<>();
+        if(null != openIdSet){
+            Iterator<String> iterator = openIdSet.iterator();
+            while (iterator.hasNext()){
+                String next = iterator.next();
+                User user = get(next);
+                if(user.getOrder().equals(1)){
+                    userList.add(user);
+                }
+            }
+        }
+        return userList;
     }
 }
