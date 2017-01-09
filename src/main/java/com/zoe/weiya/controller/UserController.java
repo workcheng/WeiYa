@@ -167,7 +167,7 @@ public class UserController {
     @RequestMapping(value = "allUserList", method = RequestMethod.GET)
     public Object getUserList() {
         try {
-            return ZoeObject.success(userService.randomUsers());
+            return ZoeObject.success(userService.orderMealUserCountAndUserList());
         } catch (NotStartException e) {
             log.error("error", e);
             return ZoeObject.failure(ZoeErrorCode.NOT_START);
