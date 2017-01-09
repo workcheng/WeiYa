@@ -112,7 +112,7 @@ public class UserController {
     public Object getRandomUserList(Integer count) {
         try {
             if(null == count){
-                count = 50;
+                count = 100;
             }
             return ZoeObject.success(userService.randomUsers(50));
         } catch (NotStartException e) {
