@@ -1,4 +1,3 @@
-
 var lottery = {
     allLotteryUser: [],//签到用户
     autoExchangeIndex: 0,
@@ -22,7 +21,6 @@ var lottery = {
             url: getUserList,
             success: function (data) {
                 _this.allLotteryUser = data.data;
-
                 $("#userCount").text(_this.allLotteryUser.length);
             }
         })
@@ -76,6 +74,7 @@ var lottery = {
             }
             else {
                 console.log("暂时没人签到哦~");
+                showInfo("暂时没人签到哦~", 0);
                 _this.showBeginBtn();
             }
         }
@@ -140,7 +139,7 @@ var lottery = {
                     lottery.showLuckyUser(lottery.userCount, imgUrl, userName, luckyLevel);
                 }
                 else {
-                    lottery.showLuckAnimate("images/default.png", "", "小伙伴们都已经中奖啦！",true);
+                    lottery.showLuckAnimate("images/default.png", "", "小伙伴们都已经中奖啦！", true);
                     if (lottery.autoHanle != 0) {
                         clearInterval(lottery.autoHanle);
                         lottery.autoHanle = 0;
@@ -184,11 +183,11 @@ var lottery = {
             "margin-left": "-400px",
             "opacity": "1"
         }, "fast");
-        $(".luckUserHead").animate({ "margin-top": "-275px" });
-        $(".showLuckLevel").animate({ "margin-top": "40px" });
-        $(".showLuckUserName").animate({ "opacity": "1" });
+        $(".luckUserHead").animate({"margin-top": "-275px"});
+        $(".showLuckLevel").animate({"margin-top": "40px"});
+        $(".showLuckUserName").animate({"opacity": "1"});
         setTimeout(function () {
-            $(".animate-bg").animate({ "opacity": "0" }, "slow", function () {
+            $(".animate-bg").animate({"opacity": "0"}, "slow", function () {
                 $(".animate-bg").remove();
             });
             $("#bgsound").remove();
@@ -220,5 +219,7 @@ $(document).ready(function () {
         lottery.stopLottery();
     })
     $("#background").fullBg();
-    setInterval(function () { lottery.getCnt(); }, 1000 * 5)
+    setInterval(function () {
+        lottery.getCnt();
+    }, 1000 * 5)
 });

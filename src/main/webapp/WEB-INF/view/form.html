@@ -54,26 +54,26 @@
         }
     </style>
 </head>
-<body>
 <div>
     <fieldset>
         <!--  <legend><img src="images/favicon.ico"></legend>-->
         <div style="height: 100px;">
-            <div class="form-row" style="width: 100px;height: 100px;float: left;clear: none">
-                <img src="images/zylogo.png" style="width: 100px;height: 100px">
+            <div class="form-row form-row-1" style="float: left;clear: none">
+                <img src="images/zylogo.png" style="">
             </div>
-            <div class="form-row" style="width: 200px;height: 100px;float: left;clear: none">
+            <div class="form-row form-row-2" style="float: left;clear: none">
                 <h2>年会签到表</h2>
                 <span>感谢您参加智业年会，请登记您的签到信息。</span>
             </div>
         </div>
         <div class="error_dialog">
-            <img src="images/error.png">
+            <img src="images/error.png">\
             <p></p>
         </div>
         <div id="partySign" style="display: none;">
             <div class="form-row">
                 <div class="field-label" style="width: 50px"><label for="userName">姓名</label>:</div>
+                <span style="color: red;" id="user"></span>
                 <div class="field-widget"><input name="userName" id="userName" class="required">
                 </div>
             </div>
@@ -121,7 +121,7 @@
                            style="margin-top: 3px;width: 18px;height: 18px;">
                 </div>
             </div>
-            <div class="form-row" style="float: right;margin-right: 30px;">
+            <div class="form-row form-row-3" style="">
                 <input type="button" class="submit" id="btnSign" value="签到"/>
             </div>
         </div>
@@ -133,11 +133,6 @@
         <div id="reSign" style="display: none" class="field-content">
             <span>
                 对不起，您已经签到一次了，不能重复签到！
-            </span>
-        </div>
-        <div id="unStart" style="display: none" class="field-content">
-            <span>
-                活动未开始！
             </span>
         </div>
     </fieldset>
