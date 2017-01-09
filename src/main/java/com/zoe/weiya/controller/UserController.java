@@ -109,10 +109,10 @@ public class UserController {
      * @return
      */
     @RequestMapping(value = "userList", method = RequestMethod.GET)
-    public Object getUserList(int count) {
+    public Object getRandomUserList(Integer count) {
         try {
-            if(count == 0){
-                count = 50;
+            if(null == count){
+                count = 100;
             }
             return ZoeObject.success(userService.randomUsers(50));
         } catch (NotStartException e) {
