@@ -149,6 +149,10 @@ public class UserService {
         return getZoeRedisTemplate().getSetSize(CommonConstant.USER);
     }
 
+    public Long getUserSize(int index) throws NotStartException, InternalException {
+        return zoeRedisTemplateIndexList.get(index).getSetSize(CommonConstant.USER);
+    }
+
     public Set<String> randomOpenIdSet(Long count) throws InternalException, NotStartException {
         Set<String> set = new HashSet<String>();
         set.addAll((List)getZoeRedisTemplate().randomMember(CommonConstant.USER, count));

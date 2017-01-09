@@ -177,9 +177,21 @@ public class UserController {
         }
     }
 
+    /**
+     *
+     * @param index 22号上午index=0，下午index=1；23号上午index=2,下午index=3，晚上index=4
+     * @return
+     */
     @RequestMapping(value = "userListCount", method = RequestMethod.GET)
-    public Object getUserListCount() {
+    public Object getUserListCount(Integer index) {
         try {
+            if(null != index){
+                if(index > 4){
+                    log.error("列表不存在");
+                    return ZoeObject.failure("列表不存在");
+                }
+                return ZoeObject.success(userService.getUserSize(index));
+            }
             return ZoeObject.success(userService.getUserSize());
         } catch (NotStartException e) {
             log.error("error", e);
