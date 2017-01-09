@@ -108,6 +108,6 @@ public class UserServiceTest extends AbstractTestCase {
 
     @Test
     public void testRandomOpenIds() throws Exception {
-        System.out.println(userService.randomOpenId(Long.valueOf(100)));
+        System.out.println(userService.randomOpenIds(Long.valueOf(100)));
     }
 }
