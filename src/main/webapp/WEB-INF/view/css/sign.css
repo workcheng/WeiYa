@@ -4,7 +4,40 @@ html {
     margin: 0;
     overflow: hidden;
 }
-h2{margin:0;padding:0;}
+
+h2 {
+    margin: 0;
+    padding: 0;
+}
+
+/*表格样式*/
+table {
+    width: 100%; /*撑满上面定义的500像素*/
+    border: 1px solid #FF00FF;
+    border-collapse: collapse; /*边线与旁边的合并*/
+    table-layout: fixed;
+}
+
+/*表头单元格(这里将表头单元格的样式设置成了和单元格一样,实际中可以改变)*/
+table tr th {
+    border: 1px solid #FF00FF;
+    overflow: hidden; /*超出长度的内容不显示*/
+    /*word-wrap: break-word;  内容将在边界内换行,这里显示省略号,所以不需要了*/
+    word-break: break-all; /*字内断开*/
+    text-overflow: ellipsis; /*当对象内文本溢出时显示省略标记（…），省略标记插入的位置是最后一个字符*/
+    white-space: nowrap;
+}
+
+/*单元格样式*/
+table tr td {
+    border: 1px solid #FF00FF;
+    overflow: hidden;
+    /*word-wrap: break-word;  内容将在边界内换行,这里显示省略号,所以不需要了*/
+    word-break: break-all;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
 body {
     margin: 0px;
     padding: 0px;
@@ -16,7 +49,13 @@ body {
     background: url(../images/hb3.png) center no-repeat;
     background-size: 100% 100%;
 }
-.grid_table{width:960px;margin:0 auto;margin-top:50px;}
+
+.grid_table {
+    width: 960px;
+    margin: 0 auto;
+    margin-top: 20px;
+}
+
 table.dataintable {
     border-collapse: collapse;
     border: 1px solid #8a8a8a;
@@ -25,15 +64,17 @@ table.dataintable {
     table-layout: fixed;
     color: #222;
 }
+
 table.dataintable th {
     vertical-align: baseline;
     padding: 4px 15px 5px 6px;
     background-color: #f0f4f6;
     border: 1px solid #c5dbec;
-    text-align: left;
+    text-align: center;
     color: #2e6e9e;
-    background:#dfeffc url(../images/u.png) 50% 50% repeat-x;
+    background: #dfeffc url(../images/u.png) 50% 50% repeat-x;
 }
+
 table.dataintable td {
     vertical-align: text-top;
     padding: 4px 15px 4px 6px;
@@ -41,17 +82,63 @@ table.dataintable td {
     word-break: break-all;
     background: #fcfdfd url(../images/u2.png) 50% bottom repeat-x;
 }
+
 .ui-widget-header {
     border: 1px solid #4297d7;
     background: #5c9ccc url(../images/ui-bg.png) 50% 50% repeat-x;
     color: #ffffff;
 }
- .ui-jqgrid-title {
-     font-size: 22px;
-     margin: 4px 0;
-     text-align: center;
-     font-weight:500;
-}
-.eat-number{float:right;margin:10px 30px 0 0;}
-.eat-number .number{color:#2e6e9e;font-weight:bold;}
 
+.ui-jqgrid-title {
+    font-size: 22px;
+    margin: 4px 0;
+    text-align: center;
+    font-weight: 500;
+}
+
+.eat-number {
+    float: right;
+    margin: 10px 30px 0 0;
+}
+
+.eat-number .number {
+    color: #2e6e9e;
+    font-weight: bold;
+}
+
+.select {
+    appearance: none;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    width: 120px;
+    padding-left: 10px;
+    display: inline-block;
+    position: relative;
+    top: 10px;
+    background: #fff;
+    border-radius: 5px;
+    height: 32px;
+    font-size: 16px;
+    line-height: 32px;
+    overflow: hidden;
+    background: url(../images/select.png) right 13px no-repeat;
+    background-color: #fff;
+    text-align: left;
+    color: #383838;
+}
+
+.condition {
+    width: 1200px;
+    height: 50px;
+    text-align: center;
+    padding-top: 20px;
+    font-size: 20px;
+    margin-bottom: 20px;
+    margin-left: 20px;
+}
+
+.condition label {
+    vertical-align: bottom;
+    margin-left: 10px;
+    line-height: 14px;
+}
