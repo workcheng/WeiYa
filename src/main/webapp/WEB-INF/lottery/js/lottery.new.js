@@ -29,12 +29,12 @@ var lottery = {
         console.log("获取总数");
         var _this = this;
         //出现正在获取最新签到成员，请稍候...todo：这里有问题，不能获取全部的签到用户，不然会卡
-        var getUserList = BaseUrl + "user/userList";
+        var getUserList = BaseUrl + "user/userListCount";
         $.ajax({
             async: true,
             url: getUserList,
             success: function (data) {
-                $("#userCount").text(data.data.length);
+                $("#userCount").text(data.data);
             }
         })
     },

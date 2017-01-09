@@ -6,12 +6,12 @@ $(document).ready(function () {
     signGrid();
 
 });
-var signGrid = function (index, item) {
-    var orderUrl = BaseUrl + "meal/order";
+var signGrid = function () {
+    var orderUrl = BaseUrl + "user/allUserList";
     $.ajax({
         url: orderUrl,
         success: function (json) {
-alert(JSON.stringify(json))
+            alert(JSON.stringify(json))
         }
     })
     var jqTR = $("<tr></tr>");

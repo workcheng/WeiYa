@@ -6,12 +6,19 @@
     <script type="text/javascript" src="../lottery/js/config.js"></script>
     <script src="http://apps.bdimg.com/libs/jquery/1.11.3/jquery.min.js"></script>
     <script type="text/javascript">
-        var mealUrl = BaseUrl + "meal/order";
-        $.ajax({
-            url: mealUrl,
-            success: function (json) {
-                alert(JSON.stringify(json));
-            }
+        $(document).ready(function () {
+            var mealUrl = BaseUrl + "meal/order";
+            $.ajax({
+                url: mealUrl,
+                success: function (json) {
+                    var orderUser = json.data.orderUsers;
+                    console.log("dsdsdd", JSON.stringify(json.data.now));
+                    $.each(orderUser, function (index, item) {
+                        console.log("dsdsdd", JSON.stringify(item));
+
+                    })
+                }
+            })
         })
     </script>
 </head>
