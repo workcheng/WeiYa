@@ -147,11 +147,19 @@ public class UserService {
         return getZoeRedisTemplate().getSetSize(CommonConstant.USER);
     }
 
-    public List<String> randomOpenIds(Long count) throws InternalException, NotStartException {
-        return (List) getZoeRedisTemplate().randomMember(CommonConstant.USER, count);
+    public Set<String> randomOpenIdSet(Long count) throws InternalException, NotStartException {
+        Set<String> set = new HashSet<String>();
+        set.addAll((List)getZoeRedisTemplate().randomMember(CommonConstant.USER, count));
+        return set;
     }
 
-    public List<User> randomUsers(int count) throws InternalException, NotStartException {
+    public List<String> randomOpenIds(Long count) throws InternalException, NotStartException {
+        List<String> list = new ArrayList<>();
+        list.addAll(randomOpenIdSet(count));
+        return list;
+    }
+
+    public List<User> randomUsers(Integer count) throws InternalException, NotStartException {
         List<User> result = new ArrayList<>();
         List<String> list = randomOpenIds(Long.valueOf(count));
         for (int i=0; i<list.size(); i++){

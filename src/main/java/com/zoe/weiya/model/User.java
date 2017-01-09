@@ -3,6 +3,7 @@ package com.zoe.weiya.model;
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.validation.constraints.NotNull;
+import java.sql.Timestamp;
 
 /**
  * Created by andy on 2016/12/20.
@@ -18,6 +19,7 @@ public class User extends OnlyUser{
     private String nickName;
     private Integer priceCount;
     private String signFlag;//该时间段内的签到标识符
+    private Timestamp signDate = new Timestamp(System.currentTimeMillis());
     public User() {
         super();
     }
@@ -25,6 +27,10 @@ public class User extends OnlyUser{
     public User(String openId, String signFlag) {
         this.openId = openId;
         this.signFlag = signFlag;
+    }
+
+    public Timestamp getSignDate() {
+        return signDate;
     }
 
     public String getNickName() {
@@ -78,8 +84,13 @@ public class User extends OnlyUser{
     @Override
     public String toString() {
         return "User{" +
-                "openid='" + openId + '\'' +
+                "openId='" + openId + '\'' +
                 ", name='" + name + '\'' +
+                ", order=" + order +
+                ", nickName='" + nickName + '\'' +
+                ", priceCount=" + priceCount +
+                ", signFlag='" + signFlag + '\'' +
+                ", signDate=" + signDate +
                 '}';
     }
 }
