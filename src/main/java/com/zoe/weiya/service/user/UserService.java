@@ -141,6 +141,10 @@ public class UserService {
         return (Set) getZoeRedisTemplate().getSet(CommonConstant.USER);
     }
 
+    public Set<String> getOpenIdSet(int index) throws NotStartException, InternalException {
+        return (Set) zoeRedisTemplateIndexList.get(index).getSet(CommonConstant.USER);
+    }
+
     public boolean isMember(String openId) throws NotStartException, InternalException {
         return getZoeRedisTemplate().isMember(CommonConstant.USER, openId);
     }
@@ -149,20 +153,14 @@ public class UserService {
         return getZoeRedisTemplate().getSetSize(CommonConstant.USER);
     }
 
-    public Long getUserSize(int index) throws NotStartException, InternalException {
-        return zoeRedisTemplateIndexList.get(index).getSetSize(CommonConstant.USER);
-    }
-
     public Set<String> randomOpenIdSet(Long count) throws InternalException, NotStartException {
         Set<String> set = new HashSet<String>();
-        set.addAll((List)getZoeRedisTemplate().randomMember(CommonConstant.USER, count));
+        set.addAll(randomOpenIds(count));
         return set;
     }
 
     public List<String> randomOpenIds(Long count) throws InternalException, NotStartException {
-        List<String> list = new ArrayList<>();
-        list.addAll(randomOpenIdSet(count));
-        return list;
+        return (List)getZoeRedisTemplate().randomMember(CommonConstant.USER, count);
     }
 
     public List<User> randomUsers(Integer count) throws InternalException, NotStartException {
@@ -255,6 +253,28 @@ public class UserService {
     public UserListCount orderMealUserCountAndUserList() throws InternalException, NotStartException {
         UserListCount userListCount = new UserListCount();
         Set<String> openIdSet =  getOpenIdSet();
+        List<User> userList = new ArrayList<>();
+        int orderCount = 0;
+        if(null != openIdSet){
+            Iterator<String> iterator = openIdSet.iterator();
+            while (iterator.hasNext()){
+                String next = iterator.next();
+                User user = get(next);
+                userList.add(user);
+                if(user.getOrder().equals(1)){
+                    orderCount++;
+                }
+            }
+        }
+        userListCount.setNow(ZoeDateUtil.moment());
+        userListCount.setOrderCount(orderCount);
+        userListCount.setUsers(userList);
+        return userListCount;
+    }
+
+    public UserListCount orderMealUserCountAndUserList(int index) throws InternalException, NotStartException {
+        UserListCount userListCount = new UserListCount();
+        Set<String> openIdSet =  getOpenIdSet(index);
         List<User> userList = new ArrayList<>();
         int orderCount = 0;
         if(null != openIdSet){
