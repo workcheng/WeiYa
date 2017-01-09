@@ -8,6 +8,7 @@ import com.zoe.weiya.model.responseModel.ZoeMessage;
 import com.zoe.weiya.service.message.WechatService;
 import com.zoe.weiya.service.user.UserService;
 import com.zoe.weiya.service.websocket.WebSocketService;
+import com.zoe.weiya.util.ZoeCrossSiteScriptingValidation;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -48,6 +49,9 @@ public class MessageController {
 
     @RequestMapping(value = "danmu", method = RequestMethod.POST)
     public Object sendDanmuMessage(@RequestBody @Validated ZoeMessage zoeMessage){//将消息传入websocket通道中
+        if( ZoeCrossSiteScriptingValidation.IsDangerousString(zoeMessage.getContent())){
+            return ZoeObject.failure("非法字符");
+        }
         if(StringUtils.isBlank(zoeMessage.getHeadImgUrl())){
             String defaultHeadImage = "http://" + request.getServerName() //服务器地址
                     + ":"

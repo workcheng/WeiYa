@@ -57,7 +57,7 @@ public class WebSocketService {
         }
     }
 
-    public void broadcast(String message, String headImgUrl) {//将消息传入websocket通道中
+    public void broadcast(String message, String headImgUrl) throws Exception {//将消息传入websocket通道中
         HttpServletRequest request = ZoeUtil.getHttpServletRequest();
         if (null != request) {
             ServletContext application = null;
@@ -72,20 +72,16 @@ public class WebSocketService {
             if (connections == null) {
                 return;
             }
+            ZoeMessage zoeMessage = new ZoeMessage();
+            String replaceMessage = sensitiveService.replaceSensitiveWord(message, 1, "*");
+            zoeMessage.setContent(replaceMessage);
+            zoeMessage.setHeadImgUrl(headImgUrl);
+            CharBuffer buffer = CharBuffer.wrap(JacksonJsonUtil.beanToJson(zoeMessage));
             for (MyMessageInbound connection : connections) {
                 try {
-                    ZoeMessage zoeMessage = new ZoeMessage();
-                    String replaceMessage = sensitiveService.replaceSensitiveWord(message, 1, "*");
-                    zoeMessage.setContent(replaceMessage);
-                    zoeMessage.setHeadImgUrl(headImgUrl);
-                    CharBuffer buffer = CharBuffer.wrap(JacksonJsonUtil.beanToJson(zoeMessage));
                     connection.getWsOutbound().writeTextMessage(buffer);
                 } catch (IOException e) {
                     log.error("error", e);
-                    e.printStackTrace();
-                } catch (Exception e) {
-                    log.error("error", e);
-                    e.printStackTrace();
                 }
             }
         }
