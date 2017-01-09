@@ -3,18 +3,19 @@
  */
 
 $(document).ready(function () {
-    signGrid();
-
+    selectChange();
 });
-var signGrid = function () {
+var signGrid = function (index) {
     var orderUrl = BaseUrl + "user/allUserList";
     $.ajax({
         url: orderUrl,
+        data: {
+            index: index
+        },
         success: function (json) {
             $(".number").text(json.data.orderCount);
             var userList = json.data.users;
             $.each(userList, function (index, item) {
-
                 var unixTimestamp = new Date(item.signDate);
                 var commonTime = unixTimestamp.toLocaleString();
                 var isOrder = item.order;
@@ -36,7 +37,13 @@ var signGrid = function () {
 
         }
     })
+}
 
+var selectChange = function () {
+    $("select[name='signTime']").change(function () {
+        var time = $("select[name='signTime']").val();
+        signGrid(time);
+    })
 }
 
 Date.prototype.toLocaleString = function () {
