@@ -13,7 +13,9 @@ import com.zoe.weiya.comm.response.ResponseMsg;
 import com.zoe.weiya.comm.response.ZoeObject;
 import com.zoe.weiya.model.OnlyUser;
 import com.zoe.weiya.model.User;
+import com.zoe.weiya.model.responseModel.UserListCount;
 import com.zoe.weiya.util.RandomUtil;
+import com.zoe.weiya.util.ZoeDateUtil;
 import com.zoe.weiya.util.ZoeUtil;
 import me.chanjar.weixin.common.exception.WxErrorException;
 import me.chanjar.weixin.mp.api.impl.WxMpServiceImpl;
@@ -246,7 +248,29 @@ public class UserService {
         return setSize;
     }
 
-    public List<User> orderMealUserList() throws InternalException, NotStartException {
+    public UserListCount orderMealUserCountAndUserList() throws InternalException, NotStartException {
+        UserListCount userListCount = new UserListCount();
+        Set<String> openIdSet =  getOpenIdSet();
+        List<User> userList = new ArrayList<>();
+        int orderCount = 0;
+        if(null != openIdSet){
+            Iterator<String> iterator = openIdSet.iterator();
+            while (iterator.hasNext()){
+                String next = iterator.next();
+                User user = get(next);
+                userList.add(user);
+                if(user.getOrder().equals(1)){
+                    orderCount++;
+                }
+            }
+        }
+        userListCount.setNow(ZoeDateUtil.moment());
+        userListCount.setOrderCount(orderCount);
+        userListCount.setUsers(userList);
+        return userListCount;
+    }
+
+    public  List<User> orderMealUserList() throws InternalException, NotStartException {
         Set<String> openIdSet =  getOpenIdSet();
         List<User> userList = new ArrayList<>();
         if(null != openIdSet){
