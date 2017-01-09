@@ -76,6 +76,8 @@ public class UserController {
         } catch (NotStartException e) {
             log.error("error", e);
             return ZoeObject.failure(ZoeErrorCode.NOT_START);
+        } catch (InternalException e) {
+            return ZoeObject.failure(e);
         }
     }
 
@@ -96,6 +98,8 @@ public class UserController {
         } catch (NotStartException e) {
             log.error("error", e);
             return ZoeObject.failure(ZoeErrorCode.NOT_START);
+        } catch (InternalException e) {
+            return ZoeObject.failure(e);
         }
     }
 
@@ -111,6 +115,8 @@ public class UserController {
         } catch (NotStartException e) {
             log.error("error", e);
             return ZoeObject.failure(ZoeErrorCode.NOT_START);
+        } catch (InternalException e) {
+            return ZoeObject.failure(e);
         }
     }
 
@@ -125,6 +131,8 @@ public class UserController {
         } catch (NotStartException e) {
             log.error("error", e);
             return ZoeObject.failure(ZoeErrorCode.NOT_START);
+        } catch (InternalException e) {
+            return ZoeObject.failure(e);
         }
     }
 

@@ -1,6 +1,7 @@
 package com.zoe.weiya.controller;
 
 import com.zoe.weiya.comm.constant.ZoeErrorCode;
+import com.zoe.weiya.comm.exception.InternalException;
 import com.zoe.weiya.comm.exception.NotStartException;
 import com.zoe.weiya.comm.response.ZoeObject;
 import com.zoe.weiya.model.OnlyUser;
@@ -48,6 +49,8 @@ public class MealController {
             return ZoeObject.success(mealOrder);
         } catch (NotStartException e) {
             return ZoeObject.failure(ZoeErrorCode.NOT_START);
+        } catch (InternalException e) {
+            return ZoeObject.failure(e);
         }
     }
 }
