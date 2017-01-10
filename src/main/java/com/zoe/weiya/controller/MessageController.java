@@ -36,36 +36,36 @@ public class MessageController {
     @Autowired(required = false)
     HttpServletRequest request;
 
-    @RequestMapping(value = "", method = RequestMethod.POST)
-    public Object sendMessage(@RequestBody List<LuckyUser> users){
+    @RequestMapping(value = "sendMsg", method = RequestMethod.POST)
+    public Object sendMessage(@RequestBody List<LuckyUser> users) {
         try {
             wechatService.sendMessage(users);
             return ZoeObject.success();
         } catch (Exception e) {
-            log.error("error",e);
+            log.error("error", e);
             return ZoeObject.failure(e.toString());
         }
     }
 
     @RequestMapping(value = "danmu", method = RequestMethod.POST)
-    public Object sendDanmuMessage(@RequestBody @Validated ZoeMessage zoeMessage){//将消息传入websocket通道中
-        if( ZoeCrossSiteScriptingValidation.IsDangerousString(zoeMessage.getContent())){
+    public Object sendDanmuMessage(@RequestBody @Validated ZoeMessage zoeMessage) {//将消息传入websocket通道中
+        if (ZoeCrossSiteScriptingValidation.IsDangerousString(zoeMessage.getContent())) {
             return ZoeObject.failure("非法字符");
         }
-        if(StringUtils.isBlank(zoeMessage.getHeadImgUrl())){
+        if (StringUtils.isBlank(zoeMessage.getHeadImgUrl())) {
             String defaultHeadImage = "http://" + request.getServerName() //服务器地址
                     + ":"
                     + request.getServerPort()           //端口号
                     + request.getContextPath()      //项目名称
-                    +"/danmu/images/wechat_logo.jpg"; //图片地址
+                    + "/danmu/images/wechat_logo.jpg"; //图片地址
             zoeMessage.setHeadImgUrl(defaultHeadImage);
         }
 
         try {
-            webSocketService.broadcast(zoeMessage.getContent(),zoeMessage.getHeadImgUrl());
+            webSocketService.broadcast(zoeMessage.getContent(), zoeMessage.getHeadImgUrl());
             return ZoeObject.success();
         } catch (Exception e) {
-            log.error("error",e);
+            log.error("error", e);
             return ZoeObject.failure(e);
         }
     }

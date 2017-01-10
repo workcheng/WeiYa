@@ -27,10 +27,10 @@ var signGrid = function (index) {
                         order = "是";
                 }
                 var jqTR = $("<tr></tr>");
-                var jqTime = $("<td></td>").text(commonTime);
-                var jqPeople = $("<td></td>").text(item.name);
-                var jqSection = $("<td></td>").text(item.depName);
-                var jqEat = $("<td></td>").text(order);
+                var jqTime = $("<td></td>").text(commonTime).css({width: "20%"});
+                var jqPeople = $("<td></td>").text(item.name).css({width: "20%"});
+                var jqSection = $("<td></td>").text(item.depName).css({width: "30%"});
+                var jqEat = $("<td></td>").text(order).css({width: "10%"});
                 jqTR.append(jqTime).append(jqPeople).append(jqSection).append(jqEat);
                 $("#signGrid").append(jqTR);
             })
@@ -41,6 +41,7 @@ var signGrid = function (index) {
 
 var selectChange = function () {
     $("select[name='signTime']").change(function () {
+        $("#signGrid").html("");
         var time = $("select[name='signTime']").val();
         signGrid(time);
     })

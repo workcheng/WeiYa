@@ -3,19 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <title>damu app</title>
-    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" media="screen"/>
-    <link rel="stylesheet" type="text/css" href="css/style.css"/>
     <link rel="stylesheet" type="text/css" href="css/barrager.css">
-    <link rel="stylesheet" type="text/css" href="css/jquery.emoji.css">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="css/index.css">
+    <link rel="stylesheet" type="text/css" href="css/jquery.emoji.css">
     <script type="text/javascript" src="js/jquery-1.9.1.min.js"></script>
     <script type="text/javascript" src="js/bootstrap.min.js"></script>
     <script type="text/javascript" src="js/tinycolor-0.9.15.min.js"></script>
-    <script type="text/javascript" src="js/jquery.barrager.min.js"></script>
+    <script type="text/javascript" src="js/jquery.barrager.js"></script>
     <script type="text/javascript" src="js/jquery.emoji.js"></script>
     <script type="application/javascript">
 
         var ws = null;
+
         function startServer() {
             var url = "ws://" + window.location.host + "/echoServlet";
             if ('WebSocket' in window) {
@@ -33,10 +33,12 @@
             ws.onmessage = function (event) {
                 var contentMessage = $.parseJSON(event.data);
                 var item = {
-                    'img': contentMessage.headImgUrl,
-                    'href': 'http://www.baidu.com',
-                    'info': contentMessage.content,
-                    close: false
+                    max: 15,
+                    speed: 10,
+                    img: contentMessage.headImgUrl,
+                    info: contentMessage.content,
+                    close: false,
+                    color: getRandomColor()
                 };
                 $('body').barrager(item);
             };
@@ -44,11 +46,16 @@
                 document.getElementById("content").innerHTML += '弹幕通道关闭! Byebye!<br />';
             };
         }
+
         startServer();
-    </script>
-    <script type="text/javascript">
-
-
+        var getRandomColor = function () {
+            return '#' +
+                    (function (color) {
+                        return (color += '0123456789abcdef'[Math.floor(Math.random() * 16)])
+                        && (color.length == 6) ? color : arguments.callee(color);
+                    })('');
+        }
+        console.log(getRandomColor());
     </script>
 </head>
 <body>
