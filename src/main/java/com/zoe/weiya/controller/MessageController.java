@@ -62,7 +62,9 @@ public class MessageController {
         }
 
         try {
+            //for (int i = 0; i <= 100; i++) {
             webSocketService.broadcast(zoeMessage.getContent(), zoeMessage.getHeadImgUrl());
+            //}
             return ZoeObject.success();
         } catch (Exception e) {
             log.error("error", e);

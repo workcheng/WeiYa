@@ -2,10 +2,6 @@
  * Created by zxc on 2017/1/8.
  */
 $(document).ready(function () {
-    var click = setInterval(function () {
-        $("#saveMsg").addClass("disabled");
-    }, 10000);
-
     var weixinUrl = location.href.split('#')[0];
     var url = BaseUrl + "sign/url";
     // 当前的网页请求地址
@@ -51,6 +47,14 @@ $(document).ready(function () {
             });
         }
     })
+    $('.emotion').qqFace({
+        id: 'facebox',
+        assign: 'msgDanmu',
+        path: BaseUrl + "comment/arclist/"	//表情存放的路径
+
+    });
+
+    //qqface();
 });
 /**
  * 发送按钮事件
@@ -61,7 +65,7 @@ var saveMsgClick = function (headImgUrl) {
         var $btn = $(this);
         if ($btn.hasClass("disabled")) return;
         $btn.addClass("disabled");
-        if (($(".wordsedit1 textarea").val() == "") || ($(".wordsedit1 textarea").val() == "null")) {
+        if (($(".wordsedit1 input").val() == "") || ($(".wordsedit1 input").val() == "null")) {
             $(".error_dialog p").html("请输入留言！");
             $(".error_dialog").show();
             setTimeout(function () {
@@ -84,10 +88,30 @@ var saveMsgClick = function (headImgUrl) {
             data: danmuMsg,
             success: function (data) {
                 console.log("data", JSON.stringify(data));
-                $(".wordsedit1 textarea").val("");
+                $(".wordsedit1 input").val("");
             }
         })
         $btn.removeClass("disabled");
     })
 
+}
+
+/*var qqface = function () {
+ $("#saveMsg").click(function () {
+ var str = $("#qqFace").val();
+ $("#show").html(replace_em(str));
+ console.log(replace_em(str));
+ })
+
+ };*/
+var replace_em = function (str) {
+    str = str.replace(/\</g, '&lt;');
+
+    str = str.replace(/\>/g, '&gt;');
+
+    str = str.replace(/\n/g, '<br/>');
+
+    str = str.replace(/\[em_([0-9]*)\]/g, '<img src="../arclist/$1.gif" border="0" />');
+
+    return str;
 }

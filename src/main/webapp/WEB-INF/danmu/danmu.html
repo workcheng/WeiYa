@@ -6,12 +6,10 @@
     <link rel="stylesheet" type="text/css" href="css/barrager.css">
     <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="css/index.css">
-    <link rel="stylesheet" type="text/css" href="css/jquery.emoji.css">
     <script type="text/javascript" src="js/jquery-1.9.1.min.js"></script>
     <script type="text/javascript" src="js/bootstrap.min.js"></script>
     <script type="text/javascript" src="js/tinycolor-0.9.15.min.js"></script>
     <script type="text/javascript" src="js/jquery.barrager.js"></script>
-    <script type="text/javascript" src="js/jquery.emoji.js"></script>
     <script type="application/javascript">
 
         var ws = null;
@@ -32,11 +30,12 @@
             };
             ws.onmessage = function (event) {
                 var contentMessage = $.parseJSON(event.data);
+                var msg = replace_em(contentMessage.content);
                 var item = {
                     max: 15,
                     speed: 10,
                     img: contentMessage.headImgUrl,
-                    info: contentMessage.content,
+                    info: msg,
                     close: false,
                     color: getRandomColor()
                 };
@@ -55,7 +54,17 @@
                         && (color.length == 6) ? color : arguments.callee(color);
                     })('');
         }
-        console.log(getRandomColor());
+        var replace_em = function (str) {
+            str = str.replace(/\</g, '&lt;');
+
+            str = str.replace(/\>/g, '&gt;');
+
+            str = str.replace(/\n/g, '<br/>');
+
+            str = str.replace(/\[em_([0-9]*)\]/g, '<img src="../comment/arclist/$1.gif" border="0" />');
+
+            return str;
+        }
     </script>
 </head>
 <body>

@@ -18,7 +18,7 @@ import java.util.Set;
  */
 @Service
 public class SensitiveWordInit {
-    private String ENCODING = "GBK";    //字符编码
+    private String ENCODING = "UTF-8";    //字符编码
     private String WORD_LOCATION = "/config/sensitive/sensitiveWord.txt";
 
 
