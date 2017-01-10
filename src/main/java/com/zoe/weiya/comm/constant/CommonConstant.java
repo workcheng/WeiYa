@@ -37,4 +37,5 @@ public class CommonConstant {
   public static final String THIRD_DAY = "THIRD";
   public static final String SET= "SET";
   public static final String LUCKY_USER = "LUCKY";
+  public static final String MESSAGE = "MESSAGE";
 }
