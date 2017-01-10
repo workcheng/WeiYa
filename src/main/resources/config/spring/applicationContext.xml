@@ -18,6 +18,8 @@ http://www.springframework.org/schema/tx/spring-tx.xsd">
     <context:component-scan base-package="**.service"/>
     <context:component-scan base-package="**.dao"/>
 
+    <bean class="com.zoe.weiya.mq.MyMqGatway"/>
+
     <!-- 加载数据库连接信息db.properties -->
     <!-- <context:property-placeholder location="classpath:/config/db/db.properties" /> -->
     <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">

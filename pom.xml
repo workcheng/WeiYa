@@ -179,26 +179,38 @@
             <version>1.11.3</version>
         </dependency>
         <dependency>
-           <groupId>org.apache.tomcat</groupId>
+            <groupId>org.apache.tomcat</groupId>
             <artifactId>tomcat-coyote</artifactId>
-          <version>7.0.73</version>
+            <version>7.0.73</version>
             <scope>provided</scope>
-          <!--<version>7.0.39</version>-->
-       </dependency>
-      <dependency>
-           <groupId>org.apache.tomcat</groupId>
-          <artifactId>tomcat-catalina</artifactId>
-           <version>7.0.73</version>
-          <scope>provided</scope>
-           <!--<version>7.0.39</version>-->
-      </dependency>
-      <dependency>
-           <groupId>org.apache.tomcat</groupId>
-        <artifactId>tomcat-annotations-api</artifactId>
-           <version>7.0.73</version>
-          <scope>provided</scope>
-           <!--<version>7.0.39</version>-->
-      </dependency>
+            <!--<version>7.0.39</version>-->
+        </dependency>
+        <dependency>
+            <groupId>org.apache.tomcat</groupId>
+            <artifactId>tomcat-catalina</artifactId>
+            <version>7.0.73</version>
+            <scope>provided</scope>
+            <!--<version>7.0.39</version>-->
+        </dependency>
+        <dependency>
+            <groupId>org.apache.tomcat</groupId>
+            <artifactId>tomcat-annotations-api</artifactId>
+            <version>7.0.73</version>
+            <scope>provided</scope>
+            <!--<version>7.0.39</version>-->
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.amqp</groupId>
+            <artifactId>spring-amqp</artifactId>
+            <version>1.6.6.RELEASE</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.springframework.amqp/spring-rabbit -->
+        <dependency>
+            <groupId>org.springframework.amqp</groupId>
+            <artifactId>spring-rabbit</artifactId>
+            <version>1.6.6.RELEASE</version>
+        </dependency>
     </dependencies>
     <build>
         <finalName>weiya</finalName>
