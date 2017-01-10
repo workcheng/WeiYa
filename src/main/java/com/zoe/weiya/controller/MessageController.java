@@ -5,6 +5,7 @@ import com.zoe.weiya.comm.logger.ZoeLoggerFactory;
 import com.zoe.weiya.comm.response.ZoeObject;
 import com.zoe.weiya.model.LuckyUser;
 import com.zoe.weiya.model.responseModel.ZoeMessage;
+import com.zoe.weiya.mq.MyMqGatway;
 import com.zoe.weiya.service.message.WechatService;
 import com.zoe.weiya.service.user.UserService;
 import com.zoe.weiya.service.websocket.WebSocketService;
@@ -35,6 +36,8 @@ public class MessageController {
     WebSocketService webSocketService;
     @Autowired(required = false)
     HttpServletRequest request;
+    @Autowired
+    MyMqGatway myMqGatway;
 
     @RequestMapping(value = "sendMsg", method = RequestMethod.POST)
     public Object sendMessage(@RequestBody List<LuckyUser> users) {
@@ -63,7 +66,8 @@ public class MessageController {
 
         try {
             //for (int i = 0; i <= 100; i++) {
-            webSocketService.broadcast(zoeMessage.getContent(), zoeMessage.getHeadImgUrl());
+//            webSocketService.broadcast(zoeMessage.getContent(), zoeMessage.getHeadImgUrl());
+            myMqGatway.sendDataToCrQueue(zoeMessage);
             //}
             return ZoeObject.success();
         } catch (Exception e) {

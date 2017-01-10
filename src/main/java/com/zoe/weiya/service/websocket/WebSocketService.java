@@ -1,5 +1,6 @@
 package com.zoe.weiya.service.websocket;
 
+import com.zoe.weiya.comm.exception.InternalException;
 import com.zoe.weiya.comm.logger.ZoeLogger;
 import com.zoe.weiya.comm.logger.ZoeLoggerFactory;
 import com.zoe.weiya.controller.echo.MyMessageInbound;
@@ -27,62 +28,39 @@ public class WebSocketService {
     protected SensitivewordFilter sensitiveService;
     @Autowired
     protected SensitiveWordInit sensitiveWordInit;
+    @Autowired
+    HttpServletRequest request;
 
-    public void broadcast(String message) {//将消息传入websocket通道中
-        HttpServletRequest request = ZoeUtil.getHttpServletRequest();
-        if (null != request) {
-            ServletContext application = null;
-            try {
-                application = request.getServletContext();
-            } catch (Exception e) {
-                request = ZoeUtil.getHttpServletRequest();
-                application = request.getServletContext();
-            }
-            Set<MyMessageInbound> connections =
-                    (Set<MyMessageInbound>) application.getAttribute("connections");
-            if (connections == null) {
-                return;
-            }
-
-            for (MyMessageInbound connection : connections) {
-                try {
-                    String replaceMessage = sensitiveService.replaceSensitiveWord(message, 1, "*");
-                    CharBuffer buffer = CharBuffer.wrap(replaceMessage);
-                    connection.getWsOutbound().writeTextMessage(buffer);
-                } catch (IOException e) {
-                    log.error("error", e);
-                    e.printStackTrace();
-                }
-            }
-        }
+    public void broadcast(String message, String headImgUrl) throws Exception {
+        ZoeMessage zoeMessage = new ZoeMessage();
+        String replaceMessage = sensitiveService.replaceSensitiveWord(message, 1, "*");
+        zoeMessage.setContent(replaceMessage);
+        zoeMessage.setHeadImgUrl(headImgUrl);
+        broadcast(JacksonJsonUtil.beanToJson(zoeMessage));
     }
 
-    public void broadcast(String message, String headImgUrl) throws Exception {//将消息传入websocket通道中
-        HttpServletRequest request = ZoeUtil.getHttpServletRequest();
+    public void broadcast(String ZoeMessageJsonString) throws Exception {//将消息传入websocket通道中
+        ServletContext application = null;
         if (null != request) {
-            ServletContext application = null;
+            application = request.getServletContext();
+        } else {
+            request = ZoeUtil.getHttpServletRequest();
+        }
+        if (null == application) {
+            throw new InternalException("获取不到httpRequest");
+        }
+
+        Set<MyMessageInbound> connections =
+                (Set<MyMessageInbound>) application.getAttribute("connections");
+        if (connections == null) {
+            return;
+        }
+        CharBuffer buffer = CharBuffer.wrap(ZoeMessageJsonString);
+        for (MyMessageInbound connection : connections) {
             try {
-                application = request.getServletContext();
-            } catch (Exception e) {
-                request = ZoeUtil.getHttpServletRequest();
-                application = request.getServletContext();
-            }
-            Set<MyMessageInbound> connections =
-                    (Set<MyMessageInbound>) application.getAttribute("connections");
-            if (connections == null) {
-                return;
-            }
-            ZoeMessage zoeMessage = new ZoeMessage();
-            String replaceMessage = sensitiveService.replaceSensitiveWord(message, 1, "*");
-            zoeMessage.setContent(replaceMessage);
-            zoeMessage.setHeadImgUrl(headImgUrl);
-            CharBuffer buffer = CharBuffer.wrap(JacksonJsonUtil.beanToJson(zoeMessage));
-            for (MyMessageInbound connection : connections) {
-                try {
-                    connection.getWsOutbound().writeTextMessage(buffer);
-                } catch (IOException e) {
-                    log.error("error", e);
-                }
+                connection.getWsOutbound().writeTextMessage(buffer);
+            } catch (IOException e) {
+                log.error("error", e);
             }
         }
     }
