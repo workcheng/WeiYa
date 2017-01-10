@@ -1,5 +1,8 @@
 package com.zoe.weiya.service.message;
 
+import com.zoe.weiya.comm.exception.InternalException;
+import com.zoe.weiya.comm.logger.ZoeLogger;
+import com.zoe.weiya.comm.logger.ZoeLoggerFactory;
 import com.zoe.weiya.comm.properties.ZoeProperties;
 import com.zoe.weiya.model.LuckyUser;
 import me.chanjar.weixin.common.exception.WxErrorException;
@@ -22,6 +25,7 @@ import java.util.Map;
  **/
 @Service
 public class WechatService {
+    private static final ZoeLogger log = ZoeLoggerFactory.getLogger(WechatService.class);
     @Autowired
     protected WxMpServiceImpl wxMpService;
 
@@ -75,10 +79,15 @@ public class WechatService {
 
     public void sendMessage(String openId, String name, Integer degree) throws Exception{
         String[] degreeList = {"一","二","三"};
-        String messageText = "{0}，恭喜您获得了{1}等奖，请凭借这条消息找工作人员兑奖！";
+        String messageText = ZoeProperties.get("config/static/static.properties","prize.message");
         String format = MessageFormat.format(messageText, name, degreeList[degree]);
         WxMpKefuMessage message = WxMpKefuMessage.TEXT().content(format).toUser(openId).build();
-        wxMpService.getKefuService().sendKefuMessage(message);
+        try {
+            wxMpService.getKefuService().sendKefuMessage(message);
+        } catch (WxErrorException e) {
+            log.error("error",e);
+            throw new InternalException(e);
+        }
     }
 
     public void sendMessage(List<LuckyUser> luckyUsers) throws Exception{
