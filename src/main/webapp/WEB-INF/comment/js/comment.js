@@ -2,6 +2,10 @@
  * Created by zxc on 2017/1/8.
  */
 $(document).ready(function () {
+    var click = setInterval(function () {
+        $("#saveMsg").addClass("disabled");
+    }, 10000);
+
     var weixinUrl = location.href.split('#')[0];
     var url = BaseUrl + "sign/url";
     // 当前的网页请求地址
@@ -80,8 +84,10 @@ var saveMsgClick = function (headImgUrl) {
             data: danmuMsg,
             success: function (data) {
                 console.log("data", JSON.stringify(data));
+                $(".wordsedit1 textarea").val("");
             }
         })
         $btn.removeClass("disabled");
     })
+
 }

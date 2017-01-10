@@ -118,8 +118,6 @@ var lottery = {
 
             }, 2000);
         }
-
-
     },
     lotter: function (luckyLevel) {
         var getLotteryUser = BaseUrl + "user/lotterySelect?time=" + this.getRandom(1, 1000);//lotterySelect
@@ -127,7 +125,8 @@ var lottery = {
             url: getLotteryUser,
             success: function (data) {
                 if (data.data.length > 0) {//抽出人了
-                    var luckyUser = data.data[0]
+                    var luckyUser = data.data[0];
+                    var openId = luckyUser.openId;
                     var userName = luckyUser.name;
                     var imgUrl = luckyUser.headImgUrl;
                     var box_pic_object = "<li><img src='" + imgUrl + "' title='中奖啦' ></li>";
@@ -135,15 +134,15 @@ var lottery = {
                     $("#box_name").html(box_name_object);
                     $("#box_pic").html(box_pic_object);
                     lottery.userCount++;
-                    lottery.showLuckAnimate(imgUrl, luckyLevel, userName);
-                    lottery.showLuckyUser(lottery.userCount, imgUrl, userName, luckyLevel);
+                    lottery.showLuckAnimate(imgUrl, luckyLevel, userName);//显示动画
+                    lottery.showLuckyUser(lottery.userCount, imgUrl, userName, luckyLevel);//左侧列表显示中奖用户
+                    lottery.sengMsg(openId, userName, luckyLevel);//发送信息给中奖用户
                 }
                 else {
                     lottery.showLuckAnimate("images/default.png", "", "小伙伴们都已经中奖啦！", true);
                     if (lottery.autoHanle != 0) {
                         clearInterval(lottery.autoHanle);
                         lottery.autoHanle = 0;
-
                     }
                 }
             }
@@ -193,6 +192,33 @@ var lottery = {
             $("#bgsound").remove();
         }, 3000);
         $("#bgsound").remove();
+    },
+    sengMsg: function (openId, userName, luckyLevel) {
+        var degree = "";
+        switch (luckyLevel) {
+            case "一等奖":
+                degree = "0";
+                break;
+            case "二等奖":
+                degree = "1";
+                break;
+            case "三等奖":
+                degree = "2";
+                break;
+        }
+        var msgContent = [];
+        msgContent.push({"openId": openId, "name": userName, "degree": degree});
+        msgContent = JSON.stringify((msgContent));
+        var sendUrl = BaseUrl + "message/sendMsg";
+        $.ajax({
+            type: 'POST',
+            contentType: 'application/json',
+            url: sendUrl,
+            data: msgContent,
+            success: function (json) {
+                console.log(JSON.stringify(json));
+            }
+        })
     }
 
 };
