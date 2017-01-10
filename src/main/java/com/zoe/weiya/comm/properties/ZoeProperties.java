@@ -10,6 +10,7 @@ import com.zoe.weiya.model.ZoeDate;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.MessageFormat;
 import java.util.Properties;
 
 /**
@@ -85,5 +86,9 @@ public class ZoeProperties {
     }
     public static int getOffWorkHour(){
         return Integer.valueOf(get("config/static/static.properties", "zoe.date.off.work"));
+    }
+    public static String getMenuJson(){
+        String menu = "'{'\"menu\":{0}'}'";
+        return MessageFormat.format(menu,get("config/static/static.properties", "menu.json"));
     }
 }

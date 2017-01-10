@@ -62,10 +62,10 @@ public class JacksonJsonUtil {
      * @return
      * @throws Exception
      */
-    public static Object jsonToBean(String json, Class<?> cls) throws Exception {
+    public static <T>T jsonToBean(String json, Class<T> cls) throws Exception {
         try {
             ObjectMapper objectMapper = getMapperInstance(false);
-            Object vo = objectMapper.readValue(json, cls);
+            T vo = objectMapper.readValue(json, cls);
             return vo;
         } catch (Exception e) {
             throw new Exception(e.getMessage());

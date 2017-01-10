@@ -11,4 +11,9 @@ public class ZoePropertiesTest {
     public void testGetStartTime() throws Exception {
         System.out.println(ZoeProperties.getStartTime());
     }
+
+    @Test
+    public void testGetMenuJson() throws Exception {
+        System.out.println(ZoeProperties.getMenuJson());
+    }
 }
