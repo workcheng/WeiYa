@@ -34,25 +34,19 @@ public class WechatService {
         WxMpMessageHandler test = new WxMpMessageHandler() {
             public WxMpXmlOutMessage handle(WxMpXmlMessage wxMessage, Map<String, Object> context,
                                             WxMpService wxMpService, WxSessionManager sessionManager) throws WxErrorException {
-                WxMpKefuMessage.WxArticle article1 = new WxMpKefuMessage.WxArticle();
-                article1.setUrl("www.baidu.com");
-                article1.setPicUrl("https://mmbiz.qlogo.cn/mmbiz/bVoOkrvEGHqgetjIc7VcFoCWgLCNaTOnZaXvR9J04EgxMfbm3WM9OreMfTcMcKN8UFkWtDwUbiatU7Qtxsutglg/0?wx_fmt=png");
-                article1.setDescription("晚会节目单");
-                article1.setTitle("节目单");
+                String url = MessageFormat.format(ZoeProperties.get("config/static/static.properties", "sign.url"),wxMessage.getFromUser());
+                WxMpXmlOutNewsMessage.Item item = new WxMpXmlOutNewsMessage.Item();
+                item.setDescription("签到表单");
+                item.setPicUrl("https://mmbiz.qlogo.cn/mmbiz/bVoOkrvEGHqgetjIc7VcFoCWgLCNaTOnZaXvR9J04EgxMfbm3WM9OreMfTcMcKN8UFkWtDwUbiatU7Qtxsutglg/0?wx_fmt=png");
+                item.setTitle("签到");
+                item.setUrl(url);
 
-                WxMpKefuMessage.WxArticle article2 = new WxMpKefuMessage.WxArticle();
-                String url = MessageFormat.format(ZoeProperties.get("config/static/static.properties", "web.url"),wxMessage.getFromUser());
-                article2.setUrl(url);
-                article2.setPicUrl("https://mmbiz.qlogo.cn/mmbiz/bVoOkrvEGHrvy0Mwuiaxmumnrgp3bqHdvmKkCXg4lJ1ajvD2yInIWbuBhJAM2IE5oc5UlSTxgV3onfXicjudos6g/0");
-                article2.setDescription("签到表单");
-                article2.setTitle("签到");
-
-                WxMpKefuMessage message = WxMpKefuMessage.NEWS()
+                WxMpXmlOutNewsMessage m = WxMpXmlOutMessage.NEWS()
+                        .fromUser(wxMessage.getToUser())
                         .toUser(wxMessage.getFromUser())
-                        .addArticle(article1)
-                        .addArticle(article2).build();
-                wxMpService.getKefuService().sendKefuMessage(message);
-                return null;
+                        .addArticle(item)
+                        .build();
+                return m;
             }
         };
         return test;
@@ -108,6 +102,28 @@ public class WechatService {
                 item.setDescription("发送弹幕");
                 item.setPicUrl("https://mmbiz.qlogo.cn/mmbiz/bVoOkrvEGHqgetjIc7VcFoCWgLCNaTOnZaXvR9J04EgxMfbm3WM9OreMfTcMcKN8UFkWtDwUbiatU7Qtxsutglg/0?wx_fmt=png");
                 item.setTitle("评论上墙");
+                item.setUrl(url);
+
+                WxMpXmlOutNewsMessage m = WxMpXmlOutMessage.NEWS()
+                        .fromUser(wxMessage.getToUser())
+                        .toUser(wxMessage.getFromUser())
+                        .addArticle(item)
+                        .build();
+                return m;
+            }
+        };
+        return test;
+    }
+
+    public WxMpMessageHandler sendCardMessage(){
+        WxMpMessageHandler test = new WxMpMessageHandler() {
+            public WxMpXmlOutMessage handle(WxMpXmlMessage wxMessage, Map<String, Object> context,
+                                            WxMpService wxMpService, WxSessionManager sessionManager) throws WxErrorException {
+                String url = MessageFormat.format(ZoeProperties.get("config/static/static.properties", "card.url"),wxMessage.getFromUser());
+                WxMpXmlOutNewsMessage.Item item = new WxMpXmlOutNewsMessage.Item();
+                item.setDescription("年会节目单");
+                item.setPicUrl("https://mmbiz.qlogo.cn/mmbiz/bVoOkrvEGHqgetjIc7VcFoCWgLCNaTOnZaXvR9J04EgxMfbm3WM9OreMfTcMcKN8UFkWtDwUbiatU7Qtxsutglg/0?wx_fmt=png");
+                item.setTitle("节目单");
                 item.setUrl(url);
 
                 WxMpXmlOutNewsMessage m = WxMpXmlOutMessage.NEWS()
