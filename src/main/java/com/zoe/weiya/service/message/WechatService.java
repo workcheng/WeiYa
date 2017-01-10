@@ -13,6 +13,7 @@ import me.chanjar.weixin.mp.api.impl.WxMpServiceImpl;
 import me.chanjar.weixin.mp.bean.kefu.WxMpKefuMessage;
 import me.chanjar.weixin.mp.bean.message.WxMpXmlMessage;
 import me.chanjar.weixin.mp.bean.message.WxMpXmlOutMessage;
+import me.chanjar.weixin.mp.bean.message.WxMpXmlOutNewsMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -47,7 +48,8 @@ public class WechatService {
                 article2.setTitle("签到");
 
                 WxMpKefuMessage message = WxMpKefuMessage.NEWS()
-                        .toUser(wxMessage.getFromUser()).addArticle(article1)
+                        .toUser(wxMessage.getFromUser())
+                        .addArticle(article1)
                         .addArticle(article2).build();
                 wxMpService.getKefuService().sendKefuMessage(message);
                 return null;
@@ -95,5 +97,27 @@ public class WechatService {
             LuckyUser user = luckyUsers.get(i);
             this.sendMessage(user.getOpenId(),user.getName(),user.getDegree());
         }
+    }
+
+    public WxMpMessageHandler sendCommentMessage(){
+        WxMpMessageHandler test = new WxMpMessageHandler() {
+            public WxMpXmlOutMessage handle(WxMpXmlMessage wxMessage, Map<String, Object> context,
+                                            WxMpService wxMpService, WxSessionManager sessionManager) throws WxErrorException {
+                String url = MessageFormat.format(ZoeProperties.get("config/static/static.properties", "comment.url"),wxMessage.getFromUser());
+                WxMpXmlOutNewsMessage.Item item = new WxMpXmlOutNewsMessage.Item();
+                item.setDescription("发送弹幕");
+                item.setPicUrl("https://mmbiz.qlogo.cn/mmbiz/bVoOkrvEGHqgetjIc7VcFoCWgLCNaTOnZaXvR9J04EgxMfbm3WM9OreMfTcMcKN8UFkWtDwUbiatU7Qtxsutglg/0?wx_fmt=png");
+                item.setTitle("评论上墙");
+                item.setUrl(url);
+
+                WxMpXmlOutNewsMessage m = WxMpXmlOutMessage.NEWS()
+                        .fromUser(wxMessage.getToUser())
+                        .toUser(wxMessage.getFromUser())
+                        .addArticle(item)
+                        .build();
+                return m;
+            }
+        };
+        return test;
     }
 }
