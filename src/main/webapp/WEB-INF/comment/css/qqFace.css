@@ -1,3 +1,20 @@
+@media screen and (max-width: 320px) {
+    #facebox {
+        top: 100px !important;
+        left: -6px !important;
+    }
+
+    .qqFace {
+        height: 260px !important;
+        width: 680px !important;
+    }
+
+    .qqFace table td img {
+        width: 61px !important;
+        height: 60px !important;
+    }
+}
+
 .comment {
     width: 680px;
     margin: 20px auto;
@@ -32,24 +49,27 @@
 }
 
 span.emotion {
-    width: 42px;
-    height: 20px;
-    background: url(../images/icon.gif) no-repeat 2px 2px;
-    padding-left: 20px;
+    width: 44px;
+    height: 44px;
+    position: absolute;
+    top: 26px;
+    right: 12px;
+    background: url(../images/icon.png) no-repeat 0 0;
     cursor: pointer
 }
 
 span.emotion:hover {
-    background-position: 2px -28px
+    background-position: 0px -44px
 }
 
 .qqFace {
-    width: 700px;
+    width: 656px;
     height: 320px;
     margin-top: 4px;
     background: #fff;
     padding: 2px;
     border: 1px #dfe6f6 solid;
+    overflow-y: auto;
 }
 
 .qqFace table td {
@@ -57,8 +77,8 @@ span.emotion:hover {
 }
 
 .qqFace table td img {
-    width: 50px;
-    height: 50px;
+    width: 60px;
+    height: 60px;
     cursor: pointer;
     border: 1px #fff solid;
 }

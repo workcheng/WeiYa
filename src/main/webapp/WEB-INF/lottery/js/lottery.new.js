@@ -21,7 +21,6 @@ var lottery = {
             url: getUserList,
             success: function (data) {
                 _this.allLotteryUser = data.data;
-                $("#userCount").text(_this.allLotteryUser.length);
             }
         })
     },

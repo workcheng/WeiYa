@@ -26,14 +26,14 @@ $(document).ready(function () {
             wx.ready(function () {
                 wx.hideOptionMenu();
                 var getUserInfo = BaseUrl + "sign/getUserInfo";
-                // var weixin = location.href.split('?')[1];
-                //var code = weixin.split('=')[1];
+                var weixin = location.href.split('?')[1];
+                var code = weixin.split('=')[1];
                 //获取用户信息
                 $.ajax({
                     url: getUserInfo, //这个地址是服务器配置JSSDK的地址
                     data: {           // 这个地址是发生jssdk调用的url地址
                         // 用于服务器配置
-                        id: 'ofj0MwjAxBL7kh_m89q0R2FiNqEY',
+                        id: code,
                         lang: ''
                     },
                     success: function (json) {
@@ -53,8 +53,6 @@ $(document).ready(function () {
         path: BaseUrl + "comment/arclist/"	//表情存放的路径
 
     });
-
-    //qqface();
 });
 /**
  * 发送按钮事件
@@ -94,24 +92,4 @@ var saveMsgClick = function (headImgUrl) {
         $btn.removeClass("disabled");
     })
 
-}
-
-/*var qqface = function () {
- $("#saveMsg").click(function () {
- var str = $("#qqFace").val();
- $("#show").html(replace_em(str));
- console.log(replace_em(str));
- })
-
- };*/
-var replace_em = function (str) {
-    str = str.replace(/\</g, '&lt;');
-
-    str = str.replace(/\>/g, '&gt;');
-
-    str = str.replace(/\n/g, '<br/>');
-
-    str = str.replace(/\[em_([0-9]*)\]/g, '<img src="../arclist/$1.gif" border="0" />');
-
-    return str;
 }
