@@ -1,16 +1,21 @@
 package com.zoe.weiya.controller;
 
+import com.rabbitmq.client.AMQP;
 import com.zoe.weiya.comm.logger.ZoeLogger;
 import com.zoe.weiya.comm.logger.ZoeLoggerFactory;
 import com.zoe.weiya.comm.response.ZoeObject;
 import com.zoe.weiya.model.LuckyUser;
 import com.zoe.weiya.model.responseModel.ZoeMessage;
 import com.zoe.weiya.mq.MyMqGatway;
+import com.zoe.weiya.mq.stomp.Program;
 import com.zoe.weiya.service.message.WechatService;
 import com.zoe.weiya.service.user.UserService;
 import com.zoe.weiya.service.websocket.WebSocketService;
 import com.zoe.weiya.util.ZoeCrossSiteScriptingValidation;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.amqp.core.AmqpTemplate;
+import org.springframework.amqp.core.Message;
+import org.springframework.amqp.core.MessageProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,7 +24,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.TimeoutException;
 
 /**
  * Created by andy on 2016/12/30.
@@ -38,6 +47,8 @@ public class MessageController {
     HttpServletRequest request;
     @Autowired
     MyMqGatway myMqGatway;
+    @Autowired
+    private AmqpTemplate amqpTemplate;
 
     @RequestMapping(value = "sendMsg", method = RequestMethod.POST)
     public Object sendMessage(@RequestBody List<LuckyUser> users) {
@@ -51,7 +62,7 @@ public class MessageController {
     }
 
     @RequestMapping(value = "danmu", method = RequestMethod.POST)
-    public Object sendDanmuMessage(@RequestBody @Validated ZoeMessage zoeMessage) {//将消息传入websocket通道中
+    public Object sendDanmuMessage(@RequestBody @Validated ZoeMessage zoeMessage) {
         if (ZoeCrossSiteScriptingValidation.IsDangerousString(zoeMessage.getContent())) {
             return ZoeObject.failure("非法字符");
         }
@@ -66,13 +77,44 @@ public class MessageController {
 
         try {
             //for (int i = 0; i <= 100; i++) {
-//            webSocketService.broadcast(zoeMessage.getContent(), zoeMessage.getHeadImgUrl());
+            webSocketService.broadcast(zoeMessage.getContent(), zoeMessage.getHeadImgUrl());
             myMqGatway.sendDataToCrQueue(zoeMessage);
             //}
             return ZoeObject.success();
         } catch (Exception e) {
             log.error("error", e);
             return ZoeObject.failure(e);
+        }
+    }
+
+    @RequestMapping("danmux")
+    public void sendDanmuMessage() {
+        String message = "{\"id\":1200,\"name\":\"Welcome to RabbitMQ message push!\"}";
+        AMQP.BasicProperties properties = new AMQP.BasicProperties();
+        MessageProperties messageProperties = new MessageProperties();
+        Map<String, Object> args = new HashMap<String, Object>();
+        args.put("x-message-ttl", 60000);
+//        channel.queueDeclare("myqueue", false, false, false, args);
+//        messageProperties.setDelay(1000);
+        messageProperties.setExpiration("60000");
+        messageProperties.setMessageCount(1);
+        messageProperties.setReceivedDelay(10000);
+        messageProperties.setDelay(1000);
+        int prefetchCount = 1;
+//        channel.basicQos(prefetchCount);
+        org.springframework.amqp.core.Message message1 = new Message(message.getBytes(), messageProperties);
+        amqpTemplate.send(message1);
+    }
+
+    @RequestMapping("danmu-x")
+    public void sendDanmuMessagex(){
+        Program program = new Program();
+        try {
+            program.main(new String[]{});
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (TimeoutException e) {
+            e.printStackTrace();
         }
     }
 }

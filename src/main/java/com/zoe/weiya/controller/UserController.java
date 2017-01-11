@@ -99,6 +99,7 @@ public class UserController {
             log.error("error", e);
             return ZoeObject.failure(ZoeErrorCode.NOT_START);
         } catch (InternalException e) {
+            log.error("error", e);
             return ZoeObject.failure(e);
         }
     }

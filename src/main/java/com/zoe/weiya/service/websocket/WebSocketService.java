@@ -28,8 +28,6 @@ public class WebSocketService {
     protected SensitivewordFilter sensitiveService;
     @Autowired
     protected SensitiveWordInit sensitiveWordInit;
-    @Autowired
-    HttpServletRequest request;
 
     public void broadcast(String message, String headImgUrl) throws Exception {
         ZoeMessage zoeMessage = new ZoeMessage();
@@ -41,10 +39,13 @@ public class WebSocketService {
 
     public void broadcast(String ZoeMessageJsonString) throws Exception {//将消息传入websocket通道中
         ServletContext application = null;
-        if (null != request) {
-            application = request.getServletContext();
-        } else {
+        HttpServletRequest request;
+        try {
             request = ZoeUtil.getHttpServletRequest();
+            application = request.getServletContext();
+        } catch (Exception e) {
+            log.error("error", e);
+            e.printStackTrace();
         }
         if (null == application) {
             throw new InternalException("获取不到httpRequest");

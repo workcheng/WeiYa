@@ -32,8 +32,8 @@
     </servlet-mapping>
     <context-param>
         <param-name>contextConfigLocation</param-name>
-        <param-value>classpath:/config/spring/applicationContext.xml</param-value>
-        <!--<param-value>classpath:/config/spring/application*.xml</param-value>-->
+        <!--<param-value>classpath:/config/spring/applicationContext.xml</param-value>-->
+        <param-value>classpath:/config/spring/applicationContext.xml,classpath:/config/spring/applicationRabbitMqClient.xml</param-value>
     </context-param>
     <listener>
         <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>

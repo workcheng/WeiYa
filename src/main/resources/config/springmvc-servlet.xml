@@ -120,5 +120,6 @@
     <mvc:resources mapping="/danmu/**" location="/WEB-INF/danmu/"/>
     <mvc:resources mapping="/comment/**" location="/WEB-INF/comment/"/>
     <mvc:resources mapping="/meal/**" location="/WEB-INF/meal/"/>
+    <mvc:resources mapping="/mq/**" location="/WEB-INF/mq/"/>
 
 </beans>

@@ -1,7 +1,8 @@
 package com.zoe.weiya.mq;
 
+import com.zoe.weiya.comm.logger.ZoeLogger;
+import com.zoe.weiya.comm.logger.ZoeLoggerFactory;
 import com.zoe.weiya.service.websocket.WebSocketService;
-import org.apache.log4j.Logger;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.core.MessageListener;
 import org.springframework.amqp.utils.SerializationUtils;
@@ -13,7 +14,7 @@ import java.nio.charset.Charset;
  * Created by andy on 2017/1/10.
  */
 public class QueueOneLitener implements  MessageListener{
-    private static final Logger log = Logger.getLogger(QueueOneLitener.class);
+    private static final ZoeLogger log = ZoeLoggerFactory.getLogger(QueueOneLitener.class);
     @Autowired
     WebSocketService webSocketService;
 

@@ -1,7 +1,7 @@
 package com.zoe.weiya.mq;
 
 import com.zoe.weiya.AbstractTestCase;
-import com.zoe.weiya.model.User;
+import com.zoe.weiya.model.responseModel.ZoeMessage;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -14,8 +14,10 @@ public class MyMqGatwayTest extends AbstractTestCase{
 
     @Test
     public void sendDataToCrQueue() throws Exception {
-        User user = new User("111","123456");
-        myMqGatway.sendDataToCrQueue(user);
+        ZoeMessage zoeMessage = new ZoeMessage();
+        zoeMessage.setHeadImgUrl("img");
+        zoeMessage.setContent("lalal");
+//        myMqGatway.sendDataToCrQueue(zoeMessage);
     }
 
 }
