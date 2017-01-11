@@ -217,6 +217,11 @@ body {
 
 .gowall .send_words .wordsedit1 {
     position: relative;
+    width: 688px;
+    background: #fff;
+    height: 96px;
+    border-radius: 11px;
+    box-shadow: 0 0 15px rgba(129, 104, 255, 0.8);
 }
 
 .gowall .send_words .wordsedit1 input {
@@ -224,12 +229,14 @@ body {
     resize: none;
     font-size: 33px;
     color: #333;
-    width: 684px;
-    border: 6px solid #fff;
+    width: 614px;
     border-radius: 11px;
-    box-shadow: 0 0 15px rgba(129, 104, 255, 0.8);
+    /* box-shadow: 0 0 15px rgba(129, 104, 255, 0.8); */
     height: 80px;
     line-height: 80px;
+    border-right: 0;
+    outline: none;
+    border:none;
 }
 
 .gowall .send_words .wordsedit .pholder {
@@ -376,10 +383,16 @@ body {
 
 }*/
 @media screen and (max-width: 320px){
-    .gowall .send_words .wordsedit1 textarea{
-        width:590px;
+    .gowall .send_words .wordsedit1{width:600px;}
+    .gowall .send_words .wordsedit1 input{
+        width:538px;
     }
     .senddiv .fasong input{
         width:600px;
     }
+    #facebox {
+        top: 100px !important;
+        left: -33px !important;
+    }
+    .qqFace{height:280px !important;width:654px !important;}
 }
