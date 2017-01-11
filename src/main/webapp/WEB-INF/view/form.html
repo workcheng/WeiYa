@@ -24,24 +24,25 @@
         }
 
         .error_dialog {
-            position: fixed;
+            position: absolute;
             width: 250px;
             height: 160px;
-            left: 100px;
-            top: 50%;
+            left: 50px;
+            top: 200px;
             margin-top: -170px;
             background: #000;
             opacity: .8 !important;
             z-index: 21500;
             border-radius: 11px;
             display: none;
+            text-align: center;
         }
 
         .error_dialog img {
             position: relative;
             width: 80px;
             height: 90px;
-            margin: 80px 235px 40px;
+            margin-top: 36px;
         }
 
         .error_dialog p {
@@ -66,11 +67,12 @@
                 <span>感谢您参加智业年会，请登记您的签到信息。</span>
             </div>
         </div>
-        <div class="error_dialog">
-            <img src="images/error.png">\
-            <p></p>
-        </div>
-        <div id="partySign" style="display: none;">
+
+        <div id="partySign" style="position:relative">
+            <div class="error_dialog">
+                <img src="images/error.png">
+                <p></p>
+            </div>
             <div class="form-row">
                 <div class="field-label" style="width: 50px"><label for="userName">姓名</label>:</div>
                 <span style="color: red;" id="user"></span>
@@ -78,7 +80,7 @@
                 </div>
             </div>
             <div class="form-row">
-                <div class="field-label" style="width: 188px;"><label for="dept" style="width: 152px;">所属中心/分子公司</label>:
+                <div class="field-label" style="width: 188px;"><label for="dept" style="width: 160px;">所属中心/分子公司</label>:
                 </div>
                 <div class="field-widget">
                     <select id="field6" name="dept" class="validate-selection">
