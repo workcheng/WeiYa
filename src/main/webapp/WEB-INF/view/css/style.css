@@ -205,13 +205,22 @@ input.validation-passed, textarea.validation-passed {
     font-size: 36px;
 }
 */
-
+html {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    overflow: hidden;
+}
 body {
-    color: #333;
-    background: url(../images/bg.gif) repeat;
+    margin: 0px;
     padding: 0px;
-    font-size: 14px;
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: "微软雅黑";
+    -webkit-user-select: none;
+    word-wrap: break-word;
+    word-break: break-all;
+    height: 100%;
+    background: url(../images/hb3.png) center no-repeat;
+    background-size: 100% 100%;
 }
 
 .field-content {
@@ -288,7 +297,7 @@ label.left {
 }
 
 input.required {
-    width: 300px;
+    width: 320px;
     height: 30px;
     border: 1px solid #95E0EF;
     background-color: #f3fcfe;
@@ -307,7 +316,7 @@ input.optional {
 }
 
 select.validate-selection {
-    width: 305px;
+    width: 325px;
     height: 37px;
     border: 1px solid #95E0EF;
     background-color: #f3fcfe;
@@ -334,7 +343,7 @@ textarea.optional {
 }
 
 input.submit {
-    width: 305px;
+    width: 325px;
     height: 38px;
     line-height: 30px;
     padding: 0 30px;
@@ -397,13 +406,17 @@ input.validation-passed, textarea.validation-passed {
     width: 200px;
     height: 100px;
 }
-
+.form-row-2 h2 {
+    padding: 0;
+    margin: 12px 0;
+    font-weight:600;
+}
 .form-row-3 {
-    float: right;
+    float: left;
     margin-right: 30px;
 }
 
-@media screen and (max-width: 360px) {
+@media screen and (max-width: 320px) {
     .form-row-1 {
         width: 90px;
         height: 90px;
@@ -420,7 +433,8 @@ input.validation-passed, textarea.validation-passed {
 
     .form-row-2 h2 {
         padding: 0;
-        margin: 14px 0;
+        margin: 6px 0;
+        font-weight:600;
     }
 
     input.required {
@@ -438,6 +452,20 @@ input.validation-passed, textarea.validation-passed {
     .form-row-3 {
         float: left;
         margin-right: 0;
+    }
+    .error_dialog{
+        left: 40px;
+        top: 200px;
+    }
+
+}
+@media screen and (min-width: 412px) and (max-width: 414px) {
+    input.required{width:360px;}
+    input.submit{width:365px;}
+    select.validate-selection{width:365px;}
+    .error_dialog{
+        left: 74px;
+        top: 200px;
     }
 }
 
