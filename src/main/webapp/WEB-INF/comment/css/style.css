@@ -43,21 +43,6 @@ html, body {
     height: 100%;
 }
 
-@media screen and(max-width: 320px) {
-    .gowall .send_words {
-        margin-left: 45px;
-    }
-
-    .gowall .send_words .wordsedit1 textarea {
-        width: 600px !important;
-        font-size: 30px !important;
-    }
-
-    .senddiv .fasong input {
-        width: 600px !important;
-    }
-}
-
 body {
     font: normal 24px/1.5 "Microsoft Yahei", "Helvetica Neue", Helvetica, "STHeiti STXihei", "Microsoft JhengHei", Arial, sans-serif;
     -webkit-text-size-adjust: 100% !important;
@@ -72,7 +57,6 @@ body {
 
 .wrapper {
     width: 100%;
-    max-width: 800px;
     min-height: 100%;
     margin: 0 auto;
     background-image: url("../images/bg2.png");
@@ -236,7 +220,7 @@ body {
     line-height: 80px;
     border-right: 0;
     outline: none;
-    border:none;
+    border: none;
 }
 
 .gowall .send_words .wordsedit .pholder {
@@ -294,11 +278,11 @@ body {
     width: 692px;
     height: 85px;
     line-height: 75px;
-    font-size:30px;
+    font-size: 30px;
     color: #fff;
     text-align: center;
     background: #e7201d;
-    background: linear-gradient( #E53E49, #e7201d);
+    background: linear-gradient(#E53E49, #e7201d);
     border-radius: 6px;
     border: 1px solid #e71b1b;
 }
@@ -373,26 +357,10 @@ body {
     text-align: center;
     font-size: 36px;
 }
-/*@media screen and (min-width: 320px) and (max-width: 360px){
-    .gowall .send_words .wordsedit1 textarea{
-        width:660px;
-    }
-    .senddiv .fasong input{
-        width:668px;
-    }
 
-}*/
-@media screen and (max-width: 320px){
-    .gowall .send_words .wordsedit1{width:600px;}
-    .gowall .send_words .wordsedit1 input{
-        width:538px;
+@media screen and (max-width: 320px) {
+    .zoom {
+        zoom: 0.42 !important;
+        -webkit-text-size-adjust: auto !important;
     }
-    .senddiv .fasong input{
-        width:600px;
-    }
-    #facebox {
-        top: 100px !important;
-        left: -33px !important;
-    }
-    .qqFace{height:280px !important;width:654px !important;}
 }
