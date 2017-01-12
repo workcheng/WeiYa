@@ -67,13 +67,16 @@ public class MessageController {
 
     @RequestMapping(value = "danmu", method = RequestMethod.POST)
     public Object sendDanmuMessage(@RequestBody @Validated ZoeMessage zoeMessage) {
+        int count = 300;
+        if(null != zoeMessage.getContent() && zoeMessage.getContent().length() > count){
+            return ZoeObject.failure("字符长度不能大于"+count);
+        }
         if (ZoeCrossSiteScriptingValidation.IsDangerousString(zoeMessage.getContent())) {
             return ZoeObject.failure("非法字符");
         }
         if (StringUtils.isBlank(zoeMessage.getHeadImgUrl())) {
             zoeMessage.setHeadImgUrl(getDefaultHeadImgUrl());
         }
-
         try {
             //for (int i = 0; i <= 100; i++) {
             webSocketService.broadcast(zoeMessage.getContent(), zoeMessage.getHeadImgUrl());
@@ -118,6 +121,10 @@ public class MessageController {
 
     @RequestMapping(value = "danmuy", method = RequestMethod.POST)
     public Object sendDanmu(@RequestBody @Validated ZoeMessage zoeMessage) {
+        int count = 300;
+        if(null != zoeMessage.getContent() && zoeMessage.getContent().length() > count){
+            return ZoeObject.failure("字符长度不能大于"+count);
+        }
         try {
             Long save = messageService.save(zoeMessage);
             if(save == 1){
