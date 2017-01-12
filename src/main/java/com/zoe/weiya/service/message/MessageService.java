@@ -28,7 +28,7 @@ public class MessageService {
         {
             add("#CC3333");
             add("#996699");
-            add("#FFFF00");
+            add("#FF6600");
             add("#0099CC");
             add("#3366CC");
             add("#000000");

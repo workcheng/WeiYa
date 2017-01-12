@@ -39,22 +39,24 @@
                 looper = setInterval(do_barrager, looper_time);
                 run_once = false;
             }
+            //是否有数据
             $.getJSON('danmuy', function (data) {//获取
                 var model = data.data;
-                //是否有数据
-                if (data.data && data.data != "") {
-                    var item = {
-                        img: model.img, //图片
-                        info: model.info, //文字
-                        href: model.href, //链接
-                        close: true, //显示关闭按钮
-                        speed: model.speed, //延迟,单位秒,默认6
-                        bottom: 70, //距离底部高度,单位px,默认随机
-                        color: model.color, //颜色,默认白色
-                        old_ie_color: model.old_ie_color, //ie低版兼容色,不能与网页背景相同,默认黑色
+                if (data.status == '1000') {
+                    if (model && model != "") {
+                        var item = {
+                            img: model.img, //图片
+                            info: model.info, //文字
+                            href: model.href, //链接
+                            close: true, //显示关闭按钮
+                            speed: model.speed, //延迟,单位秒,默认6
+//                            bottom: 70, //距离底部高度,单位px,默认随机
+                            color: model.color, //颜色,默认白色
+                            old_ie_color: model.old_ie_color, //ie低版兼容色,不能与网页背景相同,默认黑色
+                        }
+                        item.info = replaceEm(item.info);
+                        $('body').barrager(item);
                     }
-                    model.info = replaceEm(model.info);
-                    $('body').barrager(model);
                 }
             });
         }
