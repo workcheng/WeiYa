@@ -10,12 +10,13 @@
     <script type="text/javascript" src="js/bootstrap.min.js"></script>
     <script type="text/javascript" src="js/tinycolor-0.9.15.min.js"></script>
     <script type="text/javascript" src="js/jquery.barrager.js"></script>
+    <script type="text/javascript" src="../lottery/js/config.js"></script>
     <script type="application/javascript">
 
         var ws = null;
 
         function startServer() {
-            var url = "ws://" + window.location.host + "/echoServlet";
+            var url = "ws://" + BASE + "echoServlet";
             if ('WebSocket' in window) {
                 ws = new WebSocket(url);
             } else if ('MozWebSocket' in window) {

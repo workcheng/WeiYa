@@ -7,76 +7,55 @@ $(document).ready(function () {
     // 根据实际填写接口的配置地点
     // 这里的接口地址是基于node-weixin配置的。
     var weixinUrl = location.href.split('#')[0];
-    var url = BaseUrl + "sign/url";
-    // 当前的网页请求地址
+    $('body').append('<div id="loading"><img src="/view/images/loading.gif" style="width: 150px;margin-left: 97px;"></div>');
+    wx.hideOptionMenu();
+    var getUserInfo = BaseUrl + "sign/getUserInfo";//"auth/user_info";
+    var weixin = location.href.split('?')[1];
+    var code = weixin.split('=')[1];
+    //获取用户信息
     $.ajax({
-        url: url, //这个地址是服务器配置JSSDK的地址
+        url: getUserInfo, //这个地址是服务器配置JSSDK的地址
         data: {           // 这个地址是发生jssdk调用的url地址
-                          // 用于服务器配置
-            url: weixinUrl
+            // 用于服务器配置
+            id: code,
+            lang: ''
         },
         success: function (json) {
-            var data = json.data;
-            var config = {};
-            for (var k in json.data) {
-                config[k] = json.data[k];
-            }
-            config.debug = false;// 添加你需要的JSSDK的权限
-            config.appId = config.appid;
-            config.jsApiList = ['hideOptionMenu'];
-            config.timestamp = parseInt(config.timestamp);
-            config.nonceStr = config.noncestr;
-            config.signature = config.signature
-            wx.config(config);
-
-            wx.ready(function () {
-                $('body').append('<div id="loading"><img src="/view/images/loading.gif" style="width: 150px;margin-left: 97px;"></div>');
-                wx.hideOptionMenu();
-                var getUserInfo = BaseUrl + "sign/getUserInfo";//"auth/user_info";
-                var weixin = location.href.split('?')[1];
-                var code = weixin.split('=')[1];
-                //获取用户信息
-                $.ajax({
-                    url: getUserInfo, //这个地址是服务器配置JSSDK的地址
-                    data: {           // 这个地址是发生jssdk调用的url地址
-                        // 用于服务器配置
-                        id: code,
-                        lang: ''
-                    },
-                    success: function (json) {
-                        var userInfo = json.data;
-                        var openId = userInfo.openId;
-                        var memberUrl = BaseUrl + "user/isMember";
-                        $.ajax({
-                            url: memberUrl,
-                            data: {
-                                id: openId
-                            },
-                            success: function (json) {
-                                var data = json.data;
-                                if (data == "NOT_SIGN") {
-                                    $("#loading").hide();
-                                    $("#partySign").show();
-                                    userSignClick(userInfo.headImgUrl, openId);
-                                } else if (json.status == "2005") {
-                                    $("#partySign").hide();
-                                    $("#loading").hide();
-                                    $("#reSign").hide();
-                                    $("#unStart").show();
-                                } else {
-                                    $("#partySign").hide();
-                                    $("#loading").hide();
-                                    $("#reSign").show();
-                                    $("#unStart").hide();
-                                }
-                            }
-                        })
+            var userInfo = json.data;
+            var openId = userInfo.openId;
+            var memberUrl = BaseUrl + "user/isMember";
+            $.ajax({
+                url: memberUrl,
+                data: {
+                    id: openId
+                },
+                success: function (json) {
+                    var data = json.data;
+                    if(json.status == "1001"){
+                        alert("内部错误");
+                        return;
                     }
-                })
-            });
+                    if (data == "NOT_SIGN") {
+                        $("#loading").hide();
+                        $("#partySign").show();
+                        userSignClick(userInfo.headImgUrl, openId);
+                    } else if (json.status == "2005") {
+                        $("#partySign").hide();
+                        $("#loading").hide();
+                        $("#reSign").hide();
+                        $("#unStart").show();
+                    } else {
+                        $("#partySign").hide();
+                        $("#loading").hide();
+                        $("#reSign").show();
+                        $("#unStart").hide();
+                    }
+                }
+            })
         }
     })
-});
+})
+;
 
 var getOrderInfo = function () {
     $("#isOrder").click(function () {
