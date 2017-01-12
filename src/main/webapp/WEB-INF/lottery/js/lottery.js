@@ -17,10 +17,27 @@ var getLottery = function () {
         url: getUserList,
         success: function (data) {
             getAllUserInfo = data.data;
-            $("#userCount").text(getAllUserInfo.length);
         }
     })
 }
+
+/**
+ * 获取总数
+ */
+var getCnt = function () {
+    console.log("获取总数");
+    var _this = this;
+    //出现正在获取最新签到成员，请稍候...todo：这里有问题，不能获取全部的签到用户，不然会卡
+    var getUserList = BaseUrl + "user/userListCount";
+    $.ajax({
+        async: true,
+        url: getUserList,
+        success: function (data) {
+            $("#userCount").text(data.data);
+        }
+    })
+}
+
 /**
  * 获取幸运用户
  */
@@ -42,7 +59,11 @@ var getLuckyUser = function (callback) {
     });
 }
 var isAuto = function () {
-
+    setintIndex = setInterval(function () {
+        var user_index = getRandom(0, getAllUserInfo.length - 1);
+        $("#userName").html(getAllUserInfo[user_index].name);
+        $("#userImg").attr("src", getAllUserInfo[user_index].headImgUrl);
+    }, 100);
     beginLuck();
     $('.condition').addClass('disabled');
     return false;
@@ -52,20 +73,6 @@ var beginLuck = function () {
     $("#stopLuck").show();
 }
 
-
-/*
-*
-* */
-function  exchangeImg(){
-    if(setintIndex==0)
-    {
-    setintIndex = setInterval(function () {
-        var user_index = getRandom(0, getAllUserInfo.length - 1);
-        $("#userName").html(getAllUserInfo[user_index].name);
-        $("#userImg").attr("src", getAllUserInfo[user_index].headImgUrl);
-    }, 100);
-    }
-}
 /**
  * 停止抽奖
  * @returns {boolean}
@@ -104,7 +111,7 @@ var stopLuck = function () {
  */
 var showLuckyUser = function (idx, imgUI, userName, luckyLevel) {
     var listContent = $("<li></li>").addClass("list-content clearfix");
-       var listIdx = $("<div></div>").addClass("list-idx").text(idx);
+    var listIdx = $("<div></div>").addClass("list-idx").text(idx);
     var listUser = $("<div></div>").addClass("list-user");
     var jqImg = $("<img>").attr("src", imgUI);
     var jqName = $("<p></p>").addClass("text-overflow").text(userName);
@@ -157,7 +164,6 @@ var showLuckAnimate = function (imgUl, showLevel, userName) {
             }
         }
 
-
     }, 3000);
 }
 $(document).ready(function () {
@@ -165,8 +171,6 @@ $(document).ready(function () {
     // setInterval('getLottery();', 10000);
     $('#beginLuck').click(function () {
         var userNum = $("select[name='userNum']").val();
-        //判断是否有人签到
-
         if (userNum > 1) {
             setTimeout(function () {
                 stopLuck();
@@ -181,4 +185,8 @@ $(document).ready(function () {
     $(window).load(function () {
         $("#background").fullBg();
     });
+    setInterval(function () {
+        getLottery();
+        getCnt();
+    }, 1000 * 5)
 });
