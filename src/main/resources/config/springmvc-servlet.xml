@@ -121,5 +121,6 @@
     <mvc:resources mapping="/comment/**" location="/WEB-INF/comment/"/>
     <mvc:resources mapping="/meal/**" location="/WEB-INF/meal/"/>
     <mvc:resources mapping="/mq/**" location="/WEB-INF/mq/"/>
+    <mvc:resources mapping="/message/**" location="/WEB-INF/message/"/>
 
 </beans>

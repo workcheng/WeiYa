@@ -42,4 +42,5 @@ public class CommonConstant {
   public static final String COMMENT = "comment";
   public static final String CARD = "card";
   public static final String VOTE = "vote";
+  public static final String DANMU = "DANMU";
 }

@@ -2,7 +2,6 @@ package com.zoe.weiya.mq;
 
 import com.zoe.weiya.model.responseModel.ZoeMessage;
 import org.springframework.amqp.core.AmqpTemplate;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -11,7 +10,6 @@ import org.springframework.stereotype.Service;
 @Service
 public class MyMqGatway {
 
-    @Autowired
     private AmqpTemplate amqpTemplate;
 
     public void sendDataToCrQueue(ZoeMessage message) {

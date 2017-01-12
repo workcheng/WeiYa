@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>danmu app</title>
+    <link rel="stylesheet" type="text/css" href="../danmu/css/barrager.css">
+    <link rel="stylesheet" type="text/css" href="../danmu/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="../danmu/css/index.css">
+    <script type="text/javascript" src="../danmu/js/jquery-1.9.1.min.js"></script>
+    <script type="text/javascript" src="../danmu/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../danmu/js/tinycolor-0.9.15.min.js"></script>
+    <script type="text/javascript" src="../danmu/js/jquery.barrager.js"></script>
+    <script type="text/javascript">
+        var getRandomColor = function () {
+            return '#' +
+                    (function (color) {
+                        return (color += '0123456789abcdef'[Math.floor(Math.random() * 16)])
+                        && (color.length == 6) ? color : arguments.callee(color);
+                    })('');
+        };
+        var replaceEm = function (str) {
+            str = str.replace(/\</g, '&lt;');
+            str = str.replace(/\>/g, '&gt;');
+            str = str.replace(/\n/g, '<br/>');
+            str = str.replace(/\[em_([0-9]*)\]/g, '<img src="../comment/arclist/$1.gif" border="0" />');
+            return str;
+        };
+
+        $.ajaxSettings.async = false;
+        //每条弹幕发送间隔
+        var looper_time = 3*1000;
+        //是否首次执行
+        var run_once = true;
+        do_barrager();
+
+        function do_barrager(){
+            if(run_once){
+                //如果是首次执行,则设置一个定时器,并且把首次执行置为false
+                looper=setInterval(do_barrager,looper_time);
+                run_once=false;
+            }
+            $.getJSON('danmuy',function(data){//获取
+                //是否有数据
+                if(data.data){
+                    var model = data.data;
+                    model.info = replaceEm(model.info);
+                    $('body').barrager(model);
+                }
+            });
+        }
+    </script>
+</head>
+<body>
+    <h1 id="content" style="text-align: center;color:#3498ed"></h1>
+</body>
+</html>

@@ -5,15 +5,15 @@ import com.zoe.weiya.comm.logger.ZoeLogger;
 import com.zoe.weiya.comm.logger.ZoeLoggerFactory;
 import com.zoe.weiya.comm.response.ZoeObject;
 import com.zoe.weiya.model.LuckyUser;
+import com.zoe.weiya.model.responseModel.BarrAgerModel;
 import com.zoe.weiya.model.responseModel.ZoeMessage;
-import com.zoe.weiya.mq.MyMqGatway;
 import com.zoe.weiya.mq.stomp.Program;
+import com.zoe.weiya.service.message.MessageService;
 import com.zoe.weiya.service.message.WechatService;
 import com.zoe.weiya.service.user.UserService;
 import com.zoe.weiya.service.websocket.WebSocketService;
 import com.zoe.weiya.util.ZoeCrossSiteScriptingValidation;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.core.MessageProperties;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,18 +37,13 @@ import java.util.concurrent.TimeoutException;
 @RestController
 public class MessageController {
     private static final ZoeLogger log = ZoeLoggerFactory.getLogger(MessageController.class);
-    @Autowired
-    WechatService wechatService;
-    @Autowired
-    UserService userService;
-    @Autowired
-    WebSocketService webSocketService;
-    @Autowired(required = false)
-    HttpServletRequest request;
-    @Autowired
-    MyMqGatway myMqGatway;
-    @Autowired
-    private AmqpTemplate amqpTemplate;
+    @Autowired WechatService wechatService;
+    @Autowired UserService userService;
+    @Autowired WebSocketService webSocketService;
+    @Autowired(required = false) HttpServletRequest request;
+//    @Autowired MyMqGatway myMqGatway;
+//    @Autowired private AmqpTemplate amqpTemplate;
+    @Autowired MessageService messageService;
 
     @RequestMapping(value = "sendMsg", method = RequestMethod.POST)
     public Object sendMessage(@RequestBody List<LuckyUser> users) {
@@ -61,24 +56,27 @@ public class MessageController {
         }
     }
 
+    private String getDefaultHeadImgUrl(){
+        String defaultHeadImage = "http://" + request.getServerName() //服务器地址
+                + ":"
+                + request.getServerPort()           //端口号
+                + request.getContextPath()      //项目名称
+                + "/danmu/images/wechat_logo.jpg"; //图片地址
+        return defaultHeadImage;
+    }
+
     @RequestMapping(value = "danmu", method = RequestMethod.POST)
     public Object sendDanmuMessage(@RequestBody @Validated ZoeMessage zoeMessage) {
         if (ZoeCrossSiteScriptingValidation.IsDangerousString(zoeMessage.getContent())) {
             return ZoeObject.failure("非法字符");
         }
         if (StringUtils.isBlank(zoeMessage.getHeadImgUrl())) {
-            String defaultHeadImage = "http://" + request.getServerName() //服务器地址
-                    + ":"
-                    + request.getServerPort()           //端口号
-                    + request.getContextPath()      //项目名称
-                    + "/danmu/images/wechat_logo.jpg"; //图片地址
-            zoeMessage.setHeadImgUrl(defaultHeadImage);
+            zoeMessage.setHeadImgUrl(getDefaultHeadImgUrl());
         }
 
         try {
             //for (int i = 0; i <= 100; i++) {
             webSocketService.broadcast(zoeMessage.getContent(), zoeMessage.getHeadImgUrl());
-            myMqGatway.sendDataToCrQueue(zoeMessage);
             //}
             return ZoeObject.success();
         } catch (Exception e) {
@@ -103,7 +101,7 @@ public class MessageController {
         int prefetchCount = 1;
 //        channel.basicQos(prefetchCount);
         org.springframework.amqp.core.Message message1 = new Message(message.getBytes(), messageProperties);
-        amqpTemplate.send(message1);
+//        amqpTemplate.send(message1);
     }
 
     @RequestMapping("danmu-x")
@@ -115,6 +113,35 @@ public class MessageController {
             e.printStackTrace();
         } catch (TimeoutException e) {
             e.printStackTrace();
+        }
+    }
+
+    @RequestMapping(value = "danmuy", method = RequestMethod.POST)
+    public Object sendDanmu(@RequestBody @Validated ZoeMessage zoeMessage) {
+        try {
+            Long save = messageService.save(zoeMessage);
+            if(save == 1){
+                return ZoeObject.success();
+            }else{
+                log.error("not save", save);
+                return ZoeObject.failure(save);
+            }
+        } catch (Exception e) {
+            log.error("error", e);
+            return ZoeObject.failure(e);
+        }
+    }
+    @RequestMapping(value = "danmuy", method = RequestMethod.GET)
+    public Object getDanmu() {
+        try {
+            BarrAgerModel barrAgerModel = messageService.getBarrAgerModel();
+            if(StringUtils.isBlank(barrAgerModel.getImg())){
+                barrAgerModel.setImg(getDefaultHeadImgUrl());
+            }
+            return ZoeObject.success(barrAgerModel);
+        } catch (Exception e) {
+            log.error("error", e);
+            return ZoeObject.failure(e);
         }
     }
 }
