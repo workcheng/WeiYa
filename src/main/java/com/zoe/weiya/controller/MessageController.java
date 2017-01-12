@@ -10,6 +10,7 @@ import com.zoe.weiya.model.responseModel.ZoeMessage;
 import com.zoe.weiya.mq.stomp.Program;
 import com.zoe.weiya.service.message.MessageService;
 import com.zoe.weiya.service.message.WechatService;
+import com.zoe.weiya.service.sensitative.SensitivewordFilter;
 import com.zoe.weiya.service.user.UserService;
 import com.zoe.weiya.service.websocket.WebSocketService;
 import com.zoe.weiya.util.ZoeCrossSiteScriptingValidation;
@@ -44,6 +45,7 @@ public class MessageController {
 //    @Autowired MyMqGatway myMqGatway;
 //    @Autowired private AmqpTemplate amqpTemplate;
     @Autowired MessageService messageService;
+    @Autowired protected SensitivewordFilter sensitiveService;
 
     @RequestMapping(value = "sendMsg", method = RequestMethod.POST)
     public Object sendMessage(@RequestBody List<LuckyUser> users) {
@@ -125,13 +127,18 @@ public class MessageController {
         if(null != zoeMessage.getContent() && zoeMessage.getContent().length() > count){
             return ZoeObject.failure("字符长度不能大于"+count);
         }
+        if (ZoeCrossSiteScriptingValidation.IsDangerousString(zoeMessage.getContent())) {
+            return ZoeObject.failure("非法字符");
+        }
+        String replaceMessage = sensitiveService.replaceSensitiveWord(zoeMessage.getContent(), 1, "*");
+        zoeMessage.setContent(replaceMessage);
         try {
             Long save = messageService.save(zoeMessage);
-            if(save == 1){
-                return ZoeObject.success();
+            if(save > 0){
+                return ZoeObject.success(save);
             }else{
-                log.error("not save", save);
-                return ZoeObject.failure(save);
+                log.error("not save");
+                return ZoeObject.failure();
             }
         } catch (Exception e) {
             log.error("error", e);

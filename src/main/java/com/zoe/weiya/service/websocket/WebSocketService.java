@@ -5,7 +5,6 @@ import com.zoe.weiya.comm.logger.ZoeLogger;
 import com.zoe.weiya.comm.logger.ZoeLoggerFactory;
 import com.zoe.weiya.controller.echo.MyMessageInbound;
 import com.zoe.weiya.model.responseModel.ZoeMessage;
-import com.zoe.weiya.service.sensitative.SensitiveWordInit;
 import com.zoe.weiya.service.sensitative.SensitivewordFilter;
 import com.zoe.weiya.util.JacksonJsonUtil;
 import com.zoe.weiya.util.ZoeUtil;
@@ -26,8 +25,6 @@ public class WebSocketService {
     private static final ZoeLogger log = ZoeLoggerFactory.getLogger(WebSocketService.class);
     @Autowired
     protected SensitivewordFilter sensitiveService;
-    @Autowired
-    protected SensitiveWordInit sensitiveWordInit;
 
     public void broadcast(String message, String headImgUrl) throws Exception {
         ZoeMessage zoeMessage = new ZoeMessage();
