@@ -328,6 +328,19 @@ body {
     top: -46px;
 }
 
+.inner {
+    background-size: 100% 4.5rem;
+    padding-bottom: 1.5rem;
+}
+
+.inner {
+    background: #fff url(../images/open.png) top center no-repeat;
+    background-size: 750px auto;
+    text-align: center;
+    padding-bottom: 50px;
+    border-bottom: 1px solid #d5d5d5;
+}
+
 .error_dialog {
     position: fixed;
     width: 550px;
@@ -361,23 +374,27 @@ body {
 @media screen and (max-width: 320px) {
     .zoom {
         zoom: 0.42 !important;
+        -webkit-text-size-adjust: auto !important;
     }
 }
 
 @media screen and  (min-width: 320px) and(max-width: 375px) {
     .zoom {
         zoom: 0.48 !important;
+        -webkit-text-size-adjust: auto !important;
     }
 }
 
 @media screen and(min-width: 375px)and(max-width: 412px) {
     .zoom {
         zoom: 0.55 !important;
+        -webkit-text-size-adjust: auto !important;
     }
 }
 
 @media screen and(min-width: 768px) {
     .zoom {
         zoom: 0.98 !important;
+        -webkit-text-size-adjust: auto !important;
     }
 }
