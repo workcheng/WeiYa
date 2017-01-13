@@ -34,7 +34,7 @@
                 var msg = replace_em(contentMessage.content);
                 var item = {
                     max: 15,
-                    speed: 10,
+                    speed: Math.round(Math.random()*10),
                     img: contentMessage.headImgUrl,
                     info: msg,
                     close: false,
