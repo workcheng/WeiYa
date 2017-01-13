@@ -46,7 +46,10 @@ var selectChange = function () {
         signGrid(time);
     })
 }
+function PrefixInteger(num, n) {
+    return (Array(n).join(0) + num).slice(-n);
+}
 
 Date.prototype.toLocaleString = function () {
-    return this.getFullYear() + "-" + (this.getMonth() + 1) + "-" + this.getDate() + "  " + this.getHours() + ":" + this.getMinutes() + ":" + this.getSeconds();
+    return this.getFullYear() + "-" + PrefixInteger((this.getMonth() + 1), 2) + "-" + PrefixInteger(this.getDate(), 2) + "  " + PrefixInteger(this.getHours(), 2) + ":" + PrefixInteger(this.getMinutes(), 2) + ":" + PrefixInteger(this.getSeconds(), 2);
 };
