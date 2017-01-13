@@ -120,7 +120,8 @@
     <mvc:resources mapping="/danmu/**" location="/WEB-INF/danmu/"/>
     <mvc:resources mapping="/comment/**" location="/WEB-INF/comment/"/>
     <mvc:resources mapping="/meal/**" location="/WEB-INF/meal/"/>
-    <mvc:resources mapping="/mq/**" location="/WEB-INF/mq/"/>
+    <mvc:resources mapping="/config/**" location="/WEB-INF/config/"/>
     <mvc:resources mapping="/message/**" location="/WEB-INF/message/"/>
+    <mvc:resources mapping="/MP_verify_qFc0y7Y9DrJrrC1W.txt" location="/WEB-INF/"/>
 
 </beans>

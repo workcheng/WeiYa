@@ -134,6 +134,10 @@ public class UserService {
         return (User) getZoeRedisTemplate().getValue(openId);
     }
 
+    public User get(int index,String openId) throws NotStartException, InternalException {
+        return (User) zoeRedisTemplateIndexList.get(index).getValue(openId);
+    }
+
     public Long saveInSet(String openId) throws NotStartException, InternalException {
         return getZoeRedisTemplate().setSet(CommonConstant.USER, openId);
     }
@@ -262,7 +266,7 @@ public class UserService {
                 String next = iterator.next();
                 User user = get(next);
                 userList.add(user);
-                if(user.getOrder().equals(1)){
+                if(Integer.valueOf(1).equals(user.getOrder())){
                     orderCount++;
                 }
             }
@@ -282,9 +286,9 @@ public class UserService {
             Iterator<String> iterator = openIdSet.iterator();
             while (iterator.hasNext()){
                 String next = iterator.next();
-                User user = get(next);
+                User user = get(index, next);
                 userList.add(user);
-                if(user.getOrder().equals(1)){
+                if(Integer.valueOf(1).equals(user.getOrder())){
                     orderCount++;
                 }
             }
