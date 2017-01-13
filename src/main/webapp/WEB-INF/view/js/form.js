@@ -44,6 +44,8 @@ $(document).ready(function () {
                         $("#loading").hide();
                         $("#reSign").hide();
                         $("#unStart").show();
+                        alert(json.message);
+                        return;
                     } else {
                         $("#partySign").hide();
                         $("#loading").hide();
