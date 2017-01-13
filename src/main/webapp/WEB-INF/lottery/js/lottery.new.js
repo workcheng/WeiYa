@@ -245,7 +245,6 @@ $(document).ready(function () {
     })
     $("#background").fullBg();
     setInterval(function () {
-        lottery.getLotteryUser();
         lottery.getCnt();
     }, 1000 * 5)
 });

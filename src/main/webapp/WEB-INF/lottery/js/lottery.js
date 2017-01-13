@@ -186,7 +186,6 @@ $(document).ready(function () {
         $("#background").fullBg();
     });
     setInterval(function () {
-        getLottery();
         getCnt();
     }, 1000 * 5)
 });

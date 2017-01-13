@@ -41,7 +41,6 @@ $(document).ready(function () {
                         $("#headImgUrl").attr("src", userInfo.headImgUrl);
                         $("#nickName").text(userInfo.nickname);
                         saveMsgClick(userInfo.headImgUrl);
-                        //var tipId = window.setInterval("saveMsgClick()", 10000);
                     }
                 })
             });
@@ -60,18 +59,22 @@ $(document).ready(function () {
  */
 var saveMsgClick = function (headImgUrl) {
     $("#saveMsg").click(function () {
-        var $btn = $(this);
-        if ($btn.hasClass("disabled")) return;
-        $btn.addClass("disabled");
         if (($(".wordsedit1 input").val() == "") || ($(".wordsedit1 input").val() == "null")) {
-            $(".error_dialog p").html("请输入留言！");
-            $(".error_dialog").show();
-            setTimeout(function () {
-                $(".error_dialog").hide()
-            }, 3000);
-            $btn.removeClass("disabled");
+            showInfo("请输入留言！");
             return;
         }
+        var _now = new Date();
+        var difTime = _now - new Date(localStorage.lastTime);  //时间差的毫秒数
+        console.log(localStorage.lastTime);
+        console.log(difTime);
+        if (isNaN(difTime)) {
+            localStorage.lastTime = _now;
+        }
+        if (difTime < 5 * 1000) {
+            showInfo("请不要发送太频繁哦~~");
+            return false;
+        }
+        localStorage.setItem("lastTime", _now);
         var msgUrl = BaseUrl + "message/danmu";
         var msgInfo = $("#msgDanmu").val();
         var danmuMsg = {
@@ -85,11 +88,17 @@ var saveMsgClick = function (headImgUrl) {
             url: msgUrl,
             data: danmuMsg,
             success: function (data) {
-                console.log("data", JSON.stringify(data));
+                showInfo("上墙成功!");
                 $(".wordsedit1 input").val("");
             }
-        })
-        $btn.removeClass("disabled");
+        });
     })
+}
+var showInfo = function (txt) {
+    $(".error_dialog p").html(txt);
+    $(".error_dialog").show();
+    setTimeout(function () {
+        $(".error_dialog").hide()
+    }, 3000);
 
 }
