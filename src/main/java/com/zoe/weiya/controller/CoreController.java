@@ -77,6 +77,7 @@ public class CoreController {
                 .rule().async(false).event(WxConsts.EVT_SUBSCRIBE).handler(wechatService.sendSignMessage()).end()//关注事件
 //                .rule().async(false).msgType(WxConsts.XML_MSG_EVENT).event(WxConsts.EVT_SCAN).handler(wechatService.sendSignMessage()).end()//扫码事件
                 .rule().async(false).msgType(WxConsts.MASS_MSG_TEXT).handler(reply).end()
+                .rule().async(false).msgType(WxConsts.XML_MSG_EVENT).end()//过滤获取位置事件
                 .rule().async(false).handler(test).end();
         ;
     }
