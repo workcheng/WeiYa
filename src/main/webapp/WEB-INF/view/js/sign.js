@@ -48,5 +48,5 @@ var selectChange = function () {
 }
 
 Date.prototype.toLocaleString = function () {
-    return this.getFullYear() + "-" + (this.getMonth() + 1) + "-" + this.getDate() + "- " + this.getHours() + ":" + this.getMinutes() + ":" + this.getSeconds();
+    return this.getFullYear() + "-" + (this.getMonth() + 1) + "-" + this.getDate() + "  " + this.getHours() + ":" + this.getMinutes() + ":" + this.getSeconds();
 };
