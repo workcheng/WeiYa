@@ -19,8 +19,7 @@ public class EchoServlet extends WebSocketServlet {
     private static final long serialVersionUID = 1L;
 
     @Override
-    public StreamInbound createWebSocketInbound(String subProtocol,
-                                                   HttpServletRequest request) {
+    public StreamInbound createWebSocketInbound(String subProtocol,HttpServletRequest request) {
         ServletContext application = this.getServletContext();
         log.info("EchoServlet");
         return new MyMessageInbound(application);
