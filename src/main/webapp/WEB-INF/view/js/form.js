@@ -7,7 +7,7 @@ $(document).ready(function () {
     // 根据实际填写接口的配置地点
     // 这里的接口地址是基于node-weixin配置的。
     var weixinUrl = location.href.split('#')[0];
-    $('body').append('<div id="loading"><img src="/view/images/loading.gif" style="width: 150px;margin-left: 97px;"></div>');
+    $('body').append('<div id="loading"><img src="images/loading.gif" style="width: 150px;margin-left: 97px;"></div>');
     wx.hideOptionMenu();
     var getUserInfo = BaseUrl + "sign/getUserInfo";//"auth/user_info";
     var weixin = location.href.split('?')[1];
