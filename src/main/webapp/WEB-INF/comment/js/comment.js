@@ -77,6 +77,8 @@ var saveMsgClick = function (headImgUrl) {
         localStorage.setItem("lastTime", _now);
         var msgUrl = BaseUrl + "message/danmu";
         var msgInfo = $("#msgDanmu").val();
+        var time = new Date("yyyy-MM-dd HH:mm:ss");
+        //time = time.pattern("yyyy-MM-dd hh:mm:ss");
         var danmuMsg = {
             "content": msgInfo,
             "headImgUrl": headImgUrl
@@ -89,6 +91,7 @@ var saveMsgClick = function (headImgUrl) {
             data: danmuMsg,
             success: function (data) {
                 showInfo("上墙成功!");
+                showMsgLists(time, msgInfo);
                 $(".wordsedit1 input").val("");
             }
         });
@@ -102,3 +105,13 @@ var showInfo = function (txt) {
     }, 3000);
 
 }
+
+var showMsgLists = function (time, msgInfo) {
+    var wordRecord = $("<div></div>").addClass("words_record")
+    var jqSpan = $("<span></span>").text("已上墙");
+    var msgTime = $("<p></p>").text(time);
+    var msg = $("<div></div>").text(msgInfo);
+    wordRecord.append(jqSpan).append(msgTime).append(msg);
+    $(".lists").prepend(wordRecord);
+}
+
