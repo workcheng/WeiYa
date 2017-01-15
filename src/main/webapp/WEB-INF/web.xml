@@ -81,5 +81,13 @@
         <filter-name>wwwAuthFilter</filter-name>
         <url-pattern>/admin/*</url-pattern>
     </filter-mapping>
+    <filter-mapping>
+        <filter-name>wwwAuthFilter</filter-name>
+        <url-pattern>/danmu/*</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>wwwAuthFilter</filter-name>
+        <url-pattern>/lottery/*</url-pattern>
+    </filter-mapping>
 
 </web-app>
