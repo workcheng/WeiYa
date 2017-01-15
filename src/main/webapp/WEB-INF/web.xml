@@ -69,4 +69,17 @@
         <url-pattern>/echoServlet</url-pattern>
     </servlet-mapping>
 
+    <filter>
+        <filter-name>wwwAuthFilter</filter-name>
+        <filter-class>com.zoe.weiya.security.WwwAuthFilter</filter-class>
+        <init-param>
+            <param-name>auth-config</param-name>
+            <param-value>config/auth.properties</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>wwwAuthFilter</filter-name>
+        <url-pattern>/admin/*</url-pattern>
+    </filter-mapping>
+
 </web-app>
