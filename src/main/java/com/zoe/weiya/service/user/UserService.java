@@ -331,7 +331,7 @@ public class UserService {
 
     public Integer saveMessage(LuckyUser luckyUser) throws InternalException, NotStartException {
         Message msg = new Message();
-        msg.setMessage(message);
+        msg.setMessage("");
         msg.setCreateTime(ZoeDateUtil.moment());
         Long aLong = getZoeRedisTemplate().setSet(CommonConstant.MESSAGE, msg);
         if(aLong == 1){
