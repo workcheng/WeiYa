@@ -107,11 +107,13 @@ var showInfo = function (txt) {
 }
 
 var showMsgLists = function (time, msgInfo) {
-    var wordRecord = $("<div></div>").addClass("words_record")
-    var jqSpan = $("<span></span>").text("已上墙");
-    var msgTime = $("<p></p>").text(time);
-    var msg = $("<div></div>").text(msgInfo);
-    wordRecord.append(jqSpan).append(msgTime).append(msg);
+    var wordRecord = $("<div></div>").addClass("words_record");
+    var msg = $("<p></p>").addClass("word").text(msgInfo);
+    var msgTime = $("<p></p>").addClass("word-time")
+    var msgTimes = $("<span></span>").addClass("times").text(time);
+    var msgState = $("<span></span>").addClass("state").text("已上墙");
+    msgTime.append(msgTimes).append(msgState);
+    wordRecord.append(msg).append(msgTime);
     $(".lists").prepend(wordRecord);
 }
 
