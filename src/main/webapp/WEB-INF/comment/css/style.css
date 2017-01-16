@@ -288,7 +288,7 @@ body {
     border: 1px solid #e71b1b;
 }
 
-.gowall .words_record {
+.inner .lists{
     position: relative;
     background: rgba(255, 255, 255, .8);
     box-shadow: 0 0 15px rgba(255, 0, 96, 0.8);
@@ -296,13 +296,12 @@ body {
     border-radius: 11px;
     padding: 8px 22px;
     overflow: hidden;
-    margin-top: 30px;
     border: 6px solid #fff;
 }
 
-.gowall .send_words .words_record p {
-    color: #5c5c5c;
-    font-size: 20px;
+.gowall .send_words .words_record .word-time {
+    color: #808080;
+    font-size: 12px;
     padding-bottom: 6px;
     border-bottom: 1px solid #fff;
     margin-bottom: 10px;
@@ -314,7 +313,7 @@ body {
     padding-bottom: 10px;
 }
 
-.gowall .words_record span {
+/*.gowall .words_record span {
     position: absolute;
     display: inline-block;
     width: 120px;
@@ -327,7 +326,7 @@ body {
     font-size: 28px;
     right: 30px;
     top: -46px;
-}
+}*/
 
 .inner {
     background-size: 100% 4.5rem;
@@ -335,11 +334,14 @@ body {
 }
 
 .inner {
-    background: #fff url(../images/open.png) top center no-repeat;
+    /*background: #fff url(../images/open.png) top center no-repeat;*/
     background-size: 100% auto;
-    text-align: center;
+    /*text-align: center;*/
     padding-bottom: 50px;
     border-bottom: 1px solid #d5d5d5;
+    height:300px;
+    overflow-y:auto;
+    border-radius: 11px;
 }
 
 .error_dialog {
@@ -399,3 +401,6 @@ body {
         -webkit-text-size-adjust: auto !important;
     }
 }
+.gowall .send_words .word{font-size:34px;color:#000;margin-bottom:0;}
+.gowall .send_words .word-time .times{color:#808080;}
+.gowall .send_words .word-time .state{font-size:14px;display:inline-block;float:right;}
