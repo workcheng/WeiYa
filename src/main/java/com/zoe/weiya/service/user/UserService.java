@@ -11,6 +11,7 @@ import com.zoe.weiya.comm.logger.ZoeLoggerFactory;
 import com.zoe.weiya.comm.redis.ZoeRedisTemplate;
 import com.zoe.weiya.comm.response.ResponseMsg;
 import com.zoe.weiya.comm.response.ZoeObject;
+import com.zoe.weiya.model.LuckyUser;
 import com.zoe.weiya.model.Message;
 import com.zoe.weiya.model.OnlyUser;
 import com.zoe.weiya.model.User;
@@ -316,6 +317,19 @@ public class UserService {
     }
 
     public Integer saveMessage(String message) throws InternalException, NotStartException {
+        Message msg = new Message();
+        msg.setMessage(message);
+        msg.setCreateTime(ZoeDateUtil.moment());
+        Long aLong = getZoeRedisTemplate().setSet(CommonConstant.MESSAGE, msg);
+        if(aLong == 1){
+            return 1;
+        }else if(aLong == 0){
+            return 0;
+        }
+        return null;
+    }
+
+    public Integer saveMessage(LuckyUser luckyUser) throws InternalException, NotStartException {
         Message msg = new Message();
         msg.setMessage(message);
         msg.setCreateTime(ZoeDateUtil.moment());
