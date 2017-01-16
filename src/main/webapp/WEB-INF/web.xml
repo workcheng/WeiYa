@@ -83,7 +83,7 @@
     </filter-mapping>
     <filter-mapping>
         <filter-name>wwwAuthFilter</filter-name>
-        <url-pattern>/danmu/*</url-pattern>
+        <url-pattern>/danmu/danmu.html</url-pattern>
     </filter-mapping>
     <filter-mapping>
         <filter-name>wwwAuthFilter</filter-name>
