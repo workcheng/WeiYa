@@ -95,7 +95,7 @@
     <!-- 以下配置将拦截特有的URL请求 -->
     <mvc:interceptors>
         <mvc:interceptor>
-            <mvc:mapping path=".*/view/*.*"/>
+            <mvc:mapping path="/view/**"/>
             <bean id="1" class="com.zoe.weiya.interceptor.time.TimeBasedAccessInterceptor">
                 <property name="oneAmOpeningTime" value="${one.am.openIngTime}"/>
                 <property name="oneAmClosingTime" value="${one.am.closingTime}"/>
