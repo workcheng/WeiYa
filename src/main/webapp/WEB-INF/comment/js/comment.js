@@ -46,12 +46,12 @@ $(document).ready(function () {
             });
         }
     })
-    $('.emotion').qqFace({
-        id: 'facebox',
-        assign: 'msgDanmu',
-        path: BaseUrl + "comment/arclist/"	//表情存放的路径
+    /*$('.emotion').qqFace({
+     id: 'facebox',
+     assign: 'msgDanmu',
+     path: BaseUrl + "comment/arclist/"	//表情存放的路径
 
-    });
+     });*/
 });
 /**
  * 发送按钮事件
@@ -112,7 +112,6 @@ var showInfo = function (txt) {
     setTimeout(function () {
         $(".error_dialog").hide()
     }, 3000);
-
 }
 
 var showMsgLists = function (time, msgInfo) {
