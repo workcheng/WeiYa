@@ -202,4 +202,17 @@ public class UserController {
             return ZoeObject.failure(e);
         }
     }
+
+    @RequestMapping(value = "luckyUserList", method = RequestMethod.GET)
+    public Object getLuckyUserList(){
+        try {
+            return ZoeObject.success(userService.getAllMessage());
+        } catch (InternalException e) {
+            log.error("error", e);
+            return ZoeObject.failure(e);
+        } catch (NotStartException e) {
+            log.error("error", e);
+            return ZoeObject.failure(ZoeErrorCode.NOT_START);
+        }
+    }
 }

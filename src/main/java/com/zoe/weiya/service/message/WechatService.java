@@ -15,6 +15,7 @@ import me.chanjar.weixin.mp.bean.kefu.WxMpKefuMessage;
 import me.chanjar.weixin.mp.bean.message.WxMpXmlMessage;
 import me.chanjar.weixin.mp.bean.message.WxMpXmlOutMessage;
 import me.chanjar.weixin.mp.bean.message.WxMpXmlOutNewsMessage;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -77,13 +78,18 @@ public class WechatService {
     }
 
     public void sendMessage(LuckyUser user) throws Exception{
+        if(null != user){
+            if(StringUtils.isBlank(user.getOpenId()) || null == user.getDegree() || StringUtils.isBlank(user.getName())){
+                throw new InternalException("非法空白");
+            }
+        }
         String[] degreeList = {"一","二","三"};
         String messageText = ZoeProperties.get("config/static/static.properties","prize.message");
         String format = MessageFormat.format(messageText, user.getName(), degreeList[user.getDegree()]);
         WxMpKefuMessage message = WxMpKefuMessage.TEXT().content(format).toUser(user.getOpenId()).build();
         try {
             wxMpService.getKefuService().sendKefuMessage(message);
-            userService.saveMessage(user)
+            userService.saveMessage(user,format);
         } catch (WxErrorException e) {
             log.error("error",e);
             throw new InternalException(e);

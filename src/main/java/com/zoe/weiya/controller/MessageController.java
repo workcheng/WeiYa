@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
@@ -54,7 +55,7 @@ public class MessageController {
     protected SensitivewordFilter sensitiveService;
 
     @RequestMapping(value = "sendMsg", method = RequestMethod.POST)
-    public Object sendMessage(@RequestBody List<LuckyUser> users) {
+    public Object sendMessage(@RequestBody @Valid List<LuckyUser> users) {
         try {
             wechatService.sendMessage(users);
             return ZoeObject.success();
