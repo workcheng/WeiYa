@@ -75,7 +75,7 @@ public class MessageController {
 
     @RequestMapping(value = "danmu", method = RequestMethod.POST)
     public Object sendDanmuMessage(@RequestBody @Validated ZoeMessage zoeMessage) {
-        int count = 10;
+        int count = 100;
         if (null != zoeMessage.getContent() && zoeMessage.getContent().length() > count) {
             return ZoeObject.failure("字符长度不能大于" + count + "个");
         }
