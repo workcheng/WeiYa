@@ -176,7 +176,7 @@ body {
 .gowall .send_words {
     position: relative;
     margin: 34px auto;
-    width: 100%;
+    width: 90%;
 }
 
 .gowall .send_words p {
@@ -288,7 +288,7 @@ body {
     border: 1px solid #e71b1b;
 }
 
-.inner .lists{
+.inner .lists {
     position: relative;
     background: rgba(255, 255, 255, .8);
     box-shadow: 0 0 15px rgba(255, 0, 96, 0.8);
@@ -301,7 +301,7 @@ body {
 
 .gowall .send_words .words_record .word-time {
     color: #808080;
-    font-size: 12px;
+    font-size: 14px;
     padding-bottom: 6px;
     border-bottom: 1px solid #fff;
     margin-bottom: 10px;
@@ -337,10 +337,9 @@ body {
     /*background: #fff url(../images/open.png) top center no-repeat;*/
     background-size: 100% auto;
     /*text-align: center;*/
-    padding-bottom: 50px;
-    border-bottom: 1px solid #d5d5d5;
-    height:300px;
-    overflow-y:auto;
+    /* padding-bottom: 50px;*/
+    height: 190px;
+    overflow-y: auto;
     border-radius: 11px;
 }
 
@@ -401,6 +400,19 @@ body {
         -webkit-text-size-adjust: auto !important;
     }
 }
-.gowall .send_words .word{font-size:34px;color:#000;margin-bottom:0;}
-.gowall .send_words .word-time .times{color:#808080;}
-.gowall .send_words .word-time .state{font-size:14px;display:inline-block;float:right;}
+
+.gowall .send_words .word {
+    font-size: 34px;
+    color: #000;
+    margin-bottom: 0;
+}
+
+.gowall .send_words .word-time .times {
+    color: #808080;
+}
+
+.gowall .send_words .word-time .state {
+    font-size: 14px;
+    display: inline-block;
+    float: right;
+}
