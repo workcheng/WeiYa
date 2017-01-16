@@ -9,7 +9,8 @@
     <script type="text/javascript" src="../danmu/js/jquery-1.9.1.min.js"></script>
     <script type="text/javascript" src="../danmu/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="../danmu/js/tinycolor-0.9.15.min.js"></script>
-    <script type="text/javascript" src="../danmu/js/jquery.barrager.min.js"></script>
+    <!--<script type="text/javascript" src="../danmu/js/jquery.barrager.min.js"></script>-->
+    <script type="text/javascript" src="../message/js/jquery.barrager.js"></script>
     <script type="application/javascript">
 
         var ws = null;
@@ -28,14 +29,22 @@
                 document.getElementById("content").innerHTML += '弹幕通道已开启! Welcome!<br />';
             };
             ws.onmessage = function (event) {
-                var contentMessage = $.parseJSON(event.data);
-                var item = {
-                    'img': contentMessage.headImgUrl,
-                    'href': 'http://www.baidu.com',
-                    'info': contentMessage.content,
-                    close: false
-                };
-                $('body').barrager(item);
+                if(event && event.data){
+                    var contentMessage = $.parseJSON(event.data);
+                    var item = {
+                        'img': contentMessage.headImgUrl,
+                        'href': 'http://www.baidu.com',
+                        'info': contentMessage.content,
+                        close: false
+                    };
+                    var array = [];
+                    var content = {
+                        msg:item.info
+                    };
+                    array.push(content);
+                    $('canvas').barrager(array);
+//                $('body').barrager(item);
+                }
             };
             ws.onclose = function () {
                 document.getElementById("content").innerHTML += '弹幕通道关闭! Byebye!<br />';
@@ -47,6 +56,7 @@
 <body>
 <div>
     <h1 id="content" style="text-align: center;color:#3498ed"></h1>
+    <canvas style="width: 100%;height: 720px;background-color: rgba(0,0,0,0.2)">你的浏览器不支持canvas</canvas>
 </div>
 </body>
 </html>

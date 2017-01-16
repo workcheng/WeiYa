@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>damu app</title>
+    <title>弹幕</title>
     <link rel="stylesheet" type="text/css" href="css/barrager.css">
     <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="css/index.css">
@@ -12,9 +12,8 @@
     <script type="text/javascript" src="js/jquery.barrager.js"></script>
     <script type="text/javascript" src="../config/config.js"></script>
     <script type="application/javascript">
-
+        var messageAll = [];
         var ws = null;
-
         function startServer() {
             var url = "ws://" + BASE + "echoServlet";
             if ('WebSocket' in window) {
@@ -25,7 +24,6 @@
                 alert('Your browser Unsupported WebSocket!');
                 return;
             }
-
             ws.onopen = function () {
                 document.getElementById("content").innerHTML += '弹幕通道已开启! Welcome!<br />';
             };
@@ -34,19 +32,18 @@
                 var msg = replace_em(contentMessage.content);
                 var item = {
                     max: 15,
-                    speed: Math.round(Math.random()*10),
+                    speed: Math.round(Math.random() * 10),
                     img: contentMessage.headImgUrl,
                     info: msg,
                     close: false,
                     color: getRandomColor()
                 };
-                $('body').barrager(item);
+                messageAll.push(item);
             };
             ws.onclose = function () {
                 document.getElementById("content").innerHTML += '弹幕通道关闭! Byebye!<br />';
             };
         }
-
         startServer();
         var getRandomColor = function () {
             return '#' +
@@ -57,15 +54,30 @@
         }
         var replace_em = function (str) {
             str = str.replace(/\</g, '&lt;');
-
             str = str.replace(/\>/g, '&gt;');
-
             str = str.replace(/\n/g, '<br/>');
-
             str = str.replace(/\[em_([0-9]*)\]/g, '<img src="../comment/arclist/$1.gif" border="0" />');
-
             return str;
         }
+        $(function () {
+            setInterval(function () {
+                if (messageAll.length == 0) {
+                    console.log("暂无弹幕消息");
+                }
+                else {
+                    for (var i = 0; i < 1; i++) {
+                        //每30毫秒获取10条数据
+                        if (typeof (messageAll[i]) == "undefined")
+                            return;
+                        var item = messageAll[i];
+                        $('body').barrager(item);
+                        messageAll.splice(i);
+
+                        console.log(messageAll.length);
+                    }
+                }
+            }, 100);
+        })
     </script>
 </head>
 <body>

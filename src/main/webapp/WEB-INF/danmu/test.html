@@ -1,6 +1,175 @@
 <html>
 <link rel="stylesheet" href="css/barrager.css">
 <link rel="stylesheet" href="css/index.css">
+
+<script type="text/javascript">
+    $(function () {
+        $("#parent_bullet", window.parent.document).html("");
+        var b = [];
+        var a = false;
+        var d;
+        var c = 1;
+        var f = 2;
+        $(".parent-bullet", window.parent.document).html("");
+        function h() {
+            var j = Math.ceil(Math.random() * 16777215).toString(16);
+            while (j.length < 6) {
+                j = "0" + j
+            }
+            return j
+        }
+
+        function g(m) {
+            var k, l = "", j = m.length;
+            for (i = 0; i < j; i++) {
+                k = m.charCodeAt(i).toString(16);
+                while (k.length < 4) {
+                    k = "0" + k
+                }
+                l += "\\u" + k
+            }
+            return unescape(l.replace(/\\u/gi, "%u"))
+        }
+
+        function e(o, m, n) {
+            if (!!o && !!o.content) {
+                var p = [0, 150, 250, 350, 450, 550, 650];
+                var k = ["#E6F708", "#1DFC06", "#3BF8FF", "#FF4000", "#0098CD", "#FF7800", "#FFFFFF"];
+                if (n == 1) {
+                    k = ["#C3600B", "#FF6453", "#000000", "#779E4C", "#BA272B", "#9900FF", "#0099CC"]
+                }
+                var j = '<div style="top:' + p[m] + "px;left:100%;color:" + k[m] + ';text-shadow:#ccc 2px 2px 3px;" class="j-user-item not_comsume content-item">' + o.nickname + "：" + o.content + "</div>";
+                if (!o.head) {
+                    o.head = "http://wx.qlogo.cn/mmopen/WEznNWtWKmDShAXyQSoDJJaj8Egwg4RjBGPRWU4oLQvUoc6StqnFZslmpQIqTeHgAiaNFyolhHWnWQA8NRKs3m809ib2wicOqs8/132"
+                }
+                var l = '<div class="j-user-item not_comsume user-item" style="top:' + p[m] + 'px;left:100%;"><div class="user-photo" style="border: 4px solid ' + k[m] + ';"><img src="' + o.head + '"></div><div class="user-content" style="border: 4px solid ' + k[m] + ";color:" + k[m] + ';">' + o.nickname + "：" + o.content + "</div></div>";
+                if (n == 1) {
+                    $(".parent-bullet", window.parent.document).append($(l)).show()
+                } else {
+                    if (n == 2) {
+                        $(".parent-bullet", window.parent.document).append($(j)).show()
+                    }
+                }
+            }
+        }
+
+        window.changeDanmu = function (o, q, p) {
+            d = [11000, 11000, 11000, 11000, 11000, 11000, 11000];
+            if (o == 1) {
+                d = [8000, 8000, 8000, 8000, 8000, 8000, 8000]
+            } else {
+                if (o == 2) {
+                    d = [11000, 11000, 11000, 11000, 11000, 11000, 11000]
+                } else {
+                    if (o == 3) {
+                        d = [15000, 15000, 15000, 15000, 15000, 15000, 15000]
+                    }
+                }
+            }
+            if (b.length > 0) {
+                var j = b.length;
+                if (j > 7) {
+                    j = 7
+                }
+                var m = [2000, 3000, 4000, 5000, 6000, 7000, 8000];
+                for (var n = 0; n < j; n++) {
+                    var k = b.shift();
+                    b.push(k);
+                    e(k, n % 7, p)
+                }
+                var l = 1.3;
+                $("#parent_bullet", iwindow.parent.document).fnd(".j-user-item.not_comsume").each(function (u, x) {
+                    var y = $(this).offset().left;
+                    var w = $(this);
+                    w.removeClass("not_comsume");
+                    var t = 7;
+                    var v = +$("body", window.parent.document).width() + y;
+                    l += 0.1;
+                    var s = (m[u] + Math.random() * 400) / 1000;
+                    w.css({
+                        transform: "translateX(-" + v + "px)",
+                        "-webkit-transform": "translateX(-" + v + "px)",
+                        "-moz-transform": "translateX(-" + v + "px)",
+                        "-o-transform": "translateX(-" + v + "px)",
+                        "-ms-transform": "translateX(-" + v + "px)",
+                        transition: "all " + d[u] / 1000 + "s linear " + s + "s",
+                        "-webkit-transition": "all " + d[u] / 1000 + "s linear " + s + "s",
+                        "-moz-transition": "all " + d[u] / 1000 + "s linear " + s + "s",
+                        "-o-transition": "all " + d[u] / 1000 + "s linear " + s + "s",
+                        "-ms-transition": "all " + d[u] / 1000 + "s linear " + s + "s"
+                    });
+                    var r = +d[u] + m[u];
+                    setTimeout(function () {
+                        w.remove()
+                    }, r)
+                })
+            }
+        };
+        $.get("/meeting/screen/getdanmu", {aidStr: aidStr}, function (j) {
+            if (j.ret == 0) {
+                c = j.model.danmu.rate;
+                f = j.model.danmu.sytle || 2;
+                $.get("/meeting/screen/getInitMessage", {aidStr: aidStr}, function (p) {
+                    if (p.ret == 0) {
+                        var o = p.model.total;
+                        $(".container .top .right .messageword .num", window.parent.document).html(o);
+                        var k = p.model.record;
+                        for (var m = k.length - 1; m >= 0; m--) {
+                            var n = k[m];
+                            var l = {};
+                            if (n.content) {
+                                l = {
+                                    head: n.head ? n.head : (platform.staticUrl + "/image/page/nianhui/screen/default.png"),
+                                    nickname: n.nickname,
+                                    content: $.filterScript(n.content)
+                                }
+                            } else {
+                                continue
+                            }
+                            b.unshift(l);
+                            if (b.length > 50) {
+                                b.pop()
+                            }
+                        }
+                        window.changeDanmu(c, 1, f)
+                    }
+                }, "json")
+            } else {
+            }
+        }, "json");
+        setInterval(function () {
+            $.get("/meeting/screen/getMessage", {
+                aidStr: aidStr,
+                lastTotal: $(".container .top .right .messageword .num", window.parent.document).html()
+            }, function (o) {
+                if (o.ret == 0) {
+                    var n = o.model.total;
+                    $(".container .top .right .messageword .num", window.parent.document).html(n);
+                    var j = o.model.record;
+                    for (var l = j.length - 1; l >= 0; l--) {
+                        var m = j[l];
+                        var k = {};
+                        if (m.content) {
+                            k = {
+                                head: m.head ? m.head : (platform.staticUrl + "/image/page/nianhui/screen/default.png"),
+                                nickname: m.nickname,
+                                content: $.filterScript(m.content)
+                            }
+                        } else {
+                            continue
+                        }
+                        b.unshift(k);
+                        if (b.length > 50) {
+                            b.pop()
+                        }
+                    }
+                    window.changeDanmu(c, 1, f)
+                }
+            }, "json")
+        }, 2500)
+    });
+
+</script>
 <body>
 <div class="barrage" id="barrage_1484028074895" style="bottom: 60px; margin-right: 1372px;">
     <div class="barrage_box"><a class="portrait z" href="javascript:;"><img

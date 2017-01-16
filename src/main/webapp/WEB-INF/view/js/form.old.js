@@ -30,7 +30,7 @@ $(document).ready(function () {
             wx.config(config);
 
             wx.ready(function () {
-                $('body').append('<div id="loading"><img src="/view/images/loading.gif" style="width: 150px;margin-left: 97px;"></div>');
+                $('body').append('<div id="loading"><img src="images/loading.gif" style="width: 150px;margin-left: 97px;"></div>');
                 wx.hideOptionMenu();
                 var getUserInfo = BaseUrl + "sign/getUserInfo";//"auth/user_info";
                 var weixin = location.href.split('?')[1];

@@ -86,15 +86,21 @@ var stopLuck = function () {
     $.ajax({
         url: getLotteryUser,
         success: function (data) {
-            var luckyUser = data.data[0]
-            $("#userName").html(luckyUser.name);
-            $("#userImg").attr("src", luckyUser.headImgUrl);
-            var userName = luckyUser.name;
-            var imgUl = luckyUser.headImgUrl;
-            showLuckAnimate(imgUl, luckyLevel, userName);
-            clearInterval(setintIndex);
-            showLuckyUser(userCount, imgUl, userName, luckyLevel);
-            userCount += 1;
+            if (data.data.length > 0) {//抽出人了
+                var luckyUser = data.data[0];
+                var openId = luckyUser.openId;
+                $("#userName").html(luckyUser.name);
+                $("#userImg").attr("src", luckyUser.headImgUrl);
+                var userName = luckyUser.name;
+                var imgUl = luckyUser.headImgUrl;
+                showLuckAnimate(imgUl, luckyLevel, userName);
+                clearInterval(setintIndex);
+                showLuckyUser(userCount, imgUl, userName, luckyLevel);
+                sengMsg(openId, userName, luckyLevel);//发送信息给中奖用户
+                userCount += 1;
+            } else {
+                showLuckAnimate("images/default.png", "", "小伙伴们都已经中奖啦！", true);
+            }
         }
 
     });
@@ -166,6 +172,39 @@ var showLuckAnimate = function (imgUl, showLevel, userName) {
 
     }, 3000);
 }
+/**
+ * 发送获奖信息
+ * @param openId
+ * @param userName
+ * @param luckyLevel
+ */
+var sengMsg = function (openId, userName, luckyLevel) {
+    var degree = "";
+    switch (luckyLevel) {
+        case "一等奖":
+            degree = "0";
+            break;
+        case "二等奖":
+            degree = "1";
+            break;
+        case "三等奖":
+            degree = "2";
+            break;
+    }
+    var msgContent = [];
+    msgContent.push({"openId": openId, "name": userName, "degree": degree});
+    msgContent = JSON.stringify((msgContent));
+    var sendUrl = BaseUrl + "message/sendMsg";
+    $.ajax({
+        type: 'POST',
+        contentType: 'application/json',
+        url: sendUrl,
+        data: msgContent,
+        success: function (json) {
+            console.log(JSON.stringify(json));
+        }
+    })
+}
 $(document).ready(function () {
     getLottery();
     // setInterval('getLottery();', 10000);
@@ -186,7 +225,6 @@ $(document).ready(function () {
         $("#background").fullBg();
     });
     setInterval(function () {
-        getLottery();
         getCnt();
     }, 1000 * 5)
 });
