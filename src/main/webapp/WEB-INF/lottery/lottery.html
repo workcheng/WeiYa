@@ -5,6 +5,7 @@
     <meta name="viewport" content="initial-scale=1, user-scalable=0, minimal-ui">
     <link id="defaultCss" rel="stylesheet" href="css/lottery.css">
     <link id="themeCss" rel="stylesheet" href="css/lottery-9.css">
+    <link rel="stylesheet" href="css/switch-buttons.css">
     <script src="http://apps.bdimg.com/libs/jquery/1.11.3/jquery.min.js"></script>
     <script type="text/javascript" src="../lottery/js/jquery.js"></script>
     <script type="text/javascript" src="../lottery/js/jquery.fullbg.js"></script>
@@ -23,6 +24,21 @@
         }
 
     </style>
+    <script type="application/javascript">
+        $(document).ready(function(){
+           /* var ws = null;
+
+            $("#toggle-btn").click(function(){
+                $("#content").html("");
+                if(null != ws){
+                    ws.close();
+                    ws = null;
+                }
+                $("#start").show();
+                $(this).hide();
+            });*/
+        });
+    </script>
 </head>
 <body>
 <div class="container">
@@ -41,6 +57,16 @@
         <div class="wrapper">
             <div class="header">
                 <p class="total-join">共有 <span class="J-num" id="userCount">-</span> 人参与抽奖</p>
+            <div class="btn" style="position:absolute;top:0;right:10px;">
+                <label class="switch-btn">
+                    <input class="checked-switch" type="checkbox" />
+                    <span class="text-switch" data-yes="弹幕" data-no="no"></span>
+                    <span class="toggle-btn" id="toggle-btn">
+                     <!--    <input type="checkbox" class="multi-switch" value="0">-->
+                    </span>
+
+                </label>
+            </div>
             </div>
             <div>
                 <div class="turn-box">

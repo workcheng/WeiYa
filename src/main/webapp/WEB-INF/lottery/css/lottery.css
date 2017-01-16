@@ -3287,6 +3287,7 @@ a.countmoney-submit {
 .wrapper .header {
     overflow: hidden;
     width: 100%;
+    position:relative;
 }
 
 .wrapper .header .total-join {
@@ -6816,6 +6817,7 @@ a.countmoney-submit {
     margin-bottom: 4px;
     color: #fff;
     font-size: 19px;
+    margin-right:240px;
 }
 
 .wrapper .header .total-join > span {
@@ -7036,3 +7038,5 @@ a.countmoney-submit {
     margin-left: 110px;
     cursor: pointer;
 }
+
+
