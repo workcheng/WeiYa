@@ -150,20 +150,6 @@ public class TimeBasedAccessInterceptor extends HandlerInterceptorAdapter {
         int successCount = 0;
         String msg = "";
         if (mappingURL == null || url.matches(mappingURL)) {//如果匹配url，是所要控制的页面
-//            Calendar c = Calendar.getInstance();
-//            c.setTime(new Date());
-//            int now = c.get(Calendar.HOUR_OF_DAY);
-//            int day = c.get(Calendar.DATE);
-//            if (day == oneClosingDay) {
-//                if (oneAmOpeningTime < now && now < oneAmClosingTime) {//如果时间在这之内，则让其签到
-//                    log.info("closingDay=" + oneClosingDay);
-//                    log.info("now=" + now);
-//                    return true;
-//                } else if (onePmOpeningTime < now && now < onePmClosingTime) {
-//                    log.info("closingDay=" + oneClosingDay);
-//                    log.info("now=" + now);
-//                    return true;
-//                }
             Date date = new Date();
             String am1 = msgTime(date, sdf.parse(oneAmOpeningTime), sdf.parse(oneAmClosingTime));
             if (!am1.equals("true")) {
@@ -200,17 +186,16 @@ public class TimeBasedAccessInterceptor extends HandlerInterceptorAdapter {
             } else {
                 successCount++;
             }
-            if (successCount >= 1 && failureCount < 5)
+            if (successCount >= 1 && failureCount < 5){
                 return true;
+            }
+            request.setAttribute("msg", msg);
+            request.getRequestDispatcher("/msg.jsp").forward(request, response);
+            response.setContentType("application/json; charset=utf-8");
+            response.getWriter().write(msg);
+            return false;
         }
-
-//            String msg = "签到开放时间：{0}日{1}:00-{2}:00";
-//            String format = MessageFormat.format(msg, closingDay, openingTime, closingTime);
-        request.setAttribute("msg", msg);
-        request.getRequestDispatcher("/msg.jsp").forward(request, response);
-        response.setContentType("application/json; charset=utf-8");
-        response.getWriter().write(msg);
-        return false;
+        return true;
     }
 
 

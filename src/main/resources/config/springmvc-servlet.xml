@@ -107,9 +107,7 @@
                 <property name="twoPmClosingTime" value="${two.pm.closingTime}"/>
                 <property name="finalOpeningTime" value="${final.openIngTime}"/>
                 <property name="finalClosingTime" value="${final.closingTime}"/>
-
-
-                <property name="mappingURL" value=".*/view/*.*"/>
+                <property name="mappingURL" value=".*/view/form.*"/>
             </bean>
         </mvc:interceptor>
     </mvc:interceptors>
