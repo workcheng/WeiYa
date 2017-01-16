@@ -87,7 +87,7 @@
     </filter-mapping>
     <filter-mapping>
         <filter-name>wwwAuthFilter</filter-name>
-        <url-pattern>/lottery/*</url-pattern>
+        <url-pattern>/lottery/lottery.html</url-pattern>
     </filter-mapping>
 
 </web-app>
