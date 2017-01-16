@@ -172,14 +172,14 @@ public class TimeBasedAccessInterceptor extends HandlerInterceptorAdapter {
             } else {
                 successCount++;
             }
-            String pm2 = msgTime(date, sdf.parse(twoAmOpeningTime), sdf.parse(twoAmClosingTime));
+            String pm2 = msgTime(date, sdf.parse(twoPmOpeningTime), sdf.parse(twoPmClosingTime));
             if (!pm2.equals("true")) {
                 failureCount++;
                 msg = pm2;
             } else {
                 successCount++;
             }
-            String last = msgTime(date, sdf.parse(twoPmOpeningTime), sdf.parse(twoPmClosingTime));
+            String last = msgTime(date, sdf.parse(finalOpeningTime), sdf.parse(finalClosingTime));
             if (!last.equals("true")) {
                 failureCount++;
                 msg = last;
