@@ -70,4 +70,5 @@ public class MessageService {
     public List<ZoeMessage> getAll(){
         return (List)zoeRedisTemplate0.getListOperations().range(CommonConstant.DANMU,0,count());
     }
+
 }

@@ -3,6 +3,9 @@ package com.zoe.weiya.controller.echo;
 /**
  * Created by andy on 2017/1/4.
  */
+
+import com.zoe.weiya.comm.logger.ZoeLogger;
+import com.zoe.weiya.comm.logger.ZoeLoggerFactory;
 import org.apache.catalina.websocket.MessageInbound;
 import org.apache.catalina.websocket.WsOutbound;
 
@@ -15,16 +18,16 @@ import java.util.concurrent.CopyOnWriteArraySet;
 
 @SuppressWarnings("deprecation")
 public class MyMessageInbound extends MessageInbound {
+    private static final ZoeLogger log = ZoeLoggerFactory.getLogger(MyMessageInbound.class);
     private ServletContext application;
     private Set<MyMessageInbound> connections = null;
+
     @SuppressWarnings("unchecked")
     public MyMessageInbound(ServletContext application) {
         this.application = application;
-        connections =
-                (Set<MyMessageInbound>)application.getAttribute("connections");
-        if(connections == null) {
-            connections =
-                    new CopyOnWriteArraySet<MyMessageInbound>();
+        connections = (Set<MyMessageInbound>) application.getAttribute("connections");
+        if (connections == null) {
+            connections = new CopyOnWriteArraySet<MyMessageInbound>();
         }
     }
 
@@ -42,13 +45,12 @@ public class MyMessageInbound extends MessageInbound {
 
     @Override
     protected void onBinaryMessage(ByteBuffer message) throws IOException {
-        throw new UnsupportedOperationException(
-                "message not supported.");
+        throw new UnsupportedOperationException("message not supported.");
     }
 
     @Override
     protected void onTextMessage(CharBuffer message) throws IOException {
-        //System.out.println("hehehe");
+        log.info("hehehe");
     }
 
 }

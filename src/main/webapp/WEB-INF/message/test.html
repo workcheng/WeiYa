@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <!--https://github.com/Sailiy/JBarrager-->
+    <meta charset="UTF-8">
+    <title>danmu app</title>
+    <script type="text/javascript" src="../danmu/js/jquery-1.9.1.min.js"></script>
+    <script type="text/javascript" src="js/jquery.barrager.js"></script>
+    <script type="text/javascript">
+        $.ajaxSettings.async = false;
+        //每条弹幕发送间隔
+        var looper_time = 1 * 1000;
+        //是否首次执行
+        var run_once = true;
+        do_barrager();
+
+        function do_barrager() {
+            if (run_once) {
+                //如果是首次执行,则设置一个定时器,并且把首次执行置为false
+                looper = setInterval(do_barrager, looper_time);
+                run_once = false;
+            }
+            //是否有数据
+            $.getJSON('danmuy', function (data) {//获取
+                var model = data.data;
+                if (data.status == '1000') {
+                    if (model && model != "") {
+                        var item = {
+                            img: model.img, //图片
+                            info: model.info, //文字
+                            href: model.href, //链接
+                            close: true, //显示关闭按钮
+                            speed: model.speed, //延迟,单位秒,默认6
+//                            bottom: 70, //距离底部高度,单位px,默认随机
+                            color: model.color, //颜色,默认白色
+                            old_ie_color: model.old_ie_color, //ie低版兼容色,不能与网页背景相同,默认黑色
+                        }
+//                        item.info = replaceEm(item.info);
+                        var array = [];
+                        var content = {
+                            msg:item.info
+                        };
+                        array.push(content);
+                        $('canvas').barrager(array);
+                    }
+                }
+            });
+        }
+    </script>
+</head>
+<body>
+<button id="qc" type="button" style="width: 100px;height: 50px;font-size: 30px;">清除</button>
+<button id="tj" type="button" style="width: 100px;height: 50px;font-size: 30px;">添加</button><br>
+<canvas style="width: 1280px;height: 720px;background-color: rgba(0,0,0,0.2)">你的浏览器不支持canvas</canvas>
+</body>
+</html>

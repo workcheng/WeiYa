@@ -38,14 +38,20 @@ import java.util.concurrent.TimeoutException;
 @RestController
 public class MessageController {
     private static final ZoeLogger log = ZoeLoggerFactory.getLogger(MessageController.class);
-    @Autowired WechatService wechatService;
-    @Autowired UserService userService;
-    @Autowired WebSocketService webSocketService;
-    @Autowired(required = false) HttpServletRequest request;
-//    @Autowired MyMqGatway myMqGatway;
+    @Autowired
+    WechatService wechatService;
+    @Autowired
+    UserService userService;
+    @Autowired
+    WebSocketService webSocketService;
+    @Autowired(required = false)
+    HttpServletRequest request;
+    //    @Autowired MyMqGatway myMqGatway;
 //    @Autowired private AmqpTemplate amqpTemplate;
-    @Autowired MessageService messageService;
-    @Autowired protected SensitivewordFilter sensitiveService;
+    @Autowired
+    MessageService messageService;
+    @Autowired
+    protected SensitivewordFilter sensitiveService;
 
     @RequestMapping(value = "sendMsg", method = RequestMethod.POST)
     public Object sendMessage(@RequestBody List<LuckyUser> users) {
@@ -58,7 +64,7 @@ public class MessageController {
         }
     }
 
-    private String getDefaultHeadImgUrl(){
+    private String getDefaultHeadImgUrl() {
         String defaultHeadImage = "http://" + request.getServerName() //服务器地址
                 + ":"
                 + request.getServerPort()           //端口号
@@ -69,9 +75,9 @@ public class MessageController {
 
     @RequestMapping(value = "danmu", method = RequestMethod.POST)
     public Object sendDanmuMessage(@RequestBody @Validated ZoeMessage zoeMessage) {
-        int count = 300;
-        if(null != zoeMessage.getContent() && zoeMessage.getContent().length() > count){
-            return ZoeObject.failure("字符长度不能大于"+count);
+        int count = 10;
+        if (null != zoeMessage.getContent() && zoeMessage.getContent().length() > count) {
+            return ZoeObject.failure("字符长度不能大于" + count + "个");
         }
         if (ZoeCrossSiteScriptingValidation.IsDangerousString(zoeMessage.getContent())) {
             return ZoeObject.failure("非法字符");
@@ -110,7 +116,7 @@ public class MessageController {
     }
 
     @RequestMapping("danmu-x")
-    public void sendDanmuMessagex(){
+    public void sendDanmuMessagex() {
         Program program = new Program();
         try {
             program.main(new String[]{});
@@ -124,8 +130,8 @@ public class MessageController {
     @RequestMapping(value = "danmuy", method = RequestMethod.POST)
     public Object sendDanmu(@RequestBody @Validated ZoeMessage zoeMessage) {
         int count = 300;
-        if(null != zoeMessage.getContent() && zoeMessage.getContent().length() > count){
-            return ZoeObject.failure("字符长度不能大于"+count);
+        if (null != zoeMessage.getContent() && zoeMessage.getContent().length() > count) {
+            return ZoeObject.failure("字符长度不能大于" + count);
         }
         if (ZoeCrossSiteScriptingValidation.IsDangerousString(zoeMessage.getContent())) {
             return ZoeObject.failure("非法字符");
@@ -134,9 +140,9 @@ public class MessageController {
         zoeMessage.setContent(replaceMessage);
         try {
             Long save = messageService.save(zoeMessage);
-            if(save > 0){
+            if (save > 0) {
                 return ZoeObject.success(save);
-            }else{
+            } else {
                 log.error("not save");
                 return ZoeObject.failure();
             }
@@ -145,11 +151,12 @@ public class MessageController {
             return ZoeObject.failure(e);
         }
     }
+
     @RequestMapping(value = "danmuy", method = RequestMethod.GET)
     public Object getDanmu() {
         try {
             BarrAgerModel barrAgerModel = messageService.getBarrAgerModel();
-            if(StringUtils.isBlank(barrAgerModel.getImg())){
+            if (StringUtils.isBlank(barrAgerModel.getImg())) {
                 barrAgerModel.setImg(getDefaultHeadImgUrl());
             }
             return ZoeObject.success(barrAgerModel);
