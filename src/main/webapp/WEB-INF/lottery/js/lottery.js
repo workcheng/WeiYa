@@ -201,13 +201,12 @@ var sengMsg = function (openId, userName, luckyLevel) {
         url: sendUrl,
         data: msgContent,
         success: function (json) {
-            console.log(JSON.stringify(json));
+            console.log("send", JSON.stringify(json));
         }
     })
 }
 $(document).ready(function () {
     getLottery();
-    // setInterval('getLottery();', 10000);
     $('#beginLuck').click(function () {
         var userNum = $("select[name='userNum']").val();
         if (userNum > 1) {
@@ -227,4 +226,5 @@ $(document).ready(function () {
     setInterval(function () {
         getCnt();
     }, 1000 * 5)
+
 });
