@@ -43,7 +43,6 @@ public class WebSocketService {
             application = request.getServletContext();
         } catch (Exception e) {
             log.error("error", e);
-            e.printStackTrace();
         }
         if (null == application) {
             throw new InternalException("获取不到httpRequest");
@@ -57,7 +56,7 @@ public class WebSocketService {
         CharBuffer buffer = CharBuffer.wrap(ZoeMessageJsonString);
         for (MyMessageInbound connection : connections) {
             try {
-                connection.getWsOutbound().writeTextMessage(buffer);
+                connection.onTextMessage(buffer);
             } catch (IOException e) {
                 log.error("error", e);
             }

@@ -20,9 +20,10 @@ public class EchoServlet extends WebSocketServlet {
 
     @Override
     public StreamInbound createWebSocketInbound(String subProtocol,HttpServletRequest request) {
-        ServletContext application = this.getServletContext();
         log.info("EchoServlet");
+        ServletContext application = this.getServletContext();
         return new MyMessageInbound(application);
     }
+
 
 }
