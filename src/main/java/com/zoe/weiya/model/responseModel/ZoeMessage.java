@@ -11,16 +11,6 @@ public class ZoeMessage implements Serializable {
     @NotBlank
     private String content;
     private String headImgUrl;
-    @NotBlank
-    private String id;
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
 
     public String getContent() {
         return content;
@@ -43,7 +33,6 @@ public class ZoeMessage implements Serializable {
         return "ZoeMessage{" +
                 "content='" + content + '\'' +
                 ", headImgUrl='" + headImgUrl + '\'' +
-                ", id='" + id + '\'' +
                 '}';
     }
 }

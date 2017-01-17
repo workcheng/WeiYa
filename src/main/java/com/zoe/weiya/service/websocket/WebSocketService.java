@@ -26,12 +26,11 @@ public class WebSocketService {
     @Autowired
     protected SensitivewordFilter sensitiveService;
 
-    public void broadcast(String message, String headImgUrl, String openId) throws Exception {
+    public void broadcast(String message, String headImgUrl) throws Exception {
         ZoeMessage zoeMessage = new ZoeMessage();
         String replaceMessage = sensitiveService.replaceSensitiveWord(message, 1, "*");
         zoeMessage.setContent(replaceMessage);
         zoeMessage.setHeadImgUrl(headImgUrl);
-        zoeMessage.setId(openId);
         broadcast(JacksonJsonUtil.beanToJson(zoeMessage));
     }
 
