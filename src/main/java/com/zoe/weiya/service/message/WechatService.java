@@ -88,8 +88,8 @@ public class WechatService {
         String format = MessageFormat.format(messageText, user.getName(), degreeList[user.getDegree()]);
         WxMpKefuMessage message = WxMpKefuMessage.TEXT().content(format).toUser(user.getOpenId()).build();
         try {
-            wxMpService.getKefuService().sendKefuMessage(message);
             userService.saveMessage(user,format);
+            wxMpService.getKefuService().sendKefuMessage(message);
         } catch (WxErrorException e) {
             log.error("error",e);
             throw new InternalException(e);
