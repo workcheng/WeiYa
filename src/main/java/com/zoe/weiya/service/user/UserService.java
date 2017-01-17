@@ -349,7 +349,7 @@ public class UserService {
                 return 0;
             }
         } else {
-            throw new InternalException("非法消息，该用户不存在中奖池中，openId="+luckyUser.getOpenId());
+            throw new InternalException("非法消息，该用户不存在中奖池中，openId="+luckyUser.getOpenId()+",name="+luckyUser.getName());
         }
         return null;
     }
