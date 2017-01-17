@@ -41,7 +41,7 @@ public class WechatService {
                 String url = MessageFormat.format(ZoeProperties.get("config/static/static.properties", "sign.url"),wxMessage.getFromUser());
                 WxMpXmlOutNewsMessage.Item item = new WxMpXmlOutNewsMessage.Item();
                 item.setDescription("签到表单");
-                item.setPicUrl("https://mmbiz.qlogo.cn/mmbiz/bVoOkrvEGHqgetjIc7VcFoCWgLCNaTOnZaXvR9J04EgxMfbm3WM9OreMfTcMcKN8UFkWtDwUbiatU7Qtxsutglg/0?wx_fmt=png");
+                item.setPicUrl("https://mmbiz.qlogo.cn/mmbiz_jpg/rFTQWsGze4G89XqNehSdSBGt1ic6ricfgBvaxnXGhsicia3xhIaKJB0hWMIqDXqLXC3OmBKnwfMiaXaBbrECialjOJiaQ/0?wx_fmt=jpeg");
                 item.setTitle("签到");
                 item.setUrl(url);
 
@@ -110,7 +110,7 @@ public class WechatService {
                 String url = MessageFormat.format(ZoeProperties.get("config/static/static.properties", "comment.url"),wxMessage.getFromUser());
                 WxMpXmlOutNewsMessage.Item item = new WxMpXmlOutNewsMessage.Item();
                 item.setDescription("发送弹幕");
-                item.setPicUrl("https://mmbiz.qlogo.cn/mmbiz/bVoOkrvEGHqgetjIc7VcFoCWgLCNaTOnZaXvR9J04EgxMfbm3WM9OreMfTcMcKN8UFkWtDwUbiatU7Qtxsutglg/0?wx_fmt=png");
+                item.setPicUrl("https://mmbiz.qlogo.cn/mmbiz_jpg/rFTQWsGze4G89XqNehSdSBGt1ic6ricfgBfr8ThJnpIIibwpPhGjGrKpraiaNULFLfv238cC3sIxgCYZza6TYLKicBg/0?wx_fmt=jpeg");
                 item.setTitle("评论上墙");
                 item.setUrl(url);
 
