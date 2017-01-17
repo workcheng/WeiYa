@@ -14,7 +14,6 @@ import com.zoe.weiya.service.user.UserService;
 import com.zoe.weiya.util.ImageUtil;
 import me.chanjar.weixin.common.exception.WxErrorException;
 import me.chanjar.weixin.mp.api.impl.WxMpServiceImpl;
-import me.chanjar.weixin.mp.bean.result.WxMpUser;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -234,19 +233,17 @@ public class UserController {
     }
 
     @RequestMapping(value = "headImgUrl", method = RequestMethod.GET)
-    public void getHeadImgUrl(@RequestParam String id,HttpServletResponse response){
+    public void getHeadImgUrl(@RequestParam String url, HttpServletResponse response){
+        if(StringUtils.isBlank(url)){
+            return;
+        }
         response.setContentType("image/jpeg");
         try {
-            WxMpUser wxMpUser = wxMpService.getUserService().userInfo(id);
             ServletOutputStream outputStream = response.getOutputStream();
-            ImageUtil.toPNG(new URL(wxMpUser.getHeadImgUrl()), outputStream, 250, 250);
+            ImageUtil.toPNG(new URL(url), outputStream, 250, 250);
         } catch (IOException e) {
             log.error("error", e);
             e.printStackTrace();
-        } catch (WxErrorException e) {
-            log.error("error", e);
-            e.printStackTrace();
         }
-
     }
 }

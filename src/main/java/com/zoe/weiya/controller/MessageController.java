@@ -74,6 +74,15 @@ public class MessageController {
         return defaultHeadImage;
     }
 
+    private String getRadiusHeadImgUrl(String headUrl) {
+        String defaultHeadImage = "http://" + request.getServerName() //服务器地址
+                + ":"
+                + request.getServerPort()           //端口号
+                + request.getContextPath()      //项目名称
+                + "/user/headImgUrl?url="+headUrl; //图片地址
+        return defaultHeadImage;
+    }
+
     @RequestMapping(value = "danmu", method = RequestMethod.POST)
     public Object sendDanmuMessage(@RequestBody @Validated ZoeMessage zoeMessage) {
         int count = 100;
@@ -86,9 +95,10 @@ public class MessageController {
         if (StringUtils.isBlank(zoeMessage.getHeadImgUrl())) {
             zoeMessage.setHeadImgUrl(getDefaultHeadImgUrl());
         }
+        zoeMessage.setHeadImgUrl(getRadiusHeadImgUrl(zoeMessage.getHeadImgUrl()));
         try {
             //for (int i = 0; i <= 100; i++) {
-            webSocketService.broadcast(zoeMessage.getContent(), zoeMessage.getHeadImgUrl(),zoeMessage.getId());
+            webSocketService.broadcast(zoeMessage.getContent(), zoeMessage.getHeadImgUrl());
             //}
             return ZoeObject.success();
         } catch (Exception e) {
