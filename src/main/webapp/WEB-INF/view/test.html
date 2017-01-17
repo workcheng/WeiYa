@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>danmu app</title>
-    <link rel="stylesheet" type="text/css" href="css/test.css">
+    <link rel="stylesheet" type="text/css" href="../common/css/test.css">
     <script type="text/javascript" src="js/jquery.js"></script>
     <script type="text/javascript" src="../message/js/jquery.barrager.js"></script>
     <script type="text/javascript" src="../config/config.js"></script>
@@ -31,7 +31,7 @@
             });
 
             function startServer() {
-                var url = "ws://" + BASE + "echoServlet";
+                var url = "ws://" + "chenghui.cf/weiya/" + "echoServlet";
                 if ('WebSocket' in window) {
                     ws = new WebSocket(url);
                 } else if ('MozWebSocket' in window) {
