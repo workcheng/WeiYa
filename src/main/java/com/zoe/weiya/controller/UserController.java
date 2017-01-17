@@ -203,9 +203,17 @@ public class UserController {
         }
     }
 
+    /**
+     * 获取中奖名单
+     * @param degree 0：一等奖；1：二等奖；2：三等奖
+     * @return
+     */
     @RequestMapping(value = "luckyUserList", method = RequestMethod.GET)
-    public Object getLuckyUserList(){
+    public Object getLuckyUserList(Integer degree){
         try {
+            if(null != degree){
+                return ZoeObject.success(userService.getMessageByDegree(degree));
+            }
             return ZoeObject.success(userService.getAllMessage());
         } catch (InternalException e) {
             log.error("error", e);
