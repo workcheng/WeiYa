@@ -29,7 +29,7 @@
         $(document).ready(function () {
             var ws = null;
             var isStart = false;
-            $(".text-switch").click(function () {
+            $(".text-switch,.toggle-btn").click(function () {
                 var state = $(".text-switch").attr("data-no");
                 if (state == "no") {
 
@@ -38,6 +38,7 @@
                     startServer();
 
                 } else {
+                    $("canvas").barrager("clear");
                     $(".text-switch").attr("data-no", "no");
                     $("#content").html("");
                     if (null != ws) {
@@ -63,15 +64,10 @@
                 ws.onmessage = function (event) {
                     if (event && event.data) {
                         var contentMessage = $.parseJSON(event.data);
-                        var item = {
-                            'img': contentMessage.headImgUrl,
-                            'href': 'http://www.baidu.com',
-                            'info': contentMessage.content,
-                            close: false
-                        };
                         var array = [];
                         var content = {
-                            msg: item.info
+                            msg: contentMessage.content,
+                            img: contentMessage.headImgUrl
                         };
                         array.push(content);
                         $('canvas').barrager(array);
@@ -82,9 +78,8 @@
                 };
             }
 
-            //  startServer();
-        })
-        ;
+            /*  startServer();*/
+        });
     </script>
 </head>
 <body>
@@ -104,7 +99,7 @@
         <div class="wrapper">
             <div class="header">
                 <p class="total-join">共有 <span class="J-num" id="userCount">-</span> 人参与抽奖</p>
-                <div class="btn" style="position:absolute;top:0;right:10px;">
+                <div class="btn" style="position:absolute;top:0;right:10px;z-index:999;">
                     <label class="switch-btn">
                         <input class="checked-switch" type="checkbox"/>
                         <span class="text-switch" data-yes="弹幕" data-no="no"></span>
@@ -113,6 +108,9 @@
 
                     </label>
                 </div>
+                <canvas style="width: 100%;height: 100%;position: fixed;top: 0;left: 0;z-index: 99;">
+                    你的浏览器不支持canvas
+                </canvas>
             </div>
             <div>
                 <div class="turn-box">
@@ -170,12 +168,6 @@
             </div>
         </div>
     </div>
-</div>
-<div>
-    <h1 id="content" style="text-align: center;color:#3498ed"></h1>
-    <canvas style="width: 100%;height: 100%;position: absolute;top: 0;left: 0">
-        你的浏览器不支持canvas
-    </canvas>
 </div>
 </body>
 </html>

@@ -17,7 +17,7 @@
         this.canvas.height = this.height;
         this.font = "30px 黑体";
         this.ctx.font = this.font;
-        this.colorArr = ["Olive", "OliveDrab", "Orange", "OrangeRed", "Orchid", "PaleGoldenRod", "PaleGreen", "PaleTurquoise", "PaleVioletRed", "PapayaWhip", "PeachPuff", "Peru", "Pink", "Plum", "PowderBlue", "Purple", "Red", "RosyBrown", "RoyalBlue", "SaddleBrown", "Salmon", "SandyBrown", "SeaGreen", "SeaShell", "Sienna", "Silver", "SkyBlue"];
+        this.colorArr = [{"font": "#ff0000", "bg": "#ffff00"}, {"font": "#ffff00", "bg": "#663399"}, {"font": "#de009d", "bg": "#ffa4cb"}, {"font": "#b22e0b", "bg": "#ff9900"}, {"font": "#010101", "bg": "#66cc00"}, {"font": "#010101", "bg": "#0099cc"}];
         this.interval = "";
         this.draw = function () {
             if (this.interval != "")return;
@@ -38,8 +38,8 @@
                                 _this.msgs[i] = null;
                             } else {
                                 _this.msgs[i].L = parseInt(_this.msgs[i].L - _this.msgs[i].S);
-                                _this.drawRoundedRect(_this.msgs[i].C, '#fff', _this.msgs[i].L - 20, _this.msgs[i].T - 25, _this.ctx.measureText(_this.msgs[i].msg).width + 25, 40, 10);
-                                _this.ctx.fillStyle = _this.msgs[i].C;
+                                _this.drawRoundedRect(_this.msgs[i].C.font, _this.msgs[i].C.bg, _this.msgs[i].L - 20, _this.msgs[i].T - 25, _this.ctx.measureText(_this.msgs[i].msg).width + 25, 40, 10);
+                                _this.ctx.fillStyle = _this.msgs[i].C.font;//文字颜色
                                 _this.ctx.fillText(_this.msgs[i].msg, _this.msgs[i].L, _this.msgs[i].T + 6);
 
                                 _this.ctx.drawImage(_this.image, _this.msgs[i].L - 60, _this.msgs[i].T - 35, 60, 60);
@@ -74,6 +74,7 @@
         };
         this.drawRoundedRect = function (strokeStyle, fillStyle, cornerX, cornerY, width, height, cornerRadius) {
             this.ctx.beginPath();
+            this.ctx.globalAlpha = '0.8';
             this.roundedRect(cornerX, cornerY, width, height, cornerRadius);
             this.ctx.strokeStyle = strokeStyle;
             this.ctx.fillStyle = fillStyle;
