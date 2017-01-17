@@ -4,6 +4,7 @@
 
 $(document).ready(function () {
     selectChange();
+    signGrid(0);
 });
 var signGrid = function (index) {
     var luckyUrl = BaseUrl + "user/luckyUserList";

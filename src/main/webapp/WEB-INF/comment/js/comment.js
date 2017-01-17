@@ -80,7 +80,7 @@ var saveMsgClick = function (headImgUrl) {
             showInfo("请输入留言！");
             return;
         }
-/*        var _now = new Date();
+        var _now = new Date();
         var difTime = _now - new Date(localStorage.lastTime);  //时间差的毫秒数
         if (isNaN(difTime)) {
             localStorage.lastTime = _now;
@@ -89,7 +89,7 @@ var saveMsgClick = function (headImgUrl) {
             showInfo("请不要发送太频繁哦~~");
             return false;
         }
-        localStorage.setItem("lastTime", _now);*/
+        localStorage.setItem("lastTime", _now);
         var msgUrl = BaseUrl + "message/danmu";
         var msgInfo = $("#msgDanmu").val();
         var time = getNowFormatDate(new Date());
