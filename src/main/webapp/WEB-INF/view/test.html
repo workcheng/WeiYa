@@ -3,17 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <title>damu app</title>
-    <link rel="stylesheet" type="text/css" href="../danmu/css/bootstrap.min.css" media="screen"/>
-    <link rel="stylesheet" type="text/css" href="../danmu/css/style.css"/>
-    <link rel="stylesheet" type="text/css" href="../danmu/css/barrager.css">
+    <link rel="stylesheet" type="text/css" href="css/style.css">
     <script type="text/javascript" src="../danmu/js/jquery-1.9.1.min.js"></script>
-    <script type="text/javascript" src="../danmu/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="../danmu/js/tinycolor-0.9.15.min.js"></script>
-    <!--<script type="text/javascript" src="../danmu/js/jquery.barrager.min.js"></script>-->
     <script type="text/javascript" src="../message/js/jquery.barrager.js"></script>
     <script type="text/javascript" src="../config/config.js"></script>
     <script type="application/javascript">
-
         var ws = null;
         function startServer() {
             var url = "ws://" + BASE + "echoServlet";
@@ -25,12 +19,11 @@
                 alert('Your browser Unsupported WebSocket!');
                 return;
             }
-
             ws.onopen = function () {
                 document.getElementById("content").innerHTML += '弹幕通道已开启! Welcome!<br />';
             };
             ws.onmessage = function (event) {
-                if(event && event.data){
+                if (event && event.data) {
                     var contentMessage = $.parseJSON(event.data);
                     var item = {
                         'img': contentMessage.headImgUrl,
@@ -39,12 +32,13 @@
                         close: false
                     };
                     var array = [];
+
                     var content = {
-                        msg:item.info
+                        msg: item.info,
+                        img: item.img
                     };
                     array.push(content);
                     $('canvas').barrager(array);
-//                $('body').barrager(item);
                 }
             };
             ws.onclose = function () {
@@ -56,8 +50,11 @@
 </head>
 <body>
 <div>
+
     <h1 id="content" style="text-align: center;color:#3498ed"></h1>
-    <canvas style="width: 100%;height: 100%;background-color: rgba(0,0,0,0.2);position: absolute;top: 0;left: 0">你的浏览器不支持canvas</canvas>
+    <canvas style="width: 100%;height: 100%;background-color: rgba(0,0,0,0.2);position: absolute;top: 0;left: 0">
+        你的浏览器不支持canvas
+    </canvas>
 </div>
 </body>
 </html>
