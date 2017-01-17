@@ -358,4 +358,15 @@ public class UserService {
     public Set<LuckyUserMessage> getAllMessage() throws InternalException, NotStartException {
         return (Set) getZoeRedisTemplate().getSet(CommonConstant.MESSAGE);
     }
+
+    public List<LuckyUserMessage> getMessageByDegree(Integer degree) throws NotStartException, InternalException {
+        Set<LuckyUserMessage> allMessage = this.getAllMessage();
+        ArrayList<LuckyUserMessage> luckyUserMessageList = new ArrayList<>();
+        for(LuckyUserMessage lucky : allMessage){
+            if(degree.equals(lucky.getDegree())){
+                luckyUserMessageList.add(lucky);
+            }
+        }
+        return luckyUserMessageList;
+    }
 }
