@@ -54,3 +54,29 @@ var fillZero = function (number, digits) {
     }
     return number;
 };
+
+var getNowFormatDate = function () {
+    var date = new Date();
+    var year = date.getFullYear();
+    var month = date.getMonth() + 1;
+    var strDate = date.getDate();
+    var hour = date.getHours();
+    var second = date.getSeconds();
+    var minute = date.getMinutes();
+    if (month >= 1 && month <= 9) {
+        month = "0" + month;
+    }
+    if (strDate >= 0 && strDate <= 9) {
+        strDate = "0" + strDate;
+    }
+    var currentdate = year + "-" + month + "-" + strDate + " " + hour + ":" + second + ":" + minute;
+    return currentdate;
+}
+
+var replace_em = function (str) {
+    str = str.replace(/\</g, '&lt;');
+    str = str.replace(/\>/g, '&gt;');
+    str = str.replace(/\n/g, '<br/>');
+    str = str.replace(/\[em_([0-9]*)\]/g, '<img src="../comment/arclist/$1.gif" border="0" />');
+    return str;
+}

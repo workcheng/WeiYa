@@ -5,6 +5,7 @@ import com.zoe.weiya.comm.logger.ZoeLogger;
 import com.zoe.weiya.comm.logger.ZoeLoggerFactory;
 import com.zoe.weiya.comm.properties.ZoeProperties;
 import com.zoe.weiya.model.LuckyUser;
+import com.zoe.weiya.service.user.UserService;
 import me.chanjar.weixin.common.exception.WxErrorException;
 import me.chanjar.weixin.common.session.WxSessionManager;
 import me.chanjar.weixin.mp.api.WxMpMessageHandler;
@@ -14,6 +15,7 @@ import me.chanjar.weixin.mp.bean.kefu.WxMpKefuMessage;
 import me.chanjar.weixin.mp.bean.message.WxMpXmlMessage;
 import me.chanjar.weixin.mp.bean.message.WxMpXmlOutMessage;
 import me.chanjar.weixin.mp.bean.message.WxMpXmlOutNewsMessage;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,6 +31,8 @@ public class WechatService {
     private static final ZoeLogger log = ZoeLoggerFactory.getLogger(WechatService.class);
     @Autowired
     protected WxMpServiceImpl wxMpService;
+    @Autowired
+    protected UserService userService;
 
     public WxMpMessageHandler sendSignMessage() {
         WxMpMessageHandler test = new WxMpMessageHandler() {
@@ -73,13 +77,19 @@ public class WechatService {
         return test;
     }
 
-    public void sendMessage(String openId, String name, Integer degree) throws Exception{
+    public void sendMessage(LuckyUser user) throws Exception{
+        if(null != user){
+            if(StringUtils.isBlank(user.getOpenId()) || null == user.getDegree() || StringUtils.isBlank(user.getName())){
+                throw new InternalException("非法空白");
+            }
+        }
         String[] degreeList = {"一","二","三"};
         String messageText = ZoeProperties.get("config/static/static.properties","prize.message");
-        String format = MessageFormat.format(messageText, name, degreeList[degree]);
-        WxMpKefuMessage message = WxMpKefuMessage.TEXT().content(format).toUser(openId).build();
+        String format = MessageFormat.format(messageText, user.getName(), degreeList[user.getDegree()]);
+        WxMpKefuMessage message = WxMpKefuMessage.TEXT().content(format).toUser(user.getOpenId()).build();
         try {
             wxMpService.getKefuService().sendKefuMessage(message);
+            userService.saveMessage(user,format);
         } catch (WxErrorException e) {
             log.error("error",e);
             throw new InternalException(e);
@@ -89,7 +99,7 @@ public class WechatService {
     public void sendMessage(List<LuckyUser> luckyUsers) throws Exception{
         for (int i=0; i<luckyUsers.size(); i++){
             LuckyUser user = luckyUsers.get(i);
-            this.sendMessage(user.getOpenId(),user.getName(),user.getDegree());
+            this.sendMessage(user);
         }
     }
 

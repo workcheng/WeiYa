@@ -148,6 +148,7 @@ public class TimeBasedAccessInterceptor extends HandlerInterceptorAdapter {
         log.info("url=" + url);
         int failureCount = 0;
         int successCount = 0;
+        StringBuilder msgList = new StringBuilder();
         String msg = "";
         if (mappingURL == null || url.matches(mappingURL)) {//如果匹配url，是所要控制的页面
             Date date = new Date();
@@ -155,6 +156,8 @@ public class TimeBasedAccessInterceptor extends HandlerInterceptorAdapter {
             if (!am1.equals("true")) {
                 failureCount++;
                 msg = am1;
+                msgList.append(msg);
+                msgList.append("<br>");
             } else {
                 successCount++;
             }
@@ -162,6 +165,8 @@ public class TimeBasedAccessInterceptor extends HandlerInterceptorAdapter {
             if (!pm1.equals("true")) {
                 failureCount++;
                 msg = pm1;
+                msgList.append(msg);
+                msgList.append("<br>");
             } else {
                 successCount++;
             }
@@ -169,6 +174,8 @@ public class TimeBasedAccessInterceptor extends HandlerInterceptorAdapter {
             if (!am2.equals("true")) {
                 failureCount++;
                 msg = am2;
+                msgList.append(msg);
+                msgList.append("<br>");
             } else {
                 successCount++;
             }
@@ -176,6 +183,8 @@ public class TimeBasedAccessInterceptor extends HandlerInterceptorAdapter {
             if (!pm2.equals("true")) {
                 failureCount++;
                 msg = pm2;
+                msgList.append(msg);
+                msgList.append("<br>");
             } else {
                 successCount++;
             }
@@ -183,13 +192,15 @@ public class TimeBasedAccessInterceptor extends HandlerInterceptorAdapter {
             if (!last.equals("true")) {
                 failureCount++;
                 msg = last;
+                msgList.append(msg);
+                msgList.append("<br>");
             } else {
                 successCount++;
             }
             if (successCount >= 1 && failureCount < 5){
                 return true;
             }
-            request.setAttribute("msg", msg);
+            request.setAttribute("msg", msgList);
             request.getRequestDispatcher("/msg.jsp").forward(request, response);
             response.setContentType("application/json; charset=utf-8");
             response.getWriter().write(msg);

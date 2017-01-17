@@ -5,7 +5,7 @@ import java.io.Serializable;
 /**
  * Created by chenghui on 2017/1/10.
  */
-public class Message implements Serializable {
+public class Message extends LuckyUser implements Serializable {
     private String message;
     private ZoeDate createTime;
 

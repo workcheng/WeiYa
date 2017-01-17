@@ -150,7 +150,7 @@ public class CoreController {
                                             WxMpService wxMpService, WxSessionManager sessionManager) throws WxErrorException {
                 try {
                     WxMpUser wxMpUser = wxMpService.getUserService().userInfo(wxMessage.getFromUser());
-                    webSocketService.broadcast(wxMessage.getContent(),wxMpUser.getHeadImgUrl());//将微信消息组装的弹幕格式的消息传入websocket通道
+                    webSocketService.broadcast(wxMessage.getContent(),wxMpUser.getHeadImgUrl(),wxMessage.getFromUser());//将微信消息组装的弹幕格式的消息传入websocket通道
                 } catch (Exception e) {
                     log.error("error", e);
                     e.printStackTrace();

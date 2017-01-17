@@ -1,5 +1,14 @@
+import com.sun.image.codec.jpeg.JPEGCodec;
+import com.sun.image.codec.jpeg.JPEGImageDecoder;
 import com.zoe.weiya.model.User;
 import redis.clients.jedis.Jedis;
+
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.InputStream;
+import java.net.URL;
 
 /**
  * Created by chenghui on 2016/12/20.
@@ -60,5 +69,46 @@ public class Test{
     public void testUser(){
         User user = new User();
         System.out.println(user.getSignDate());
+    }
+
+    @org.junit.Test
+    public void images() throws Exception{
+        /*URL url = new URL("http://www.google.com/intl/en_ALL/images/logo.gif");
+        BufferedImage image = ImageIO.read(url);
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
+        ImageIO.write(image, "gif", os);
+        InputStream is = new ByteArrayInputStream(os.toByteArray());*/
+        URL img = new  URL("http://img233.ph.126.net/m6sweVwiTs1-VNNz6Pj5xg==/1365153637048312514.jpg");
+        InputStream in = img.openStream();
+
+//        接着把输入流转为BufferedImage：
+
+        JPEGImageDecoder decoderFile = JPEGCodec.createJPEGDecoder(in);
+        BufferedImage image = decoderFile.decodeAsBufferedImage();
+
+//        如果根据这个图片对象，重新draw了一个新的bufferedImage以后，怎么才能获得它的byte数组呢？
+
+//        通过ImageIO对象进行操作：
+/*        OutputStream bos = null;
+        boolean jpg = ImageIO.write(image, "jpg", bos);*/
+//        InputStream inputStream = ClassLoader.getSystemResourceAsStream("mm.jpg");
+        BufferedImage bufferedImage = setBorderRadius(image, 1);
+        /*ByteArrayOutputStream os = new ByteArrayOutputStream();
+        ImageIO.write(image, "gif", os);*/
+        // 输出为文件
+        ImageIO.write(bufferedImage, "JPEG", new File("E:/fixfoxdownload/"
+                + "test.jpg"));
+    }
+
+    public static BufferedImage setBorderRadius(BufferedImage srcImage, int radius){
+        int width = srcImage.getWidth();
+        int height = srcImage.getHeight();
+        BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g2d = image.createGraphics();
+        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        g2d.fillRoundRect(0, 0, width, height, radius, radius);
+        g2d.setComposite(AlphaComposite.SrcIn);
+        g2d.drawImage(srcImage, 0, 0, width, height, null);
+        return image;
     }
 }

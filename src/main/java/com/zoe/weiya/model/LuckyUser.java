@@ -1,11 +1,18 @@
 package com.zoe.weiya.model;
 
+import org.hibernate.validator.constraints.NotBlank;
+
+import javax.validation.constraints.NotNull;
+
 /**
  * Created by chenghui on 2017/1/5.
  */
 public class LuckyUser {
+    @NotBlank
     private String openId;
+    @NotBlank
     private String name;
+    @NotNull
     private Integer degree;
 
     public String getName() {

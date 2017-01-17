@@ -46,12 +46,12 @@ $(document).ready(function () {
             });
         }
     })
-    $('.emotion').qqFace({
-        id: 'facebox',
-        assign: 'msgDanmu',
-        path: BaseUrl + "comment/arclist/"	//表情存放的路径
+    /*$('.emotion').qqFace({
+     id: 'facebox',
+     assign: 'msgDanmu',
+     path: BaseUrl + "comment/arclist/"	//表情存放的路径
 
-    });
+     });*/
 });
 /**
  * 发送按钮事件
@@ -65,8 +65,6 @@ var saveMsgClick = function (headImgUrl) {
         }
         var _now = new Date();
         var difTime = _now - new Date(localStorage.lastTime);  //时间差的毫秒数
-        console.log(localStorage.lastTime);
-        console.log(difTime);
         if (isNaN(difTime)) {
             localStorage.lastTime = _now;
         }
@@ -77,8 +75,12 @@ var saveMsgClick = function (headImgUrl) {
         localStorage.setItem("lastTime", _now);
         var msgUrl = BaseUrl + "message/danmu";
         var msgInfo = $("#msgDanmu").val();
-        var time = new Date("yyyy-MM-dd HH:mm:ss");
-        //time = time.pattern("yyyy-MM-dd hh:mm:ss");
+        var time = getNowFormatDate(new Date());
+
+        localStorage.msgInfo = msgInfo;
+        localStorage.msgTime = time;
+        localStorage.setItem("msgInfo", msgInfo);
+        localStorage.setItem("msgTime", time);
         var danmuMsg = {
             "content": msgInfo,
             "headImgUrl": headImgUrl
@@ -90,9 +92,16 @@ var saveMsgClick = function (headImgUrl) {
             url: msgUrl,
             data: danmuMsg,
             success: function (data) {
-                showInfo("上墙成功!");
-                showMsgLists(time, msgInfo);
-                $(".wordsedit1 input").val("");
+                if (data.status == "1000") {
+                    showInfo("上墙成功!");
+                    showMsgLists(localStorage.msgTime, localStorage.msgInfo);
+                    $(".wordsedit1 input").val("");
+                } else {
+                    var msg = data.data;
+                    showInfo(msg);
+                    $(".wordsedit1 input").val("");
+                }
+
             }
         });
     })
@@ -103,15 +112,16 @@ var showInfo = function (txt) {
     setTimeout(function () {
         $(".error_dialog").hide()
     }, 3000);
-
 }
 
 var showMsgLists = function (time, msgInfo) {
-    var wordRecord = $("<div></div>").addClass("words_record")
-    var jqSpan = $("<span></span>").text("已上墙");
-    var msgTime = $("<p></p>").text(time);
-    var msg = $("<div></div>").text(msgInfo);
-    wordRecord.append(jqSpan).append(msgTime).append(msg);
+    var wordRecord = $("<div></div>").addClass("words_record");
+    var msg = $("<p></p>").addClass("word").text(msgInfo);
+    var msgTime = $("<p></p>").addClass("word-time")
+    var msgTimes = $("<span></span>").addClass("times").text(time);
+    var msgState = $("<span></span>").addClass("state").text("已上墙");
+    msgTime.append(msgTimes).append(msgState);
+    wordRecord.append(msg).append(msgTime);
     $(".lists").prepend(wordRecord);
 }
 

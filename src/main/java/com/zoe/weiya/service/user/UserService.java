@@ -11,9 +11,7 @@ import com.zoe.weiya.comm.logger.ZoeLoggerFactory;
 import com.zoe.weiya.comm.redis.ZoeRedisTemplate;
 import com.zoe.weiya.comm.response.ResponseMsg;
 import com.zoe.weiya.comm.response.ZoeObject;
-import com.zoe.weiya.model.Message;
-import com.zoe.weiya.model.OnlyUser;
-import com.zoe.weiya.model.User;
+import com.zoe.weiya.model.*;
 import com.zoe.weiya.model.responseModel.UserListCount;
 import com.zoe.weiya.util.RandomUtil;
 import com.zoe.weiya.util.ZoeDateUtil;
@@ -238,8 +236,13 @@ public class UserService {
         }
     }
 
-    public List<User> getLuckySet() throws NotStartException, InternalException {
+    public Set<String> getLuckyOpenIdSet() throws InternalException, NotStartException {
         Set<String> set = (Set)getZoeRedisTemplate().getSet(CommonConstant.LUCKY_USER);
+        return set;
+    }
+
+    public List<User> getLuckySet() throws NotStartException, InternalException {
+        Set<String> set = this.getLuckyOpenIdSet();
         List<User> userList = new ArrayList<>();
         Iterator<String> iterator = set.iterator();
         while (iterator.hasNext()){
@@ -328,7 +331,42 @@ public class UserService {
         return null;
     }
 
-    public Set<Message> getAllMessage() throws InternalException, NotStartException {
+    public Integer saveMessage(LuckyUser luckyUser, String message) throws InternalException, NotStartException {
+        Set<String> luckyOpenIdSet = this.getLuckyOpenIdSet();
+        if(luckyOpenIdSet.contains(luckyUser.getOpenId())){
+            User user = this.get(luckyUser.getOpenId());
+            LuckyUserMessage luckyUserMessage  = new LuckyUserMessage();
+            luckyUserMessage.setOpenId(luckyUser.getOpenId());
+            luckyUserMessage.setName(luckyUser.getName());
+            luckyUserMessage.setDegree(luckyUser.getDegree());
+            luckyUserMessage.setDepName(user.getDepName());
+            luckyUserMessage.setSignDate(user.getSignDate());
+            luckyUserMessage.setMessage(message);
+            luckyUserMessage.setNickName(user.getNickName());
+            Long aLong = getZoeRedisTemplate().setSet(CommonConstant.MESSAGE, luckyUserMessage);
+            if(aLong == 1){
+                return 1;
+            }else if(aLong == 0){
+                return 0;
+            }
+        }else{
+            throw new InternalException("该用户不存在中奖池中");
+        }
+        return null;
+    }
+
+    public Set<LuckyUserMessage> getAllMessage() throws InternalException, NotStartException {
         return (Set) getZoeRedisTemplate().getSet(CommonConstant.MESSAGE);
+    }
+
+    public List<LuckyUserMessage> getMessageByDegree(Integer degree) throws NotStartException, InternalException {
+        Set<LuckyUserMessage> allMessage = this.getAllMessage();
+        ArrayList<LuckyUserMessage> luckyUserMessageList = new ArrayList<>();
+        for(LuckyUserMessage lucky : allMessage){
+            if(degree.equals(lucky.getDegree())){
+                luckyUserMessageList.add(lucky);
+            }
+        }
+        return luckyUserMessageList;
     }
 }
