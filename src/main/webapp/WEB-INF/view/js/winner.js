@@ -3,15 +3,14 @@
  */
 
 $(document).ready(function () {
-    signGrid();
+    selectChange();
 });
 var signGrid = function (index) {
-    var degree = $("select[name='degree']").val();
     var luckyUrl = BaseUrl + "user/luckyUserList";
     $.ajax({
         url: luckyUrl,
         data: {
-            index: degree
+            degree: index
         },
         success: function (json) {
             var userList = json.data;
@@ -41,9 +40,9 @@ var signGrid = function (index) {
 }
 
 var selectChange = function () {
-    $("select[name='signTime']").change(function () {
+    $("select[name='degree']").change(function () {
         $("#signGrid").html("");
-        var time = $("select[name='signTime']").val();
-        signGrid(time);
+        var index = $("select[name='degree']").val();
+        signGrid(index);
     })
 }
