@@ -10,6 +10,7 @@
         this.canvas = dom.get(0);
         this.ctx = this.canvas.getContext("2d");
         this.msgs = new Array(300);
+        this.image = new Image();
         this.width = 1280;
         this.height = 720;
         this.canvas.width = this.width;
@@ -26,6 +27,7 @@
                 _this.ctx.save();
                 for (var i = 0; i < _this.msgs.length; i++) {
                     if (!(_this.msgs[i] == null || _this.msgs[i] == "" || typeof(_this.msgs[i]) == "undefined")) {
+                        _this.image.src = _this.msgs[i].img;
                         if (_this.msgs[i].L == null || typeof(_this.msgs[i].L) == "undefined") {
                             _this.msgs[i].L = _this.width;
                             _this.msgs[i].T = parseInt(Math.random() * 700);
@@ -35,20 +37,18 @@
                             if (_this.msgs[i].L < -200) {
                                 _this.msgs[i] = null;
                             } else {
-                                var image = new Image();
-
-                                image.src = _this.msgs[i].id;//"../message/1.png";// _this.msgs[i].img;
-
                                 _this.msgs[i].L = parseInt(_this.msgs[i].L - _this.msgs[i].S);
-                                _this.drawRoundedRect(_this.msgs[i].C, '#fff', _this.msgs[i].L - 20, _this.msgs[i].T - 30, _this.ctx.measureText(_this.msgs[i].msg).width + 25, 40, 10);
+                                _this.drawRoundedRect(_this.msgs[i].C, '#fff', _this.msgs[i].L - 20, _this.msgs[i].T - 25, _this.ctx.measureText(_this.msgs[i].msg).width + 25, 40, 10);
                                 _this.ctx.fillStyle = _this.msgs[i].C;
-                                _this.ctx.fillText(_this.msgs[i].msg, _this.msgs[i].L, _this.msgs[i].T);
-                                _this.ctx.drawImage(image, _this.msgs[i].L - 60, _this.msgs[i].T - 35, 50, 50);
-                                _this.ctx.arc(image.width / 2, image.width / 2, Math.min(image.width, image.height) / 2, 0, 2 * Math.PI);
+                                _this.ctx.fillText(_this.msgs[i].msg, _this.msgs[i].L, _this.msgs[i].T + 6);
+
+                                _this.ctx.drawImage(_this.image, _this.msgs[i].L - 60, _this.msgs[i].T - 35, 60, 60);
+                                _this.ctx.arc(_this.image.width / 2, _this.image.width / 2, Math.min(_this.image.width, _this.image.height) / 2, 0, 2 * Math.PI);
                                 _this.ctx.restore();
                             }
                         }
                     }
+
                 }
             }, 20);
         };
@@ -75,7 +75,6 @@
         this.drawRoundedRect = function (strokeStyle, fillStyle, cornerX, cornerY, width, height, cornerRadius) {
             this.ctx.beginPath();
             this.roundedRect(cornerX, cornerY, width, height, cornerRadius);
-            this.ctx.globalAlpha = 0.8;
             this.ctx.strokeStyle = strokeStyle;
             this.ctx.fillStyle = fillStyle;
             this.ctx.stroke();

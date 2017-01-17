@@ -49,17 +49,10 @@
                 ws.onmessage = function (event) {
                     if (event && event.data) {
                         var contentMessage = $.parseJSON(event.data);
-                        /*  var item = {
-                         'img': contentMessage.headImgUrl,
-                         'href': 'http://www.baidu.com',
-                         'info': contentMessage.content,
-                         close: false
-                         };*/
                         var array = [];
-
                         var content = {
-                            msg: contentMessage.info,
-                            img: contentMessage.img
+                            msg: contentMessage.content,
+                            img: contentMessage.headImgUrl
                         };
                         array.push(content);
                         $('canvas').barrager(array);
