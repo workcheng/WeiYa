@@ -11,12 +11,19 @@ import com.zoe.weiya.comm.response.ZoeObject;
 import com.zoe.weiya.model.OnlyUser;
 import com.zoe.weiya.model.User;
 import com.zoe.weiya.service.user.UserService;
+import com.zoe.weiya.util.ImageUtil;
 import me.chanjar.weixin.common.exception.WxErrorException;
+import me.chanjar.weixin.mp.api.impl.WxMpServiceImpl;
+import me.chanjar.weixin.mp.bean.result.WxMpUser;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,6 +37,8 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+    @Autowired
+    protected WxMpServiceImpl wxMpService;
 
     /**
      * 保存签到信息
@@ -222,5 +231,22 @@ public class UserController {
             log.error("error", e);
             return ZoeObject.failure(ZoeErrorCode.NOT_START);
         }
+    }
+
+    @RequestMapping(value = "headImgUrl", method = RequestMethod.GET)
+    public void getHeadImgUrl(@RequestParam String id,HttpServletResponse response){
+        response.setContentType("image/jpeg");
+        try {
+            WxMpUser wxMpUser = wxMpService.getUserService().userInfo(id);
+            ServletOutputStream outputStream = response.getOutputStream();
+            ImageUtil.toPNG(new URL(wxMpUser.getHeadImgUrl()), outputStream, 250, 250);
+        } catch (IOException e) {
+            log.error("error", e);
+            e.printStackTrace();
+        } catch (WxErrorException e) {
+            log.error("error", e);
+            e.printStackTrace();
+        }
+
     }
 }
