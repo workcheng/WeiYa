@@ -36,7 +36,9 @@
                                 _this.msgs[i] = null;
                             } else {
                                 var image = new Image();
-                                image.src = "../message/1.png";// _this.msgs[i].img;
+
+                                image.src = _this.msgs[i].id;//"../message/1.png";// _this.msgs[i].img;
+
                                 _this.msgs[i].L = parseInt(_this.msgs[i].L - _this.msgs[i].S);
                                 _this.drawRoundedRect(_this.msgs[i].C, '#fff', _this.msgs[i].L - 20, _this.msgs[i].T - 30, _this.ctx.measureText(_this.msgs[i].msg).width + 25, 40, 10);
                                 _this.ctx.fillStyle = _this.msgs[i].C;
