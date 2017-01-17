@@ -2,9 +2,9 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>damu app</title>
+    <title>danmu app</title>
     <link rel="stylesheet" type="text/css" href="css/test.css">
-    <script type="text/javascript" src="../danmu/js/jquery-1.9.1.min.js"></script>
+    <script type="text/javascript" src="js/jquery.js"></script>
     <script type="text/javascript" src="../message/js/jquery.barrager.js"></script>
     <script type="text/javascript" src="../config/config.js"></script>
     <script type="application/javascript">
@@ -29,9 +29,6 @@
                 $("#exit").show();
                 $(this).hide();
             });
-
-            //获取url参数
-
 
             function startServer() {
                 var url = "ws://" + BASE + "echoServlet";
@@ -62,7 +59,6 @@
                     document.getElementById("content").innerHTML += '弹幕通道关闭! Byebye!<br />';
                 };
             }
-
             startServer();
         });
     </script>
