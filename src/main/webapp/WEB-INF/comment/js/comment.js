@@ -4,6 +4,8 @@
 $(document).ready(function () {
     var weixinUrl = location.href.split('#')[0];
     var url = BaseUrl + "sign/url";
+
+
     // 当前的网页请求地址
     $.ajax({
         url: url, //这个地址是服务器配置JSSDK的地址
@@ -58,6 +60,21 @@ $(document).ready(function () {
  * @param headImgUrl
  */
 var saveMsgClick = function (headImgUrl) {
+
+    function getParamFromUrl(name) {
+        name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
+        var regexS = "[\\?&]" + name + "=([^&#]*)";
+        var regex = new RegExp(regexS);
+        var results = regex.exec(window.location.href);
+        if (results == null) {
+            return null;
+        }
+        else {
+            return decodeURIComponent(results[1]);
+        }
+    };
+
+
     $("#saveMsg").click(function () {
         if (($(".wordsedit1 input").val() == "") || ($(".wordsedit1 input").val() == "null")) {
             showInfo("请输入留言！");

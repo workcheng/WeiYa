@@ -4,33 +4,35 @@
 
 $(document).ready(function () {
     selectChange();
+    signGrid(0);
 });
 var signGrid = function (index) {
-    var orderUrl = BaseUrl + "user/allUserList";
+    var luckyUrl = BaseUrl + "user/luckyUserList";
     $.ajax({
-        url: orderUrl,
+        url: luckyUrl,
         data: {
-            index: index
+            degree: index
         },
         success: function (json) {
-            $(".number").text(json.data.orderCount);
-            var userList = json.data.users;
+            var userList = json.data;
             $.each(userList, function (index, item) {
-                var unixTimestamp = new Date(item.signDate);
-                var commonTime = unixTimestamp.toLocaleString();
-                var isOrder = item.order;
-                var order = "";
-                switch (isOrder) {
+                var rank = "";
+                switch (item.degree) {
                     case 0:
-                        order = "否";
+                        rank = "一等奖";
+                        break;
                     case 1:
-                        order = "是";
+                        rank = "二等奖";
+                        break;
+                    case 2:
+                        rank = "三等奖";
+                        break;
                 }
                 var jqTR = $("<tr></tr>");
                 var jqPeople = $("<td></td>").text(item.name).css({width: "40%"});
                 var jqSection = $("<td></td>").text(item.depName).css({width: "40%"});
-                var jqRank = $("<td></td>").text(item.depRank).css({width: "20%"});
-                jqTR.append(jqPeople).append(jqSection).append(jqRnk);
+                var jqRank = $("<td></td>").text(rank).css({width: "20%"});
+                jqTR.append(jqPeople).append(jqSection).append(jqRank);
                 $("#signGrid").append(jqTR);
             })
 
@@ -39,16 +41,9 @@ var signGrid = function (index) {
 }
 
 var selectChange = function () {
-    $("select[name='signTime']").change(function () {
+    $("select[name='degree']").change(function () {
         $("#signGrid").html("");
-        var time = $("select[name='signTime']").val();
-        signGrid(time);
+        var index = $("select[name='degree']").val();
+        signGrid(index);
     })
 }
-function PrefixInteger(num, n) {
-    return (Array(n).join(0) + num).slice(-n);
-}
-
-Date.prototype.toLocaleString = function () {
-    return this.getFullYear() + "-" + PrefixInteger((this.getMonth() + 1), 2) + "-" + PrefixInteger(this.getDate(), 2) + "  " + PrefixInteger(this.getHours(), 2) + ":" + PrefixInteger(this.getMinutes(), 2) + ":" + PrefixInteger(this.getSeconds(), 2);
-};
