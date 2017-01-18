@@ -1,10 +1,7 @@
 package com.zoe.weiya.controller;
 
 import com.zoe.weiya.comm.constant.ZoeErrorCode;
-import com.zoe.weiya.comm.exception.HasSignException;
-import com.zoe.weiya.comm.exception.InternalException;
-import com.zoe.weiya.comm.exception.NotStartException;
-import com.zoe.weiya.comm.exception.VoteException;
+import com.zoe.weiya.comm.exception.*;
 import com.zoe.weiya.comm.logger.ZoeLogger;
 import com.zoe.weiya.comm.logger.ZoeLoggerFactory;
 import com.zoe.weiya.comm.response.ZoeObject;
@@ -160,6 +157,9 @@ public class UserController {
         } catch (InternalException e){
             log.error("error", e);
             return ZoeObject.failure(ZoeErrorCode.ERROR);
+        } catch (LotteryException e) {
+            log.error("error", e);
+            return ZoeObject.failure(ZoeErrorCode.ERROR_LOTTERY,e.getMessage());
         }
     }
 
@@ -173,6 +173,9 @@ public class UserController {
         } catch (InternalException e){
             log.error("error", e);
             return ZoeObject.failure(ZoeErrorCode.ERROR);
+        } catch (LotteryException e) {
+            log.error("error", e);
+            return ZoeObject.failure(ZoeErrorCode.ERROR_LOTTERY,e.getMessage());
         }
     }
 

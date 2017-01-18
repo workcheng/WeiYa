@@ -80,7 +80,7 @@ public class WechatService {
     public void sendMessage(LuckyUser user) throws Exception{
         if(null != user){
             if(StringUtils.isBlank(user.getOpenId()) || null == user.getDegree() || StringUtils.isBlank(user.getName())){
-                throw new InternalException("非法空白");
+                throw new InternalException("非法id="+user.getOpenId()+"，degree="+user.getDegree()+"，name="+user.getName());
             }
         }
         String[] degreeList = {"一","二","三"};

@@ -2,10 +2,7 @@ package com.zoe.weiya.service.user;
 
 import com.zoe.weiya.comm.constant.CommonConstant;
 import com.zoe.weiya.comm.constant.ZoeErrorCode;
-import com.zoe.weiya.comm.exception.HasSignException;
-import com.zoe.weiya.comm.exception.InternalException;
-import com.zoe.weiya.comm.exception.NotStartException;
-import com.zoe.weiya.comm.exception.VoteException;
+import com.zoe.weiya.comm.exception.*;
 import com.zoe.weiya.comm.logger.ZoeLogger;
 import com.zoe.weiya.comm.logger.ZoeLoggerFactory;
 import com.zoe.weiya.comm.redis.ZoeRedisTemplate;
@@ -197,14 +194,14 @@ public class UserService {
         return user;
     }
 
-    public List<User> randomUser(Integer count) throws NotStartException, InternalException {
+    public List<User> randomUser(Integer count) throws NotStartException, InternalException, LotteryException {
         //TODO 数量超过返回错误
         List<String> randomOpenIds = this.randomOpenIds(Long.valueOf(count));
         List<User> userList = new ArrayList<>();
         Long luckySetSize = getLuckySetSize();
         Long userSize = getUserSize();
         if (luckySetSize == userSize) {//TODO REVIEW
-            throw new InternalException("中奖池已满");
+            throw new LotteryException(String.valueOf(userSize-luckySetSize));
         }
         for (int i = 0; i < randomOpenIds.size(); i++) {
             String openId = randomOpenIds.get(i);

@@ -42,9 +42,13 @@ public class ZoeObject {
     }
 
     public static ResponseMsg failure(Enum enu){
+        return failure(enu,"");
+    }
+
+    public static ResponseMsg failure(Enum enu, String data){
         ZoeErrorCode enu1 = (ZoeErrorCode) enu;
         ResponseMsg msg = new ResponseMsg();
-        msg.setData("");
+        msg.setData(data);
         msg.setMessage(enu1.getDescription());
         msg.setStatus(enu1.getCode());
         return msg;
