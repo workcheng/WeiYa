@@ -345,9 +345,9 @@ body {
 
 .error_dialog {
     position: fixed;
-    width: 550px;
+    width: 76%;
     height: 340px;
-    left: 100px;
+    left: 12%;
     top: 50%;
     margin-top: -170px;
     background: #000;
@@ -385,6 +385,7 @@ body {
         zoom: 0.48 !important;
         -webkit-text-size-adjust: auto !important;
     }
+
 }
 
 @media screen and(min-width: 375px)and(max-width: 412px) {

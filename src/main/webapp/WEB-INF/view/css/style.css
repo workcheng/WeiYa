@@ -25,8 +25,8 @@ body {
 }
 
 fieldset {
+    width: 90%;
     border: 0px #ebebeb solid;
-    margin: 0 0 10px 0;
 }
 
 legend {
@@ -44,7 +44,7 @@ legend.optional {
 .form-row {
     clear: both;
     float: left;
-    padding: 10px 5px 10px 5px;
+    padding: 10px 0px 10px 5px;
 }
 
 .form-row-select {
@@ -201,15 +201,16 @@ input.validation-passed, textarea.validation-passed {
 }
 
 .field-content {
-    width: auto;
+    width: 80%;
     height: 50px;
     line-height: 20px;
     text-align: center;
     float: left;
     margin-top: 100px;
-    margin-left: 20px;
+    margin-left: 10%;
     font-size: 18px;
-    font-weight: bold
+    font-weight: bold;
+    line-height: 30px;
 }
 
 .error_dialog {

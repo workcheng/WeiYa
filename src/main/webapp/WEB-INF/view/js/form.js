@@ -7,7 +7,7 @@ $(document).ready(function () {
     // 根据实际填写接口的配置地点
     // 这里的接口地址是基于node-weixin配置的。
     var weixinUrl = location.href.split('#')[0];
-    $('body').append('<div id="loading"><img src="images/loading.gif" style="width: 150px;margin-left: 97px;"></div>');
+    $('body').append('<div id="loading"><img src="images/loading.gif" style="width: 150px;margin-left: 100px;"></div>');
     wx.hideOptionMenu();
     var getUserInfo = BaseUrl + "sign/getUserInfo";//"auth/user_info";
     var weixin = location.href.split('?')[1];
@@ -16,7 +16,7 @@ $(document).ready(function () {
     $.ajax({
         url: getUserInfo, //这个地址是服务器配置JSSDK的地址
         data: {           // 这个地址是发生jssdk调用的url地址
-            // 用于服务器配置
+                          // 用于服务器配置
             id: code,
             lang: ''
         },
@@ -31,8 +31,7 @@ $(document).ready(function () {
                 },
                 success: function (json) {
                     var data = json.data;
-                    if(json.status == "1001"){
-                        alert("内部错误");
+                    if (json.status == "1001") {
                         return;
                     }
                     if (data == "NOT_SIGN") {
@@ -44,7 +43,6 @@ $(document).ready(function () {
                         $("#loading").hide();
                         $("#reSign").hide();
                         $("#unStart").show();
-                        alert(json.message);
                         return;
                     } else {
                         $("#partySign").hide();
