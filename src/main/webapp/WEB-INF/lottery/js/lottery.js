@@ -46,7 +46,6 @@ var getLuckyUser = function (callback) {
     var getLotteryUser = BaseUrl + "user/lotteryUserList?time=" + getRandom(1, 1000);//lotterySelect
 
     $.ajax({
-
         url: getLotteryUser,
         data: {count: userNum},
         success: function (data) {
@@ -64,7 +63,13 @@ var isAuto = function () {
         $("#userName").html(getAllUserInfo[user_index].name);
         $("#userImg").attr("src", getAllUserInfo[user_index].headImgUrl);
     }, 100);
-    beginLuck();
+    if (getAllUserInfo.length > 0) {
+        var userNum = $("select[name='userNum']").val();
+        beginLuck();
+    } else {
+        showInfo("当前还没有人参加活动！", 0);
+    }
+
     $('.condition').addClass('disabled');
     return false;
 }
@@ -215,7 +220,9 @@ $(document).ready(function () {
                 luckCount = 1;
             }, 2000);
         }
-        isAuto();
+        if (getAllUserInfo.length > 0) {
+            isAuto();
+        }
     });
     $("#stopLuck").click(function () {
         stopLuck();

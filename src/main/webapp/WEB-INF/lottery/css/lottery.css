@@ -2,7 +2,7 @@
     height: 100%;
     width: 100%;
     margin: 0;
-    overflow:hidden;
+    overflow: hidden;
 }
 
 body {
@@ -13,7 +13,7 @@ body {
     word-wrap: break-word;
     word-break: break-all;
     height: 100%;
-    background: url(../images/1024.png) center no-repeat;
+    background: url(../images/bg1.JPG) center no-repeat;
     background-size: 100% 100%;
 }
 
@@ -1893,16 +1893,6 @@ a.disabled:hover {
     color: #fff;
 }
 
-.downAnimate {
-    width: 100px;
-    height: 100px;
-    position: fixed;
-    background: url(images/animate2.png) no-repeat;
-    background-size: 100%;
-    top: -100px;
-    z-index: 99999;
-}
-
 .downAnimate_1 {
     -webkit-animation: downAnimate1 1s ease-in;
 }
@@ -2587,36 +2577,6 @@ span.heart i {
     margin-left: -50px
 }
 
-.pairAnimateBg {
-    text-align: center;
-    font-size: 30px;
-    position: absolute;
-    left: 50%;
-    margin-left: -500px;
-    top: 50%;
-    background: url(images/pair.png) no-repeat;
-    width: 1000px;
-    height: 512px;
-    background-size: 100%;
-    opacity: 0;
-    z-index: 9999;
-}
-
-.pairAnimateBg1 {
-    text-align: center;
-    font-size: 30px;
-    position: absolute;
-    left: 50%;
-    margin-left: -500px;
-    top: 50%;
-    background: url(images/pair1.png) no-repeat;
-    width: 1000px;
-    height: 512px;
-    background-size: 100%;
-    opacity: 0;
-    z-index: 9999;
-}
-
 div.pairLeft img, div.pairRight img {
     width: 150px;
     height: 150px;
@@ -2664,17 +2624,6 @@ div.pairRight {
     background: rgba(0, 0, 0, 0.5);
     float: left;
     margin: 20px 0 0 20px;
-}
-
-#prizelottery .right {
-    width: 297px;
-    height: 495px;
-    background: rgba(0, 0, 0, 0.5);
-    float: left;
-    background: url(images/luck-prize-720.png) no-repeat;
-    padding: 19px 7px 0 23px;
-    box-sizing: border-box;
-    margin: 20px 0 0 10px;
 }
 
 #prizelottery .right .result {
@@ -2800,26 +2749,6 @@ div.pairRight {
 #prizelottery .showMyLuck {
     left: 82px;
     background: rgba(0, 0, 0, 0.5);
-}
-
-.default-prize {
-    background: url(images/defaultprize.png) no-repeat;
-    background-size: 100%;
-    width: 210px;
-    height: 210px;
-    position: absolute;
-    top: 50px;
-    left: 0;
-    z-index: 99;
-    background-color: #fff;
-}
-
-.prize-box li div.default-prize {
-    top: 0;
-    position: relative;
-    background: url(images/defaultprize.png) no-repeat;
-    background-size: 100%;
-    background-color: #fff;
 }
 
 #prizelottery #luckIng {
@@ -3041,60 +2970,6 @@ div.pairRight {
     top: -5000px;
 }
 
-.fire:before {
-    content: '';
-    display: block;
-    margin: auto;
-    width: 500px;
-    height: 500px;
-    background: url(images/fire1.png) no-repeat;
-    background-size: 100%;
-    -webkit-animation: fireanimate .5s linear infinite;
-}
-
-@-webkit-keyframes fireanimate {
-    0% {
-        background: url(images/fire1.png) no-repeat;
-        background-size: 100%;
-    }
-    11% {
-        background: url(images/fire2.png) no-repeat;
-        background-size: 100%;
-    }
-    22% {
-        background: url(images/fire3.png) no-repeat;
-        background-size: 100%;
-    }
-    33% {
-        background: url(images/fire4.png) no-repeat;
-        background-size: 100%;
-    }
-    44% {
-        background: url(images/fire5.png) no-repeat;
-        background-size: 100%;
-    }
-    55% {
-        background: url(images/fire6.png) no-repeat;
-        background-size: 100%;
-    }
-    66% {
-        background: url(images/fire7.png) no-repeat;
-        background-size: 100%;
-    }
-    77% {
-        background: url(images/fire8.png) no-repeat;
-        background-size: 100%;
-    }
-    88% {
-        background: url(images/fire9.png) no-repeat;
-        background-size: 100%;
-    }
-    99% {
-        background: url(images/fire1.png) no-repeat;
-        background-size: 100%;
-    }
-}
-
 /*中奖列表*/
 .level {
     margin-bottom: 20px;
@@ -3144,19 +3019,6 @@ div.pairRight {
     100% {
         -webkit-transform: rotate(360deg);
     }
-}
-
-a.countmoney-submit {
-    display: block;
-    position: absolute;
-    left: 50%;
-    margin-left: -74px;
-    top: 635px;
-    width: 147px;
-    height: 38px;
-    background: url(images/count-money-btn.png) no-repeat;
-    background-size: 100%;
-    z-index: 9999;
 }
 
 .money-ing ul li img.downmoney {
@@ -3212,16 +3074,6 @@ a.countmoney-submit {
     right: 0px;
     width: 100%;
     color: #837955;
-}
-
-#nohtml5 div {
-    width: 820px;
-    padding-left: 85px;
-    margin: auto;
-    line-height: 25px;
-    background: url(images/alert.jpg) left no-repeat;
-    height: 65px;
-    padding-top: 15px;
 }
 
 #nohtml5 a {
@@ -3287,7 +3139,7 @@ a.countmoney-submit {
 .wrapper .header {
     overflow: hidden;
     width: 100%;
-    position:relative;
+    position: relative;
 }
 
 .wrapper .header .total-join {
@@ -3515,6 +3367,7 @@ a.countmoney-submit {
     margin-left: 110px;
     cursor: pointer;
 }
+
 html {
     height: 100%;
     width: 100%;
@@ -3536,7 +3389,7 @@ body {
      !*   background-size: 100%;*!
         background-size: cover;*/
     height: 100%;
-    background: url(../images/1024.png) center;
+    background: url(../images/bg1.JPG) center;
     background-size: 100% 100%;
 }
 
@@ -5416,16 +5269,6 @@ a.disabled:hover {
     color: #fff;
 }
 
-.downAnimate {
-    width: 100px;
-    height: 100px;
-    position: fixed;
-    background: url(images/animate2.png) no-repeat;
-    background-size: 100%;
-    top: -100px;
-    z-index: 99999;
-}
-
 .downAnimate_1 {
     -webkit-animation: downAnimate1 1s ease-in;
 }
@@ -6110,36 +5953,6 @@ span.heart i {
     margin-left: -50px
 }
 
-.pairAnimateBg {
-    text-align: center;
-    font-size: 30px;
-    position: absolute;
-    left: 50%;
-    margin-left: -500px;
-    top: 50%;
-    background: url(images/pair.png) no-repeat;
-    width: 1000px;
-    height: 512px;
-    background-size: 100%;
-    opacity: 0;
-    z-index: 9999;
-}
-
-.pairAnimateBg1 {
-    text-align: center;
-    font-size: 30px;
-    position: absolute;
-    left: 50%;
-    margin-left: -500px;
-    top: 50%;
-    background: url(images/pair1.png) no-repeat;
-    width: 1000px;
-    height: 512px;
-    background-size: 100%;
-    opacity: 0;
-    z-index: 9999;
-}
-
 div.pairLeft img, div.pairRight img {
     width: 150px;
     height: 150px;
@@ -6187,17 +6000,6 @@ div.pairRight {
     background: rgba(0, 0, 0, 0.5);
     float: left;
     margin: 20px 0 0 20px;
-}
-
-#prizelottery .right {
-    width: 297px;
-    height: 495px;
-    background: rgba(0, 0, 0, 0.5);
-    float: left;
-    background: url(images/luck-prize-720.png) no-repeat;
-    padding: 19px 7px 0 23px;
-    box-sizing: border-box;
-    margin: 20px 0 0 10px;
 }
 
 #prizelottery .right .result {
@@ -6323,26 +6125,6 @@ div.pairRight {
 #prizelottery .showMyLuck {
     left: 82px;
     background: rgba(0, 0, 0, 0.5);
-}
-
-.default-prize {
-    background: url(images/defaultprize.png) no-repeat;
-    background-size: 100%;
-    width: 210px;
-    height: 210px;
-    position: absolute;
-    top: 50px;
-    left: 0;
-    z-index: 99;
-    background-color: #fff;
-}
-
-.prize-box li div.default-prize {
-    top: 0;
-    position: relative;
-    background: url(images/defaultprize.png) no-repeat;
-    background-size: 100%;
-    background-color: #fff;
 }
 
 #prizelottery #luckIng {
@@ -6564,60 +6346,6 @@ div.pairRight {
     top: -5000px;
 }
 
-.fire:before {
-    content: '';
-    display: block;
-    margin: auto;
-    width: 500px;
-    height: 500px;
-    background: url(images/fire1.png) no-repeat;
-    background-size: 100%;
-    -webkit-animation: fireanimate .5s linear infinite;
-}
-
-@-webkit-keyframes fireanimate {
-    0% {
-        background: url(images/fire1.png) no-repeat;
-        background-size: 100%;
-    }
-    11% {
-        background: url(images/fire2.png) no-repeat;
-        background-size: 100%;
-    }
-    22% {
-        background: url(images/fire3.png) no-repeat;
-        background-size: 100%;
-    }
-    33% {
-        background: url(images/fire4.png) no-repeat;
-        background-size: 100%;
-    }
-    44% {
-        background: url(images/fire5.png) no-repeat;
-        background-size: 100%;
-    }
-    55% {
-        background: url(images/fire6.png) no-repeat;
-        background-size: 100%;
-    }
-    66% {
-        background: url(images/fire7.png) no-repeat;
-        background-size: 100%;
-    }
-    77% {
-        background: url(images/fire8.png) no-repeat;
-        background-size: 100%;
-    }
-    88% {
-        background: url(images/fire9.png) no-repeat;
-        background-size: 100%;
-    }
-    99% {
-        background: url(images/fire1.png) no-repeat;
-        background-size: 100%;
-    }
-}
-
 /*中奖列表*/
 .level {
     margin-bottom: 20px;
@@ -6667,19 +6395,6 @@ div.pairRight {
     100% {
         -webkit-transform: rotate(360deg);
     }
-}
-
-a.countmoney-submit {
-    display: block;
-    position: absolute;
-    left: 50%;
-    margin-left: -74px;
-    top: 635px;
-    width: 147px;
-    height: 38px;
-    background: url(images/count-money-btn.png) no-repeat;
-    background-size: 100%;
-    z-index: 9999;
 }
 
 .money-ing ul li img.downmoney {
@@ -6735,16 +6450,6 @@ a.countmoney-submit {
     right: 0px;
     width: 100%;
     color: #837955;
-}
-
-#nohtml5 div {
-    width: 820px;
-    padding-left: 85px;
-    margin: auto;
-    line-height: 25px;
-    background: url(images/alert.jpg) left no-repeat;
-    height: 65px;
-    padding-top: 15px;
 }
 
 #nohtml5 a {
@@ -6817,7 +6522,7 @@ a.countmoney-submit {
     margin-bottom: 4px;
     color: #fff;
     font-size: 19px;
-    margin-right:240px;
+    margin-right: 240px;
 }
 
 .wrapper .header .total-join > span {

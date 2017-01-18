@@ -80,3 +80,11 @@ var replace_em = function (str) {
     str = str.replace(/\[em_([0-9]*)\]/g, '<img src="../comment/arclist/$1.gif" border="0" />');
     return str;
 }
+
+function PrefixInteger(num, n) {
+    return (Array(n).join(0) + num).slice(-n);
+}
+
+Date.prototype.toLocaleString = function () {
+    return this.getFullYear() + "-" + PrefixInteger((this.getMonth() + 1), 2) + "-" + PrefixInteger(this.getDate(), 2) + "  " + PrefixInteger(this.getHours(), 2) + ":" + PrefixInteger(this.getMinutes(), 2) + ":" + PrefixInteger(this.getSeconds(), 2);
+};

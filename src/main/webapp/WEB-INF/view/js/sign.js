@@ -13,6 +13,10 @@ var signGrid = function (index) {
             index: index
         },
         success: function (json) {
+            if (json.data.length <= 16) {
+                $("#winnerContent").css({width: "1000"});
+                $(".bu").hide();
+            }
             $(".number").text(json.data.orderCount);
             var userList = json.data.users;
             $.each(userList, function (index, item) {
@@ -46,10 +50,3 @@ var selectChange = function () {
         signGrid(time);
     })
 }
-function PrefixInteger(num, n) {
-    return (Array(n).join(0) + num).slice(-n);
-}
-
-Date.prototype.toLocaleString = function () {
-    return this.getFullYear() + "-" + PrefixInteger((this.getMonth() + 1), 2) + "-" + PrefixInteger(this.getDate(), 2) + "  " + PrefixInteger(this.getHours(), 2) + ":" + PrefixInteger(this.getMinutes(), 2) + ":" + PrefixInteger(this.getSeconds(), 2);
-};
