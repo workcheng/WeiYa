@@ -201,7 +201,7 @@ input.validation-passed, textarea.validation-passed {
 }
 
 .field-content {
-    width: 300px;
+    width: auto;
     height: 50px;
     line-height: 20px;
     text-align: center;
