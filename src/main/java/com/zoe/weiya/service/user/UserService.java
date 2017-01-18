@@ -196,13 +196,17 @@ public class UserService {
 
     public List<User> randomUser(Integer count) throws NotStartException, InternalException, LotteryException {
         //TODO 数量超过返回错误
-        List<String> randomOpenIds = this.randomOpenIds(Long.valueOf(count));
         List<User> userList = new ArrayList<>();
         Long luckySetSize = getLuckySetSize();
         Long userSize = getUserSize();
-        if (luckySetSize == userSize) {//TODO REVIEW
-            throw new LotteryException(String.valueOf(userSize-luckySetSize));
+        long l = userSize - luckySetSize;
+        if(count > l){
+            throw new LotteryException(String.valueOf(l));
         }
+        if (luckySetSize == userSize) {//TODO REVIEW
+            throw new InternalException("中奖池已满");
+        }
+        List<String> randomOpenIds = this.randomOpenIds(Long.valueOf(count));
         for (int i = 0; i < randomOpenIds.size(); i++) {
             String openId = randomOpenIds.get(i);
             long inLuckySet = saveInLuckySet(openId);//存入中奖池

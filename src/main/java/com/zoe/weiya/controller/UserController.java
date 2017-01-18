@@ -57,7 +57,7 @@ public class UserController {
             return ZoeObject.failure(ZoeErrorCode.HAS_SIGN);
         } catch (InternalException e) {
             log.error("error", e);
-            return ZoeObject.failure(ZoeErrorCode.ERROR_INTERNAL);
+            return ZoeObject.failure(e.getMessage());
         } catch (VoteException e) {
             log.error("error", e);
             return ZoeObject.failure(ZoeErrorCode.ERROR_VOTE);
@@ -85,7 +85,7 @@ public class UserController {
             log.error("error", e);
             return ZoeObject.failure(ZoeErrorCode.NOT_START);
         } catch (InternalException e) {
-            return ZoeObject.failure(e);
+            return ZoeObject.failure(e.getMessage());
         }
     }
 
@@ -108,7 +108,7 @@ public class UserController {
             return ZoeObject.failure(ZoeErrorCode.NOT_START);
         } catch (InternalException e) {
             log.error("error", e);
-            return ZoeObject.failure(e);
+            return ZoeObject.failure(e.getMessage());
         }
     }
 
@@ -156,7 +156,7 @@ public class UserController {
             return ZoeObject.failure(ZoeErrorCode.NOT_START);
         } catch (InternalException e){
             log.error("error", e);
-            return ZoeObject.failure(ZoeErrorCode.ERROR);
+            return ZoeObject.failure(e.getMessage());
         } catch (LotteryException e) {
             log.error("error", e);
             return ZoeObject.failure(ZoeErrorCode.ERROR_LOTTERY,e.getMessage());
@@ -172,7 +172,7 @@ public class UserController {
             return ZoeObject.failure(ZoeErrorCode.NOT_START);
         } catch (InternalException e){
             log.error("error", e);
-            return ZoeObject.failure(ZoeErrorCode.ERROR);
+            return ZoeObject.failure(e.getMessage());
         } catch (LotteryException e) {
             log.error("error", e);
             return ZoeObject.failure(ZoeErrorCode.ERROR_LOTTERY,e.getMessage());
@@ -213,7 +213,7 @@ public class UserController {
             return ZoeObject.failure(ZoeErrorCode.NOT_START);
         } catch (InternalException e) {
             log.error("error", e);
-            return ZoeObject.failure(e);
+            return ZoeObject.failure(e.getMessage());
         }
     }
 
@@ -231,7 +231,7 @@ public class UserController {
             return ZoeObject.success(userService.getAllMessage());
         } catch (InternalException e) {
             log.error("error", e);
-            return ZoeObject.failure(e);
+            return ZoeObject.failure(e.getMessage());
         } catch (NotStartException e) {
             log.error("error", e);
             return ZoeObject.failure(ZoeErrorCode.NOT_START);
