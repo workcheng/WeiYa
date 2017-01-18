@@ -121,6 +121,7 @@
     <mvc:resources mapping="/config/**" location="/WEB-INF/config/"/>
     <mvc:resources mapping="/message/**" location="/WEB-INF/message/"/>
     <mvc:resources mapping="/MP_verify_qFc0y7Y9DrJrrC1W.txt" location="/WEB-INF/"/>
+    <mvc:resources mapping="/MP_verify_0pskDMJLWkmFhfTK.txt" location="/WEB-INF/"/>
     <mvc:resources mapping="/admin/**" location="/WEB-INF/admin/"/>
     <mvc:resources mapping="/main/**" location="/WEB-INF/main/"/>
     <mvc:resources mapping="/common/**" location="/WEB-INF/common/"/>
