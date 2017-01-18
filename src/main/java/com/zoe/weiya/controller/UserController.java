@@ -47,6 +47,9 @@ public class UserController {
      */
     @RequestMapping(value = "save", method = RequestMethod.POST)
     public Object save(@RequestBody @Valid User u) {
+        if(u.getName().length() > 30){
+            return ZoeObject.failure("姓名不超过30字符");
+        }
         if (StringUtils.isBlank(u.getOpenId())) {
             return ZoeObject.failure();
         }
