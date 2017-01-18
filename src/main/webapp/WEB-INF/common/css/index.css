@@ -658,12 +658,12 @@ body {
 
 .menulist .menu_item0 a {
     width: 100%;
-    background: url(../images/icon_left.png) no-repeat 50% 44%;
+    background: url(../../comment/images/icon_left.png) no-repeat 50% 44%;
 }
 
 .menulist .menu_item8 a {
     width: 100%;
-    background: url(../images/icon_next.png) no-repeat 50% 44%;
+    background: url(../../comment/images/icon_next.png) no-repeat 50% 44%;
 }
 
 .menulist .menu-wrap {
@@ -791,7 +791,7 @@ body {
     width: 5px;
     right: 0;
     top: 0;
-    background: url(../images/item_fgx.png) no-repeat;
+    background: url(../../comment/images/item_fgx.png) no-repeat;
 }
 
 .menulist .cur {
@@ -1355,7 +1355,7 @@ body {
     height: 150px;
     right: 20px;
     top: 53px;
-    background: url(../images/sprite.png) no-repeat;
+    background: url(../../comment/images/sprite.png) no-repeat;
     background-position: -554px -841px;
     transform: rotate(180deg);
     -webkit-transform: rotate(180deg);
@@ -1370,7 +1370,7 @@ body {
     height: 150px;
     left: 20px;
     top: 53px;
-    background: url(../images/sprite.png) no-repeat;
+    background: url(../../comment/images/sprite.png) no-repeat;
     background-position: -554px -841px;
     z-index: 30000;
 }
@@ -1972,7 +1972,7 @@ body {
     text-align: center;
     line-height: 150px;
     border-radius: 120px;
-    background: url(../images/sprite.png?v=1) no-repeat;
+    background: url(../../comment/images/sprite.png?v=1) no-repeat;
     background-position: -74px -689px;
     color: #fff;
     font-size: 28px;
@@ -2112,7 +2112,7 @@ body {
 }
 
 .result .inner {
-    background: #fff url(../images/open.png) top center no-repeat;
+    background: #fff url(../../comment/images/open.png) top center no-repeat;
     background-size: 750px auto;
     text-align: center;
     padding-bottom: 50px;
@@ -2394,7 +2394,7 @@ body {
     height: 200px;
     right: 40px;
     top: 50px;
-    background: url(../images/sprite.png) no-repeat;
+    background: url(../../comment/images/sprite.png) no-repeat;
     background-position: -540px -488px;
     z-index: 30000;
     transform: rotate(180deg);
@@ -2431,7 +2431,7 @@ body {
     height: 200px;
     left: 40px;
     top: 50px;
-    background: url(../images/sprite.png) no-repeat;
+    background: url(../../comment/images/sprite.png) no-repeat;
     background-position: -455px -488px;
     z-index: 30000;
     -webkit-animation: .8s ease infinite alternate;
@@ -2558,7 +2558,7 @@ body {
     display: block;
     width: 200px;
     height: 200px;
-    background: url(../images/loading.png) center center no-repeat;
+    background: url(../../comment/images/loading.png) center center no-repeat;
     background-size: 100% 100%;
     position: fixed;
     left: 50%;

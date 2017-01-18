@@ -2,10 +2,7 @@ package com.zoe.weiya.service.user;
 
 import com.zoe.weiya.comm.constant.CommonConstant;
 import com.zoe.weiya.comm.constant.ZoeErrorCode;
-import com.zoe.weiya.comm.exception.HasSignException;
-import com.zoe.weiya.comm.exception.InternalException;
-import com.zoe.weiya.comm.exception.NotStartException;
-import com.zoe.weiya.comm.exception.VoteException;
+import com.zoe.weiya.comm.exception.*;
 import com.zoe.weiya.comm.logger.ZoeLogger;
 import com.zoe.weiya.comm.logger.ZoeLoggerFactory;
 import com.zoe.weiya.comm.redis.ZoeRedisTemplate;
@@ -35,23 +32,28 @@ import java.util.*;
 public class UserService {
     private static final ZoeLogger log = ZoeLoggerFactory.getLogger(UserService.class);
     @Qualifier("zoeRedisTemplate0")
-    @Autowired private ZoeRedisTemplate zoeRedisTemplate0;
+    @Autowired
+    private ZoeRedisTemplate zoeRedisTemplate0;
     @Qualifier("zoeRedisTemplate1")
-    @Autowired private ZoeRedisTemplate zoeRedisTemplate1;
+    @Autowired
+    private ZoeRedisTemplate zoeRedisTemplate1;
     @Qualifier("zoeRedisTemplate2")
-    @Autowired private ZoeRedisTemplate zoeRedisTemplate2;
+    @Autowired
+    private ZoeRedisTemplate zoeRedisTemplate2;
     @Qualifier("zoeRedisTemplate3")
-    @Autowired private ZoeRedisTemplate zoeRedisTemplate3;
+    @Autowired
+    private ZoeRedisTemplate zoeRedisTemplate3;
     @Qualifier("zoeRedisTemplate4")
-    @Autowired private ZoeRedisTemplate zoeRedisTemplate4;
+    @Autowired
+    private ZoeRedisTemplate zoeRedisTemplate4;
     @Autowired
     private WxMpServiceImpl wxMpService;
     private List<ZoeRedisTemplate> zoeRedisTemplateIndexList;
 
 
     @PostConstruct
-    private void init(){
-        zoeRedisTemplateIndexList = new ArrayList<ZoeRedisTemplate>(){
+    private void init() {
+        zoeRedisTemplateIndexList = new ArrayList<ZoeRedisTemplate>() {
             private static final long serialVersionUID = 1L;
             {
                 add(zoeRedisTemplate0);
@@ -63,7 +65,7 @@ public class UserService {
         };
     }
 
-    private ZoeRedisTemplate getZoeRedisTemplate() throws NotStartException,InternalException {
+    private ZoeRedisTemplate getZoeRedisTemplate() throws NotStartException, InternalException {
         try {
             return zoeRedisTemplateIndexList.get(Integer.valueOf(ZoeUtil.getIndex()));
         } catch (IndexOutOfBoundsException e) {
@@ -72,21 +74,14 @@ public class UserService {
     }
 
     public void save(User u) throws NotStartException, InternalException, HasSignException, WxErrorException, VoteException {
-        if(StringUtils.isEmpty(u.getOpenId())){
+        if (StringUtils.isEmpty(u.getOpenId())) {
             throw new InternalException("openid不能为空");
         }
-        /*try {
-            WxMpUser wxMpUser = wxMpService.getUserService().userInfo(u.getOpenId());
-            u.setNickName(wxMpUser.getNickname());
-        } catch (WxErrorException e) {
-            log.error("error",e);
-            WxError error = e.getError();
-            if(null != error){
-                throw new WxErrorException(error);
-            }
-        }*/
+        WxMpUser wxMpUser = wxMpService.getUserService().userInfo(u.getOpenId());
+        u.setNickName(wxMpUser.getNickname());
+        u.setHeadImgUrl(wxMpUser.getHeadImgUrl());
         Long add = this.getZoeRedisTemplate().getSetOperations().add(CommonConstant.USER, u.getOpenId());
-        if(add == 0){
+        if (add == 0) {
             throw new HasSignException("已经签到");
         }
         this.getZoeRedisTemplate().setValue(u.getOpenId(), u);
@@ -95,7 +90,7 @@ public class UserService {
     @Deprecated
     public void save0(User u) throws HasSignException, InternalException, WxErrorException, NotStartException {
         WxMpUser wxMpUser = wxMpService.getUserService().userInfo(u.getOpenId());
-        if(null != wxMpUser){
+        if (null != wxMpUser) {
             Long aLong = this.saveInSet(u.getOpenId());
             if (aLong == 1) {
                 u.setNickName(wxMpUser.getNickname());
@@ -112,7 +107,7 @@ public class UserService {
     public void commitLotteryPerson(List<OnlyUser> users) throws NotStartException, InternalException {
         SimpleDateFormat sdf = new SimpleDateFormat();
         String format = sdf.format(new Date());
-        getZoeRedisTemplate().setValue(format,users);
+        getZoeRedisTemplate().setValue(format, users);
     }
 
     public ResponseMsg deleteAll(List<OnlyUser> users) throws NotStartException, InternalException {
@@ -132,7 +127,7 @@ public class UserService {
         return (User) getZoeRedisTemplate().getValue(openId);
     }
 
-    public User get(int index,String openId) throws NotStartException, InternalException {
+    public User get(int index, String openId) throws NotStartException, InternalException {
         return (User) zoeRedisTemplateIndexList.get(index).getValue(openId);
     }
 
@@ -163,13 +158,13 @@ public class UserService {
     }
 
     public List<String> randomOpenIds(Long count) throws InternalException, NotStartException {
-        return (List)getZoeRedisTemplate().randomMember(CommonConstant.USER, count);
+        return (List) getZoeRedisTemplate().randomMember(CommonConstant.USER, count);
     }
 
     public List<User> randomUsers(Integer count) throws InternalException, NotStartException {
         List<User> result = new ArrayList<>();
         List<String> list = randomOpenIds(Long.valueOf(count));
-        for (int i=0; i<list.size(); i++){
+        for (int i = 0; i < list.size(); i++) {
             User user = (User) getZoeRedisTemplate().getValue(list.get(i));
             result.add(user);
         }
@@ -179,12 +174,13 @@ public class UserService {
     public List<User> randomUsers() throws InternalException, NotStartException {
         List<User> result = new ArrayList<>();
         List<String> list = randomOpenIds(getUserSize());
-        for (int i=0; i<list.size(); i++){
+        for (int i = 0; i < list.size(); i++) {
             User user = (User) getZoeRedisTemplate().getValue(list.get(i));
             result.add(user);
         }
         return result;
     }
+
     //TODO 后端判断抽奖重复
     //TODO 签到的跟抽奖的分离出来，签到以五份数据保存，抽奖保存在一份，五个key->value
     //抽奖
@@ -198,46 +194,46 @@ public class UserService {
         return user;
     }
 
-    public List<User> randomUser(Integer count) throws NotStartException,InternalException {
+    public List<User> randomUser(Integer count) throws NotStartException, InternalException, LotteryException {
         //TODO 数量超过返回错误
         List<String> randomOpenIds = this.randomOpenIds(Long.valueOf(count));
         List<User> userList = new ArrayList<>();
         Long luckySetSize = getLuckySetSize();
         Long userSize = getUserSize();
-        if(luckySetSize == userSize){//TODO REVIEW
-            throw new InternalException("中奖池已满");
+        if (luckySetSize == userSize) {//TODO REVIEW
+            throw new LotteryException(String.valueOf(userSize-luckySetSize));
         }
-        for(int i=0; i<randomOpenIds.size(); i++){
+        for (int i = 0; i < randomOpenIds.size(); i++) {
             String openId = randomOpenIds.get(i);
-                long inLuckySet= saveInLuckySet(openId);//存入中奖池
-                if(inLuckySet == 0){//已经获奖,重新抽
-                    List<String> openIds = this.randomOpenIds(Long.valueOf(1));
-                    randomOpenIds.remove(openId);
-                    randomOpenIds.add(openIds.get(0));
-                    i = i - 1;//移除-1，当前位置被占用
-                } else if(inLuckySet == 1){
-                    User value = (User)getZoeRedisTemplate().getValue(openId);
-                    userList.add(value);
-                }
+            long inLuckySet = saveInLuckySet(openId);//存入中奖池
+            if (inLuckySet == 0) {//已经获奖,重新抽
+                List<String> openIds = this.randomOpenIds(Long.valueOf(1));
+                randomOpenIds.remove(openId);
+                randomOpenIds.add(openIds.get(0));
+                i = i - 1;//移除-1，当前位置被占用
+            } else if (inLuckySet == 1) {
+                User value = (User) getZoeRedisTemplate().getValue(openId);
+                userList.add(value);
+            }
         }
         return userList;
     }
 
     private Long saveInLuckySet(String openId) throws NotStartException, InternalException {
         Long aLong = getZoeRedisTemplate().setSet(CommonConstant.LUCKY_USER, openId);
-        if(aLong == 1){
+        if (aLong == 1) {
             //success
             return aLong;
-        }else if(aLong ==0){
+        } else if (aLong == 0) {
             //fail
             return aLong;
-        }else{
+        } else {
             throw new InternalException("失败");
         }
     }
 
     public Set<String> getLuckyOpenIdSet() throws InternalException, NotStartException {
-        Set<String> set = (Set)getZoeRedisTemplate().getSet(CommonConstant.LUCKY_USER);
+        Set<String> set = (Set) getZoeRedisTemplate().getSet(CommonConstant.LUCKY_USER);
         return set;
     }
 
@@ -245,7 +241,7 @@ public class UserService {
         Set<String> set = this.getLuckyOpenIdSet();
         List<User> userList = new ArrayList<>();
         Iterator<String> iterator = set.iterator();
-        while (iterator.hasNext()){
+        while (iterator.hasNext()) {
             String openId = iterator.next();
             User user = (User) getZoeRedisTemplate().getValue(openId);
             userList.add(user);
@@ -260,16 +256,16 @@ public class UserService {
 
     public UserListCount orderMealUserCountAndUserList() throws InternalException, NotStartException {
         UserListCount userListCount = new UserListCount();
-        Set<String> openIdSet =  getOpenIdSet();
+        Set<String> openIdSet = getOpenIdSet();
         List<User> userList = new ArrayList<>();
         int orderCount = 0;
-        if(null != openIdSet){
+        if (null != openIdSet) {
             Iterator<String> iterator = openIdSet.iterator();
-            while (iterator.hasNext()){
+            while (iterator.hasNext()) {
                 String next = iterator.next();
                 User user = get(next);
                 userList.add(user);
-                if(Integer.valueOf(1).equals(user.getOrder())){
+                if (Integer.valueOf(1).equals(user.getOrder())) {
                     orderCount++;
                 }
             }
@@ -282,16 +278,16 @@ public class UserService {
 
     public UserListCount orderMealUserCountAndUserList(int index) throws InternalException, NotStartException {
         UserListCount userListCount = new UserListCount();
-        Set<String> openIdSet =  getOpenIdSet(index);
+        Set<String> openIdSet = getOpenIdSet(index);
         List<User> userList = new ArrayList<>();
         int orderCount = 0;
-        if(null != openIdSet){
+        if (null != openIdSet) {
             Iterator<String> iterator = openIdSet.iterator();
-            while (iterator.hasNext()){
+            while (iterator.hasNext()) {
                 String next = iterator.next();
                 User user = get(index, next);
                 userList.add(user);
-                if(Integer.valueOf(1).equals(user.getOrder())){
+                if (Integer.valueOf(1).equals(user.getOrder())) {
                     orderCount++;
                 }
             }
@@ -302,15 +298,15 @@ public class UserService {
         return userListCount;
     }
 
-    public  List<User> orderMealUserList() throws InternalException, NotStartException {
-        Set<String> openIdSet =  getOpenIdSet();
+    public List<User> orderMealUserList() throws InternalException, NotStartException {
+        Set<String> openIdSet = getOpenIdSet();
         List<User> userList = new ArrayList<>();
-        if(null != openIdSet){
+        if (null != openIdSet) {
             Iterator<String> iterator = openIdSet.iterator();
-            while (iterator.hasNext()){
+            while (iterator.hasNext()) {
                 String next = iterator.next();
                 User user = get(next);
-                if(user.getOrder().equals(1)){
+                if (user.getOrder().equals(1)) {
                     userList.add(user);
                 }
             }
@@ -323,9 +319,9 @@ public class UserService {
         msg.setMessage(message);
         msg.setCreateTime(ZoeDateUtil.moment());
         Long aLong = getZoeRedisTemplate().setSet(CommonConstant.MESSAGE, msg);
-        if(aLong == 1){
+        if (aLong == 1) {
             return 1;
-        }else if(aLong == 0){
+        } else if (aLong == 0) {
             return 0;
         }
         return null;
@@ -333,9 +329,9 @@ public class UserService {
 
     public Integer saveMessage(LuckyUser luckyUser, String message) throws InternalException, NotStartException {
         Set<String> luckyOpenIdSet = this.getLuckyOpenIdSet();
-        if(luckyOpenIdSet.contains(luckyUser.getOpenId())){
+        if (luckyOpenIdSet.contains(luckyUser.getOpenId())) {
             User user = this.get(luckyUser.getOpenId());
-            LuckyUserMessage luckyUserMessage  = new LuckyUserMessage();
+            LuckyUserMessage luckyUserMessage = new LuckyUserMessage();
             luckyUserMessage.setOpenId(luckyUser.getOpenId());
             luckyUserMessage.setName(luckyUser.getName());
             luckyUserMessage.setDegree(luckyUser.getDegree());
@@ -344,13 +340,13 @@ public class UserService {
             luckyUserMessage.setMessage(message);
             luckyUserMessage.setNickName(user.getNickName());
             Long aLong = getZoeRedisTemplate().setSet(CommonConstant.MESSAGE, luckyUserMessage);
-            if(aLong == 1){
+            if (aLong == 1) {
                 return 1;
-            }else if(aLong == 0){
+            } else if (aLong == 0) {
                 return 0;
             }
-        }else{
-            throw new InternalException("该用户不存在中奖池中");
+        } else {
+            throw new InternalException("非法消息，该用户不存在中奖池中，openId="+luckyUser.getOpenId()+",name="+luckyUser.getName());
         }
         return null;
     }
@@ -362,8 +358,8 @@ public class UserService {
     public List<LuckyUserMessage> getMessageByDegree(Integer degree) throws NotStartException, InternalException {
         Set<LuckyUserMessage> allMessage = this.getAllMessage();
         ArrayList<LuckyUserMessage> luckyUserMessageList = new ArrayList<>();
-        for(LuckyUserMessage lucky : allMessage){
-            if(degree.equals(lucky.getDegree())){
+        for (LuckyUserMessage lucky : allMessage) {
+            if (degree.equals(lucky.getDegree())) {
                 luckyUserMessageList.add(lucky);
             }
         }

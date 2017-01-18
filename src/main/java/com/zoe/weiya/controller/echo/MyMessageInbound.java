@@ -65,8 +65,17 @@ public class MyMessageInbound extends MessageInbound {
     }
 
     @Override
-    public void onTextMessage(CharBuffer message) throws IOException {
+    protected void onTextMessage(CharBuffer message) throws IOException {
         log.info("Accept Message : " + message);
+        Set<MyMessageInbound> connections =
+                (Set<MyMessageInbound>) application.getAttribute("connections");
+        for (MyMessageInbound myMessageInbound : connections){
+            myMessageInbound.wsOutbound.writeTextMessage(message);
+            myMessageInbound.wsOutbound.flush();
+        }
+    }
+
+    public void sendMessage(CharBuffer message) throws IOException {
         CharBuffer buffer = CharBuffer.wrap(message);
         wsOutbound.writeTextMessage(buffer);
         wsOutbound.flush();

@@ -56,7 +56,7 @@ public class WebSocketService {
         CharBuffer buffer = CharBuffer.wrap(ZoeMessageJsonString);
         for (MyMessageInbound connection : connections) {
             try {
-                connection.onTextMessage(buffer);
+                connection.sendMessage(buffer);
             } catch (IOException e) {
                 log.error("error", e);
             }

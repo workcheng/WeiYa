@@ -14,7 +14,8 @@ public enum ZoeErrorCode {
     ERROR_OPENID(2004,"错误的id信息"),
     NOT_START(2005,"活动未开始"),
     HAS_VOTE(2006,"已投票"),
-    ERROR_VOTE(2007,"投票失败");
+    ERROR_VOTE(2007,"投票失败"),
+    ERROR_LOTTERY(2008,"人数不足");
 
     ZoeErrorCode(int code, String description) {
         this.code = code;
