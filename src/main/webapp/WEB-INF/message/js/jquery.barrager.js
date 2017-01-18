@@ -74,7 +74,7 @@
         };
         this.drawRoundedRect = function (strokeStyle, fillStyle, cornerX, cornerY, width, height, cornerRadius) {
             this.ctx.beginPath();
-            this.ctx.globalAlpha = '0.8';
+            this.ctx.globalAlpha = '0.9';
             this.roundedRect(cornerX, cornerY, width, height, cornerRadius);
             this.ctx.strokeStyle = strokeStyle;
             this.ctx.fillStyle = fillStyle;
