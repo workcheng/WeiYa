@@ -33,7 +33,11 @@ var getCnt = function () {
         async: true,
         url: getUserList,
         success: function (data) {
-            $("#userCount").text(data.data);
+            if (data.status == "1000") {
+                $("#userCount").text(data.data);
+            } else {
+                showInfo("活动尚未开始！", 0);
+            }
         }
     })
 }
@@ -44,7 +48,6 @@ var getCnt = function () {
 var getLuckyUser = function (callback) {
     var userNum = $("select[name='userNum']").val();
     var getLotteryUser = BaseUrl + "user/lotteryUserList?time=" + getRandom(1, 1000);//lotterySelect
-
     $.ajax({
         url: getLotteryUser,
         data: {count: userNum},
@@ -57,6 +60,10 @@ var getLuckyUser = function (callback) {
 
     });
 }
+/**
+ *
+ * @returns {boolean}
+ */
 var isAuto = function () {
     setintIndex = setInterval(function () {
         var user_index = getRandom(0, getAllUserInfo.length - 1);
@@ -109,8 +116,6 @@ var stopLuck = function () {
         }
 
     });
-
-
     return false;
 }
 /**
@@ -220,9 +225,7 @@ $(document).ready(function () {
                 luckCount = 1;
             }, 2000);
         }
-        if (getAllUserInfo.length > 0) {
-            isAuto();
-        }
+        isAuto();
     });
     $("#stopLuck").click(function () {
         stopLuck();
