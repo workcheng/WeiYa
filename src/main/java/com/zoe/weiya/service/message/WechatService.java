@@ -34,11 +34,33 @@ public class WechatService {
     @Autowired
     protected UserService userService;
 
-    public WxMpMessageHandler sendSignMessage() {
+    public WxMpMessageHandler sendInSignMessage() {
         WxMpMessageHandler test = new WxMpMessageHandler() {
             public WxMpXmlOutMessage handle(WxMpXmlMessage wxMessage, Map<String, Object> context,
                                             WxMpService wxMpService, WxSessionManager sessionManager) throws WxErrorException {
-                String url = MessageFormat.format(ZoeProperties.get("config/static/static.properties", "sign.url"),wxMessage.getFromUser());
+                String url = MessageFormat.format(ZoeProperties.get("config/static/static.properties", "sign.in.url"),wxMessage.getFromUser());
+                WxMpXmlOutNewsMessage.Item item = new WxMpXmlOutNewsMessage.Item();
+                item.setDescription("签到表单");
+                item.setPicUrl("https://mmbiz.qlogo.cn/mmbiz_jpg/rFTQWsGze4G89XqNehSdSBGt1ic6ricfgBvaxnXGhsicia3xhIaKJB0hWMIqDXqLXC3OmBKnwfMiaXaBbrECialjOJiaQ/0?wx_fmt=jpeg");
+                item.setTitle("签到");
+                item.setUrl(url);
+
+                WxMpXmlOutNewsMessage m = WxMpXmlOutMessage.NEWS()
+                        .fromUser(wxMessage.getToUser())
+                        .toUser(wxMessage.getFromUser())
+                        .addArticle(item)
+                        .build();
+                return m;
+            }
+        };
+        return test;
+    }
+
+    public WxMpMessageHandler sendOutSignMessage() {
+        WxMpMessageHandler test = new WxMpMessageHandler() {
+            public WxMpXmlOutMessage handle(WxMpXmlMessage wxMessage, Map<String, Object> context,
+                                            WxMpService wxMpService, WxSessionManager sessionManager) throws WxErrorException {
+                String url = MessageFormat.format(ZoeProperties.get("config/static/static.properties", "sign.out.url"),wxMessage.getFromUser());
                 WxMpXmlOutNewsMessage.Item item = new WxMpXmlOutNewsMessage.Item();
                 item.setDescription("签到表单");
                 item.setPicUrl("https://mmbiz.qlogo.cn/mmbiz_jpg/rFTQWsGze4G89XqNehSdSBGt1ic6ricfgBvaxnXGhsicia3xhIaKJB0hWMIqDXqLXC3OmBKnwfMiaXaBbrECialjOJiaQ/0?wx_fmt=jpeg");

@@ -63,18 +63,18 @@ public class CoreController {
     @PostConstruct
     public void init() throws ServletException {
         WxMpMessageHandler test = test();
-//        WxMpMessageHandler reply = reply();
         wxMpMessageRouter
                 .rule().async(false).content("andy").handler(test).end()
-                .rule().async(false).content("签到").handler(wechatService.sendSignMessage()).end()//回复签到
-                .rule().async(false).eventKey(CommonConstant.SIGN).handler(wechatService.sendSignMessage()).end()//签到菜单事件
+                .rule().async(false).content("智业尾牙签到").handler(wechatService.sendOutSignMessage()).end()//回复智业签到
+                .rule().async(false).eventKey("签到").handler(wechatService.sendInSignMessage()).end()//回复签到
+                .rule().async(false).eventKey(CommonConstant.SIGN).handler(wechatService.sendInSignMessage()).end()//签到菜单事件
                 .rule().async(false).content("投票").handler(wechatService.sendVoteMessage()).end()//回复投票
                 .rule().async(false).eventKey(CommonConstant.VOTE).handler(wechatService.sendVoteMessage()).end()//回复投票
                 .rule().async(false).content("上墙").handler(wechatService.sendCommentMessage()).end()//回复投票
                 .rule().async(false).eventKey(CommonConstant.COMMENT).handler(wechatService.sendCommentMessage()).end()//投票菜单事件
                 .rule().async(false).content("节目单").handler(wechatService.sendCardMessage()).end()//回复投票
                 .rule().async(false).eventKey(CommonConstant.CARD).handler(wechatService.sendCardMessage()).end()//投票菜单事件
-                .rule().async(false).event(WxConsts.EVT_SUBSCRIBE).handler(wechatService.sendSignMessage()).end()//关注事件
+                .rule().async(false).event(WxConsts.EVT_SUBSCRIBE).handler(wechatService.sendInSignMessage()).end()//关注事件
 //                .rule().async(false).msgType(WxConsts.XML_MSG_EVENT).event(WxConsts.EVT_SCAN).handler(wechatService.sendSignMessage()).end()//扫码事件
 //                .rule().async(false).msgType(WxConsts.MASS_MSG_TEXT).handler(reply).end()
                 .rule().async(false).msgType(WxConsts.XML_MSG_EVENT).end()//过滤获取位置事件
