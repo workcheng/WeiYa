@@ -219,13 +219,24 @@ $(document).ready(function () {
     getLottery();
     $('#beginLuck').click(function () {
         var userNum = $("select[name='userNum']").val();
-        if (userNum > 1) {
-            setTimeout(function () {
-                stopLuck();
-                luckCount = 1;
-            }, 2000);
-        }
-        isAuto();
+        var unHitUrl = BaseUrl + "user/unHitUserSize";
+        $.ajax({
+            url: unHitUrl,
+            success: function (data) {
+                if (data.data >= userNum) {
+                    if (userNum > 1) {
+                        setTimeout(function () {
+                            stopLuck();
+                            luckCount = 1;
+                        }, 2000);
+                    }
+                    isAuto();
+                } else {
+                    showInfo("抽奖人数不够！", 0);
+                }
+            }
+        })
+
     });
     $("#stopLuck").click(function () {
         stopLuck();

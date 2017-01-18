@@ -4,6 +4,7 @@
 
 $(document).ready(function () {
     selectChange();
+    signGrid(2);
 });
 var signGrid = function (index) {
     var orderUrl = BaseUrl + "user/allUserList";
@@ -13,8 +14,8 @@ var signGrid = function (index) {
             index: index
         },
         success: function (json) {
-            if (json.data.length <= 16) {
-                $("#winnerContent").css({width: "1000"});
+            if (json.data.users.length <= 16) {
+                $("#signContent").css({width: "1000"});
                 $(".bu").hide();
             }
             $(".number").text(json.data.orderCount);
@@ -27,8 +28,10 @@ var signGrid = function (index) {
                 switch (isOrder) {
                     case 0:
                         order = "否";
+                        break;
                     case 1:
                         order = "是";
+                        break;
                 }
                 var jqTR = $("<tr></tr>");
                 var jqTime = $("<td></td>").text(commonTime).css({width: "20%"});
