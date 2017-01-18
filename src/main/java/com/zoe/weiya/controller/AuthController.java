@@ -33,7 +33,7 @@ public class AuthController {
         try {
             return ZoeObject.success(wxMpService.oauth2getAccessToken(code));
         } catch (WxErrorException e) {
-            log.error(CommonConstant.ERROR+e.toString());
+            log.error("error",e);
             return ZoeObject.failure(e.toString());
         }
     }
@@ -43,7 +43,7 @@ public class AuthController {
         try {
             return ZoeObject.success(wxMpService.oauth2getUserInfo(wxMpService.oauth2getAccessToken(code),lang));
         } catch (WxErrorException e) {
-            log.error(CommonConstant.ERROR+e.toString());
+            log.error("error",e);
             return ZoeObject.failure(e.toString());
         }
     }
@@ -53,7 +53,7 @@ public class AuthController {
         try {
             return wxMpService.oauth2refreshAccessToken(refreshToken);
         } catch (WxErrorException e) {
-            log.error(CommonConstant.ERROR+e.toString());
+            log.error("error",e);
             return ZoeObject.failure(e.toString());
         }
     }

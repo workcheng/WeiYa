@@ -103,7 +103,7 @@ public class MessageController {
             return ZoeObject.success();
         } catch (Exception e) {
             log.error("error", e);
-            return ZoeObject.failure(e);
+            return ZoeObject.failure(e.getMessage());
         }
     }
 

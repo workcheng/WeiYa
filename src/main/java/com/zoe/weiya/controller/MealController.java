@@ -36,7 +36,7 @@ public class MealController {
         } catch (NotStartException e) {
             return ZoeObject.failure(ZoeErrorCode.NOT_START);
         } catch (InternalException e) {
-            return ZoeObject.failure(e);
+            return ZoeObject.failure(e.getMessage());
         }
     }
 }

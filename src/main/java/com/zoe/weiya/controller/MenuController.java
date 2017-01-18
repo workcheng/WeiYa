@@ -29,7 +29,7 @@ public class MenuController {
             return ZoeObject.success(wxMpService.getMenuService().menuGet());
         } catch (WxErrorException e) {
             log.error("error",e);
-            return ZoeObject.failure();
+            return ZoeObject.failure(e);
         }
     }
 
