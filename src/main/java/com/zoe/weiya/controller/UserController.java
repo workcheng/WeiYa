@@ -253,4 +253,20 @@ public class UserController {
             e.printStackTrace();
         }
     }
+
+    @RequestMapping(value = "unHitUserSize",method = RequestMethod.GET)
+    public Object getNotLuckyUserSize(){
+        try {
+            Long userSize = userService.getUserSize();
+            Long luckySetSize = userService.getLuckySetSize();
+            long l = userSize - luckySetSize;
+            return ZoeObject.success(l);
+        } catch (NotStartException e) {
+            log.error("error", e);
+            return ZoeObject.failure(ZoeErrorCode.NOT_START);
+        } catch (InternalException e) {
+            log.error("error", e);
+            return ZoeObject.failure(e.getMessage());
+        }
+    }
 }
