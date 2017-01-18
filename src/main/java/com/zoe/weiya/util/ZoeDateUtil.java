@@ -32,11 +32,11 @@ public class ZoeDateUtil {
 
 
     public static String getTime(ZoeDate now){
-        if( now.getHour() <= ZoeProperties.getNoonHour()){//小于中午的时间-早上
+        if( now.getHour() < ZoeProperties.getNoonHour()){//14-小于中午的时间-早上（0:00-13:59:59）
             return CommonConstant.MORNING;
-        }else if(now.getHour() >= ZoeProperties.getOffWorkHour()){//大于下班的时间-晚上
+        }else if(now.getHour() >= ZoeProperties.getOffWorkHour()){//16-大于下班的时间-晚上(16:00:00-23:59:59)
             return CommonConstant.NIGHT;
-        }else {//处于上面两个时间的中间，也就是-下午
+        }else {//处于上面两个时间的中间，也就是-下午(14:00:00-15:59:59)
             return CommonConstant.NOON;
         }
     }
