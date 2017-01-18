@@ -74,7 +74,7 @@
         <filter-class>com.zoe.weiya.security.WwwAuthFilter</filter-class>
         <init-param>
             <param-name>auth-config</param-name>
-            <param-value>config/auth.properties</param-value>
+            <param-value>config/auth/auth.properties</param-value>
         </init-param>
     </filter>
     <filter-mapping>
