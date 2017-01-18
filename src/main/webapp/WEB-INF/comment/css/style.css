@@ -359,9 +359,9 @@ body {
 
 .error_dialog img {
     position: relative;
-    width: 80px;
+    width: 16%;
     height: 90px;
-    margin: 80px 235px 40px;
+    margin: 80px 42% 40px;
 }
 
 .error_dialog p {
