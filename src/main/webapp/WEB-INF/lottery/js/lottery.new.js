@@ -238,18 +238,7 @@ $(document).ready(function () {
     // 获取待抽奖人员
     lottery.getLotteryUser();
     $('#begin_lottery').click(function () {
-        var userNum = $("select[name='userNum']").val();
-        var unHitUrl = BaseUrl + "user/unHitUserSize";
-        $.ajax({
-            url: unHitUrl,
-            success: function (data) {
-                if (data.data >= userNum) {
-                    lottery.startLottery();
-                } else {
-                    showInfo("抽奖人数不够！", 0);
-                }
-            }
-        })
+        lottery.startLottery();
     });
     $("#stop_lottery").click(function () {
         lottery.stopLottery();
