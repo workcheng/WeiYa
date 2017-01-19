@@ -67,8 +67,9 @@ var getLuckyUser = function (callback) {
 var isAuto = function () {
     setintIndex = setInterval(function () {
         var user_index = getRandom(0, getAllUserInfo.length - 1);
+        var imgCut = BaseUrl + "user/headImgUrl?url=";
         $("#userName").html(getAllUserInfo[user_index].name);
-        $("#userImg").attr("src", getAllUserInfo[user_index].headImgUrl);
+        $("#userImg").attr("src", imgCut + getAllUserInfo[user_index].headImgUrl);
     }, 100);
     if (getAllUserInfo.length > 0) {
         var userNum = $("select[name='userNum']").val();
