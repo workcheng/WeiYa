@@ -20,15 +20,11 @@ http://www.springframework.org/schema/tx/spring-tx.xsd">
 
     <bean class="com.zoe.weiya.mq.MyMqGatway"/>
 
-    <!-- 加载数据库连接信息db.properties -->
-    <!-- <context:property-placeholder location="classpath:/config/db/db.properties" /> -->
     <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
         <property name="locations">
             <list>
-                <value>classpath:/config/db/db.properties</value>
                 <value>classpath:/config/wechat/wechat.properties</value>
                 <value>classpath:/config/redis/redis.properties</value>
-                <value>classpath:/config/date/date.properties</value>
             </list>
         </property>
     </bean>
