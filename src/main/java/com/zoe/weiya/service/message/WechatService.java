@@ -82,18 +82,19 @@ public class WechatService {
         WxMpMessageHandler test = new WxMpMessageHandler() {
             public WxMpXmlOutMessage handle(WxMpXmlMessage wxMessage, Map<String, Object> context,
                                             WxMpService wxMpService, WxSessionManager sessionManager) throws WxErrorException {
-                WxMpKefuMessage.WxArticle article1 = new WxMpKefuMessage.WxArticle();
                 String url = MessageFormat.format(ZoeProperties.get("config/static/static.properties", "vote.url"),wxMessage.getFromUser());
-                article1.setUrl(url);
-                article1.setPicUrl("https://mmbiz.qlogo.cn/mmbiz_jpg/rFTQWsGze4EdewBW92AAD6Ap8ydAQrgBnndVMdAIXB4CmGiaGiassibiaKhWID6icmdMg3kvWSejFd5omyUdjcvb0GA/0?wx_fmt=jpeg");
-                article1.setDescription("来投票吧");
-                article1.setTitle("投票");
+                WxMpXmlOutNewsMessage.Item item = new WxMpXmlOutNewsMessage.Item();
+                item.setDescription("来投票吧");
+                item.setPicUrl("https://mmbiz.qlogo.cn/mmbiz_jpg/rFTQWsGze4EdewBW92AAD6Ap8ydAQrgBnndVMdAIXB4CmGiaGiassibiaKhWID6icmdMg3kvWSejFd5omyUdjcvb0GA/0?wx_fmt=jpeg");
+                item.setTitle("投票");
+                item.setUrl(url);
 
-                WxMpKefuMessage message = WxMpKefuMessage.NEWS()
-                        .toUser(wxMessage.getFromUser()).addArticle(article1)
+                WxMpXmlOutNewsMessage m = WxMpXmlOutMessage.NEWS()
+                        .fromUser(wxMessage.getToUser())
+                        .toUser(wxMessage.getFromUser())
+                        .addArticle(item)
                         .build();
-                wxMpService.getKefuService().sendKefuMessage(message);
-                return null;
+                return m;
             }
         };
         return test;

@@ -115,7 +115,7 @@ var lottery = {
                 }
                 index++;
 
-            }, 3000);
+            }, 2000);
         }
     },
     lotter: function (luckyLevel) {
@@ -189,7 +189,7 @@ var lottery = {
                 $(".animate-bg").remove();
             });
             $("#bgsound").remove();
-        }, 5000);
+        }, 3000);
         $("#bgsound").remove();
     },
     sengMsg: function (openId, userName, luckyLevel) {
@@ -238,7 +238,19 @@ $(document).ready(function () {
     // 获取待抽奖人员
     lottery.getLotteryUser();
     $('#begin_lottery').click(function () {
-        lottery.startLottery();
+        var userNum = $("select[name='userNum']").val();
+        var unHitUrl = BaseUrl + "user/unHitUserSize";
+        $.ajax({
+            url: unHitUrl,
+            success: function (data) {
+                if (data.data >= userNum) {
+                    lottery.startLottery();
+                } else {
+                    showInfo("抽奖人数不够！", 0);
+                }
+            }
+        })
+
     });
     $("#stop_lottery").click(function () {
         lottery.stopLottery();

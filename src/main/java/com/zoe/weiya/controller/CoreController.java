@@ -66,7 +66,7 @@ public class CoreController {
         wxMpMessageRouter
                 .rule().async(false).content("andy").handler(test).end()
                 .rule().async(false).content("智业尾牙签到").handler(wechatService.sendOutSignMessage()).end()//回复智业签到
-                .rule().async(false).eventKey("签到").handler(wechatService.sendInSignMessage()).end()//回复签到
+                .rule().async(false).content("签到").handler(wechatService.sendInSignMessage()).end()//回复签到
                 .rule().async(false).eventKey(CommonConstant.SIGN).handler(wechatService.sendInSignMessage()).end()//签到菜单事件
                 .rule().async(false).content("投票").handler(wechatService.sendVoteMessage()).end()//回复投票
                 .rule().async(false).eventKey(CommonConstant.VOTE).handler(wechatService.sendVoteMessage()).end()//回复投票
