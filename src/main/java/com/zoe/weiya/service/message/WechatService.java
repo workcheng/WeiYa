@@ -85,8 +85,8 @@ public class WechatService {
                 WxMpKefuMessage.WxArticle article1 = new WxMpKefuMessage.WxArticle();
                 String url = MessageFormat.format(ZoeProperties.get("config/static/static.properties", "vote.url"),wxMessage.getFromUser());
                 article1.setUrl(url);
-                article1.setPicUrl("https://mmbiz.qlogo.cn/mmbiz/bVoOkrvEGHqgetjIc7VcFoCWgLCNaTOnZaXvR9J04EgxMfbm3WM9OreMfTcMcKN8UFkWtDwUbiatU7Qtxsutglg/0?wx_fmt=png");
-                article1.setDescription("为你喜爱的节目投票");
+                article1.setPicUrl("https://mmbiz.qlogo.cn/mmbiz_jpg/rFTQWsGze4EdewBW92AAD6Ap8ydAQrgBnndVMdAIXB4CmGiaGiassibiaKhWID6icmdMg3kvWSejFd5omyUdjcvb0GA/0?wx_fmt=jpeg");
+                article1.setDescription("来投票吧");
                 article1.setTitle("投票");
 
                 WxMpKefuMessage message = WxMpKefuMessage.NEWS()
