@@ -20,12 +20,15 @@ var lottery = {
             async: true,
             url: getUserList,
             success: function (data) {
-                _this.allLotteryUser = data.data;
+                if (data.status == "1000") {
+                    _this.allLotteryUser = data.data;
+                } else {
+                    showInfo("活动尚未开始！", 0);
+                }
             }
         })
     },
     getCnt: function () {
-        console.log("获取总数");
         var _this = this;
         //出现正在获取最新签到成员，请稍候...todo：这里有问题，不能获取全部的签到用户，不然会卡
         var getUserList = BaseUrl + "user/userListCount";
@@ -72,7 +75,6 @@ var lottery = {
                 }, _this.changeUserDelay);
             }
             else {
-                console.log("暂时没人签到哦~");
                 showInfo("暂时没人签到哦~", 0);
                 _this.showBeginBtn();
             }
@@ -88,12 +90,10 @@ var lottery = {
     showStopBtn: function () {
         $("#begin_lottery").hide();
         $("#stop_lottery").show();
-        console.log("显示结束抽奖按钮");
     },
     showBeginBtn: function () {
         $("#begin_lottery").show();
         $("#stop_lottery").hide();
-        console.log("显示开始抽奖按钮");
     },
     autoHanle: 0,
     stopLottery: function () {
@@ -149,9 +149,7 @@ var lottery = {
     },
     startLottery: function () {
         this.isLotter = true;
-        console.log("开始抽奖");
         this.showStopBtn();
-        console.log("开始变");
         this.exchangeUser();//开始变
     },
     showLuckyUser: function (idx, imgUI, userName, luckyLevel) {
@@ -159,10 +157,10 @@ var lottery = {
         var listIdx = $("<div></div>").addClass("list-idx").text(idx);
         var listUser = $("<div></div>").addClass("list-user");
         var jqImg = $("<img>").attr("src", imgUI);
-        var jqName = $("<p></p>").addClass("text-overflow").text(userName);
-        var listPrize = $("<div></div>").addClass("list-prize text-overflow");
+        //var jqName = $("<p></p>").addClass("text-overflow").text(userName);
+        var listPrize = $("<div></div>").addClass("list-prize text-overflow").text(userName);
         var jqPrize = $("<div></div>").addClass("list-prize-name text-overflow").text(luckyLevel);
-        listUser.append(jqImg).append(jqName);
+        listUser.append(jqImg);//.append(jqName);
         listContent.append(listIdx).append(listUser).append(listPrize).append(jqPrize);
         $("#luckyUser").find("ul").prepend(listContent);
     },
