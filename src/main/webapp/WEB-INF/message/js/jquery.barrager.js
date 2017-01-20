@@ -31,6 +31,9 @@
                         if (_this.msgs[i].L == null || typeof(_this.msgs[i].L) == "undefined") {
                             _this.msgs[i].L = _this.width;
                             _this.msgs[i].T = parseInt(Math.random() * 700);
+                            if(_this.msgs[i].T<40){
+                                _this.msgs[i].T=_this.msgs[i].T+100;
+                            }
                             _this.msgs[i].S = parseInt(Math.random() * (10 - 4) + 4);
                             _this.msgs[i].C = _this.colorArr[Math.floor(Math.random() * _this.colorArr.length)];
                         } else {
@@ -50,7 +53,7 @@
                     }
 
                 }
-            }, 20);
+            }, 50);
         };
         this.putMsg = function (datas) {
             for (var j = 0; j < datas.length; j++) {

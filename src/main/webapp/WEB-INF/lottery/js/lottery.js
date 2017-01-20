@@ -131,10 +131,10 @@ var showLuckyUser = function (idx, imgUI, userName, luckyLevel) {
     var listIdx = $("<div></div>").addClass("list-idx").text(idx);
     var listUser = $("<div></div>").addClass("list-user");
     var jqImg = $("<img>").attr("src", imgUI);
-    var jqName = $("<p></p>").addClass("text-overflow").text(userName);
-    var listPrize = $("<div></div>").addClass("list-prize text-overflow");
+    //var jqName = $("<p></p>").addClass("text-overflow").text(userName);
+    var listPrize = $("<div></div>").addClass("list-prize text-overflow").text(userName);
     var jqPrize = $("<div></div>").addClass("list-prize-name text-overflow").text(luckyLevel);
-    listUser.append(jqImg).append(jqName);
+    listUser.append(jqImg);//.append(jqName);
     listContent.append(listIdx).append(listUser).append(listPrize).append(jqPrize);
     $("#luckyUser").find("ul").prepend(listContent);
 
