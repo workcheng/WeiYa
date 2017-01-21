@@ -23,9 +23,9 @@ public class AppTest  extends AbstractTestCase{
     @org.junit.Test
     public void test() throws Exception{
         WxMpInMemoryConfigStorage config = new WxMpInMemoryConfigStorage();
-        config.setAppId("wx3b2f04cd718a6f57"); // 设置微信公众号的appid
+        config.setAppId("wx5149e1919bfc8aee"); // 设置微信公众号的appid
 //        config.setAppId("wx5149e1919bfc8aee"); // 设置微信公众号的appid
-        config.setSecret("81ac3fa27b21c86d730b8280586907c5");
+        config.setSecret("d0924246c7959df31ba52f90d50f05e0");
         config.setToken("andy"); // 设置微信公众号的token
         config.setAesKey("..."); // 设置微信公众号的EncodingAESKey
 
@@ -47,6 +47,7 @@ public class AppTest  extends AbstractTestCase{
                     if(null != wxMpUser){
                         User u = new User();
                         u.setName(wxMpUser.getNickname());
+                        u.setDepName("区域产品中心");
                         u.setOpenId(wxMpUser.getOpenId());
                         u.setHeadImgUrl(wxMpUser.getHeadImgUrl());
                         userService.save(u);
