@@ -146,7 +146,6 @@ public class TimeBasedAccessInterceptor extends HandlerInterceptorAdapter {
         String url = request.getRequestURL().toString();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd kk:mm:ss");
         log.info("url=" + url);
-        int failureCount = 0;
         int successCount = 0;
         StringBuilder msgList = new StringBuilder();
         String msg = "";
@@ -154,35 +153,7 @@ public class TimeBasedAccessInterceptor extends HandlerInterceptorAdapter {
             Date date = new Date();
             String am1 = msgTime(date, sdf.parse(oneAmOpeningTime), sdf.parse(oneAmClosingTime));
             if (!am1.equals("true")) {
-                failureCount++;
                 msg = am1;
-                msgList.append(msg);
-                msgList.append("<br>");
-            } else {
-                successCount++;
-            }
-            String pm1 = msgTime(date, sdf.parse(onePmOpeningTime), sdf.parse(onePmClosingTime));
-            if (!pm1.equals("true")) {
-                failureCount++;
-                msg = pm1;
-                msgList.append(msg);
-                msgList.append("<br>");
-            } else {
-                successCount++;
-            }
-            String am2 = msgTime(date, sdf.parse(twoAmOpeningTime), sdf.parse(twoAmClosingTime));
-            if (!am2.equals("true")) {
-                failureCount++;
-                msg = am2;
-                msgList.append(msg);
-                msgList.append("<br>");
-            } else {
-                successCount++;
-            }
-            String pm2 = msgTime(date, sdf.parse(twoPmOpeningTime), sdf.parse(twoPmClosingTime));
-            if (!pm2.equals("true")) {
-                failureCount++;
-                msg = pm2;
                 msgList.append(msg);
                 msgList.append("<br>");
             } else {
@@ -190,14 +161,13 @@ public class TimeBasedAccessInterceptor extends HandlerInterceptorAdapter {
             }
             String last = msgTime(date, sdf.parse(finalOpeningTime), sdf.parse(finalClosingTime));
             if (!last.equals("true")) {
-                failureCount++;
                 msg = last;
                 msgList.append(msg);
                 msgList.append("<br>");
             } else {
                 successCount++;
             }
-            if (successCount >= 1 && failureCount < 5){
+            if (successCount >= 1){
                 return true;
             }
             request.setAttribute("msg", msgList);

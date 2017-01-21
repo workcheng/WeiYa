@@ -257,4 +257,16 @@ $(document).ready(function () {
     setInterval(function () {
         lottery.getCnt();
     }, 1000 * 5)
+
+    var music = document.getElementById("music");
+    music.pause();
+    $("#audio_btn").click(function(){
+        if(music.paused){
+            music.play();
+            $("#music_btn").attr("src","images/pause.gif");
+        }else{
+            music.pause();
+            $("#music_btn").attr("src","images/play.gif");
+        }
+    });
 });
