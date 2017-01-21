@@ -139,7 +139,7 @@ var lottery = {
                     lottery.userCount++;
                     lottery.showLuckAnimate(imgUrl, luckyLevel, userName);//显示动画
                     lottery.showLuckyUser(lottery.userCount, imgUrl, userName, luckyLevel);//左侧列表显示中奖用户
-                    //lottery.sengMsg(openId, userName, luckyLevel);//发送信息给中奖用户
+                    lottery.sengMsg(openId, userName, luckyLevel);//发送信息给中奖用户
                 }
                 else {
                     lottery.showLuckAnimate("images/default.png", "", "小伙伴们都已经中奖啦！", true);
