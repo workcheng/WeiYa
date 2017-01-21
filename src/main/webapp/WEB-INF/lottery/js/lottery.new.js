@@ -36,7 +36,11 @@ var lottery = {
             async: true,
             url: getUserList,
             success: function (data) {
-                $("#userCount").text(data.data);
+                if (data.status == "1000") {
+                    $("#userCount").text(data.data);
+                } else {
+                    showInfo("活动尚未开始！", 0);
+                }
             }
         })
     },
@@ -257,16 +261,15 @@ $(document).ready(function () {
     setInterval(function () {
         lottery.getCnt();
     }, 1000 * 5)
-
     var music = document.getElementById("music");
     music.pause();
-    $("#audio_btn").click(function(){
-        if(music.paused){
+    $("#audio_btn").click(function () {
+        if (music.paused) {
             music.play();
-            $("#music_btn").attr("src","images/pause.gif");
-        }else{
+            $("#music_btn").attr("src", "images/pause.gif");
+        } else {
             music.pause();
-            $("#music_btn").attr("src","images/play.gif");
+            $("#music_btn").attr("src", "images/play.gif");
         }
     });
 });
