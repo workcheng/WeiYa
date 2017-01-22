@@ -20,7 +20,7 @@
         this.colorArr = [{"font": "#F0FFF0", "bg": "#000099"}, {"font": "#F0FFF0", "bg": "#000000"},
             {"font": "#EE0000", "bg": "#F0FFF0"}, {"font": "#68228B", "bg": "#00CD00"},
             {"font": "#0000FF", "bg": "#CD3700"}, {"font": "#3A5FCD", "bg": "#CDCD00"},
-            {"font": "#68228B", "bg": "#000000"}];
+            {"font": "#000000", "bg": "#FFFFFF"}];
         this.interval = "";
         this.draw = function () {
             if (this.interval != "")return;
@@ -80,7 +80,7 @@
         };
         this.drawRoundedRect = function (strokeStyle, fillStyle, cornerX, cornerY, width, height, cornerRadius) {
             this.ctx.beginPath();
-            this.ctx.globalAlpha = '0.9';
+            this.ctx.globalAlpha = '1';
             this.roundedRect(cornerX, cornerY, width, height, cornerRadius);
             this.ctx.strokeStyle = strokeStyle;
             this.ctx.fillStyle = fillStyle;
