@@ -17,7 +17,10 @@
         this.canvas.height = this.height;
         this.font = "30px 黑体";
         this.ctx.font = this.font;
-        this.colorArr = [{"font": "#ff0000", "bg": "#ffff00"}, {"font": "#ffff00", "bg": "#663399"}, {"font": "#de009d", "bg": "#ffa4cb"}, {"font": "#b22e0b", "bg": "#ff9900"}, {"font": "#010101", "bg": "#66cc00"}, {"font": "#010101", "bg": "#0099cc"}];
+        this.colorArr = [{"font": "#F0FFF0", "bg": "#000099"}, {"font": "#F0FFF0", "bg": "#000000"},
+            {"font": "#EE0000", "bg": "#F0FFF0"}, {"font": "#68228B", "bg": "#00CD00"},
+            {"font": "#0000FF", "bg": "#CD3700"}, {"font": "#3A5FCD", "bg": "#CDCD00"},
+            {"font": "#68228B", "bg": "#000000"}];
         this.interval = "";
         this.draw = function () {
             if (this.interval != "")return;
@@ -31,8 +34,8 @@
                         if (_this.msgs[i].L == null || typeof(_this.msgs[i].L) == "undefined") {
                             _this.msgs[i].L = _this.width;
                             _this.msgs[i].T = parseInt(Math.random() * 700);
-                            if(_this.msgs[i].T<40){
-                                _this.msgs[i].T=_this.msgs[i].T+100;
+                            if (_this.msgs[i].T < 40) {
+                                _this.msgs[i].T = _this.msgs[i].T + 100;
                             }
                             _this.msgs[i].S = parseInt(Math.random() * (10 - 4) + 4);
                             _this.msgs[i].C = _this.colorArr[Math.floor(Math.random() * _this.colorArr.length)];
