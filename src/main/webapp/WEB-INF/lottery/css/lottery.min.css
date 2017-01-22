@@ -3290,76 +3290,6 @@ div.pairRight {
     font-size: 22px;
 }
 
-.container .award-list .award-list-wrapper .list-container .list-content {
-    padding: 3px 0;
-    height: 65px;
-}
-
-.clearfix {
-    zoom: 1;
-}
-
-.container .award-list .award-list-wrapper .list-container .list-content .list-idx {
-    float: left;
-    margin-top: 11px;
-    height: 22px;
-    width: 22px;
-    line-height: 22px;
-    text-align: center;
-    background-color: #e8e3e2;
-    -moz-border-radius: 50%;
-    -webkit-border-radius: 50%;
-    border-radius: 50%;
-}
-
-.container .award-list .award-list-wrapper .list-container .list-content .list-user {
-    float: left;
-    margin: 0 10px;
-}
-
-.container .award-list .award-list-wrapper .list-container .list-content .list-user img {
-    display: block;
-    margin: 0 auto;
-    height: 33px;
-    width: 33px;
-    border: 2px solid #e8e3e2;
-    -moz-border-radius: 50%;
-    -webkit-border-radius: 50%;
-    border-radius: 50%;
-}
-
-.container .award-list .award-list-wrapper .list-container .list-content .list-user p {
-    height: 22px;
-    width: 72px;
-    text-align: center;
-    font-size: 14px;
-}
-
-.container .award-list .award-list-wrapper .list-container .list-content .list-prize {
-    float: left;
-    margin: 18px 10px 0 10px;
-    height: 33px;
-    width: 50px;
-    text-align: center;
-    font-size: 18px;
-}
-
-.container .award-list .award-list-wrapper .list-container .list-content .list-prize-name {
-    float: right;
-    margin-top: 18px;
-    width: 135px;
-    height: 33px;
-    text-align: center;
-    font-size: 18px;
-    color: #7e2137;
-}
-
-.text-overflow {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
 .container .top .right .qrcode {
     width: 65px;
     height: 65px;
@@ -6598,7 +6528,7 @@ div.pairRight {
     position: absolute;
     top: 0;
     left: 0;
-    font-size: 28px;
+    font-size: 36px;
     width: 200px;
     height: 45px;
     color: #fd0a49;
@@ -6657,6 +6587,7 @@ div.pairRight {
     overflow-x: hidden;
     overflow-y: auto;
     margin-top: 5px;
+    width: 350px;
     height: 360px;
 }
 
@@ -6677,7 +6608,7 @@ div.pairRight {
 
 .container .award-list .award-list-wrapper .list-container .list-content .list-idx {
     float: left;
-    margin-top: 11px;
+    margin-top: 24px;
     height: 22px;
     width: 22px;
     line-height: 22px;
@@ -6690,14 +6621,14 @@ div.pairRight {
 
 .container .award-list .award-list-wrapper .list-container .list-content .list-user {
     float: left;
-    margin: 0 10px;
+    margin: 10px 10px;
 }
 
 .container .award-list .award-list-wrapper .list-container .list-content .list-user img {
     display: block;
     margin: 0 auto;
-    height: 33px;
-    width: 33px;
+    height: 40px;
+    width: 40px;
     border: 2px solid #e8e3e2;
     -moz-border-radius: 50%;
     -webkit-border-radius: 50%;
@@ -6713,20 +6644,23 @@ div.pairRight {
 
 .container .award-list .award-list-wrapper .list-container .list-content .list-prize {
     float: left;
-    margin: 18px 10px 0 10px;
-    height: 33px;
-    width: 50px;
+    margin-top: 5px;
+    height: 50px;
+    width: 145px;
     text-align: center;
-    font-size: 18px;
+    font-size: 36px;
+    font-family: 微软雅黑, 宋体, Arial, sans-serif;
+    color: #7e2137;
 }
 
 .container .award-list .award-list-wrapper .list-container .list-content .list-prize-name {
     float: right;
-    margin-top: 18px;
-    width: 135px;
-    height: 33px;
+    margin-top: 5px;
+    width: 110px;
+    height: 50px;
     text-align: center;
-    font-size: 18px;
+    font-size: 36px;
+    font-family: 微软雅黑, 宋体, Arial, sans-serif;
     color: #7e2137;
 }
 
