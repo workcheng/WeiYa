@@ -125,5 +125,6 @@
     <mvc:resources mapping="/admin/**" location="/WEB-INF/admin/"/>
     <mvc:resources mapping="/main/**" location="/WEB-INF/main/"/>
     <mvc:resources mapping="/common/**" location="/WEB-INF/common/"/>
+    <mvc:resources mapping="/favicon.ico" location="/WEB-INF/common/images/"/>
 
 </beans>
