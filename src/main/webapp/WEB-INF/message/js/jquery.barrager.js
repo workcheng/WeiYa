@@ -17,10 +17,14 @@
         this.canvas.height = this.height;
         this.font = "30px 黑体";
         this.ctx.font = this.font;
-        this.colorArr = [{"font": "#F0FFF0", "bg": "#000099"}, {"font": "#F0FFF0", "bg": "#000000"},
+        this.colorArr = [{"font": "#F0FFF0", "bg": "#000099"}, {"font": "#F0FFF0", "bg": "#990066"},
             {"font": "#EE0000", "bg": "#F0FFF0"}, {"font": "#68228B", "bg": "#00CD00"},
             {"font": "#0000FF", "bg": "#CD3700"}, {"font": "#3A5FCD", "bg": "#CDCD00"},
-            {"font": "#000000", "bg": "#FFFFFF"}];
+            {"font": "#000000", "bg": "#FFFFFF"},
+            {"font": "#FFFFFF", "bg": "#CC3333"},
+            {"font": "#FFFFFF", "bg": "#FF6600"},
+            {"font": "#FFFFFF", "bg": "#CC0033"}
+        ];
         this.interval = "";
         this.draw = function () {
             if (this.interval != "")return;
@@ -56,7 +60,7 @@
                     }
 
                 }
-            }, 50);
+            }, 35);
         };
         this.putMsg = function (datas) {
             for (var j = 0; j < datas.length; j++) {
