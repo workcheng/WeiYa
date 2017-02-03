@@ -22,12 +22,22 @@ public class AuthController {
     @Autowired
     protected WxMpServiceImpl wxMpService;
 
-
+    /**
+     * 获取授权登陆的URL
+     * @param url
+     * @param state
+     * @return
+     */
     @RequestMapping(value="url",method = RequestMethod.GET)
     public Object getAuthUrl(String url,String state){
         return ZoeObject.success(wxMpService.oauth2buildAuthorizationUrl(url, CommonConstant.AUTH_USERINFO,state));
     }
 
+    /**
+     * 根据code获取access_token
+     * @param code
+     * @return
+     */
     @RequestMapping("access_token")
     public Object getAccessToken(@RequestParam(value = "code") String code){
         try {
@@ -38,6 +48,12 @@ public class AuthController {
         }
     }
 
+    /**
+     * 根据code获取用户信息
+     * @param code
+     * @param lang
+     * @return
+     */
     @RequestMapping("user_info")
     public Object getUserInfo(@RequestParam(value = "code") String code, String lang){
         try {
@@ -48,6 +64,11 @@ public class AuthController {
         }
     }
 
+    /**
+     * 刷新access_token
+     * @param refreshToken
+     * @return
+     */
     @RequestMapping("refresh_token")
     public Object refreshToken(@RequestParam(value = "refreshToken") String refreshToken){
         try {

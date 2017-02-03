@@ -24,6 +24,10 @@ public class MealController {
     @Autowired
     UserService userService;
 
+    /**
+     * 获取订餐信息
+     * @return
+     */
     @RequestMapping(value = "order", method = RequestMethod.GET)
     public Object getOrder(){
         try {

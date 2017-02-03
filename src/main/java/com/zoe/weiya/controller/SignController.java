@@ -5,7 +5,6 @@ import com.zoe.weiya.comm.constant.ZoeErrorCode;
 import com.zoe.weiya.comm.logger.ZoeLogger;
 import com.zoe.weiya.comm.logger.ZoeLoggerFactory;
 import com.zoe.weiya.comm.response.ZoeObject;
-import com.zoe.weiya.model.Area;
 import me.chanjar.weixin.common.exception.WxErrorException;
 import me.chanjar.weixin.mp.api.impl.WxMpServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,17 +24,11 @@ public class SignController {
     @Autowired
     protected WxMpServiceImpl wxMpService;
 
-    @Deprecated
-    @RequestMapping(value = "if_over_area", method = RequestMethod.POST)
-    public Object ifOverArea(Area area) {
-        //TODO 判断位置范围，返回是否在这个范围当中
-        if (true) {
-            return ZoeObject.success(ZoeErrorCode.SUCCESS);
-        } else {
-            return ZoeObject.failure(ZoeErrorCode.ERROR_WECHAT);
-        }
-    }
-
+    /**
+     * 构建js-sdk所需配置
+     * @param url
+     * @return
+     */
     @RequestMapping(value = "url", method = RequestMethod.GET)
     public Object getSign(@RequestParam String url) {
         try {
@@ -46,6 +39,11 @@ public class SignController {
         }
     }
 
+    /**
+     * 根据openId获取用户信息
+     * @param id
+     * @return
+     */
     @RequestMapping(value = "getUserInfo", method = RequestMethod.GET)
     public Object getUserInfo(@RequestParam String id) {
         try {

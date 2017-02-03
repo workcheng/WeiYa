@@ -23,6 +23,10 @@ public class MenuController {
     @Autowired
     protected WxMpServiceImpl wxMpService;
 
+    /**
+     * 获取自定义菜单
+     * @return
+     */
     @RequestMapping(value = "", method = RequestMethod.GET)
     public Object getMenu(){
         try {
@@ -33,6 +37,11 @@ public class MenuController {
         }
     }
 
+    /**
+     * 创建自定义菜单
+     * @param wxMenu
+     * @return
+     */
     @RequestMapping(value = "", method = RequestMethod.POST)
     public Object createMenu(@RequestBody WxMenu wxMenu){
         try {
@@ -44,6 +53,10 @@ public class MenuController {
         }
     }
 
+    /**
+     * 从配置文件中创建自定义菜单
+     * @return
+     */
     @RequestMapping(value = "default", method = RequestMethod.POST)
     public Object createMenu(){
         try {
@@ -59,6 +72,10 @@ public class MenuController {
         }
     }
 
+    /**
+     * 删除自定义菜单
+     * @return
+     */
     @RequestMapping(value = "", method = RequestMethod.DELETE)
     public Object deleteMenu(){
         try {

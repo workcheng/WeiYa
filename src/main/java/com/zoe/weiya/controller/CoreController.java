@@ -30,6 +30,7 @@ import java.io.IOException;
 import java.util.Map;
 
 /**
+ * 接入微信后端模块
  * Created by andy on 2016/12/15.
  */
 @RequestMapping("core")

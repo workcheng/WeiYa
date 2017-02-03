@@ -54,6 +54,11 @@ public class MessageController {
     @Autowired
     protected SensitivewordFilter sensitiveService;
 
+    /**
+     * 公众号发送消息给用户，前提是24小时之内有交互
+     * @param users
+     * @return
+     */
     @RequestMapping(value = "sendMsg", method = RequestMethod.POST)
     public Object sendMessage(@RequestBody @Valid List<LuckyUser> users) {
         try {
@@ -74,6 +79,11 @@ public class MessageController {
         return defaultHeadImage;
     }
 
+    /**
+     * 头像圆角化
+     * @param headUrl
+     * @return
+     */
     private String getRadiusHeadImgUrl(String headUrl) {
         String defaultHeadImage = "http://" + request.getServerName() //服务器地址
                 + ":"
@@ -126,6 +136,9 @@ public class MessageController {
 //        amqpTemplate.send(message1);
     }
 
+    /**
+     * rabbitMQ队列测试
+     */
     @RequestMapping("danmu-x")
     public void sendDanmuMessagex() {
         Program program = new Program();
@@ -138,6 +151,11 @@ public class MessageController {
         }
     }
 
+    /**
+     * 把弹幕消息存储到数据库中
+     * @param zoeMessage
+     * @return
+     */
     @RequestMapping(value = "danmuy", method = RequestMethod.POST)
     public Object sendDanmu(@RequestBody @Validated ZoeMessage zoeMessage) {
         int count = 300;
@@ -163,6 +181,10 @@ public class MessageController {
         }
     }
 
+    /**
+     * 从数据库中获取最开始的一条弹幕消息
+     * @return
+     */
     @RequestMapping(value = "danmuy", method = RequestMethod.GET)
     public Object getDanmu() {
         try {

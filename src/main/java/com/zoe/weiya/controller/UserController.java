@@ -132,6 +132,7 @@ public class UserController {
         }
     }
 
+    @Deprecated
     @RequestMapping(value = "submitLottery", method = RequestMethod.POST)
     public Object confirmLucky(@RequestBody List<String> openIds) {
         List<OnlyUser> onlyUsers = new ArrayList<>();
@@ -147,6 +148,10 @@ public class UserController {
         return ZoeObject.success(ZoeErrorCode.SUCCESS);
     }
 
+    /**
+     * 抽奖，返回一个中奖者信息
+     * @return
+     */
     @RequestMapping(value = "lotterySelect", method = RequestMethod.GET)
     public Object LotterySelect() {
         try {
@@ -163,6 +168,11 @@ public class UserController {
         }
     }
 
+    /**
+     * 抽奖，返回多个中奖者信息
+     * @param count
+     * @return
+     */
     @RequestMapping(value = "lotteryUserList", method = RequestMethod.GET)
     public Object LotteryUser(@RequestParam Integer count) {
         try {
@@ -204,6 +214,10 @@ public class UserController {
         }
     }
 
+    /**
+     * 返回签到者数量
+     * @return
+     */
     @RequestMapping(value = "userListCount", method = RequestMethod.GET)
     public Object getUserListCount() {
         try {
@@ -238,9 +252,14 @@ public class UserController {
         }
     }
 
+    /**
+     * 返回头像image
+     * @param url
+     * @param response
+     */
     @RequestMapping(value = "headImgUrl", method = RequestMethod.GET)
     public void getHeadImgUrl(@RequestParam String url, HttpServletResponse response){
-        System.setProperty("java.awt.headless", "true");
+        System.setProperty("java.awt.headless", "true");//
         if(StringUtils.isBlank(url)){
             return;
         }
@@ -254,6 +273,10 @@ public class UserController {
         }
     }
 
+    /**
+     * 获取未中奖者的数量
+     * @return
+     */
     @RequestMapping(value = "unHitUserSize",method = RequestMethod.GET)
     public Object getNotLuckyUserSize(){
         try {
