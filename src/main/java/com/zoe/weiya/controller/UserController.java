@@ -259,7 +259,8 @@ public class UserController {
      */
     @RequestMapping(value = "headImgUrl", method = RequestMethod.GET)
     public void getHeadImgUrl(@RequestParam String url, HttpServletResponse response){
-        System.setProperty("java.awt.headless", "true");//
+        //fix bug：http://stackoverflow.com/questions/21131855/could-not-initialize-class-sun-awt-x11graphicsenvironment-on-solaris
+        System.setProperty("java.awt.headless", "true");
         if(StringUtils.isBlank(url)){
             return;
         }
