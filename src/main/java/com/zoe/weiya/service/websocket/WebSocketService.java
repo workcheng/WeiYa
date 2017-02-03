@@ -34,7 +34,6 @@ public class WebSocketService {
         broadcast(JacksonJsonUtil.beanToJson(zoeMessage));
     }
 
-    //TODO fix bug：建立多次websocket連接，衹能第一次鏈接能接受到信息
     public void broadcast(String ZoeMessageJsonString) throws Exception {//将消息传入websocket通道中
         ServletContext application = null;
         HttpServletRequest request;

@@ -14,6 +14,7 @@
     - resources\config\wechat\wechat.properties 微信公众号配置
     - resources\config\date\date.properties 签到限时配置
     - resources\config\static\static.properties url时间等配置
+    - resources\config\sensitive\sensitiveWord.txt 和谐词库配置
     - webapp\WEB-INF\config\config.js 前端url配置
 
 ===========

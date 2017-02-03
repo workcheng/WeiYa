@@ -27,6 +27,11 @@ public class VoteController {
     @Autowired
     private VoteService voteService;
 
+    /**
+     * 保存投票者信息
+     * @param vote
+     * @return
+     */
     @RequestMapping(value = "", method = RequestMethod.POST)
     public Object vote(@RequestBody @Valid Vote vote){
         try {
