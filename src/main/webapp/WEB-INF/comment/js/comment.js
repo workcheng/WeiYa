@@ -110,7 +110,7 @@ var saveMsgClick = function (headImgUrl) {
             success: function (data) {
                 if (data.status == "1000") {
                     showInfo("上墙成功!");
-                    showMsgLists(localStorage.msgTime, localStorage.msgInfo);
+                    //showMsgLists(localStorage.msgTime, localStorage.msgInfo);
                     $(".wordsedit1 input").val("");
                 } else {
                     var msg = data.data;
