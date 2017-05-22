@@ -1,7 +1,3 @@
-/**
- * @Copyright 0gmi
- * @Author Bane.Shi 2015年7月3日-下午5:29:41
- */
 package com.zoe.weiya.comm.redis;
 
 import org.springframework.dao.DataAccessException;
