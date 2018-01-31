@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="initial-scale=1, user-scalable=0, minimal-ui">
+    <link id="defaultCss" rel="stylesheet" href="css/lottery.min.css">
+    <link rel="stylesheet" href="css/switch-buttons.min.css">
+    <script type="text/javascript" src="../common/js/jquery-1.9.1.min.js"></script>
+    <script type="text/javascript" src="../lottery/js/jquery.fullbg.min.js"></script>
+    <script type="text/javascript" src="../message/js/jquery.barrager.min.js"></script>
+    <script type="text/javascript" src="../lottery/js/common.min.js"></script>
+    <script type="text/javascript" src="../config/config.js"></script>
+    <script type="text/javascript" src="../lottery/js/lottery.min.js"></script>
+
+    <title>年会抽奖系统</title>
+
+    <style>
+        .fullBg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            overflow: hidden;
+        }
+
+    </style>
+    <script type="application/javascript">
+        $(document).ready(function () {
+            var ws = null;
+            var isStart = false;
+            $(".text-switch,.toggle-btn").click(function () {
+                var state = $(".text-switch").attr("data-no");
+                if (state == "no") {
+                    $(".text-switch").attr("data-no", "yes");
+                    $("#content").html("");
+                    startServer();
+                    $("canvas").css({"z-index": "99"});
+
+                } else {
+                    $("canvas").barrager("clear");
+                    $("canvas").css({"z-index": ""});
+                    $(".text-switch").attr("data-no", "no");
+                    $("#content").html("");
+                    if (null != ws) {
+                        ws.close();
+                        ws = null;
+                    }
+                }
+            })
+            function startServer() {
+                var url = "ws://" + BASE + "echoServlet";
+                if ('WebSocket' in window) {
+                    ws = new WebSocket(url);
+                } else if ('MozWebSocket' in window) {
+                    ws = new MozWebSocket(url);
+                } else {
+                    alert('Your browser Unsupported WebSocket!');
+                    return;
+                }
+
+                ws.onopen = function () {
+                    //document.getElementById("content").innerHTML += '弹幕通道已开启! Welcome!<br />';
+                };
+                ws.onmessage = function (event) {
+                    if (event && event.data) {
+                        var contentMessage = $.parseJSON(event.data);
+                        var array = [];
+                        var content = {
+                            msg: contentMessage.content,
+                            img: contentMessage.headImgUrl
+                        };
+                        array.push(content);
+                        $('canvas').barrager(array);
+                    }
+                };
+                ws.onclose = function () {
+                    //document.getElementById("content").innerHTML += '弹幕通道关闭! Byebye!<br />';
+                };
+            }
+
+            /*  startServer();*/
+        });
+    </script>
+</head>
+<body>
+<div style="position:absolute;top:10px;right:10px;z-index:9999;">
+    <audio id="music" src="images/music.mp3" autoplay loop>你的浏览器不支持audio标签。</audio>
+    <a id="audio_btn"><img src="images/play.gif" width="48" height="50" id="music_btn" border="0"></a>
+</div>
+<div class="container">
+    <div class="top">
+        <div class="left">
+            <img class="logo" src="images/logo.png">
+        </div>
+        <div class="center">
+            <span class="title" style="font-size: 35px;">年会抽奖</span>
+        </div>
+        <div class="right">
+            <img class="qrcode" src="../main/images/code.jpg">
+        </div>
+    </div>
+    <div class="main">
+        <div class="wrapper">
+            <div class="header">
+                <p class="total-join">共有 <span class="J-num" id="userCount">-</span> 人参与抽奖</p>
+                <div class="btn" style="position:absolute;top:0;right:10px;z-index:999;">
+                    <label class="switch-btn">
+                        <input class="checked-switch" type="checkbox"/>
+                        <span class="text-switch" data-yes="弹幕" data-no="no"></span>
+                    <span class="toggle-btn" id="toggle-btn">
+                    </span>
+
+                    </label>
+                </div>
+                <canvas style="width: 100%;height: 100%;position: fixed;top: 0;left: 0;background-color: rgba(0,0,0,0.2);">
+                    你的浏览器不支持canvas
+                </canvas>
+            </div>
+            <div>
+                <div class="turn-box">
+                    <div class="box-wrapper">
+                        <div class="box-crown"></div>
+                        <div class="box-pic-wrapper">
+                            <ul class="box-pic">
+                                <li><img src="images/default.png" title="默认头像" id="userImg"></li>
+                            </ul>
+                        </div>
+                        <div class="box-name-wrapper">
+                            <ul class="box-name" id="box_name">
+                                <li><span
+                                        id="userName">求中奖</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="condition">
+                        <label>奖项:</label>
+                        <select class="select" name="prize">
+                            <option value="一等奖">一等奖</option>
+                            <option value="二等奖">二等奖</option>
+                            <option value="三等奖">三等奖</option>
+                        </select>
+                        <label>人数:</label>
+                        <select class="select" name="userNum">
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="8">8</option>
+                            <option value="10">10</option>
+                            <option value="20">20</option>
+                            <option value="30">30</option>
+                            <option value="40">40</option>
+                        </select>
+                    </div>
+                    <div class="box-btn" id="beginLuck">开始抽奖</div>
+                    <div class="box-btn" id="stopLuck" style="display: none;">停止抽奖</div>
+                </div>
+                <div class="award-list">
+                    <div class="award-list-wrapper">
+                        <div class="list-header">
+                            <p>获奖名单</p>
+                            <p></p>
+                        </div>
+                        <div class="list-container" id="luckyUser">
+                            <ul>
+
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

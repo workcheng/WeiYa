@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script type="text/javascript" src="../config/config.js"></script>
+    <script type="text/javascript" src="../common/js/jquery-1.9.1.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var mealUrl = BaseUrl + "meal/order";
+            $.ajax({
+                url: mealUrl,
+                success: function (json) {
+                    var orderUser = json.data.orderUsers;
+                    console.log("dsdsdd", JSON.stringify(json.data.now));
+                    $.each(orderUser, function (index, item) {
+                        console.log("dsdsdd", JSON.stringify(item));
+
+                    })
+                }
+            })
+        })
+    </script>
+</head>
+<body>
+
+</body>
+</html>

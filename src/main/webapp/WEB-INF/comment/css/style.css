@@ -1,0 +1,419 @@
+a, button, input {
+    -webkit-tap-highlight-color: transparent;
+    outline: 0;
+}
+
+body, h1, h2, h3, h4, h5, h6, hr, p, blockquote, dl, dt, dd, ul, ol, li, pre, form, fieldset, legend, button, input, textarea, th, td {
+    vertical-align: baseline;
+    margin: 0;
+    padding: 0;
+}
+
+img {
+    border: 0 none;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0.2);
+    vertical-align: top;
+}
+
+i, em {
+    font-style: normal;
+}
+
+ol, ul {
+    list-style: none;
+}
+
+input, select, button, h1, h2, h3, h4, h5, h6 {
+    font-size: 100%;
+    font-family: inherit;
+}
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+a {
+    text-decoration: none;
+    color: #333;
+}
+
+html, body {
+    min-height: 100%;
+    height: 100%;
+}
+
+body {
+    font: normal 24px/1.5 "Microsoft Yahei", "Helvetica Neue", Helvetica, "STHeiti STXihei", "Microsoft JhengHei", Arial, sans-serif;
+    -webkit-text-size-adjust: 100% !important;
+    -webkit-touch-callout: none;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-user-select: none;
+    user-select: none;
+    margin: 0 auto;
+    height: 100%;
+    min-height: 100%;
+}
+
+.wrapper {
+    width: 100%;
+    min-height: 100%;
+    margin: 0 0;
+    padding: 0;
+    background-image: url("../images/bg2.png");
+    background-repeat: repeat;
+    background-size: 100% auto;
+}
+
+#container {
+    opacity: 1.0;
+    height: 100%;
+}
+
+.zoom {
+    zoom: 0.48;
+    -webkit-text-size-adjust: auto !important;
+}
+
+.welcome .join_nh {
+    margin-top: 60px;
+}
+
+.fgx {
+    width: auto;
+    text-align: center;
+}
+
+.fgx img {
+    width: 90%;
+    margin: 30px 0px;
+}
+
+.head_box {
+    margin-top: 5px;
+}
+
+.head_box {
+    width: 215px;
+    height: 215px;
+    margin: 0 auto;
+    border-radius: 200px;
+    position: relative;
+    left: 0;
+    right: 0;
+}
+
+.head_box .headbox {
+    position: absolute;
+    width: 229px;
+    height: 229px;
+    left: -7px;
+    top: -7px;
+    z-index: 1000;
+}
+
+.head_box img {
+    border-radius: 200px;
+    display: block;
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+.companyLogo {
+    margin: 0 auto;
+}
+
+.companyLogo {
+    position: relative;
+    width: 260px;
+    margin: 0 auto 16px;
+    padding-top: 30px;
+}
+
+.companyLogo img {
+    width: 100%;
+    height: auto;
+}
+
+.companyName {
+    position: relative;
+    width: 100%;
+}
+
+.companyName p {
+    font-family: 微软雅黑, 宋体, Arial, sans-serif;
+    font-size: 50px;
+    color: #fff;
+    font-weight: bold;
+    text-align: center;
+    margin-top: 0px;
+    margin-bottom: 0px;
+
+}
+
+.zoom {
+    position: relative;
+    height: 100%;
+}
+
+.signIn2 .head_box {
+    background-color: #ebebeb;
+}
+
+.userName {
+    margin-top: 14px;
+}
+
+.userName {
+    font-family: 微软雅黑, 宋体, Arial, sans-serif;
+    font-size: 40px;
+    color: #fff;
+    text-align: center;
+    margin-top: 34px;
+}
+
+.gowall .send_words {
+    position: relative;
+    margin: 34px auto;
+    width: 90%;
+}
+
+.gowall .send_words p {
+    font-family: 微软雅黑, 宋体, Arial, sans-serif;
+    font-size: 36px;
+    color: #fff;
+    margin-bottom: 15px;
+}
+
+.gowall .send_words .wordsedit {
+    position: relative;
+    width: 100%;
+    border: 6px solid #fff;
+    border-radius: 11px;
+    box-shadow: 0 0 15px rgba(255, 0, 96, 0.8);
+    line-height: 80px;
+    min-height: 80px;
+    background: rgba(255, 255, 255, .8);
+    font-size: 33px;
+    color: #333;
+    text-indent: 20px;
+}
+
+.gowall .send_words .wordsedit1 {
+    position: relative;
+    width: 100%;
+    background: #fff;
+    height: 96px;
+    border-radius: 11px;
+    box-shadow: 0 0 15px rgba(129, 104, 255, 0.8);
+}
+
+.gowall .send_words .wordsedit1 input {
+    text-indent: 20px;
+    resize: none;
+    font-size: 33px;
+    color: #333;
+    width: 100%;
+    border-radius: 11px;
+    /* box-shadow: 0 0 15px rgba(129, 104, 255, 0.8); */
+    height: 96px;
+    line-height: 96px;
+    border-right: 0;
+    outline: none;
+    border: none;
+}
+
+.gowall .send_words .wordsedit .pholder {
+    color: #9c9294;
+}
+
+.senddiv {
+    position: relative;
+    width: 100%;
+    margin-top: 50px;
+    height: 75px;
+    margin-bottom: 50px;
+}
+
+.senddiv .sendimg {
+    position: relative;
+    float: left;
+    width: 200px;
+    height: 75px;
+    background: #cc0e37;
+    border-radius: 6px;
+    color: #fff;
+}
+
+.senddiv .sendimg a {
+    position: relative;
+    display: inline-block;
+    width: 200px;
+    height: 75px;
+    line-height: 75px;
+    font-size: 28px;
+    color: #fff;
+    text-align: center;
+    background: #cc0e37;
+    border-radius: 6px;
+}
+
+.senddiv .sendimg a img {
+    margin-top: 16px;
+}
+
+.senddiv .fasong {
+    position: relative;
+    float: left;
+    width: 100%;
+    height: 75px;
+    line-height: 70px;
+    text-align: center;
+    border-radius: 6px;
+}
+
+.senddiv .fasong input {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+    height: 85px;
+    line-height: 75px;
+    font-size: 30px;
+    color: #fff;
+    text-align: center;
+    background: #e7201d;
+    background: linear-gradient(#E53E49, #e7201d);
+    border-radius: 6px;
+    border: 1px solid #e71b1b;
+}
+
+.inner .lists {
+    position: relative;
+    background: rgba(255, 255, 255, .8);
+    box-shadow: 0 0 15px rgba(255, 0, 96, 0.8);
+    background: rgba(255, 255, 255, .8);
+    border-radius: 11px;
+    padding: 8px 22px;
+    overflow: hidden;
+    border: 6px solid #fff;
+}
+
+.gowall .send_words .words_record .word-time {
+    color: #808080;
+    font-size: 14px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid #fff;
+    margin-bottom: 10px;
+}
+
+.gowall .send_words .words_record div {
+    color: #333;
+    font-size: 30px;
+    padding-bottom: 10px;
+}
+
+/*.gowall .words_record span {
+    position: absolute;
+    display: inline-block;
+    width: 120px;
+    height: 120px;
+    text-align: center;
+    line-height: 150px;
+    border-radius: 120px;
+    background: #ff911a;
+    color: #fff;
+    font-size: 28px;
+    right: 30px;
+    top: -46px;
+}*/
+
+.inner {
+    background-size: 100% 4.5rem;
+    padding-bottom: 1.5rem;
+}
+
+.inner {
+    /*background: #fff url(../images/open.png) top center no-repeat;*/
+    background-size: 100% auto;
+    /*text-align: center;*/
+    /* padding-bottom: 50px;*/
+    height: 190px;
+    overflow-y: auto;
+    border-radius: 11px;
+}
+
+.error_dialog {
+    position: fixed;
+    width: 76%;
+    height: 340px;
+    left: 12%;
+    top: 50%;
+    margin-top: -170px;
+    background: #000;
+    opacity: .8 !important;
+    z-index: 21500;
+    border-radius: 11px;
+    display: none;
+}
+
+.error_dialog img {
+    position: relative;
+    width: 16%;
+    height: 90px;
+    margin: 80px 42% 40px;
+}
+
+.error_dialog p {
+    position: relative;
+    width: 100%;
+    height: 60px;
+    color: #fff;
+    text-align: center;
+    font-size: 36px;
+}
+
+@media screen and (max-width: 320px) {
+    .zoom {
+        zoom: 0.42 !important;
+        -webkit-text-size-adjust: auto !important;
+    }
+}
+
+@media screen and  (min-width: 320px) and(max-width: 375px) {
+    .zoom {
+        zoom: 0.48 !important;
+        -webkit-text-size-adjust: auto !important;
+    }
+
+}
+
+@media screen and(min-width: 375px)and(max-width: 412px) {
+    .zoom {
+        zoom: 0.55 !important;
+        -webkit-text-size-adjust: auto !important;
+    }
+}
+
+@media screen and(min-width: 768px) {
+    .zoom {
+        zoom: 0.98 !important;
+        -webkit-text-size-adjust: auto !important;
+    }
+}
+
+.gowall .send_words .word {
+    font-size: 34px;
+    color: #000;
+    margin-bottom: 0;
+}
+
+.gowall .send_words .word-time .times {
+    color: #808080;
+}
+
+.gowall .send_words .word-time .state {
+    font-size: 14px;
+    display: inline-block;
+    float: right;
+}

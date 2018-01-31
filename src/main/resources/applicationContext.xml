@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mvc="http://www.springframework.org/schema/mvc"
+  xmlns:context="http://www.springframework.org/schema/context"
+  xmlns:aop="http://www.springframework.org/schema/aop" xmlns:util="http://www.springframework.org/schema/util"
+  xsi:schemaLocation="http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+
+  <import resource="classpath*:spring-service-bean.xml" />
+
+  <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+    <property name="locations">
+      <list>
+        <!--<value>classpath:/wx.properties</value>-->
+        <value>classpath:/redis/redis.properties</value>
+          <value>classpath:/date/date.properties</value>
+      </list>
+    </property>
+  </bean>
+  <util:properties id="wxProperties" location="classpath:/wx.properties" />
+
+    <!-- 以下配置将拦截所有的URL请求 -->
+    <mvc:interceptors>
+        <!--<bean class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor" />-->
+        <bean class="com.zoe.weiya.interceptor.BaseInterceptor"/>
+    </mvc:interceptors>
+    <!-- 以下配置将拦截特有的URL请求 -->
+<!--    <mvc:interceptors>
+        <mvc:interceptor>
+            <mvc:mapping path="/view/**"/>
+            <bean id="1" class="com.zoe.weiya.interceptor.time.TimeBasedAccessInterceptor">
+                <property name="oneAmOpeningTime" value="${one.am.openIngTime}"/>
+                <property name="oneAmClosingTime" value="${one.am.closingTime}"/>
+                &lt;!&ndash;<property name="onePmOpeningTime" value="${one.pm.openIngTime}"/>
+                <property name="onePmClosingTime" value="${one.pm.closingTime}"/>
+                <property name="twoAmOpeningTime" value="${two.am.openIngTime}"/>
+                <property name="twoAmClosingTime" value="${two.am.closingTime}"/>
+                <property name="twoPmOpeningTime" value="${two.pm.openIngTime}"/>
+                <property name="twoPmClosingTime" value="${two.pm.closingTime}"/>&ndash;&gt;
+                <property name="finalOpeningTime" value="${final.openIngTime}"/>
+                <property name="finalClosingTime" value="${final.closingTime}"/>
+                <property name="mappingURL" value=".*/view/form.*"/>
+            </bean>
+        </mvc:interceptor>
+    </mvc:interceptors>-->
+
+    <mvc:resources mapping="/view/**" location="/WEB-INF/view/"/>
+    <mvc:resources mapping="/lottery/**" location="/WEB-INF/lottery/"/>
+    <mvc:resources mapping="/vote/**" location="/WEB-INF/vote/"/>
+    <mvc:resources mapping="/danmu/**" location="/WEB-INF/danmu/"/>
+    <mvc:resources mapping="/comment/**" location="/WEB-INF/comment/"/>
+    <mvc:resources mapping="/meal/**" location="/WEB-INF/meal/"/>
+    <mvc:resources mapping="/config/**" location="/WEB-INF/config/"/>
+    <mvc:resources mapping="/message/**" location="/WEB-INF/message/"/>
+    <mvc:resources mapping="/MP_verify_qFc0y7Y9DrJrrC1W.txt" location="/WEB-INF/"/>
+    <mvc:resources mapping="/MP_verify_0pskDMJLWkmFhfTK.txt" location="/WEB-INF/"/>
+    <mvc:resources mapping="/admin/**" location="/WEB-INF/admin/"/>
+    <mvc:resources mapping="/main/**" location="/WEB-INF/main/"/>
+    <mvc:resources mapping="/common/**" location="/WEB-INF/common/"/>
+    <mvc:resources mapping="/favicon.ico" location="/WEB-INF/common/images/"/>
+
+</beans>
