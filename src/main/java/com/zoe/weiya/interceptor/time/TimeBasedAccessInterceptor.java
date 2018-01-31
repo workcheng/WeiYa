@@ -1,8 +1,8 @@
 package com.zoe.weiya.interceptor.time;
 
-import com.zoe.weiya.comm.logger.ZoeLogger;
-import com.zoe.weiya.comm.logger.ZoeLoggerFactory;
 import com.zoe.weiya.util.ZoeDateUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.servlet.http.HttpServletRequest;
@@ -13,7 +13,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class TimeBasedAccessInterceptor extends HandlerInterceptorAdapter {
-    private static ZoeLogger log = ZoeLoggerFactory.getLogger(TimeBasedAccessInterceptor.class);
+    private final static Logger LOGGER = LoggerFactory.getLogger(TimeBasedAccessInterceptor.class);
 
     private String oneAmOpeningTime;
     private String oneAmClosingTime;
@@ -47,14 +47,6 @@ public class TimeBasedAccessInterceptor extends HandlerInterceptorAdapter {
 
     public void setFinalOpeningTime(String finalOpeningTime) {
         this.finalOpeningTime = finalOpeningTime;
-    }
-
-    public static ZoeLogger getLog() {
-        return log;
-    }
-
-    public static void setLog(ZoeLogger log) {
-        TimeBasedAccessInterceptor.log = log;
     }
 
     public String getMappingURL() {
@@ -133,7 +125,7 @@ public class TimeBasedAccessInterceptor extends HandlerInterceptorAdapter {
         SimpleDateFormat sdf = new SimpleDateFormat("dd日 kk:mm:ss");
         //如果时间在这之内，则让其签到
         if (ZoeDateUtil.compare(openTime, now) && ZoeDateUtil.compare(now, closeTime)) {
-            log.info("now=" + sdf.format(now));
+            LOGGER.info("now="+sdf.format(now));
             return "true";
         }
         String msg = "签到开放时间：{0}-{1}";
@@ -146,7 +138,7 @@ public class TimeBasedAccessInterceptor extends HandlerInterceptorAdapter {
                              HttpServletResponse response, Object handler) throws Exception {
         String url = request.getRequestURL().toString();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd kk:mm:ss");
-        log.info("url=" + url);
+        LOGGER.info("request url=" + url);
         int successCount = 0;
         StringBuilder msgList = new StringBuilder();
         String msg = "";
@@ -172,6 +164,7 @@ public class TimeBasedAccessInterceptor extends HandlerInterceptorAdapter {
             if (successCount >= 1){
                 return true;
             }
+            LOGGER.warn("未到预定时间:{}，禁止签到",msgList);
             request.setAttribute("msg", msgList);
             request.getRequestDispatcher("/msg.jsp").forward(request, response);
             response.setContentType("application/json; charset=utf-8");

@@ -79,8 +79,4 @@
 		<filter-name>wwwAuthFilter</filter-name>
 		<url-pattern>/lottery/lottery.new.html</url-pattern>
 	</filter-mapping>
-    <filter-mapping>
-		<filter-name>wwwAuthFilter</filter-name>
-		<url-pattern>/view/form.html</url-pattern>
-	</filter-mapping>
 </web-app>
