@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <title>百度sdk测试</title>
+    <script src="http://api.map.baidu.com/api?v=2.0&ak=aF77ZS0B8zURn3zGXuj97fTRBIXbSgZU" type="text/javascript"></script>
+    <style type="text/css">
+        html{height:100%}
+        body{height:100%;margin:0px;padding:0px}
+        #container{height:100%}
+    </style>
+    <!--<script type="text/javascript">
+        function initialize() {
+            var mp = new BMap.Map('map');
+            mp.centerAndZoom(new BMap.Point(121.491, 31.233), 11);
+        }
+
+        function loadScript() {
+            var script = document.createElement("script");
+            script.src = "http://api.map.baidu.com/api?v=2.0&ak=aF77ZS0B8zURn3zGXuj97fTRBIXbSgZU&callback=initialize";//此为v2.0版本的引用方式
+            // http://api.map.baidu.com/api?v=1.4&ak=您的密钥&callback=initialize"; //此为v1.4版本及以前版本的引用方式
+            document.body.appendChild(script);
+        }
+        window.onload = loadScript;
+    </script>-->
+</head>
+<body>
+    <!--<div id="map" style="width:500px;height:320px"></div>-->
+    <div id="container"></div>
+<!--    <script type="text/javascript">
+        var map = new BMap.Map("container");          // 创建地图实例
+        var point = new BMap.Point(116.404, 39.915);  // 创建点坐标
+        map.centerAndZoom(point, 11);                 // 初始化地图，设置中心点坐标和地图级别
+        /*window.setTimeout(function(){
+            map.panTo(new BMap.Point(106.409, 59.918));
+        }, 2000);*/
+        map.addControl(new BMap.NavigationControl());
+        map.addControl(new BMap.ScaleControl());
+        map.addControl(new BMap.OverviewMapControl());
+        map.addControl(new BMap.MapTypeControl());
+        map.setCurrentCity("厦门"); // 仅当设置城市信息时，MapTypeControl的切换功能才能可用
+    </script>-->
+
+    <script type="text/javascript">
+        // 百度地图API功能
+        var map = new BMap.Map("container");
+        map.centerAndZoom("厦门",15);  //初始化地图,设置城市和地图级别。
+        //GPS坐标
+        /*var x = 116.32715863448607;
+        var y = 39.990912172420714;
+        var ggPoint = new BMap.Point(x,y);*/
+        var pointA = new BMap.Point(118.089425,24.479834);  // 创建点坐标A--大渡口区
+        var pointB = new BMap.Point(118.1744,24.49037);  // 创建点坐标B--江北区
+        alert('两地的距离是：'+(map.getDistance(pointA,pointB)).toFixed(2)+' 米。');  //获取两点距离,保留小数点后两位
+        var polyline = new BMap.Polyline([pointA,pointB], {strokeColor:"blue", strokeWeight:6, strokeOpacity:0.5});  //定义折线
+        map.addOverlay(polyline);     //添加折线到地图上
+    </script>
+</body>
+</html>

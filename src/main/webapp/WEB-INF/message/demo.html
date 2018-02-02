@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<canvas id="canvas" width="1024" height="1024"></canvas>
+<script type="application/javascript">
+    //圆角矩形
+    CanvasRenderingContext2D.prototype.roundRect = function (x, y, w, h, r) {
+        var min_size = Math.min(w, h);
+        if (r > min_size / 2) r = min_size / 2;
+        // 开始绘制
+        this.beginPath();
+        this.moveTo(x + r, y);
+        this.arcTo(x + w, y, x + w, y + h, r);
+        this.arcTo(x + w, y + h, x, y + h, r);
+        this.arcTo(x, y + h, x, y, r);
+        this.arcTo(x, y, x + w, y, r);
+        this.closePath();
+        return this;
+    }
+    // canvas元素, 图片元素
+    var canvas = document.querySelector("#canvas");
+    var image = new Image();
+    var context = canvas.getContext("2d");
+    var draw = function (obj) {
+
+        // 创建图片纹理
+        /* var pattern = context.createPattern(obj, "no-repeat");
+         // 如果要绘制一个圆，使用下面代码
+         obj.width = obj.width - 20;
+         obj.height = obj.height - 20;
+         // 填充绘制的圆
+         context.fillStyle = pattern;
+         context.scale(0.08, 0.08);
+         context.arc(obj.width / 2, obj.width / 2, Math.min(obj.width, obj.height) / 2, 0, 2 * Math.PI);
+         context.fill();
+         context.save();
+         context.scale(8, 8);
+         var text = "张三李四王五赵六签到";
+         context.font = "Bold 50px Arial";
+         //设置字体的大小
+         context.strokeText(text, 98, 70);*/
+
+
+
+
+        var pattern = context.createPattern(obj, "no-repeat");
+        //设置填充及描边颜色
+        context.fillStyle = "rgb(100,150,185)";
+        context.lineWidth = 3;
+        context.strokeStyle = "red";
+        context.fillStyle = pattern;
+        //绘制圆形
+        context.arc(100, 100, 50, 0, 2 * Math.PI);
+        context.fill();
+        context.stroke();
+    }
+
+    image.onload = function () {
+        draw(this);
+    };
+    image.src = "http://news.xinhuanet.com/fashion/2013-01/28/11192124279088_1581d.jpg";//"http://lqh.tunnel.qydev.com/danmu/images/wechat_logo.jpg";
+</script>
+</body>
+</html>
