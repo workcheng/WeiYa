@@ -1,0 +1,11 @@
+# Intellij project files
+*.iml
+*.ipr
+*.iws
+.idea/
+target/
+*.log
+*.log*
+*.orig
+/src/main/resources/config/wechat.properties
+/src/main/webapp/WEB-INF/MP_verify_0pskDMJLWkmFhfTK.txt
