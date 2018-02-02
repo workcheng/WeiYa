@@ -10,6 +10,7 @@ import me.chanjar.weixin.common.session.WxSessionManager;
 import me.chanjar.weixin.mp.api.WxMpService;
 import me.chanjar.weixin.mp.bean.message.WxMpXmlMessage;
 import me.chanjar.weixin.mp.bean.message.WxMpXmlOutMessage;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;
@@ -23,6 +24,8 @@ import static me.chanjar.weixin.common.api.WxConsts.XmlMsgType;
  */
 @Component
 public class MenuHandler extends AbstractHandler {
+    @Autowired
+    private MsgHandler msgHandler;
 
   @Override
   public WxMpXmlOutMessage handle(WxMpXmlMessage wxMessage,
@@ -30,7 +33,7 @@ public class MenuHandler extends AbstractHandler {
       WxSessionManager sessionManager) {
     WeixinService weixinService = (WeixinService) wxMpService;
 
-    String key = "{\"type\":\"link\",\"content\":\""+wxMessage.getEventKey()+"\"}";
+    String key = wxMessage.getEventKey();
     WxMenuKey menuKey;
     try {
       menuKey = JSON.parseObject(key, WxMenuKey.class);
@@ -53,7 +56,9 @@ public class MenuHandler extends AbstractHandler {
     case XmlMsgType.VIDEO:
       break;
     case XmlMsgType.NEWS:
-      break;
+        wxMessage.setContent(menuKey.getContent());
+        return msgHandler.handle(wxMessage, context, wxMpService, sessionManager);
+//      break;
     default:
       break;
     }

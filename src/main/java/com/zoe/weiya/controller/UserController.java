@@ -13,6 +13,7 @@ import me.chanjar.weixin.common.exception.WxErrorException;
 import me.chanjar.weixin.mp.api.impl.WxMpServiceImpl;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.ServletOutputStream;
@@ -43,7 +44,10 @@ public class UserController {
      * @return
      */
     @RequestMapping(value = "save", method = RequestMethod.POST)
-    public Object save(@RequestBody @Valid User u) {
+    public Object save(@RequestBody @Valid User u, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return ZoeObject.failure(bindingResult.getFieldError().getDefaultMessage());
+        }
         if(u.getName().length() > 30){
             return ZoeObject.failure("姓名不超过30字符");
         }

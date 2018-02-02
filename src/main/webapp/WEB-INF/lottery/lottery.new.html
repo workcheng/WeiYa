@@ -17,6 +17,8 @@
         $(document).ready(function () {
             var ws = null;
             var isStart = false;
+            startServer();
+            $(".text-switch").attr("data-no", "yes");
             $(".text-switch,.toggle-btn").click(function () {
                 var state = $(".text-switch").attr("data-no");
                 if (state == "no") {
@@ -24,7 +26,6 @@
                     $("#content").html("");
                     startServer();
                     $("canvas").css({"z-index": "99"});
-
                 } else {
                     $("canvas").barrager("clear");
                     $("canvas").css({"z-index": ""});
