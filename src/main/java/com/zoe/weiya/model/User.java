@@ -2,7 +2,6 @@ package com.zoe.weiya.model;
 
 import org.hibernate.validator.constraints.NotBlank;
 
-import javax.validation.constraints.NotNull;
 import java.sql.Timestamp;
 
 /**
@@ -14,7 +13,7 @@ public class User extends OnlyUser{
     private String openId;
     @NotBlank(message = "姓名不能为空")
     private String name;
-    @NotNull(message = "是否订餐不能为空")
+//    @NotNull(message = "是否订餐不能为空")
     private Integer order;
     private String nickName;
     private Integer priceCount;
