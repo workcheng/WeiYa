@@ -19,7 +19,7 @@ package com.zoe.weiya.security;
 
 import com.zoe.weiya.comm.logger.ZoeLogger;
 import com.zoe.weiya.comm.logger.ZoeLoggerFactory;
-import org.apache.commons.codec.binary.Base64;
+import org.apache.tomcat.util.codec.binary.Base64;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
