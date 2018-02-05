@@ -99,7 +99,7 @@ public class MsgHandler extends AbstractHandler {
 
         String url = MessageFormat.format(ZoeProperties.get("static/static.properties", "sign.in.url"), wxMessage.getFromUser());
         WxMpXmlOutNewsMessage.Item item = new WxMpXmlOutNewsMessage.Item();
-        item.setDescription("签到表单");
+        item.setDescription("请点击进去智业尾牙年会签到页面");
         item.setPicUrl("https://mmbiz.qpic.cn/mmbiz_jpg/B0md6NdhhMRguia0l7AUGZ1mRUzm3ibv9fVqiblSON5VyS6ceAjWLZHGJQ9CnbeUKOOg1xkvQQB4QprfdkLmA9gicw/0?wx_fmt=jpeg");
         item.setTitle("签到");
         item.setUrl(url);
@@ -116,7 +116,7 @@ public class MsgHandler extends AbstractHandler {
                                           WxMpService wxMpService, WxSessionManager sessionManager) {
         String url = MessageFormat.format(ZoeProperties.get("static/static.properties", "comment.url"), wxMessage.getFromUser());
         WxMpXmlOutNewsMessage.Item item = new WxMpXmlOutNewsMessage.Item();
-        item.setDescription("发送弹幕");
+        item.setDescription("点击图文进入弹幕互动");
         item.setPicUrl("https://mmbiz.qlogo.cn/mmbiz_jpg/rFTQWsGze4G89XqNehSdSBGt1ic6ricfgBfr8ThJnpIIibwpPhGjGrKpraiaNULFLfv238cC3sIxgCYZza6TYLKicBg/0?wx_fmt=jpeg");
         item.setTitle("评论上墙");
         item.setUrl(url);

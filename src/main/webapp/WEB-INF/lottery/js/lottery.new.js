@@ -61,6 +61,7 @@ var lottery = {
         var _this = this;
         _this.appendUser();
         if (this.autoExchangeIndex == 0) {//防止多次点击，只有停止清除事件后才能继续点
+            console.log(_this.allLotteryUser.length)
             if (_this.allLotteryUser.length > 0) {//如果没人，不进行点击
                 var i = 1;
                 _this.autoExchangeIndex = setInterval(function () {

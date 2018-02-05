@@ -4,27 +4,30 @@
     <meta charset="UTF-8">
     <title>签到二维码</title>
     <style>
-        html,body{
+        html, body {
             padding: 0;
             border: 0;
             margin: 0;
-            background: rgba(245,245,245,0.5);
+            background: rgba(245, 245, 245, 0.5);
         }
-        #index{
-            zoom:200%;
+
+        #index {
+            zoom: 200%;
             width: 100%;
             margin: 0 auto;
         }
-        #code{
+
+        #code {
             float: left;
             height: 430px;
             width: 430px;
-            background: url('../main/images/code.jpg') no-repeat
         }
-        #content{
+
+        #content {
             float: left;
         }
-        ol{
+
+        ol {
             font-weight: bold;
             font-size: 24px;
             margin: 40px 0 12px 0;
@@ -32,35 +35,38 @@
             padding: 0 0;
             list-style-type: none;
         }
-        ol li{
+
+        ol li {
             width: auto;
             margin: 8px 0 0 0;
         }
-        #small{
+
+        #small {
             margin: 0 0 0 -15px;
             border: 0;
             padding: 0 0;
             width: 230px;
             height: 230px;
-            background: url('../main/images/code.jpg') no-repeat;
-            background-size:cover;
+            background: url('../main/images/small.jpg') no-repeat;
+            background-size: cover;
             float: inherit;
         }
     </style>
 </head>
 <body>
-    <div id="index">
-        <div id="code">
-        </div>
-        <div id="content">
-            <ol>
-                <li>1.微信扫一扫</li>
-                <li>2.关注公众号</li>
-                <li>3.点击菜单-签到</li>
-                <li>4.填写签到信息</li>
-            </ol>
-            <div id="small"></div>
-        </div>
+<div id="index">
+    <div id="code">
+        <img src="images/big_code.jpg" width="430" height="430" alt="">
     </div>
+    <div id="content">
+        <ol>
+            <li>1.微信扫一扫</li>
+            <li>2.关注公众号</li>
+            <li>3.点击菜单-签到</li>
+            <li>4.填写签到信息</li>
+        </ol>
+        <div id="small"></div>
+    </div>
+</div>
 </body>
 </html>
