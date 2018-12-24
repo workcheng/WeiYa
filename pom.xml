@@ -8,22 +8,22 @@
     <artifactId>weiya</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>war</packaging>
-    <name>Weixin MP Demo</name>
+    <name>Weixin-weiya for zoesoft</name>
     <description>weiya for zoesoft</description>
-    <url>https://github.com/wechat-group/weixin-java-mp-demo</url>
+    <url>https://github.com/workcheng/WeiYa</url>
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
 
         <weixin-java-mp.version>2.9.0</weixin-java-mp.version>
         <spring.version>4.3.2.RELEASE</spring.version>
-        <spring-security.version>4.1.3.RELEASE</spring-security.version>
+        <spring-security.version>[4.1.5,)</spring-security.version>
         <guava.version>20.0</guava.version>
         <slf4j.version>1.7.24</slf4j.version>
         <aspectj.version>1.8.9</aspectj.version>
-        <fastjson.version>1.2.6</fastjson.version>
+        <fastjson.version>[1.2.31,)</fastjson.version>
         <commons-lang3.version>3.5</commons-lang3.version>
-        <jackson.version>2.8.3</jackson.version>
+        <jackson.version>[2.8.11.1,)</jackson.version>
         <jetty-maven-plugin.version>9.3.0.RC0</jetty-maven-plugin.version>
     </properties>
 
@@ -174,6 +174,7 @@
     </dependencies>
 
     <build>
+        <finalName>weiya</finalName>
         <plugins>
             <plugin>
                 <groupId>org.eclipse.jetty</groupId>
