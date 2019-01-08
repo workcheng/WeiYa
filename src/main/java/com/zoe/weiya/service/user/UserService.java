@@ -282,7 +282,12 @@ public class UserService {
 
     public UserListCount orderMealUserCountAndUserList(int index) throws InternalException, NotStartException {
         UserListCount userListCount = new UserListCount();
-        Set<String> openIdSet = getOpenIdSet(index);
+        Set<String> openIdSet = null;
+        try {
+            openIdSet = getOpenIdSet(index);
+        } catch (Exception e) {
+            log.error("error:{}",e);
+        }
         List<User> userList = new ArrayList<>();
         int orderCount = 0;
         if (null != openIdSet) {
