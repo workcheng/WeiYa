@@ -43,7 +43,7 @@
                     return;
                 }
                 ws.onopen = function () {
-                    document.getElementById("content").innerHTML += '弹幕通道已开启! Welcome!<br />';
+                    document.getElementById("content").innerHTML += 'Flying!<br />';
                 };
                 ws.onmessage = function (event) {
                     if (event && event.data) {
@@ -53,12 +53,15 @@
                             msg: contentMessage.content,
                             img: contentMessage.headImgUrl
                         };
+                        if ("弹幕通道开启！" === content.msg) {
+                            content.msg = "弹幕墙已开启！";
+                        }
                         array.push(content);
                         $('canvas').barrager(array);
                     }
                 };
                 ws.onclose = function () {
-                    document.getElementById("content").innerHTML += '弹幕通道关闭! Byebye!<br />';
+                    document.getElementById("content").innerHTML += 'Bye!<br />';
                 };
             }
         });
