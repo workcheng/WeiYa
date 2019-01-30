@@ -37,7 +37,9 @@ var signGrid = function (index) {
                 var jqTime = $("<td></td>").text(commonTime).css({width: "20%"});
                 var jqPeople = $("<td></td>").text(item.name).css({width: "20%"});
                 var jqSection = $("<td></td>").text(item.depName).css({width: "30%"});
-                var jqEat = $("<td></td>").text(order).css({width: "10%"});
+                var img = $("<img src='"+item.headImgUrl+"'>").css({"height":"30px","padding":"0","margin":"0"});
+                var jqEat = $("<td></td>").css({"width":"5%"});
+                jqEat.append(img);
                 jqTR.append(jqTime).append(jqPeople).append(jqSection).append(jqEat);
                 $("#signGrid").append(jqTR);
             })

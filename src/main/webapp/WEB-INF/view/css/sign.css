@@ -77,7 +77,7 @@ table.dataintable th {
 
 table.dataintable td {
     vertical-align: text-top;
-    padding: 4px 15px 4px 6px;
+    /*padding: 4px 15px 4px 6px;*/
     border: 1px solid #a6c9e2;
     word-break: break-all;
     background: #fcfdfd url(../images/u2.png) 50% bottom repeat-x;

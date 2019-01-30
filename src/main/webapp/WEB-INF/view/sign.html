@@ -4,9 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
     <title>签到列表</title>
-    <link rel="stylesheet" href="../view/css/sign.min.css">
+    <link rel="stylesheet" href="../view/css/sign.css">
     <script type="text/javascript" src="../common/js/jquery-1.9.1.min.js"></script>
-    <script type="text/javascript" src="../view/js/sign.min.js"></script>
+    <script type="text/javascript" src="../view/js/sign.js"></script>
     <script type="text/javascript" src="../config/config.js"></script>
     <style type="text/css">
         table, tr, td, th {
@@ -18,13 +18,13 @@
 <div class="condition">
     <label>签到时间:</label>
     <select class="select" name="signTime">
-       <!-- <option value="0">第一天 上午</option>
-        <option value="1">第一天 下午</option>-->
-        <option value="2">第一天 上午</option>
-        <option value="3">第一天 下午</option>
-        <option value="4">第一天 晚上</option>
+        <option value="0">签到0</option>
+        <option value="1">签到1</option>
+        <option value="2">签到2</option>
+        <option value="3">签到3</option>
+        <option value="4">签到4</option>
     </select>
-    <div class="eat-number">共 <span class="number">-</span> 人点餐</div>
+    <!--<div class="eat-number">共 <span class="number">-</span> 人点餐</div>-->
 </div>
 <div class="grid_table">
     <div class="ui-widget-header">
@@ -37,7 +37,7 @@
                 <th style="width:20%;">签到时间</th>
                 <th style="width:20%">签到人</th>
                 <th style="width:30%">部门</th>
-                <th style="width:10%">是否点餐</th>
+                <th style="width:5%">头像</th>
             </tr>
         </table>
         <div class="bu"></div>
