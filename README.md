@@ -16,3 +16,33 @@ Keep-Alive: timeout=60
 
 appId
 ```
+
+### 使用gib
+
+1. 打包镜像：
+
+```
+mvn compile jib:buildTar
+```
+2. 导入镜像：
+
+```
+docker load < target/jib-image.tar
+```
+
+3. 启动容器
+
+```
+docker run \
+        --name=magical_beaver \
+        --hostname=7b9f6db0ad40 \
+        --mac-address=02:42:ac:11:00:03 \
+        --env=PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/lib/jvm/java-1.8-openjdk/jre/bin:/usr/lib/jvm/java-1.8-openjdk/bin \
+        --env=JAVA_HOME=/usr/lib/jvm/java-1.8-openjdk \
+        --env=JAVA_VERSION=8u171 \
+        --env=JAVA_ALPINE_VERSION=8.171.11-r0 \
+        --env=LANG=C.UTF-8 \
+        -p 0.0.0.0:9090:8080 \
+        -t \
+        workcheng/hellojib:0.0.1-SNAPSHOT
+```
