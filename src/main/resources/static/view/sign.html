@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <title>签到列表</title>
+    <link rel="stylesheet" href="../view/css/sign.css">
+    <script type="text/javascript" src="../common/js/jquery-1.9.1.min.js"></script>
+    <script type="text/javascript" src="../view/js/sign.js"></script>
+    <script type="text/javascript" src="../config/config.js"></script>
+    <style type="text/css">
+        table, tr, td, th {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+<div class="condition">
+    <label>签到时间:</label>
+    <select class="select" name="signTime">
+        <option value="0">签到0</option>
+        <option value="1">签到1</option>
+        <option value="2">签到2</option>
+        <option value="3">签到3</option>
+        <option value="4">签到4</option>
+    </select>
+    <!--<div class="eat-number">共 <span class="number">-</span> 人点餐</div>-->
+</div>
+<div class="grid_table">
+    <div class="ui-widget-header">
+        <h2 class="ui-jqgrid-title">签到列表</h2>
+    </div>
+    <div style="width: 983px;position:relative;    border-right: 1px solid #4297d7;
+    border-left: 1px solid #4297d7;" id="signContent">
+        <table class="dataintable" id="tabHeader">
+            <tr>
+                <th style="width:20%;">签到时间</th>
+                <th style="width:20%">签到人</th>
+                <th style="width:30%">部门</th>
+                <th style="width:5%">头像</th>
+            </tr>
+        </table>
+        <div class="bu"></div>
+    </div>
+    <div style="width:1000px;height:480px;overflow-y:auto;border: 1px solid #4297d7;
+    border-top: 0;border-right:1px solid #a6c9e2;">
+        <table class="dataintable" id="tdContent">
+            <tbody id="signGrid">
+
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <title>年会签到表</title>
+    <link rel="stylesheet" href="../view/css/style.min.css">
+    <script type="text/javascript" src="../common/js/jweixin-1.0.0.js"></script>
+    <script type="text/javascript" src="../common/js/jquery-1.9.1.min.js"></script>
+    <script type="text/javascript" src="../lottery/js/common.min.js"></script>
+    <script type="text/javascript" src="../config/config.js"></script>
+    <script type="text/javascript" src="../view/js/form.min.js"></script>
+</head>
+<div>
+    <fieldset>
+        <div style="height: 100px;">
+            <div class="form-row form-row-1" style="float: left;clear: none">
+                <img src="images/zylogo.png" style="">
+            </div>
+            <div class="form-row form-row-2" style="float: left;clear: none">
+                <h2>年会签到表</h2>
+                <span>感谢您参加智业年会，请登记您的签到信息。</span>
+            </div>
+        </div>
+        <div id="partySign" style="position:relative;display: none">
+            <div class="error_dialog">
+                <img src="images/error.png">
+                <p></p>
+            </div>
+            <div class="form-row">
+                <div class="field-label" style="width: 50px"><label for="userName">姓名</label>:</div>
+                <span style="color: red;" id="user"></span>
+                <div class="field-widget"><input style="font-size: 16px" name="userName" id="userName" class="required">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="field-label" style="width: 188px;"><label for="field6"
+                                                                      style="width: 160px;">所属中心/分子公司</label>:
+                </div>
+                <div class="field-widget">
+                    <select id="field6" name="dept" class="validate-selection" style="font-size: 16px">
+                        <option>总裁办</option>
+                        <option>行政中心</option>
+                        <option>商务中心</option>
+                        <option>财务中心</option>
+                        <option>医院产品中心</option>
+                        <option>区域产品中心</option>
+                        <option>智业研究院</option>
+                        <option>工程管理中心</option>
+                        <option>福建区</option>
+                        <option>智业健康</option>
+                        <option>战略研究中心</option>
+                        <option>北方大区</option>
+                        <option>中南大区</option>
+                        <option>西北大区</option>
+                        <option>西南大区</option>
+                        <option>华南大区</option>
+                        <option>华南大区</option>
+                        <option>华东营销中心</option>
+                        <option>东北大区</option>
+                        <option>新疆分公司</option>
+                        <option>西藏分公司</option>
+                        <option>云南汇众智业公司</option>
+                        <option>云顶伟业</option>
+                        <option>西藏展望</option>
+                        <option>浪潮智业（厦门）健康医疗大数据科技有限公司</option>
+                        <option>天津天职</option>
+                        <option>内蒙古普诺杰</option>
+                        <option>克拉玛依市智业科技有限公司</option>
+                        <option>河北智业</option>
+                        <option>江西智业</option>
+                        <option>海医汇</option>
+                        <option>重庆中域智业</option>
+                    </select>
+                </div>
+            </div>
+            <!--<div class="form-row">
+                <div class="field-widget">
+                    <label class="field-label" style="width: 80px;" for="isOrder">是否点餐:</label>
+                    <input type="checkbox" name="isOrder" id="isOrder" value="0"
+                           style="margin-top: 3px;width: 18px;height: 18px;">
+                </div>
+            </div>-->
+            <div class="form-row form-row-3" style="">
+                <input type="button" class="submit" id="btnSign" value="签到"/>
+            </div>
+        </div>
+        <div id="unStart" style="width: 100%;height: 300px;display: none">
+            <span class="field-content">
+                活动尚未开始，敬请期待~~
+            </span>
+        </div>
+        <div id="signSuccess" style="width: 100%;height: 300px;display: none">
+            <span class="field-content">
+                签到成功，感谢您的配合~~
+            </span>
+        </div>
+        <div id="reSign" style="width: 100%;height: 300px;display: none">
+            <span class="field-content">
+                对不起，您已经签到一次，不能重复签到哦~~
+            </span>
+        </div>
+    </fieldset>
+</div>
+</body>
+</html>

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <title>评论上墙</title>
+    <link rel="stylesheet" href="../comment/css/style.min.css">
+    <link rel="stylesheet" href="css/reset.min.css">
+    <script type="text/javascript" src="../common/js/jquery-1.9.1.min.js"></script>
+    <script type="text/javascript" src="../common/js/jweixin-1.0.0.js"></script>
+    <script type="text/javascript" src="../lottery/js/common.min.js"></script>
+    <script type="text/javascript" src="../config/config.js"></script>
+    <script type="text/javascript" src="../comment/js/comment.js"></script>
+</head>
+<style>
+</style>
+<body>
+<div id="container">
+    <div class="zoom">
+        <div class="error_dialog" style="display: none">
+            <img src="images/error.png">
+            <p></p>
+        </div>
+        <div class="wrapper gowall" style="background-repeat: repeat">
+            <div class="companyLogo">
+                <img alt src="images/flower.png">
+            </div>
+            <div class="companyName">
+                <p>评论上墙</p>
+                <div class="fgx">
+                    <img alt src="images/fgx.png">
+                </div>
+            </div>
+            <div class="signIn2">
+                <div class="head_box">
+                    <div class="headbox">
+                        <img alt src="" id="headImgUrl">
+                    </div>
+                </div>
+                <div class="userName" id="nickName"></div>
+            </div>
+            <div>
+                <div class="send_words">
+                    <p>上墙留言：</p>
+                    <div class="wordsedit1">
+                        <input name="memo" placeholder="请输入留言" maxlength="70" id="msgDanmu" type="text">
+                        <!--<span class="emotion"></span>-->
+                    </div>
+                    <div class="senddiv">
+                        <div class="fasong">
+                            <input type="button" id="saveMsg" value="发送">
+                        </div>
+                        <div class="clear"></div>
+                    </div>
+                    <!--<p>留言记录：</p>
+                    <div class="inner" style="padding-bottom: 0px;">
+                        <div class="lists">
+                        </div>
+                    </div>-->
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
