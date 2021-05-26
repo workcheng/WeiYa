@@ -46,3 +46,9 @@ docker run \
         -t \
         workcheng/hellojib:0.0.1-SNAPSHOT
 ```
+
+4. 浏览器打开/查看
+
+```
+curl http://127.0.0.1:9090/admin/index.html
+```
