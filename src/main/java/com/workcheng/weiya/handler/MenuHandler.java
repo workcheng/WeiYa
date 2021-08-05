@@ -6,6 +6,8 @@ import com.workcheng.weiya.builder.TextBuilder;
 import com.workcheng.weiya.common.dto.WxMenuKey;
 import com.workcheng.weiya.service.WeiXinService;
 import com.workcheng.weiya.common.utils.*;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import me.chanjar.weixin.common.session.WxSessionManager;
 import me.chanjar.weixin.mp.api.WxMpService;
 import me.chanjar.weixin.mp.bean.message.WxMpXmlMessage;
@@ -21,9 +23,10 @@ import static me.chanjar.weixin.common.api.WxConsts.XmlMsgType;
  * @author Binary Wang
  */
 @Component
+@RequiredArgsConstructor
+@Slf4j
 public class MenuHandler extends AbstractHandler {
-    @Autowired
-    private MsgHandler msgHandler;
+    private final MsgHandler msgHandler;
 
     @Override
     public WxMpXmlOutMessage handle(WxMpXmlMessage wxMessage, Map<String, Object> context, WxMpService wxMpService, WxSessionManager sessionManager) {
@@ -31,8 +34,9 @@ public class MenuHandler extends AbstractHandler {
         String key = wxMessage.getEventKey();
         WxMenuKey menuKey;
         try {
-            menuKey = JsonUtil.getJSON().readValue(key, WxMenuKey.class);
+            menuKey = gson.fromJson(key, WxMenuKey.class);
         } catch (Exception e) {
+            log.error("menu event error", e);
             return WxMpXmlOutMessage.TEXT().content(key)
                     .fromUser(wxMessage.getToUser())
                     .toUser(wxMessage.getFromUser()).build();
