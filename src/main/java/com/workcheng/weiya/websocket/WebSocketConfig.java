@@ -1,6 +1,6 @@
 package com.workcheng.weiya.websocket;
 
-import com.workcheng.weiya.config.MyWsHandler;
+import com.workcheng.weiya.common.config.MyWsHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.socket.config.annotation.EnableWebSocket;
@@ -19,6 +19,6 @@ public class WebSocketConfig implements WebSocketConfigurer {
 
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry webSocketHandlerRegistry) {
-        webSocketHandlerRegistry.addHandler(myWsHandler,"myWebSocket").setAllowedOrigins("*");
+        webSocketHandlerRegistry.addHandler(myWsHandler, "myWebSocket").setAllowedOrigins("*");
     }
 }

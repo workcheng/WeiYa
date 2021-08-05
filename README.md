@@ -2,7 +2,6 @@
 ### 本`WeiYa`项目使用 `Spring Boot Starter` 实现微信公众号开发功能。
 #### 本项目为`WeiYa`的实现基于微信公众号的签到、抽奖、发送弹幕程序
 
-
 1. 修改对应配置为正确的配置，
 2. 运行demo，执行命令 ：`http get :8080/test`
 
@@ -52,3 +51,8 @@ docker run \
 ```
 curl http://127.0.0.1:9090/admin/index.html
 ```
+
+#### todo
+1. 公众号接入逻辑实现
+2. 数据库默认使用`h2db`,可配置redis
+3. PaaS模式？提供可配置多租户，多公众号配置？用户体系？

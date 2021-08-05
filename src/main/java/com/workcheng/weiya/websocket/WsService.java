@@ -21,6 +21,7 @@ public class WsService {
 
     /**
      * 发送消息
+     *
      * @param session
      * @param text
      * @return
@@ -32,14 +33,14 @@ public class WsService {
 
     /**
      * 广播消息
+     *
      * @param text
      * @return
      * @throws IOException
      */
     public void broadcastMsg(String text) throws IOException {
-        for (WebSocketSession session: WsSessionManager.SESSION_POOL.values()) {
+        for (WebSocketSession session : WsSessionManager.SESSION_POOL.values()) {
             session.sendMessage(new TextMessage(text));
         }
     }
-
 }

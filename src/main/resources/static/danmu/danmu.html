@@ -10,7 +10,6 @@
     <script type="application/javascript">
         $(document).ready(function () {
             var ws = null;
-
             $("#exit").click(function () {
                 $("#content").html("");
                 $("canvas").barrager("clear");
@@ -33,7 +32,14 @@
 
             //获取url参数
             function startServer() {
-                var url = "ws://" + BASE + "/myWebSocket";
+                var url;
+                if (protocolStr === "http:") {
+                    url = "ws://" + BASE + "myWebSocket";
+                } else if (protocolStr === "https:") {
+                    url = "wss://" + BASE + "myWebSocket";
+                } else {
+                    url = "ws://" + BASE + "myWebSocket";
+                }
                 if ('WebSocket' in window) {
                     ws = new WebSocket(url);
                 } else if ('MozWebSocket' in window) {
@@ -44,6 +50,9 @@
                 }
                 ws.onopen = function () {
                     document.getElementById("content").innerHTML += 'Flying!<br />';
+                    setTimeout(function fly() {
+                        document.getElementById("content").innerHTML = '';
+                    }, 3000);
                 };
                 ws.onmessage = function (event) {
                     if (event && event.data) {
@@ -69,9 +78,9 @@
 </head>
 <body>
 <div>
-
     <h1 id="content" style="text-align: center;color:#3498ed"></h1>
-    <button id="exit" style="position: absolute;top: 0;right: 0;z-index: 1000;background-color: transparent;display: none">关闭弹幕通道
+    <button id="exit"
+            style="position: absolute;top: 0;right: 0;z-index: 1000;background-color: transparent;display: none">关闭弹幕通道
     </button>
     <button id="start"
             style="position: absolute;z-index: 1000;top:0;right:100px;background-color: transparent;">

@@ -1,4 +1,4 @@
-package com.workcheng.weiya.config;
+package com.workcheng.weiya.common.config;
 
 import com.workcheng.weiya.websocket.WsSessionManager;
 import lombok.extern.slf4j.Slf4j;
@@ -12,11 +12,10 @@ import org.springframework.web.socket.handler.AbstractWebSocketHandler;
 import java.time.LocalDateTime;
 
 /**
+ * ws消息处理类
+ *
  * @author chenghui
  * @Date: 2021/5/25 17:48
- */
-/**
- * ws消息处理类
  */
 @Component
 @Slf4j
@@ -25,7 +24,7 @@ public class MyWsHandler extends AbstractWebSocketHandler {
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
         log.info("建立ws连接");
-        WsSessionManager.add(session.getId(),session);
+        WsSessionManager.add(session.getId(), session);
     }
 
     @Override

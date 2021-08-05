@@ -36,9 +36,10 @@
                         ws = null;
                     }
                 }
-            })
+            });
+
             function startServer() {
-                var url = "ws://" + BASE + "echoServlet";
+                var url = "ws://" + BASE + "myWebSocket";
                 if ('WebSocket' in window) {
                     ws = new WebSocket(url);
                 } else if ('MozWebSocket' in window) {
@@ -47,7 +48,6 @@
                     alert('Your browser Unsupported WebSocket!');
                     return;
                 }
-
                 ws.onopen = function () {
                     //document.getElementById("content").innerHTML += '弹幕通道已开启! Welcome!<br />';
                 };
@@ -111,7 +111,7 @@
                     <label class="switch-btn">
                         <input class="checked-switch" type="checkbox"/>
                         <span class="text-switch" data-yes="弹幕" data-no="no"></span>
-                    <span class="toggle-btn" id="toggle-btn">
+                        <span class="toggle-btn" id="toggle-btn">
                     </span>
 
                     </label>
