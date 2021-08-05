@@ -7,6 +7,8 @@ import com.workcheng.weiya.common.domain.*;
 import com.workcheng.weiya.common.dto.UserListCount;
 import com.workcheng.weiya.common.exception.*;
 import com.workcheng.weiya.common.utils.*;
+import com.workcheng.weiya.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import me.chanjar.weixin.common.error.WxErrorException;
 import me.chanjar.weixin.mp.api.impl.WxMpServiceImpl;
 import me.chanjar.weixin.mp.bean.result.WxMpUser;
@@ -26,28 +28,23 @@ import java.util.*;
  * Created by andy on 2016/12/20.
  */
 @Service
+@RequiredArgsConstructor
 public class UserService {
     private static final Logger log = LoggerFactory.getLogger(UserService.class);
     @Qualifier("redisTemplate0")
-    @Autowired
-    private RedisTemplate RedisTemplate0;
+    private final RedisTemplate RedisTemplate0;
     @Qualifier("redisTemplate1")
-    @Autowired
-    private RedisTemplate RedisTemplate1;
+    private final RedisTemplate RedisTemplate1;
     @Qualifier("redisTemplate2")
-    @Autowired
-    private RedisTemplate RedisTemplate2;
+    private final RedisTemplate RedisTemplate2;
     @Qualifier("redisTemplate3")
-    @Autowired
-    private RedisTemplate RedisTemplate3;
+    private final RedisTemplate RedisTemplate3;
     @Qualifier("redisTemplate4")
-    @Autowired
-    private RedisTemplate RedisTemplate4;
-    @Autowired
-    private WxMpServiceImpl wxMpService;
+    private final RedisTemplate RedisTemplate4;
+    private final WxMpServiceImpl wxMpService;
     private List<RedisTemplate> RedisTemplateIndexList;
-    @Autowired
-    private DateUtil dateUtil;
+    private final DateUtil dateUtil;
+    private final UserRepository userRepository;
 
     @PostConstruct
     private void init() {

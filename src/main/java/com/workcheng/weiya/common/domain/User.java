@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.validator.constraints.NotBlank;
 
+import javax.persistence.*;
 import java.sql.Timestamp;
 
 /**
@@ -13,12 +14,19 @@ import java.sql.Timestamp;
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
+@Entity
+@Table(name = "t_user")
 public class User extends UnionUser {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     @NotBlank(message = "openId不能为空")
+    @Column(unique = true)
     private String openId;
     @NotBlank(message = "姓名不能为空")
     private String name;
     //    @NotNull(message = "是否订餐不能为空")
+    @Column(name="`ORDER`")
     private Integer order;
     private String nickName;
     private Integer priceCount;
@@ -29,7 +37,8 @@ public class User extends UnionUser {
     @Override
     public String toString() {
         return "User{" +
-                "openId='" + openId + '\'' +
+                "id=" + id +
+                ", openId='" + openId + '\'' +
                 ", name='" + name + '\'' +
                 ", order=" + order +
                 ", nickName='" + nickName + '\'' +
