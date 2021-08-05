@@ -3,6 +3,7 @@ package com.workcheng.weiya.controller;
 import com.workcheng.weiya.common.constant.ErrorCode;
 import com.workcheng.weiya.common.domain.UnionUser;
 import com.workcheng.weiya.common.domain.User;
+import com.workcheng.weiya.common.dto.UserDto;
 import com.workcheng.weiya.common.exception.*;
 import com.workcheng.weiya.common.exception.LotteryException;
 import com.workcheng.weiya.common.exception.NotStartException;
@@ -17,6 +18,7 @@ import me.chanjar.weixin.mp.api.impl.WxMpServiceImpl;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -105,7 +107,10 @@ public class UserController {
     public Object isMember(@RequestParam(value = "id") String openId) {
         try {
             if (userService.isMember(openId)) {
-                return ResponseUtil.success(ErrorCode.HAS_SIGN);
+                final User user = userService.get(openId);
+                UserDto userDto = new UserDto();
+                BeanUtils.copyProperties(user, userDto);
+                return ResponseUtil.success(ErrorCode.HAS_SIGN, userDto);
             } else {
                 return ResponseUtil.success(ErrorCode.NOT_SIGN);
             }

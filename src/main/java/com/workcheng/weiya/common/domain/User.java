@@ -1,13 +1,17 @@
 package com.workcheng.weiya.common.domain;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.hibernate.validator.constraints.NotBlank;
 
 import java.sql.Timestamp;
 
 /**
- * Created by andy on 2016/12/20.
+ *
+ * @author andy
+ * @date 2016/12/20
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
 public class User extends UnionUser {
     @NotBlank(message = "openId不能为空")

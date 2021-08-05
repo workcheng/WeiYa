@@ -26,6 +26,15 @@ public class ResponseUtil {
         return msg;
     }
 
+    public static ResponseMsg success(Object obj, Object extraData) {
+        ResponseMsg msg = new ResponseMsg();
+        msg.setData(obj);
+        msg.setMessage(ErrorCode.SUCCESS.getDescription());
+        msg.setStatus(ErrorCode.SUCCESS.getCode());
+        msg.setExtraData(extraData);
+        return msg;
+    }
+
     public static ResponseMsg failure() {
         ResponseMsg msg = new ResponseMsg();
         msg.setData("");

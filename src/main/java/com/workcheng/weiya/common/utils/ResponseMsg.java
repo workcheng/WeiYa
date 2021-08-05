@@ -2,14 +2,17 @@ package com.workcheng.weiya.common.utils;
 
 import lombok.Data;
 
+import java.io.Serializable;
+
 /**
  * Created by andy on 2016/12/17.
  */
 @Data
-public class ResponseMsg {
+public class ResponseMsg implements Serializable {
     private Object data;
     private String message;
     private Integer status;
+    private Object extraData;
 
     @Override
     public String toString() {
