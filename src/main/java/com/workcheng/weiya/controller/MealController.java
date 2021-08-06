@@ -1,5 +1,6 @@
 package com.workcheng.weiya.controller;
 
+import com.workcheng.weiya.common.config.WeiYaConfig;
 import com.workcheng.weiya.common.constant.ErrorCode;
 import com.workcheng.weiya.common.domain.User;
 import com.workcheng.weiya.common.dto.MealOrder;
@@ -24,6 +25,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MealController {
     private final UserService userService;
+    private final WeiYaConfig weiYaConfig;
 
     /**
      * 获取订餐信息
@@ -40,7 +42,7 @@ public class MealController {
             mealOrder.setNow(new Date());
             return ResponseUtil.success(mealOrder);
         } catch (NotStartException e) {
-            return ResponseUtil.failure(ErrorCode.NOT_START);
+            return ResponseUtil.failure(ErrorCode.NOT_START, weiYaConfig.getWeiyaTime());
         } catch (ServerInternalException e) {
             return ResponseUtil.failure(e.getMessage());
         }

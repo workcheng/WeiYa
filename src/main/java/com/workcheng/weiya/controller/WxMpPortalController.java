@@ -76,5 +76,4 @@ public class WxMpPortalController {
     protected WeiXinService getWxService() {
         return this.wxService;
     }
-
 }

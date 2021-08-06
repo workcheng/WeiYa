@@ -1,6 +1,6 @@
 package com.workcheng.weiya.service;
 
-import com.workcheng.weiya.common.config.WxMpConfig;
+import com.binarywang.spring.starter.wxjava.mp.properties.WxMpProperties;
 import com.workcheng.weiya.handler.*;
 import lombok.RequiredArgsConstructor;
 import me.chanjar.weixin.mp.api.WxMpMessageRouter;
@@ -8,7 +8,9 @@ import me.chanjar.weixin.mp.api.impl.WxMpServiceImpl;
 import me.chanjar.weixin.mp.bean.kefu.result.WxMpKfOnlineList;
 import me.chanjar.weixin.mp.bean.message.WxMpXmlMessage;
 import me.chanjar.weixin.mp.bean.message.WxMpXmlOutMessage;
+import me.chanjar.weixin.mp.config.WxMpConfigStorage;
 import me.chanjar.weixin.mp.config.impl.WxMpDefaultConfigImpl;
+import me.chanjar.weixin.mp.config.impl.WxMpRedisConfigImpl;
 import me.chanjar.weixin.mp.constant.WxMpEventConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,26 +31,17 @@ public class WeiXinService extends WxMpServiceImpl {
     protected final NullHandler nullHandler;
     protected final KfSessionHandler kfSessionHandler;
     protected final StoreCheckNotifyHandler storeCheckNotifyHandler;
-    private final WxMpConfig wxConfig;
     private final LocationHandler locationHandler;
     private final MenuHandler menuHandler;
     private final MsgHandler msgHandler;
     private final UnsubscribeHandler unsubscribeHandler;
     private final SubscribeHandler subscribeHandler;
     private WxMpMessageRouter router;
+    private final WxMpConfigStorage wxMpConfigStorage;
 
     @PostConstruct
     public void init() {
-        final WxMpDefaultConfigImpl config = new WxMpDefaultConfigImpl();
-        // 设置微信公众号的appid
-        config.setAppId(this.wxConfig.getAppId());
-        // 设置微信公众号的app corpSecret
-        config.setSecret(this.wxConfig.getSecret());
-        // 设置微信公众号的token
-        config.setToken(this.wxConfig.getToken());
-        // 设置消息加解密密钥
-        config.setAesKey(this.wxConfig.getAesKey());
-        super.setWxMpConfigStorage(config);
+        super.setWxMpConfigStorage(wxMpConfigStorage);
         this.refreshRouter();
     }
 

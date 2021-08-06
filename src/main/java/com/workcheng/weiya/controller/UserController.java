@@ -1,5 +1,6 @@
 package com.workcheng.weiya.controller;
 
+import com.workcheng.weiya.common.config.WeiYaConfig;
 import com.workcheng.weiya.common.constant.ErrorCode;
 import com.workcheng.weiya.common.domain.UnionUser;
 import com.workcheng.weiya.common.domain.User;
@@ -42,6 +43,7 @@ import java.util.List;
 public class UserController {
     private final UserService userService;
     private final StringRedisTemplate stringRedisTemplate;
+    private final WeiYaConfig weiYaConfig;
 
     /**
      * 保存签到信息
@@ -73,7 +75,7 @@ public class UserController {
             return ResponseUtil.failure(ErrorCode.ERROR_VOTE);
         } catch (NotStartException e) {
             log.error("error", e);
-            return ResponseUtil.failure(ErrorCode.NOT_START);
+            return ResponseUtil.failure(ErrorCode.NOT_START, weiYaConfig.getWeiyaTime());
         } catch (WxErrorException e) {
             log.error("error", e);
             return ResponseUtil.failure(e);
@@ -93,7 +95,7 @@ public class UserController {
             return ResponseUtil.success(userService.get(openId));
         } catch (NotStartException e) {
             log.error("error", e);
-            return ResponseUtil.failure(ErrorCode.NOT_START);
+            return ResponseUtil.failure(ErrorCode.NOT_START, weiYaConfig.getWeiyaTime());
         } catch (ServerInternalException e) {
             return ResponseUtil.failure(e.getMessage());
         }
@@ -108,6 +110,10 @@ public class UserController {
     @RequestMapping(value = "/isMember", method = RequestMethod.GET)
     public Object isMember(@RequestParam(value = "id") String openId) {
         try {
+            if (!weiYaConfig.signTime()) {
+                log.info("签到时间为：{} ~ {}", weiYaConfig.getSinOpenTime(), weiYaConfig.getSignCloseTime());
+                return ResponseUtil.failure(ErrorCode.NOT_START, weiYaConfig.getSignCloseTime());
+            }
             if (userService.isMember(openId)) {
                 final User user = userService.get(openId);
                 UserDto userDto = new UserDto();
@@ -118,7 +124,7 @@ public class UserController {
             }
         } catch (NotStartException e) {
             log.error("error", e);
-            return ResponseUtil.failure(ErrorCode.NOT_START);
+            return ResponseUtil.failure(ErrorCode.NOT_START, weiYaConfig.getWeiyaTime());
         } catch (ServerInternalException e) {
             log.error("error", e);
             return ResponseUtil.failure(e.getMessage());
@@ -172,7 +178,7 @@ public class UserController {
             return ResponseUtil.success(userService.randomUser(1));
         } catch (NotStartException e) {
             log.error("error", e);
-            return ResponseUtil.failure(ErrorCode.NOT_START);
+            return ResponseUtil.failure(ErrorCode.NOT_START, weiYaConfig.getWeiyaTime());
         } catch (ServerInternalException e) {
             log.error("error", e);
             return ResponseUtil.failure(e.getMessage());
@@ -194,7 +200,7 @@ public class UserController {
             return ResponseUtil.success(userService.randomUser(count));
         } catch (NotStartException e) {
             log.error("error", e);
-            return ResponseUtil.failure(ErrorCode.NOT_START);
+            return ResponseUtil.failure(ErrorCode.NOT_START, weiYaConfig.getWeiyaTime());
         } catch (ServerInternalException e) {
             log.error("error", e);
             return ResponseUtil.failure(e.getMessage());
@@ -221,7 +227,7 @@ public class UserController {
             return ResponseUtil.success(userService.orderMealUserCountAndUserList());
         } catch (NotStartException e) {
             log.error("error", e);
-            return ResponseUtil.failure(ErrorCode.NOT_START);
+            return ResponseUtil.failure(ErrorCode.NOT_START, weiYaConfig.getWeiyaTime());
         } catch (ServerInternalException e) {
             log.error("error", e);
             return ResponseUtil.failure(e);
@@ -239,7 +245,7 @@ public class UserController {
             return ResponseUtil.success(userService.getUserSize());
         } catch (NotStartException e) {
             log.error("error", e);
-            return ResponseUtil.failure(ErrorCode.NOT_START);
+            return ResponseUtil.failure(ErrorCode.NOT_START, weiYaConfig.getWeiyaTime());
         } catch (ServerInternalException e) {
             log.error("error", e);
             return ResponseUtil.failure(e.getMessage());
@@ -268,7 +274,7 @@ public class UserController {
             return ResponseUtil.failure(e.getMessage());
         } catch (NotStartException e) {
             log.error("error", e);
-            return ResponseUtil.failure(ErrorCode.NOT_START);
+            return ResponseUtil.failure(ErrorCode.NOT_START, weiYaConfig.getWeiyaTime());
         }
     }
 
@@ -308,7 +314,7 @@ public class UserController {
             return ResponseUtil.success(l);
         } catch (NotStartException e) {
             log.error("error", e);
-            return ResponseUtil.failure(ErrorCode.NOT_START);
+            return ResponseUtil.failure(ErrorCode.NOT_START, weiYaConfig.getWeiyaTime());
         } catch (ServerInternalException e) {
             log.error("error", e);
             return ResponseUtil.failure(e.getMessage());

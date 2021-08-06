@@ -22,6 +22,8 @@ public class WeiYaConfig {
     private String password;
     private String closeTime;
     private String openTime;
+    private String sinOpenTime;
+    private String signCloseTime;
     private String signInUrl;
     private String signOutUrl;
     private String voteUrl;
@@ -31,32 +33,48 @@ public class WeiYaConfig {
     final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     // 2021-08-10 23:15:00
-    public boolean partyTime() {
+    public boolean weiyaTime() {
+        return inTheTime(openTime, closeTime);
+    }
+
+    public boolean signTime() {
+        return inTheTime(sinOpenTime, signCloseTime);
+    }
+
+    private boolean inTheTime(String start, String end) {
         final Date now = new Date();
         log.info("now:{}", now);
-        if (openTime == null) {
+        if (start == null) {
             return false;
         }
-        if (closeTime == null) {
+        if (end == null) {
             return false;
         }
         final Date open;
         try {
-            open = simpleDateFormat.parse(openTime);
+            open = simpleDateFormat.parse(start);
         } catch (ParseException e) {
-            log.error("format time error, openTime" + openTime, e);
+            log.error("format time error, start" + start, e);
             return false;
         }
         final Date close;
         try {
-            close = simpleDateFormat.parse(closeTime);
+            close = simpleDateFormat.parse(end);
         } catch (ParseException e) {
-            log.error("format time error, closeTime:"+ closeTime, e);
+            log.error("format time error, closeTime:"+ end, e);
             return false;
         }
         if (now.after(close)) {
             return false;
         }
         return !now.before(open);
+    }
+
+    public String getWeiyaTime() {
+        return openTime + "-" + closeTime;
+    }
+
+    public String getSignTime() {
+        return sinOpenTime + "-" + signCloseTime;
     }
 }
