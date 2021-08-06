@@ -90,21 +90,20 @@
                         <ports>
                             <port>8090</port>
                         </ports>
+                        <mainClass>com.workcheng.weiya.WeiYaApplication</mainClass>
                         <useCurrentTimestamp>true</useCurrentTimestamp>
                     </container>
                     <allowInsecureRegistries>true</allowInsecureRegistries>
                 </configuration>
-                <executions>
+                <!--<executions>
                     <execution>
                         <phase>compile</phase>
                         <goals>
                             <goal>dockerBuild</goal>
                         </goals>
                     </execution>
-                </executions>
+                </executions>-->
             </plugin>
         </plugins>
     </build>
-
-
 </project>
