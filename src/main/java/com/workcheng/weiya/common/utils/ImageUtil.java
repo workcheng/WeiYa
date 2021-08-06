@@ -167,12 +167,6 @@ public class ImageUtil {
         createTempAndOutPut(os, url, roundedImage, stringRedisTemplate);
     }
 
-    public static void main(String[] args) throws IOException {
-        File img = new File("e:\\Users\\rocky\\Desktop\\0\\IMG_0404.PNG");
-        File save = new File("e:\\Users\\rocky\\Desktop\\0\\zz.jpg");
-//        toJPG(img, save, 250, 100);
-    }
-
     private static void createTempAndOutPut(OutputStream os, URL url, BufferedImage roundedImage, StringRedisTemplate stringRedisTemplate) throws IOException {
         try {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();

@@ -44,11 +44,4 @@ public enum ErrorCode {
                 ", description='" + description + '\'' +
                 '}';
     }
-
-    public static void main(String args[]) {
-        // 静态方法
-        for (ErrorCode s : ErrorCode.values()) {
-            System.out.println("code: " + s.getCode() + ", description: " + s.getDescription());
-        }
-    }
 }

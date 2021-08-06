@@ -52,10 +52,10 @@ public class ZoeCrossSiteScriptingValidationUtil {
         return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z');
     }
 
-    public static void main(String[] args) {
+/*    public static void main(String[] args) {
         String s = "acd<&《&";
         for (int i = 0; i < str.length; i++) {
             System.out.println(" i= " + find(s, str, 0));
         }
-    }
+    }*/
 }

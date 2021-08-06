@@ -151,7 +151,7 @@ public class SensitiveWordFilter {
         }
         return matchFlag;
     }
-
+/*
     public static void main(String[] args) {
         SensitiveWordFilter filter = new SensitiveWordFilter();
         System.out.println("敏感词的数量：" + filter.sensitiveWordMap.size());
@@ -164,5 +164,5 @@ public class SensitiveWordFilter {
         String s = filter.replaceSensitiveWord(string, 2, "*");
         System.out.println("语句替换敏感词之后：" + s);
         System.out.println("总共消耗时间为：" + (endTime - beginTime));
-    }
+    }*/
 }

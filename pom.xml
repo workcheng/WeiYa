@@ -88,7 +88,7 @@
                         </jvmFlags>
                         <!--要暴露的端口-->
                         <ports>
-                            <port>8080</port>
+                            <port>8090</port>
                         </ports>
                         <useCurrentTimestamp>true</useCurrentTimestamp>
                     </container>

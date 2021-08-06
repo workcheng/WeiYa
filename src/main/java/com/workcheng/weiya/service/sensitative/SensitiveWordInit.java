@@ -3,10 +3,8 @@ package com.workcheng.weiya.service.sensitative;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStreamReader;
+import java.io.*;
+import java.net.URL;
 import java.util.*;
 
 
@@ -19,7 +17,7 @@ import java.util.*;
 public class SensitiveWordInit {
     //字符编码
     private static final String ENCODING = "UTF-8";
-    private static final String WORD_LOCATION = "/sensitive/sensitiveWord.txt";
+    private static final String WORD_LOCATION = "sensitive/sensitiveWord.txt";
     @SuppressWarnings("rawtypes")
     public HashMap sensitiveWordMap;
 
@@ -113,6 +111,20 @@ public class SensitiveWordInit {
         }
     }
 
+    private InputStream load() {
+        InputStream inputStream = null;
+        ClassLoader loader = Thread.currentThread().getContextClassLoader();
+        if (WORD_LOCATION.startsWith("classpath:")) {
+            inputStream = loader.getResourceAsStream(WORD_LOCATION.substring(10));
+        } else {
+            inputStream = loader.getResourceAsStream(WORD_LOCATION);
+            if (inputStream == null) {
+                inputStream = SensitiveWordInit.class.getClassLoader().getResourceAsStream(WORD_LOCATION);
+            }
+        }
+        return inputStream;
+    }
+
     /**
      * 读取敏感词库中的内容，将内容添加到set集合中
      *
@@ -122,11 +134,9 @@ public class SensitiveWordInit {
     @SuppressWarnings("resource")
     private Set<String> readSensitiveWordFile() throws Exception {
         Set<String> set = null;
-        File file = new File(SensitiveWordInit.class.getResource(WORD_LOCATION).getFile());
         //读取文件
-//		File file = new File("D:\\sensitiveWord.txt");
-        try (InputStreamReader read = new InputStreamReader(new FileInputStream(file), ENCODING)) {
-            if (file.isFile() && file.exists()) {
+        try (InputStreamReader read = new InputStreamReader(load(), ENCODING)) {
+            if (read.ready()) {
                 //文件流是否存在
                 set = new HashSet<String>();
                 BufferedReader bufferedReader = new BufferedReader(read);
