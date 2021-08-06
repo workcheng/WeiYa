@@ -16,6 +16,8 @@
 
     <properties>
         <java.version>1.8</java.version>
+        <!--  weiya url配置 -->
+        <weiya.url>http://workcheng.ngrok.wendal.cn</weiya.url>
     </properties>
 
     <dependencies>
@@ -37,7 +39,6 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-redis</artifactId>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-websocket -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-websocket</artifactId>
@@ -88,7 +89,7 @@
                         </jvmFlags>
                         <!--要暴露的端口-->
                         <ports>
-                            <port>8090</port>
+                            <port>8080</port>
                         </ports>
                         <mainClass>com.workcheng.weiya.WeiYaApplication</mainClass>
                         <useCurrentTimestamp>true</useCurrentTimestamp>

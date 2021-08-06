@@ -18,22 +18,34 @@ import java.util.Date;
 @ConfigurationProperties(prefix = "weiya")
 @Slf4j
 public class WeiYaConfig {
+    /** 后台登陆用户名 */
     private String username;
+    /** 后台登陆密码 */
     private String password;
+    /** 活动结束时间 */
     private String closeTime;
+    /** 活动开始时间 */
     private String openTime;
+    /** 签到开始时间 */
     private String sinOpenTime;
+    /** 签到结束时间 */
     private String signCloseTime;
+    /** 签到 url */
     private String signInUrl;
+    /** 签到 url */
     private String signOutUrl;
+    /** 投票 url */
     private String voteUrl;
+    /** 弹幕互动 url */
     private String commentUrl;
+    /** 节目单 url */
     private String cardUrl;
+    /** 中奖信息 */
     private String prizeMessage;
+    /** 菜单书籍 */
     private String menuJson;
     final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-    // 2021-08-10 23:15:00
     public boolean weiyaTime() {
         return inTheTime(openTime, closeTime);
     }
