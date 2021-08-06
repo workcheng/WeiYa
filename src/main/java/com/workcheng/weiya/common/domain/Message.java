@@ -4,6 +4,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
+import java.util.Date;
 
 import com.workcheng.weiya.common.dto.*;
 
@@ -16,5 +18,5 @@ import com.workcheng.weiya.common.dto.*;
 @Data
 public class Message extends LuckyUser implements Serializable {
     private String message;
-    private MyDate createTime;
+    private Date createTime;
 }

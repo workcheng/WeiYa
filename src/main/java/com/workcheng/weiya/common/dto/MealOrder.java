@@ -4,6 +4,7 @@ package com.workcheng.weiya.common.dto;
 import com.workcheng.weiya.common.domain.User;
 import lombok.Data;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -13,7 +14,7 @@ import java.util.List;
 public class MealOrder {
     private int orderCount;
     private List<User> orderUsers;
-    private MyDate now;
+    private Date now;
 
     @Override
     public String toString() {

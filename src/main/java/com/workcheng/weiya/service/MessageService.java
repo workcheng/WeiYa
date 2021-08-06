@@ -5,6 +5,8 @@ import com.workcheng.weiya.common.dto.BarrAgerModel;
 import com.workcheng.weiya.common.dto.WsMessage;
 import com.workcheng.weiya.common.exception.ServerInternalException;
 import com.workcheng.weiya.common.utils.RandomUtil;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,11 +18,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by chenghui on 2017/1/12.
+ *
+ * @author chenghui
+ * @date 2017/1/12
  */
 @Service
+@Slf4j
+@RequiredArgsConstructor
 public class MessageService {
-    private static final Logger log = LoggerFactory.getLogger(MessageService.class);
     @Qualifier("redisTemplate0")
     @Autowired
     private RedisTemplate<String, WsMessage> zoeRedisTemplate0;

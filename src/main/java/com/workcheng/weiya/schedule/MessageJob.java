@@ -39,7 +39,7 @@ public class MessageJob {
             msg.put("headImgUrl", "http://static.clewm.net/cli/images/beautify/logo/icon1.png");
             wsService.broadcastMsg(getMapperInstance(false).writeValueAsString(msg));
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("error", e);
         }
     }
 

@@ -1,5 +1,6 @@
 package com.workcheng.weiya.service.sensitative;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
@@ -14,11 +15,11 @@ import java.util.*;
  * @date 2017/1/5
  */
 @Service
+@Slf4j
 public class SensitiveWordInit {
     //字符编码
     private static final String ENCODING = "UTF-8";
     private static final String WORD_LOCATION = "/sensitive/sensitiveWord.txt";
-
     @SuppressWarnings("rawtypes")
     public HashMap sensitiveWordMap;
 
@@ -38,7 +39,7 @@ public class SensitiveWordInit {
             addSensitiveWordToHashMap(keyWordSet);
             //spring获取application，然后application.setAttribute("sensitiveWordMap",sensitiveWordMap);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("error", e);
         }
         return sensitiveWordMap;
     }

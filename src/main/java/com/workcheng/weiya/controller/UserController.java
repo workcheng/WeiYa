@@ -20,6 +20,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -40,6 +41,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
+    private final StringRedisTemplate stringRedisTemplate;
 
     /**
      * 保存签到信息
@@ -165,7 +167,7 @@ public class UserController {
      * @return
      */
     @RequestMapping(value = "/lotterySelect", method = RequestMethod.GET)
-    public Object LotterySelect() {
+    public Object lotterySelect() {
         try {
             return ResponseUtil.success(userService.randomUser(1));
         } catch (NotStartException e) {
@@ -214,7 +216,7 @@ public class UserController {
                     log.error("列表不存在");
                     return ResponseUtil.failure("列表不存在");
                 }
-                return ResponseUtil.success(userService.orderMealUserCountAndUserList(index));
+                return ResponseUtil.success(userService.orderMealUserCountAndUserList());
             }
             return ResponseUtil.success(userService.orderMealUserCountAndUserList());
         } catch (NotStartException e) {
@@ -247,14 +249,18 @@ public class UserController {
     /**
      * 获取中奖名单
      *
-     * @param degree 0：一等奖；1：二等奖；2：三等奖
+     * @param degree 0：一等奖；1：二等奖；2：三等奖 -1:所有
      * @return
      */
     @RequestMapping(value = "/luckyUserList", method = RequestMethod.GET)
     public Object getLuckyUserList(Integer degree) {
         try {
             if (null != degree) {
-                return ResponseUtil.success(userService.getMessageByDegree(degree));
+                if (degree == -1) {
+                    return ResponseUtil.success(userService.getAllMessage());
+                } else {
+                    return ResponseUtil.success(userService.getMessageByDegree(degree));
+                }
             }
             return ResponseUtil.success(userService.getAllMessage());
         } catch (ServerInternalException e) {
@@ -274,6 +280,7 @@ public class UserController {
      */
     @RequestMapping(value = "/headImgUrl", method = RequestMethod.GET)
     public void getHeadImgUrl(@RequestParam String url, HttpServletResponse response) {
+        // TODO 前端自己画圆角头像，不需要再通过服务端进行处理
         response.setContentType("image/jpeg");
         System.setProperty("java.awt.headless", "true");
         if (StringUtils.isBlank(url)) {
@@ -281,10 +288,9 @@ public class UserController {
         }
         try {
             ServletOutputStream outputStream = response.getOutputStream();
-            ImageUtil.toPNG(new URL(url), outputStream, 250, 250);
+            ImageUtil.toPNG(new URL(url), outputStream, 250, 250, stringRedisTemplate);
         } catch (IOException e) {
             log.error("error", e);
-            e.printStackTrace();
         }
     }
 

@@ -1,23 +1,25 @@
 package com.workcheng.weiya.common.utils;
 
-/**
- * Created by chenghui on 2017/1/17.
- */
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.util.Base64Utils;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.geom.Area;
 import java.awt.geom.RoundRectangle2D;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.URL;
 
 /**
- * @author sanshizi
+ *
+ * @author chenghui
+ * @date 2017/1/17
  */
+
+@Slf4j
 public class ImageUtil {
 
     /**
@@ -137,46 +139,75 @@ public class ImageUtil {
         return __rgbs;
     }
 
-/*    public static void toJPG(File img, File save, int size, int quality) throws IOException {
-        FileOutputStream out = new FileOutputStream(save);
-        JPEGImageEncoder encoder = JPEGCodec.createJPEGEncoder(out);
-
-        BufferedImage image = (BufferedImage) getRoundedImage(ImageIO.read(img), size, 0, 2);//默认无圆角
-
-        //如果图像是透明的，就丢弃Alpha通道
-        if (image.getTransparency() == Transparency.TRANSLUCENT) {
-            image = get24BitImage(image);
-        }
-
-        JPEGEncodeParam param = encoder.getDefaultJPEGEncodeParam(image);//使用jpeg编码器
-//        param.setQuality(1, true);//高质量jpg图片输出
-        param.setQuality(quality, true);
-        encoder.encode(image, param);
-
-        out.close();
-    }*/
 
     public static void toPNG(File img, File save, int size, int radius) throws IOException {
-        ImageIO.write((BufferedImage) getRoundedImage(ImageIO.read(img), size, radius, 2), "PNG", save);//默认无圆角
+        ImageIO.write(getRoundedImage(ImageIO.read(img), size, radius, 2), "PNG", save);
+        //默认无圆角
     }
 
     public static ByteArrayOutputStream toPNG(URL url, int size, int radius) throws IOException {
         ByteArrayOutputStream os = new ByteArrayOutputStream();
-        ImageIO.write((BufferedImage) getRoundedImage(ImageIO.read(url), size, radius, 2), "PNG", os);
+        ImageIO.write(getRoundedImage(ImageIO.read(url), size, radius, 2), "PNG", os);
 //        InputStream is = new ByteArrayInputStream(os.toByteArray());
         return os;
     }
 
     public static void toPNG(URL url, OutputStream os, int size, int radius) throws IOException {
-        BufferedImage roundedImage = (BufferedImage) getRoundedImage(ImageIO.read(url), size, radius, 2);
+        BufferedImage roundedImage = getRoundedImage(ImageIO.read(url), size, radius, 2);
         ImageIO.write(roundedImage, "PNG", os);
         os.close();
+    }
+
+    public static void toPNG(URL url, OutputStream os, int size, int radius, StringRedisTemplate stringRedisTemplate) throws IOException {
+        if (getFromTemp(os, url, stringRedisTemplate)) {
+            log.info("从缓存获取, url:{}", url.getPath());
+            return;
+        }
+        BufferedImage roundedImage = getRoundedImage(ImageIO.read(url), size, radius, 2);
+        createTempAndOutPut(os, url, roundedImage, stringRedisTemplate);
     }
 
     public static void main(String[] args) throws IOException {
         File img = new File("e:\\Users\\rocky\\Desktop\\0\\IMG_0404.PNG");
         File save = new File("e:\\Users\\rocky\\Desktop\\0\\zz.jpg");
 //        toJPG(img, save, 250, 100);
+    }
+
+    private static void createTempAndOutPut(OutputStream os, URL url, BufferedImage roundedImage, StringRedisTemplate stringRedisTemplate) throws IOException {
+        try {
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            ImageIO.write(roundedImage,  "PNG", baos);
+            final byte[] bytes = baos.toByteArray();
+            final String encodeToString = Base64Utils.encodeToString(bytes);
+            stringRedisTemplate.opsForValue().set(getTempPrefix(url.getPath()), encodeToString);
+            os.write(bytes);
+            os.close();
+        } catch (Exception e) {
+            log.error("create image temp error", e);
+            ImageIO.write(roundedImage, "PNG", os);
+            os.close();
+        }
+    }
+
+    private static boolean getFromTemp(OutputStream os, URL url, StringRedisTemplate stringRedisTemplate) {
+        try {
+            final String s = stringRedisTemplate.opsForValue().get(getTempPrefix(url.getPath()));
+            if (StringUtils.isNotEmpty(s)) {
+                final byte[] bytes = Base64Utils.decodeFromString(s);
+                os.write(bytes);
+                os.close();
+                return true;
+            }
+            return false;
+        } catch (Exception e) {
+            log.error("get image from temp error", e);
+            return false;
+        }
+    }
+
+    private static String getTempPrefix(String key) {
+        String tempPrefix = "headImage";
+        return tempPrefix + "_" + key;
     }
 }
 

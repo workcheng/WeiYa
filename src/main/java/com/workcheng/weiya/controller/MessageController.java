@@ -4,7 +4,7 @@ import com.workcheng.weiya.common.domain.LuckyUser;
 import com.workcheng.weiya.common.dto.BarrAgerModel;
 import com.workcheng.weiya.common.dto.WsMessage;
 import com.workcheng.weiya.common.utils.ResponseUtil;
-import com.workcheng.weiya.common.utils.ZoeCrossSiteScriptingValidation;
+import com.workcheng.weiya.common.utils.ZoeCrossSiteScriptingValidationUtil;
 import com.workcheng.weiya.handler.MsgHandler;
 import com.workcheng.weiya.service.MessageService;
 import com.workcheng.weiya.service.UserService;
@@ -64,7 +64,7 @@ public class MessageController {
         if (null != zoeMessage.getContent() && zoeMessage.getContent().length() > count) {
             return ResponseUtil.failure("字符长度不能大于" + count + "个");
         }
-        if (ZoeCrossSiteScriptingValidation.IsDangerousString(zoeMessage.getContent())) {
+        if (ZoeCrossSiteScriptingValidationUtil.isDangerousString(zoeMessage.getContent())) {
             return ResponseUtil.failure("非法字符");
         }
         if (StringUtils.isBlank(zoeMessage.getHeadImgUrl())) {
@@ -92,7 +92,7 @@ public class MessageController {
         if (null != zoeMessage.getContent() && zoeMessage.getContent().length() > count) {
             return ResponseUtil.failure("字符长度不能大于" + count);
         }
-        if (ZoeCrossSiteScriptingValidation.IsDangerousString(zoeMessage.getContent())) {
+        if (ZoeCrossSiteScriptingValidationUtil.isDangerousString(zoeMessage.getContent())) {
             return ResponseUtil.failure("非法字符");
         }
         String replaceMessage = sensitiveService.replaceSensitiveWord(zoeMessage.getContent(), 1, "*");
@@ -131,8 +131,7 @@ public class MessageController {
     }
 
     private String getDefaultHeadImgUrl() {
-        String defaultHeadImage = defaultPrefix() + "/danmu/images/wechat_logo.jpg";
-        return defaultHeadImage;
+        return defaultPrefix() + "/danmu/images/wechat_logo.jpg";
     }
 
     /**
@@ -142,8 +141,7 @@ public class MessageController {
      * @return
      */
     private String getRadiusHeadImgUrl(String headUrl) {
-        String defaultHeadImage = defaultPrefix() + "/user/headImgUrl?url=" + headUrl;
-        return defaultHeadImage;
+        return defaultPrefix() + "/user/headImgUrl?url=" + headUrl;
     }
 
     private String defaultPrefix() {

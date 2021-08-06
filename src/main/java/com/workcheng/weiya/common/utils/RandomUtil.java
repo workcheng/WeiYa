@@ -12,14 +12,6 @@ public class RandomUtil {
     //双重校验锁获取一个Random单例
     public static ThreadLocalRandom getRandom() {
         return ThreadLocalRandom.current();
-        /*if(random==null){
-            synchronized (RandomUtils.class) {
-                if(random==null){
-                    random =new Random();
-                }
-            }
-        }
-        return random;*/
     }
 
     /**
@@ -162,7 +154,6 @@ public class RandomUtil {
                 int random = (int) (Math.random() * list.size());
                 if (!map.containsKey(random)) {
                     map.put(random, "");
-                    System.out.println(random + "===========" + list.get(random));
                     listNew.add(list.get(random));
                 }
             }

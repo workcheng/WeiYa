@@ -1,9 +1,9 @@
 package com.workcheng.weiya.common.dto;
 
 import com.workcheng.weiya.common.domain.User;
-import com.workcheng.weiya.common.dto.MyDate;
 import lombok.Data;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -15,7 +15,7 @@ import java.util.List;
 public class UserListCount {
     private int orderCount;
     private List<User> users;
-    private MyDate now;
+    private Date now;
 
     @Override
     public String toString() {

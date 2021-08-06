@@ -51,7 +51,7 @@ public class WsSessionManager {
                 session.close();
             } catch (IOException e) {
                 // todo: 关闭出现异常处理
-                e.printStackTrace();
+                log.error("error", e);
             }
         }
     }

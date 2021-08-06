@@ -1,12 +1,15 @@
 package com.workcheng.weiya.service;
 
 
+import com.workcheng.weiya.common.config.WeiYaConfig;
 import com.workcheng.weiya.common.constant.CommonConstant;
 import com.workcheng.weiya.common.constant.ErrorCode;
 import com.workcheng.weiya.common.domain.*;
 import com.workcheng.weiya.common.dto.UserListCount;
 import com.workcheng.weiya.common.exception.*;
 import com.workcheng.weiya.common.utils.*;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import me.chanjar.weixin.common.error.WxErrorException;
 import me.chanjar.weixin.mp.api.impl.WxMpServiceImpl;
 import me.chanjar.weixin.mp.bean.result.WxMpUser;
@@ -16,6 +19,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -26,28 +30,16 @@ import java.util.*;
  * Created by andy on 2016/12/20.
  */
 @Service
+@RequiredArgsConstructor
+@Slf4j
 public class UserService {
-    private static final Logger log = LoggerFactory.getLogger(UserService.class);
+    @Autowired
     @Qualifier("redisTemplate0")
-    @Autowired
     private RedisTemplate RedisTemplate0;
-    @Qualifier("redisTemplate1")
-    @Autowired
-    private RedisTemplate RedisTemplate1;
-    @Qualifier("redisTemplate2")
-    @Autowired
-    private RedisTemplate RedisTemplate2;
-    @Qualifier("redisTemplate3")
-    @Autowired
-    private RedisTemplate RedisTemplate3;
-    @Qualifier("redisTemplate4")
-    @Autowired
-    private RedisTemplate RedisTemplate4;
-    @Autowired
-    private WxMpServiceImpl wxMpService;
+    private final WxMpServiceImpl wxMpService;
     private List<RedisTemplate> RedisTemplateIndexList;
-    @Autowired
-    private DateUtil dateUtil;
+    private final WeiYaConfig weiYaConfig;
+
 
     @PostConstruct
     private void init() {
@@ -55,17 +47,20 @@ public class UserService {
             private static final long serialVersionUID = 1L;
             {
                 add(RedisTemplate0);
-                add(RedisTemplate1);
-                add(RedisTemplate2);
-                add(RedisTemplate3);
-                add(RedisTemplate4);
             }
         };
     }
 
+    private Integer getIndex() throws NotStartException {
+        if (!weiYaConfig.partyTime()) {
+            throw new NotStartException();
+        }
+        return 0;
+    }
+
     private RedisTemplate getRedisTemplate() throws NotStartException, ServerInternalException {
         try {
-            return RedisTemplateIndexList.get(Integer.parseInt(dateUtil.getIndex()));
+            return RedisTemplateIndexList.get(getIndex());
         } catch (IndexOutOfBoundsException e) {
             throw new ServerInternalException("时间设置不对");
         }
@@ -125,20 +120,12 @@ public class UserService {
         return (User) getRedisTemplate().opsForValue().get(openId);
     }
 
-    public User get(int index, String openId) throws NotStartException, ServerInternalException {
-        return (User) RedisTemplateIndexList.get(index).opsForValue().get(openId);
-    }
-
     public Long saveInSet(String openId) throws NotStartException, ServerInternalException {
         return getRedisTemplate().opsForSet().add(CommonConstant.USER, openId);
     }
 
     public Set<String> getOpenIdSet() throws NotStartException, ServerInternalException {
         return (Set) getRedisTemplate().opsForSet().members(CommonConstant.USER);
-    }
-
-    public Set<String> getOpenIdSet(int index) throws NotStartException, ServerInternalException {
-        return (Set) RedisTemplateIndexList.get(index).opsForSet().members(CommonConstant.USER);
     }
 
     public boolean isMember(String openId) throws NotStartException, ServerInternalException {
@@ -271,32 +258,7 @@ public class UserService {
                 }
             }
         }
-        userListCount.setNow(MyDateUtil.moment());
-        userListCount.setOrderCount(orderCount);
-        userListCount.setUsers(userList);
-        return userListCount;
-    }
-
-    public UserListCount orderMealUserCountAndUserList(int index) throws ServerInternalException, NotStartException {
-        UserListCount userListCount = new UserListCount();
-        Set<String> openIdSet = null;
-        try {
-            openIdSet = getOpenIdSet(index);
-        } catch (Exception e) {
-            log.error("error", e);
-        }
-        List<User> userList = new ArrayList<>();
-        int orderCount = 0;
-        if (null != openIdSet) {
-            for (String next : openIdSet) {
-                User user = get(index, next);
-                userList.add(user);
-                if (Integer.valueOf(1).equals(user.getOrder())) {
-                    orderCount++;
-                }
-            }
-        }
-        userListCount.setNow(MyDateUtil.moment());
+        userListCount.setNow(new Date());
         userListCount.setOrderCount(orderCount);
         userListCount.setUsers(userList);
         return userListCount;
@@ -319,7 +281,7 @@ public class UserService {
     public Integer saveMessage(String message) throws ServerInternalException, NotStartException {
         Message msg = new Message();
         msg.setMessage(message);
-        msg.setCreateTime(MyDateUtil.moment());
+        msg.setCreateTime(new Date());
         Long aLong = getRedisTemplate().opsForSet().add(CommonConstant.MESSAGE, msg);
         if (aLong == 1) {
             return 1;

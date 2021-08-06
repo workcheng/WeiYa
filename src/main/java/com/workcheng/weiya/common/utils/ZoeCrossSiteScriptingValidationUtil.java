@@ -1,38 +1,27 @@
 package com.workcheng.weiya.common.utils;
 
 /**
+ * 过滤非法字符
  * Created by chenghui on 2017/1/9.
  */
-
-/**
- * 过滤非法字符
- */
-
-public class ZoeCrossSiteScriptingValidation {
-
-    private static String[] str =
-            new String[]
-                    {
-                            "<",
-                            "&"
-                    };
+public class ZoeCrossSiteScriptingValidationUtil {
+    private static String[] str = new String[]{"<", "&"};
 
     public static int find(String arr, String[] str, int startIndex) {
         boolean flag = false;
-        for (int i = 0; i < str.length; i++) {
-            if (arr.indexOf(str[i], startIndex) != -1) {
+        for (String s : str) {
+            if (arr.indexOf(s, startIndex) != -1) {
                 flag = true;
-                return arr.indexOf(str[i], startIndex);
+                return arr.indexOf(s, startIndex);
             }
         }
-        if (flag == false) {
+        if (!flag) {
             return -1;
         }
         return -1;
     }
 
-
-    public static boolean IsDangerousString(String s) {
+    public static boolean isDangerousString(String s) {
         int matchIndex = 0;
         int startIndex = 0;
         while (true) {
@@ -46,7 +35,7 @@ public class ZoeCrossSiteScriptingValidation {
             matchIndex = num;
             char c = s.charAt(num);
             if (c != '&') {
-                if (c == '<' && (ZoeCrossSiteScriptingValidation.IsAtoZ(s.charAt(num + 1)) || s.charAt(num + 1) == '!' || s.charAt(num + 1) == '/' || s.charAt(num + 1) == '?')) {
+                if (c == '<' && (ZoeCrossSiteScriptingValidationUtil.isAtoZ(s.charAt(num + 1)) || s.charAt(num + 1) == '!' || s.charAt(num + 1) == '/' || s.charAt(num + 1) == '?')) {
                     return true;
                 }
             } else {
@@ -59,7 +48,7 @@ public class ZoeCrossSiteScriptingValidation {
         return false;
     }
 
-    private static boolean IsAtoZ(char c) {
+    private static boolean isAtoZ(char c) {
         return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z');
     }
 

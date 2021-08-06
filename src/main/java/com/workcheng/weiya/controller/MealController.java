@@ -5,7 +5,6 @@ import com.workcheng.weiya.common.domain.User;
 import com.workcheng.weiya.common.dto.MealOrder;
 import com.workcheng.weiya.common.exception.NotStartException;
 import com.workcheng.weiya.common.exception.ServerInternalException;
-import com.workcheng.weiya.common.utils.MyDateUtil;
 import com.workcheng.weiya.common.utils.ResponseUtil;
 import com.workcheng.weiya.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -37,7 +37,7 @@ public class MealController {
             List<User> userList = userService.orderMealUserList();
             mealOrder.setOrderUsers(userList);
             mealOrder.setOrderCount(userList.size());
-            mealOrder.setNow(MyDateUtil.moment());
+            mealOrder.setNow(new Date());
             return ResponseUtil.success(mealOrder);
         } catch (NotStartException e) {
             return ResponseUtil.failure(ErrorCode.NOT_START);
