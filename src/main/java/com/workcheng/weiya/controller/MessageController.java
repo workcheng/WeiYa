@@ -145,12 +145,7 @@ public class MessageController {
     }
 
     private String defaultPrefix() {
-        return "http://" + request.getServerName()
-                //服务器地址
-                + ":"
-                + request.getServerPort()
-                //端口号
-                + request.getContextPath();
+        return "http://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
     }
 
 }
