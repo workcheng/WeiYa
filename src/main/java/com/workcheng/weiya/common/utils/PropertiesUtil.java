@@ -4,6 +4,7 @@
  */
 package com.workcheng.weiya.common.utils;
 
+import com.workcheng.weiya.common.config.WeiYaConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -49,8 +50,8 @@ public class PropertiesUtil {
         return properties.getProperty(key);
     }
 
-    public static String getMenuJson() {
+    public static String getMenuJson(WeiYaConfig weiYaConfig) {
         String menu = "'{'\"menu\":{0}'}'";
-        return MessageFormat.format(menu, get("static/static.properties", "menu.json"));
+        return MessageFormat.format(menu, weiYaConfig.getMenuJson());
     }
 }

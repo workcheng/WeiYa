@@ -1,5 +1,6 @@
 package com.workcheng.weiya.controller;
 
+import com.workcheng.weiya.common.config.WeiYaConfig;
 import com.workcheng.weiya.common.utils.PropertiesUtil;
 import com.workcheng.weiya.common.utils.ResponseUtil;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 public class MenuController {
     protected final WxMpServiceImpl wxMpService;
+    protected final WeiYaConfig weiYaConfig;
 
     /**
      * 获取自定义菜单
@@ -65,7 +67,7 @@ public class MenuController {
     @RequestMapping(value = "/default", method = RequestMethod.POST)
     public Object createMenu() {
         try {
-            WxMenu wxMenu = WxMenu.fromJson(PropertiesUtil.getMenuJson());
+            WxMenu wxMenu = WxMenu.fromJson(PropertiesUtil.getMenuJson(weiYaConfig));
             wxMpService.getMenuService().menuCreate(wxMenu);
             return ResponseUtil.success();
         } catch (WxErrorException e) {

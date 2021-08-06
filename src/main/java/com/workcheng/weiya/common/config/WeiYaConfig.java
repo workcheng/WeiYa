@@ -30,6 +30,7 @@ public class WeiYaConfig {
     private String commentUrl;
     private String cardUrl;
     private String prizeMessage;
+    private String menuJson;
     final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     // 2021-08-10 23:15:00

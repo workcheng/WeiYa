@@ -64,7 +64,8 @@ public final class AuthFilter implements Filter {
         response.setStatus(200);
         response.setHeader("Pragma", "No-cache");
         response.setHeader("Cache-Control", "no-store");
-        response.setDateHeader("Expires", 0);
+        // 3小时之后过期
+        response.setDateHeader("Expires", System.currentTimeMillis() + 3 * 60 * 60 * 1000);
     }
 
     private void needAuthenticate(final HttpServletRequest request, final HttpServletResponse response) {
