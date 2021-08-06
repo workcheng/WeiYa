@@ -5,7 +5,9 @@ import org.hibernate.validator.constraints.NotBlank;
 import java.io.Serializable;
 
 /**
- * Created by chenghui on 2017/1/5.
+ *
+ * @author andy
+ * @date 2017/1/5
  */
 public class WsMessage implements Serializable {
     @NotBlank

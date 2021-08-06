@@ -28,7 +28,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- * @author chenghui
+ * @author andy
  */
 @Slf4j
 public final class AuthFilter implements Filter {

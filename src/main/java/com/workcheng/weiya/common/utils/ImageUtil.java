@@ -15,7 +15,7 @@ import java.net.URL;
 
 /**
  *
- * @author chenghui
+ * @author andy
  * @date 2017/1/17
  */
 
@@ -148,7 +148,6 @@ public class ImageUtil {
     public static ByteArrayOutputStream toPNG(URL url, int size, int radius) throws IOException {
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         ImageIO.write(getRoundedImage(ImageIO.read(url), size, radius, 2), "PNG", os);
-//        InputStream is = new ByteArrayInputStream(os.toByteArray());
         return os;
     }
 

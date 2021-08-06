@@ -1,7 +1,7 @@
 package com.workcheng.weiya.common.handler;
 
 /**
- * @author Binary Wang
+ * @author andy
  */
 public abstract class ScanHandler extends AbstractHandler {
 

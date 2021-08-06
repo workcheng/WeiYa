@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 
 /**
- * @author Binary Wang
+ * @author andy
  */
 @RestController
 @RequestMapping("/wechat/portal")

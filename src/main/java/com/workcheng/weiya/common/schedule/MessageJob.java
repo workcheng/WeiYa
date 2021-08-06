@@ -1,10 +1,4 @@
 package com.workcheng.weiya.common.schedule;
-
-/**
- * @author chenghui
- * @Date: 2021/5/25 17:54
- */
-
 import com.workcheng.weiya.common.websocket.WsService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -16,10 +10,14 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 
+
+
 /**
- * 消息生成job
- * @author lxk
+ * 测试消息生成 job（可通过 @EnableScheduling 来生效）
+ * @author andy
+ * @Date: 2021/5/25 17:54
  */
+
 @Slf4j
 @Component
 @RequiredArgsConstructor

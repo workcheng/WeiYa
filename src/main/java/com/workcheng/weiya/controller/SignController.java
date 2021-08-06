@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * Created by andy on 2016/12/18.
+ *
+ * @author andy
+ * @date 2016/12/18
  */
 @RequestMapping("/sign")
 @RestController

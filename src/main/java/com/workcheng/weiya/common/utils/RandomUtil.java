@@ -4,10 +4,11 @@ import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
- * Created by zhanghao on 2016/12/22.
+ *
+ * @author zhanghao
+ * @date 2016/12/22
  */
 public class RandomUtil {
-    //private static Random random;
 
     //双重校验锁获取一个Random单例
     public static ThreadLocalRandom getRandom() {

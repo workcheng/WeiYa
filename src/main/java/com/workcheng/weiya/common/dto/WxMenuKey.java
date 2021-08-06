@@ -7,7 +7,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 /**
  * 菜单的dto对象
  *
- * @author Binary Wang
+ * @author andy
  */
 @Data
 @NoArgsConstructor

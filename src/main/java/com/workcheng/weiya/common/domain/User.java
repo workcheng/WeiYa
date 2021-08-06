@@ -18,11 +18,11 @@ public class User extends UnionUser {
     private String openId;
     @NotBlank(message = "姓名不能为空")
     private String name;
-    //    @NotNull(message = "是否订餐不能为空")
+    /** 是否订餐不能为空 */
     private Integer order;
     private String nickName;
     private Integer priceCount;
-    //该时间段内的签到标识符
+    /** 该时间段内的签到标识符 */
     private String signFlag;
     private Timestamp signDate = new Timestamp(System.currentTimeMillis());
 

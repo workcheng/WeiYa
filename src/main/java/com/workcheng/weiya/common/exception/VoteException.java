@@ -1,7 +1,9 @@
 package com.workcheng.weiya.common.exception;
 
 /**
- * Created by chenghui on 2016/12/29.
+ *
+ * @author andy
+ * @date 2016/12/29
  */
 public class VoteException extends Exception {
     public VoteException() {

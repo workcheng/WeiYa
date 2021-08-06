@@ -2,12 +2,15 @@ package com.workcheng.weiya.common.utils;
 
 /**
  * 过滤非法字符
- * Created by chenghui on 2017/1/9.
+ *
+ * @author andy
+ * @date 2017/1/9
  */
 public class ZoeCrossSiteScriptingValidationUtil {
     private static String[] str = new String[]{"<", "&"};
 
     public static int find(String arr, String[] str, int startIndex) {
+        //TODO 待优化
         boolean flag = false;
         for (String s : str) {
             if (arr.indexOf(s, startIndex) != -1) {

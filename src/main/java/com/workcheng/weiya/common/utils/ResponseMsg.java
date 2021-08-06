@@ -5,7 +5,9 @@ import lombok.Data;
 import java.io.Serializable;
 
 /**
- * Created by andy on 2016/12/17.
+ *
+ * @author andy
+ * @date 2016/12/17
  */
 @Data
 public class ResponseMsg implements Serializable {

@@ -7,7 +7,7 @@ import javax.validation.constraints.NotNull;
 
 /**
  *
- * @author chenghui
+ * @author andy
  * @date 2017/1/5
  */
 @Data

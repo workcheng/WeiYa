@@ -34,7 +34,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by chenghui on 2016/12/20.
+ *
+ * @author andy
+ * @date 2016/12/20
  */
 @RequestMapping("user")
 @RestController

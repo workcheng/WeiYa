@@ -13,7 +13,7 @@ import redis.clients.jedis.JedisPoolConfig;
 import javax.annotation.Nullable;
 
 /**
- * @author binary wang
+ * @author andy
  */
 @EnableScheduling
 @RestController

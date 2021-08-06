@@ -14,7 +14,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 /**
- * Created by chenghui on 2016/12/29.
+ * Created by andy on 2016/12/29.
  */
 @Service
 public class VoteService {

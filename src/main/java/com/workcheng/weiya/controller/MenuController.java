@@ -17,7 +17,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * Created by chenghui on 2016/12/27.
+ *
+ * @author andy
+ * @date 2016/12/27
  */
 @RequestMapping("/menu")
 @RestController

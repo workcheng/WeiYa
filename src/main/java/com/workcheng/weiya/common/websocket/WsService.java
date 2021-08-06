@@ -1,10 +1,5 @@
 package com.workcheng.weiya.common.websocket;
 
-/**
- * @author chenghui
- * @Date: 2021/5/25 17:52
- */
-
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.socket.TextMessage;
@@ -14,6 +9,8 @@ import java.io.IOException;
 
 /**
  * ws操作相关服务
+ * @author andy
+ * @Date: 2021/5/25 17:52
  */
 @Service
 @Slf4j

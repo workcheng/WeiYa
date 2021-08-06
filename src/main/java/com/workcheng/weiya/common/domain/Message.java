@@ -11,7 +11,7 @@ import com.workcheng.weiya.common.dto.*;
 
 /**
  *
- * @author chenghui
+ * @author andy
  * @date 2017/1/10
  */
 @EqualsAndHashCode(callSuper = true)

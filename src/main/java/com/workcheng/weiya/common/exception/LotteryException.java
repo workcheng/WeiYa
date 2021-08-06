@@ -1,7 +1,9 @@
 package com.workcheng.weiya.common.exception;
 
 /**
- * Created by chenghui on 2017/1/18.
+ *
+ * @author andy
+ * @date 2017/1/18
  */
 public class LotteryException extends Exception {
     public LotteryException() {

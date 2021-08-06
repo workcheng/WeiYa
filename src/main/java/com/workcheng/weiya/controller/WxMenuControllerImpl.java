@@ -18,11 +18,11 @@ import static me.chanjar.weixin.common.api.WxConsts.MenuButtonType;
  *      实际项目中无需这样，根据自己需要添加对应接口即可
  * </pre>
  *
- * @author Binary Wang(https://github.com/binarywang)
+ * @author andy(https://github.com/workcheng)
  */
 @RestController
 @RequestMapping("/wechat/menu")
-public class WxMenuController implements WxMpMenuService {
+public class WxMenuControllerImpl implements WxMpMenuService {
 
     @Autowired
     private WxMpService wxService;
@@ -41,50 +41,6 @@ public class WxMenuController implements WxMpMenuService {
     @Override
     @PostMapping("/create")
     public String menuCreate(@RequestBody WxMenu menu) throws WxErrorException {
-        return this.wxService.getMenuService().menuCreate(menu);
-    }
-
-    @GetMapping("/create")
-    public String menuCreateSample() throws WxErrorException {
-        WxMenu menu = new WxMenu();
-        WxMenuButton button1 = new WxMenuButton();
-        button1.setType(MenuButtonType.CLICK);
-        button1.setName("今日歌曲");
-        button1.setKey("V1001_TODAY_MUSIC");
-
-//        WxMenuButton button2 = new WxMenuButton();
-//        button2.setType(WxConsts.BUTTON_MINIPROGRAM);
-//        button2.setName("小程序");
-//        button2.setAppId("wx286b93c14bbf93aa");
-//        button2.setPagePath("pages/lunar/index.html");
-//        button2.setUrl("http://mp.weixin.qq.com");
-
-        WxMenuButton button3 = new WxMenuButton();
-        button3.setName("菜单");
-
-        menu.getButtons().add(button1);
-//        menu.getButtons().add(button2);
-        menu.getButtons().add(button3);
-
-        WxMenuButton button31 = new WxMenuButton();
-        button31.setType(MenuButtonType.VIEW);
-        button31.setName("搜索");
-        button31.setUrl("http://www.soso.com/");
-
-        WxMenuButton button32 = new WxMenuButton();
-        button32.setType(MenuButtonType.VIEW);
-        button32.setName("视频");
-        button32.setUrl("http://v.qq.com/");
-
-        WxMenuButton button33 = new WxMenuButton();
-        button33.setType(MenuButtonType.CLICK);
-        button33.setName("赞一下我们");
-        button33.setKey("V1001_GOOD");
-
-        button3.getSubButtons().add(button31);
-        button3.getSubButtons().add(button32);
-        button3.getSubButtons().add(button33);
-
         return this.wxService.getMenuService().menuCreate(menu);
     }
 

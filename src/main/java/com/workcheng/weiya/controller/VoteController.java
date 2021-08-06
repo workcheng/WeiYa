@@ -20,7 +20,9 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.Valid;
 
 /**
- * Created by chenghui on 2016/12/29.
+ *
+ * @author andy
+ * @date 2016/12/29
  */
 @RequestMapping("vote")
 @RestController

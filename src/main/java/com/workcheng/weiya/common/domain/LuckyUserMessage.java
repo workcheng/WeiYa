@@ -7,7 +7,7 @@ import java.sql.Timestamp;
 
 /**
  *
- * @author chenghui
+ * @author andy
  * @date 2017/1/16
  */
 @Data

@@ -1,7 +1,9 @@
 package com.workcheng.weiya.common.exception;
 
 /**
- * Created by chenghui on 2016/12/22.
+ *
+ * @author andy
+ * @date 2016/12/22
  */
 public class HasSignException extends Exception {
 

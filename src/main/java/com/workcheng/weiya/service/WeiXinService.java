@@ -18,7 +18,7 @@ import javax.annotation.PostConstruct;
 import static me.chanjar.weixin.common.api.WxConsts.*;
 
 /**
- * @author Binary Wang
+ * @author andy
  */
 @Service
 @RequiredArgsConstructor

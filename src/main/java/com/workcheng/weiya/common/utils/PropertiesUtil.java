@@ -14,7 +14,7 @@ import java.text.MessageFormat;
 import java.util.Properties;
 
 /**
- * @author Chenghui
+ * @author andy
  */
 public class PropertiesUtil {
     private static Logger log = LoggerFactory.getLogger(PropertiesUtil.class);

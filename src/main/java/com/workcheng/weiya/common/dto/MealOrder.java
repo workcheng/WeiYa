@@ -8,7 +8,9 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * Created by chenghui on 2017/1/3.
+ *
+ * @author andy
+ * @date 2017/1/3
  */
 @Data
 public class MealOrder {

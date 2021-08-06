@@ -3,7 +3,9 @@ package com.workcheng.weiya.common.dto;
 import lombok.Data;
 
 /**
- * Created by chenghui on 2017/1/12.
+ *
+ * @author andy
+ * @date 2017/1/12
  */
 @Data
 public class BarrAgerModel {

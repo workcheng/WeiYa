@@ -6,7 +6,7 @@ package com.workcheng.weiya.common.constant;
  */
 public enum ErrorCode {
     /**
-     * code
+     * error code
      */
     SUCCESS(1000, "成功"),
     ERROR(1001, "错误"),
