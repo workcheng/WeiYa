@@ -1,4 +1,4 @@
-package com.workcheng.weiya.handler;
+package com.workcheng.weiya.common.handler;
 
 import com.google.gson.Gson;
 import me.chanjar.weixin.mp.api.WxMpMessageHandler;

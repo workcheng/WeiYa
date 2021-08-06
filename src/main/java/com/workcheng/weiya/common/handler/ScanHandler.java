@@ -1,4 +1,4 @@
-package com.workcheng.weiya.handler;
+package com.workcheng.weiya.common.handler;
 
 /**
  * @author Binary Wang

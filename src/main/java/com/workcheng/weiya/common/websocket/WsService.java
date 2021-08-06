@@ -1,4 +1,4 @@
-package com.workcheng.weiya.websocket;
+package com.workcheng.weiya.common.websocket;
 
 /**
  * @author chenghui

@@ -1,6 +1,6 @@
-package com.workcheng.weiya.handler;
+package com.workcheng.weiya.common.handler;
 
-import com.workcheng.weiya.builder.TextBuilder;
+import com.workcheng.weiya.common.builder.TextBuilder;
 import com.workcheng.weiya.service.WeiXinService;
 import me.chanjar.weixin.common.error.WxErrorException;
 import me.chanjar.weixin.common.session.WxSessionManager;

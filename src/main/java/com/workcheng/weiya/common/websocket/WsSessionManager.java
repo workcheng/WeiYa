@@ -1,4 +1,4 @@
-package com.workcheng.weiya.websocket;
+package com.workcheng.weiya.common.websocket;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.socket.WebSocketSession;

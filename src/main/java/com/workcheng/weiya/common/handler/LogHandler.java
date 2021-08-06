@@ -1,8 +1,7 @@
-package com.workcheng.weiya.handler;
+package com.workcheng.weiya.common.handler;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.workcheng.weiya.common.utils.*;
-import lombok.extern.slf4j.Slf4j;
 import me.chanjar.weixin.common.session.WxSessionManager;
 import me.chanjar.weixin.mp.api.WxMpService;
 import me.chanjar.weixin.mp.bean.message.WxMpXmlMessage;

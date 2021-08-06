@@ -1,6 +1,6 @@
 package com.workcheng.weiya.common.config;
 
-import com.workcheng.weiya.websocket.WsSessionManager;
+import com.workcheng.weiya.common.websocket.WsSessionManager;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.BinaryMessage;

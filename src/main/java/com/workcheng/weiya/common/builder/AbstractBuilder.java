@@ -1,4 +1,4 @@
-package com.workcheng.weiya.builder;
+package com.workcheng.weiya.common.builder;
 
 import com.workcheng.weiya.service.WeiXinService;
 import me.chanjar.weixin.mp.bean.message.WxMpXmlMessage;

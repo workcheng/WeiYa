@@ -1,4 +1,4 @@
-package com.workcheng.weiya.websocket;
+package com.workcheng.weiya.common.websocket;
 
 import com.workcheng.weiya.common.dto.WsMessage;
 import com.workcheng.weiya.common.utils.*;

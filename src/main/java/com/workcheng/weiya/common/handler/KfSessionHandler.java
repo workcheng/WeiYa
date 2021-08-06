@@ -1,4 +1,4 @@
-package com.workcheng.weiya.handler;
+package com.workcheng.weiya.common.handler;
 
 import me.chanjar.weixin.common.session.WxSessionManager;
 import me.chanjar.weixin.mp.api.WxMpService;
@@ -12,12 +12,13 @@ import java.util.Map;
  * @author Binary Wang
  */
 @Component
-public class NullHandler extends AbstractHandler {
+public class KfSessionHandler extends AbstractHandler {
 
     @Override
     public WxMpXmlOutMessage handle(WxMpXmlMessage wxMessage,
                                     Map<String, Object> context, WxMpService wxMpService,
                                     WxSessionManager sessionManager) {
+        //TODO 对会话做处理
         return null;
     }
 

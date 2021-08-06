@@ -1,15 +1,14 @@
-package com.workcheng.weiya.schedule;
+package com.workcheng.weiya.common.schedule;
 
 /**
  * @author chenghui
  * @Date: 2021/5/25 17:54
  */
 
-import com.workcheng.weiya.websocket.WsService;
+import com.workcheng.weiya.common.websocket.WsService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 

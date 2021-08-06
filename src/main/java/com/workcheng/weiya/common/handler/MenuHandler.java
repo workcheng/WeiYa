@@ -1,18 +1,16 @@
-package com.workcheng.weiya.handler;
+package com.workcheng.weiya.common.handler;
 
-import com.workcheng.weiya.builder.AbstractBuilder;
-import com.workcheng.weiya.builder.ImageBuilder;
-import com.workcheng.weiya.builder.TextBuilder;
+import com.workcheng.weiya.common.builder.AbstractBuilder;
+import com.workcheng.weiya.common.builder.ImageBuilder;
+import com.workcheng.weiya.common.builder.TextBuilder;
 import com.workcheng.weiya.common.dto.WxMenuKey;
 import com.workcheng.weiya.service.WeiXinService;
-import com.workcheng.weiya.common.utils.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import me.chanjar.weixin.common.session.WxSessionManager;
 import me.chanjar.weixin.mp.api.WxMpService;
 import me.chanjar.weixin.mp.bean.message.WxMpXmlMessage;
 import me.chanjar.weixin.mp.bean.message.WxMpXmlOutMessage;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;

@@ -1,6 +1,6 @@
-package com.workcheng.weiya.handler;
+package com.workcheng.weiya.common.handler;
 
-import com.workcheng.weiya.builder.TextBuilder;
+import com.workcheng.weiya.common.builder.TextBuilder;
 import com.workcheng.weiya.common.domain.LuckyUser;
 import com.workcheng.weiya.common.exception.ServerInternalException;
 import com.workcheng.weiya.common.config.WeiYaConfig;
