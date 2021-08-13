@@ -78,7 +78,7 @@ public class MsgHandler extends AbstractHandler {
         String format = MessageFormat.format(messageText, user.getName(), degreeList[user.getDegree()]);
         WxMpKefuMessage message = WxMpKefuMessage.TEXT().content(format).toUser(user.getOpenId()).build();
         try {
-            userService.saveMessage(user, format);
+            userService.saveMessage2(user, format);
             wxMpKefuService.sendKefuMessage(message);
         } catch (WxErrorException e) {
             log.error("error", e);

@@ -9,6 +9,10 @@ import java.util.Date;
 
 import com.workcheng.weiya.common.dto.*;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+
 /**
  *
  * @author andy
@@ -16,7 +20,11 @@ import com.workcheng.weiya.common.dto.*;
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
+@Entity
 public class Message extends LuckyUser implements Serializable {
+    @Id
+    @GeneratedValue
+    private Long id;
     private String message;
     private Date createTime;
 }

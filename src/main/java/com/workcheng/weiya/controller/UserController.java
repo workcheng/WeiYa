@@ -2,26 +2,20 @@ package com.workcheng.weiya.controller;
 
 import com.workcheng.weiya.common.config.WeiYaConfig;
 import com.workcheng.weiya.common.constant.ErrorCode;
-import com.workcheng.weiya.common.domain.UnionUser;
 import com.workcheng.weiya.common.domain.User;
 import com.workcheng.weiya.common.dto.UserDto;
 import com.workcheng.weiya.common.exception.*;
 import com.workcheng.weiya.common.exception.LotteryException;
-import com.workcheng.weiya.common.exception.NotStartException;
 import com.workcheng.weiya.common.exception.VoteException;
 import com.workcheng.weiya.common.utils.ImageUtil;
 import com.workcheng.weiya.common.utils.ResponseUtil;
+import com.workcheng.weiya.repository.ImageDataRepository;
 import com.workcheng.weiya.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import me.chanjar.weixin.common.error.WxErrorException;
-import me.chanjar.weixin.mp.api.impl.WxMpServiceImpl;
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,8 +24,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  *
@@ -44,8 +36,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
-    private final StringRedisTemplate stringRedisTemplate;
     private final WeiYaConfig weiYaConfig;
+    private final ImageDataRepository imageDataRepository;
 
     /**
      * 保存签到信息
@@ -65,7 +57,7 @@ public class UserController {
             return ResponseUtil.failure();
         }
         try {
-            userService.save(u);
+            userService.save2(u);
         } catch (HasSignException e) {
             log.error("error", e);
             return ResponseUtil.failure(ErrorCode.HAS_SIGN);
@@ -75,9 +67,6 @@ public class UserController {
         } catch (VoteException e) {
             log.error("error", e);
             return ResponseUtil.failure(ErrorCode.ERROR_VOTE);
-        } catch (NotStartException e) {
-            log.error("error", e);
-            return ResponseUtil.failure(ErrorCode.NOT_START, weiYaConfig.getWeiyaTime());
         } catch (WxErrorException e) {
             log.error("error", e);
             return ResponseUtil.failure(e);
@@ -94,11 +83,8 @@ public class UserController {
     @RequestMapping(value = "/getUser", method = RequestMethod.GET)
     public Object get(@RequestParam(value = "id") String openId) {
         try {
-            return ResponseUtil.success(userService.get(openId));
-        } catch (NotStartException e) {
-            log.error("error", e);
-            return ResponseUtil.failure(ErrorCode.NOT_START, weiYaConfig.getWeiyaTime());
-        } catch (ServerInternalException e) {
+            return ResponseUtil.success(userService.get2(openId));
+        } catch (Exception e) {
             return ResponseUtil.failure(e.getMessage());
         }
     }
@@ -116,25 +102,22 @@ public class UserController {
                 log.info("签到时间为：{} ~ {}", weiYaConfig.getSinOpenTime(), weiYaConfig.getSignCloseTime());
                 return ResponseUtil.failure(ErrorCode.NOT_START, weiYaConfig.getSignCloseTime());
             }
-            if (userService.isMember(openId)) {
-                final User user = userService.get(openId);
+            final User member2 = userService.isMember2(openId);
+            if (member2 != null) {
                 UserDto userDto = new UserDto();
-                BeanUtils.copyProperties(user, userDto);
+                BeanUtils.copyProperties(member2, userDto);
                 return ResponseUtil.success(ErrorCode.HAS_SIGN, userDto);
             } else {
                 return ResponseUtil.success(ErrorCode.NOT_SIGN);
             }
-        } catch (NotStartException e) {
-            log.error("error", e);
-            return ResponseUtil.failure(ErrorCode.NOT_START, weiYaConfig.getWeiyaTime());
-        } catch (ServerInternalException e) {
+        } catch (Exception e) {
             log.error("error", e);
             return ResponseUtil.failure(e.getMessage());
         }
     }
 
     /**
-     * 获取签到用户信息
+     * 随机抽取用户
      *
      * @return
      */
@@ -142,31 +125,15 @@ public class UserController {
     public Object getRandomUserList(Integer count) {
         try {
             if (null == count) {
-                count = 100;
+                count = 1;
             }
-            return ResponseUtil.success(userService.randomUsers(count));
-        } catch (NotStartException e) {
+            return ResponseUtil.success(userService.randomUser2(count));
+        } catch (LotteryException e) {
             log.error("error", e);
-            return ResponseUtil.failure(ErrorCode.NOT_START);
+            return ResponseUtil.failure(ErrorCode.ERROR_LOTTERY);
         } catch (ServerInternalException e) {
             return ResponseUtil.failure(e);
         }
-    }
-
-    @Deprecated
-    @RequestMapping(value = "/submitLottery", method = RequestMethod.POST)
-    public Object confirmLucky(@RequestBody List<String> openIds) {
-        List<UnionUser> onlyUsers = new ArrayList<>();
-        try {
-            for (String openId : openIds) {
-                UnionUser onlyUser = userService.get(openId);
-                onlyUsers.add(onlyUser);
-            }
-            userService.commitLotteryPerson(onlyUsers);
-        } catch (Exception e) {
-            return ResponseUtil.failure(ErrorCode.ERROR);
-        }
-        return ResponseUtil.success(ErrorCode.SUCCESS);
     }
 
     /**
@@ -177,10 +144,7 @@ public class UserController {
     @RequestMapping(value = "/lotterySelect", method = RequestMethod.GET)
     public Object lotterySelect() {
         try {
-            return ResponseUtil.success(userService.randomUser(1));
-        } catch (NotStartException e) {
-            log.error("error", e);
-            return ResponseUtil.failure(ErrorCode.NOT_START, weiYaConfig.getWeiyaTime());
+            return ResponseUtil.success(userService.randomUser2(1));
         } catch (ServerInternalException e) {
             log.error("error", e);
             return ResponseUtil.failure(e.getMessage());
@@ -199,10 +163,7 @@ public class UserController {
     @RequestMapping(value = "/lotteryUserList", method = RequestMethod.GET)
     public Object LotteryUser(@RequestParam Integer count) {
         try {
-            return ResponseUtil.success(userService.randomUser(count));
-        } catch (NotStartException e) {
-            log.error("error", e);
-            return ResponseUtil.failure(ErrorCode.NOT_START, weiYaConfig.getWeiyaTime());
+            return ResponseUtil.success(userService.randomUser2(count));
         } catch (ServerInternalException e) {
             log.error("error", e);
             return ResponseUtil.failure(e.getMessage());
@@ -224,13 +185,10 @@ public class UserController {
                     log.error("列表不存在");
                     return ResponseUtil.failure("列表不存在");
                 }
-                return ResponseUtil.success(userService.orderMealUserCountAndUserList());
+                return ResponseUtil.success(userService.orderMealUserCountAndUserList2());
             }
-            return ResponseUtil.success(userService.orderMealUserCountAndUserList());
-        } catch (NotStartException e) {
-            log.error("error", e);
-            return ResponseUtil.failure(ErrorCode.NOT_START, weiYaConfig.getWeiyaTime());
-        } catch (ServerInternalException e) {
+            return ResponseUtil.success(userService.orderMealUserCountAndUserList2());
+        } catch (Exception e) {
             log.error("error", e);
             return ResponseUtil.failure(e);
         }
@@ -244,11 +202,8 @@ public class UserController {
     @RequestMapping(value = "/userListCount", method = RequestMethod.GET)
     public Object getUserListCount() {
         try {
-            return ResponseUtil.success(userService.getUserSize());
-        } catch (NotStartException e) {
-            log.error("error", e);
-            return ResponseUtil.failure(ErrorCode.NOT_START, weiYaConfig.getWeiyaTime());
-        } catch (ServerInternalException e) {
+            return ResponseUtil.success(userService.getUserSize2());
+        } catch (Exception e) {
             log.error("error", e);
             return ResponseUtil.failure(e.getMessage());
         }
@@ -265,18 +220,15 @@ public class UserController {
         try {
             if (null != degree) {
                 if (degree == -1) {
-                    return ResponseUtil.success(userService.getAllMessage());
+                    return ResponseUtil.success(userService.getAllMessage2());
                 } else {
-                    return ResponseUtil.success(userService.getMessageByDegree(degree));
+                    return ResponseUtil.success(userService.getMessageByDegree2(degree));
                 }
             }
-            return ResponseUtil.success(userService.getAllMessage());
-        } catch (ServerInternalException e) {
+            return ResponseUtil.success(userService.getAllMessage2());
+        } catch (Exception e) {
             log.error("error", e);
             return ResponseUtil.failure(e.getMessage());
-        } catch (NotStartException e) {
-            log.error("error", e);
-            return ResponseUtil.failure(ErrorCode.NOT_START, weiYaConfig.getWeiyaTime());
         }
     }
 
@@ -296,7 +248,8 @@ public class UserController {
         }
         try {
             ServletOutputStream outputStream = response.getOutputStream();
-            ImageUtil.toPNG(new URL(url), outputStream, 250, 250, stringRedisTemplate);
+//            ImageUtil.toPNG(new URL(url), outputStream, 250, 250, imageDataRepository);
+            ImageUtil.toPNG(new URL(url), outputStream, 250, 250);
         } catch (IOException e) {
             log.error("error", e);
         }
@@ -310,14 +263,11 @@ public class UserController {
     @RequestMapping(value = "/unHitUserSize", method = RequestMethod.GET)
     public Object getNotLuckyUserSize() {
         try {
-            Long userSize = userService.getUserSize();
-            Long luckySetSize = userService.getLuckySetSize();
+            Long userSize = userService.getUserSize2();
+            Long luckySetSize = userService.getLuckySetSize2();
             long l = userSize - luckySetSize;
             return ResponseUtil.success(l);
-        } catch (NotStartException e) {
-            log.error("error", e);
-            return ResponseUtil.failure(ErrorCode.NOT_START, weiYaConfig.getWeiyaTime());
-        } catch (ServerInternalException e) {
+        } catch (Exception e) {
             log.error("error", e);
             return ResponseUtil.failure(e.getMessage());
         }

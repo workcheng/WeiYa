@@ -1,8 +1,9 @@
 package com.workcheng.weiya.common.utils;
 
+import com.workcheng.weiya.common.domain.ImageData;
+import com.workcheng.weiya.repository.ImageDataRepository;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.util.Base64Utils;
 
 import javax.imageio.ImageIO;
@@ -12,6 +13,8 @@ import java.awt.geom.RoundRectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.net.URL;
+import java.security.MessageDigest;
+import java.util.Optional;
 
 /**
  *
@@ -157,7 +160,7 @@ public class ImageUtil {
         os.close();
     }
 
-    public static void toPNG(URL url, OutputStream os, int size, int radius, StringRedisTemplate stringRedisTemplate) throws IOException {
+    public static void toPNG(URL url, OutputStream os, int size, int radius, ImageDataRepository stringRedisTemplate) throws IOException {
         if (getFromTemp(os, url, stringRedisTemplate)) {
             log.info("从缓存获取, url:{}", url.getPath());
             return;
@@ -166,13 +169,17 @@ public class ImageUtil {
         createTempAndOutPut(os, url, roundedImage, stringRedisTemplate);
     }
 
-    private static void createTempAndOutPut(OutputStream os, URL url, BufferedImage roundedImage, StringRedisTemplate stringRedisTemplate) throws IOException {
+    private static void createTempAndOutPut(OutputStream os, URL url, BufferedImage roundedImage, ImageDataRepository stringRedisTemplate) throws IOException {
         try {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             ImageIO.write(roundedImage,  "PNG", baos);
             final byte[] bytes = baos.toByteArray();
             final String encodeToString = Base64Utils.encodeToString(bytes);
-            stringRedisTemplate.opsForValue().set(getTempPrefix(url.getPath()), encodeToString);
+            final ImageData imageData = new ImageData();
+            imageData.setData(encodeToString);
+            imageData.setPath(getTempPrefix(url.getPath()));
+            log.info("imageData:{}", imageData);
+            stringRedisTemplate.save(imageData);
             os.write(bytes);
             os.close();
         } catch (Exception e) {
@@ -182,11 +189,11 @@ public class ImageUtil {
         }
     }
 
-    private static boolean getFromTemp(OutputStream os, URL url, StringRedisTemplate stringRedisTemplate) {
+    private static boolean getFromTemp(OutputStream os, URL url, ImageDataRepository stringRedisTemplate) {
         try {
-            final String s = stringRedisTemplate.opsForValue().get(getTempPrefix(url.getPath()));
-            if (StringUtils.isNotEmpty(s)) {
-                final byte[] bytes = Base64Utils.decodeFromString(s);
+            final Optional<ImageData> byId = stringRedisTemplate.findById(getTempPrefix(url.getPath()));
+            if (byId.isPresent()) {
+                final byte[] bytes = Base64Utils.decodeFromString(byId.get().getData());
                 os.write(bytes);
                 os.close();
                 return true;
@@ -199,8 +206,23 @@ public class ImageUtil {
     }
 
     private static String getTempPrefix(String key) {
-        String tempPrefix = "headImage";
-        return tempPrefix + "_" + key;
+        return MD5(key);
+    }
+
+    @SneakyThrows
+    private static String MD5(String str) {
+        MessageDigest md = MessageDigest.getInstance("MD5");
+        md.update(str.getBytes());
+        byte[] bs = md.digest();
+        StringBuilder sb = new StringBuilder();
+        for (byte b : bs) {
+            int v = b & 0xff;
+            if (v < 16) {
+                sb.append(0);
+            }
+            sb.append(Integer.toHexString(v));
+        }
+        return sb.toString();
     }
 }
 

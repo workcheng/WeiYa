@@ -1,6 +1,6 @@
 package com.workcheng.weiya.common.websocket;
 
-import com.workcheng.weiya.common.dto.WsMessage;
+import com.workcheng.weiya.common.domain.WsMessage;
 import com.workcheng.weiya.common.utils.*;
 import com.workcheng.weiya.service.sensitative.SensitiveWordFilter;
 import lombok.RequiredArgsConstructor;

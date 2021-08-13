@@ -1,17 +1,12 @@
 package com.workcheng.weiya.service;
 
-import com.workcheng.weiya.common.constant.CommonConstant;
 import com.workcheng.weiya.common.dto.BarrAgerModel;
-import com.workcheng.weiya.common.dto.WsMessage;
+import com.workcheng.weiya.common.domain.WsMessage;
 import com.workcheng.weiya.common.exception.ServerInternalException;
 import com.workcheng.weiya.common.utils.RandomUtil;
+import com.workcheng.weiya.repository.WsMessageRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -26,9 +21,7 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 public class MessageService {
-    @Qualifier("redisTemplate0")
-    @Autowired
-    private RedisTemplate<String, WsMessage> zoeRedisTemplate0;
+    private final WsMessageRepository wsMessageRepository;
     private List<String> colors = new ArrayList() {
         {
             add("#CC3333");
@@ -46,17 +39,21 @@ public class MessageService {
         }
     };
 
-    public Long save(WsMessage zoeMessage) {
-        return zoeRedisTemplate0.opsForList().leftPush(CommonConstant.DANMU, zoeMessage);
+    public WsMessage save(WsMessage zoeMessage) {
+        return wsMessageRepository.save(zoeMessage);
     }
 
     public WsMessage get() {
-        return zoeRedisTemplate0.opsForList().rightPop(CommonConstant.DANMU);
+        final Iterable<WsMessage> all = wsMessageRepository.findAll();
+        if (all.iterator().hasNext()) {
+            return all.iterator().next();
+        }
+        return null;
     }
 
     public BarrAgerModel getBarrAgerModel() throws ServerInternalException {
         BarrAgerModel barrAgerModel = new BarrAgerModel();
-        WsMessage zoeMessage = zoeRedisTemplate0.opsForList().rightPop(CommonConstant.DANMU);
+        WsMessage zoeMessage = get();
         if (null == zoeMessage) {
             throw new ServerInternalException("消息池为空");
         }
@@ -69,10 +66,10 @@ public class MessageService {
     }
 
     public Long count() {
-        return zoeRedisTemplate0.opsForList().size(CommonConstant.DANMU);
+        return wsMessageRepository.count();
     }
 
-    public List<WsMessage> getAll() {
-        return zoeRedisTemplate0.opsForList().range(CommonConstant.DANMU, 0, count());
+    public Iterable<WsMessage> getAll() {
+        return wsMessageRepository.findAll();
     }
 }

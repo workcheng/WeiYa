@@ -1,8 +1,10 @@
 package com.workcheng.weiya;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.scheduling.TaskScheduler;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import redis.clients.jedis.JedisPoolConfig;
 
 import javax.annotation.Nullable;
+import javax.sql.DataSource;
 
 /**
  * @author andy
@@ -33,16 +36,5 @@ public class WeiYaApplication {
         threadPoolScheduler.setPoolSize(Runtime.getRuntime().availableProcessors());
         threadPoolScheduler.setRemoveOnCancelPolicy(true);
         return threadPoolScheduler;
-    }
-
-    @Bean
-    public JedisPoolConfig poolConfig() {
-        JedisPoolConfig poolConfig = new JedisPoolConfig();
-        poolConfig.setMaxTotal(100);
-        poolConfig.setMaxWaitMillis(30 * 1000);
-        poolConfig.setMinIdle(20);
-        poolConfig.setMaxIdle(40);
-        poolConfig.setTestWhileIdle(true);
-        return poolConfig;
     }
 }

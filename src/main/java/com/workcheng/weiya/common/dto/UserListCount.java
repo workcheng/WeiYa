@@ -13,8 +13,8 @@ import java.util.List;
  */
 @Data
 public class UserListCount {
-    private int orderCount;
-    private List<User> users;
+    private Long orderCount;
+    private Iterable<User> users;
     private Date now;
 
     @Override

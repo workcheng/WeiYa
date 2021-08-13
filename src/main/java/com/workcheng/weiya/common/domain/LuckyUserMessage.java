@@ -2,6 +2,9 @@ package com.workcheng.weiya.common.domain;
 
 import lombok.Data;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import java.io.Serializable;
 import java.sql.Timestamp;
 
@@ -11,7 +14,11 @@ import java.sql.Timestamp;
  * @date 2017/1/16
  */
 @Data
+@Entity
 public class LuckyUserMessage implements Serializable {
+    @Id
+    @GeneratedValue
+    private Long id;
     private String openId;
     private String name;
     private Integer degree;

@@ -36,14 +36,12 @@ public class MealController {
     public Object getOrder() {
         try {
             MealOrder mealOrder = new MealOrder();
-            List<User> userList = userService.orderMealUserList();
+            List<User> userList = userService.orderMealUserList2();
             mealOrder.setOrderUsers(userList);
             mealOrder.setOrderCount(userList.size());
             mealOrder.setNow(new Date());
             return ResponseUtil.success(mealOrder);
-        } catch (NotStartException e) {
-            return ResponseUtil.failure(ErrorCode.NOT_START, weiYaConfig.getWeiyaTime());
-        } catch (ServerInternalException e) {
+        } catch (Exception e) {
             return ResponseUtil.failure(e.getMessage());
         }
     }

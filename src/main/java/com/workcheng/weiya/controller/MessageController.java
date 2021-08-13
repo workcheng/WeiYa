@@ -2,7 +2,7 @@ package com.workcheng.weiya.controller;
 
 import com.workcheng.weiya.common.domain.LuckyUser;
 import com.workcheng.weiya.common.dto.BarrAgerModel;
-import com.workcheng.weiya.common.dto.WsMessage;
+import com.workcheng.weiya.common.domain.WsMessage;
 import com.workcheng.weiya.common.utils.ResponseUtil;
 import com.workcheng.weiya.common.utils.ZoeCrossSiteScriptingValidationUtil;
 import com.workcheng.weiya.common.handler.MsgHandler;
@@ -98,13 +98,8 @@ public class MessageController {
         String replaceMessage = sensitiveService.replaceSensitiveWord(zoeMessage.getContent(), 1, "*");
         zoeMessage.setContent(replaceMessage);
         try {
-            Long save = messageService.save(zoeMessage);
-            if (save > 0) {
-                return ResponseUtil.success(save);
-            } else {
-                log.error("not save");
-                return ResponseUtil.failure();
-            }
+            WsMessage save = messageService.save(zoeMessage);
+            return ResponseUtil.success(save);
         } catch (Exception e) {
             log.error("error", e);
             return ResponseUtil.failure(e);
