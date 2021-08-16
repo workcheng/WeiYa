@@ -1,0 +1,17 @@
+# yaml 配置
+version: '3.7'
+services:
+  app:
+    image: 192.168.0.161:5000/weiya
+    container_name: app
+    ports:
+      - "8080:8080"
+    environment:
+      REDIS_HOST: redis
+      REDIS_PASSWORD:
+      REDIS_DB: 0
+    links:
+      - redis
+  redis:
+    image: "redis:alpine"
+    container_name: redis
